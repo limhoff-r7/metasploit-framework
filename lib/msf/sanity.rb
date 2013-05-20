@@ -47,7 +47,7 @@ end
 
 if(RUBY_PLATFORM == 'java')
 	require 'socket'
-	s = Socket.new(::Socket::AF_INET, ::Socket::SOCK_STREAM, ::Socket::IPPROTO_TCP)
+	s = Socket.new(::Socket::AF_INET, ::Socket::SOCK_STREAM, 0)
 	if(not s.respond_to?('bind'))
 		$stderr.puts "*** JRuby 1.5.0+ is required to use Metasploit with jRuby"
 		exit(0)
