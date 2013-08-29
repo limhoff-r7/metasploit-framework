@@ -10,7 +10,7 @@ gem 'json'
 #   metasploit_data_model's dependency on metasploit-model so that the version
 #   of metasploit-model is the same without or without the db group installed.
 # @todo change to `gem 'metasploit-model', '~> X.Y.Z'`` when version X.Y.Z is released to rubygems
-gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.2.0.module-caching'
+gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.5.0.module-caching'
 # Needed by msfgui and other rpc components
 gem 'msgpack'
 # Needed by anemone crawler
@@ -25,16 +25,11 @@ group :db do
 	gem 'activerecord'
 	# Database models shared between framework and Pro.
 	# @todo change to `gem 'metasploit_data_models', '~> X.Y.Z' when version X.Y.Z is released to rubygems`
-	gem 'metasploit_data_models', :git => 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.23.0.module-caching'
+	gem 'metasploit_data_models', :git => 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.40.3.module-caching'
 	# Needed for module caching in Mdm::ModuleDetails
 	gem 'pg', '>= 0.11'
 end
 
-group :pcap do
-  gem 'network_interface', '~> 0.0.1'
-	# For sniffer and raw socket modules
-	gem 'pcaprub'
-end
 
 group :development do
 	# Markdown formatting for yard
@@ -50,6 +45,17 @@ group :development, :test do
 	gem 'factory_girl', '>= 4.1.0'
 	# running documentation generation tasks and rspec tasks
 	gem 'rake'
+end
+
+group :memory do
+	gem 'axiom-memory-adapter'
+	gem 'rom', '~> 0.1.0'
+end
+
+group :pcap do
+  gem 'network_interface', '~> 0.0.1'
+	# For sniffer and raw socket modules
+	gem 'pcaprub'
 end
 
 group :test do

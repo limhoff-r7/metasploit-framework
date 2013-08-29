@@ -1,25 +1,26 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: d8eb281e4dc334f7a671a26abbfff58f13f6203f
-  tag: v0.2.0.module-caching
+  revision: 08e85ff1dd34281d59a69a1991ddbef2fd3bd9b2
+  tag: v0.5.0.module-caching
   specs:
-    metasploit-model (0.2.0)
+    metasploit-model (0.5.0)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 5afe46a71c2f1612f54f8ae2873b5b08e3c9e655
-  tag: v0.23.0.module-caching
+  revision: 25f0c12bf79b24d9802aae8a6465ffe0f3d5a550
+  tag: v0.40.3.module-caching
   specs:
-    metasploit_data_models (0.23.0)
+    metasploit_data_models (0.40.3)
       activerecord (>= 3.2.13)
       activesupport
-      metasploit-model (~> 0.2.0)
+      metasploit-model (~> 0.5.0)
       pg
 
 GEM
   remote: http://rubygems.org/
   specs:
+    abstract_type (0.0.6)
     activemodel (3.2.13)
       activesupport (= 3.2.13)
       builder (~> 3.0.0)
@@ -31,15 +32,40 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    adamantium (0.1.0)
+      ice_nine (~> 0.9)
+      thread_safe (~> 0.1.2)
+    addressable (2.3.5)
     arel (3.0.2)
+    atomic (1.1.13)
+    axiom (0.1.1)
+      abstract_type (~> 0.0.5)
+      adamantium (~> 0.1)
+      axiom-types (~> 0.0.3)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
+    axiom-memory-adapter (0.0.2)
+      axiom (~> 0.1.1)
+      thread_safe (~> 0.1.0)
+    axiom-optimizer (0.1.0)
+      axiom (~> 0.1.0)
+    axiom-types (0.0.3)
+      descendants_tracker (~> 0.0.1)
+      ice_nine (~> 0.9)
     bourne (1.4.0)
       mocha (~> 0.13.2)
     builder (3.0.4)
+    concord (0.1.4)
+      adamantium (~> 0.1)
+      equalizer (~> 0.0.7)
     database_cleaner (0.9.1)
+    descendants_tracker (0.0.1)
     diff-lcs (1.2.2)
+    equalizer (0.0.7)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     i18n (0.6.1)
+    ice_nine (0.9.0)
     json (1.7.7)
     metaclass (0.0.1)
     mocha (0.13.3)
@@ -51,9 +77,33 @@ GEM
     packetfu (1.1.8)
     pcaprub (0.11.3)
     pg (0.15.1)
-    rake (10.0.4)
+    rake (10.1.0)
     redcarpet (2.2.2)
     robots (0.10.1)
+    rom (0.1.0)
+      rom-mapper (~> 0.1.0)
+      rom-relation (~> 0.1.0)
+      rom-session (~> 0.1.0)
+    rom-mapper (0.1.0)
+      abstract_type (~> 0.0.6)
+      adamantium (~> 0.1)
+      concord (~> 0.1.4)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
+    rom-relation (0.1.0)
+      abstract_type (~> 0.0.6)
+      adamantium (~> 0.1)
+      addressable (~> 2.3, >= 2.3.3)
+      axiom (~> 0.1.1)
+      axiom-optimizer (~> 0.1.0)
+      concord (~> 0.1.4)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
+    rom-session (0.1.0)
+      abstract_type (~> 0.0.6)
+      adamantium (~> 0.1)
+      concord (~> 0.1.4)
+      equalizer (~> 0.0.7)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -69,6 +119,8 @@ GEM
       multi_json (~> 1.0.3)
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
+    thread_safe (0.1.2)
+      atomic
     timecop (0.6.1)
     tzinfo (0.3.37)
     yard (0.8.5.2)
@@ -79,6 +131,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   activesupport (>= 3.0.0)
+  axiom-memory-adapter
   database_cleaner
   factory_girl (>= 4.1.0)
   json
@@ -93,6 +146,7 @@ DEPENDENCIES
   rake
   redcarpet
   robots
+  rom (~> 0.1.0)
   rspec (>= 2.12)
   shoulda-matchers
   simplecov (= 0.5.4)
