@@ -7,36 +7,49 @@
 # http://metasploit.com/framework/
 ##
 
+require 'msf/base/sessions'
+require 'msf/core/option_container'
 
-module Msf
-module Sessions
-module CommandShellOptions
+module Msf::Sessions::CommandShellOptions
 
   def initialize(info = {})
     super(info)
 
     register_advanced_options(
       [
-        OptString.new('InitialAutoRunScript', [false, "An initial script to run on session creation (before AutoRunScript)", '']),
-        OptString.new('AutoRunScript', [false, "A script to run automatically on session creation.", ''])
+        Msf::OptString.new('InitialAutoRunScript', [false, "An initial script to run on session creation (before AutoRunScript)", '']),
+        Msf::OptString.new('AutoRunScript', [false, "A script to run automatically on session creation.", ''])
       ], self.class)
   end
 
   def on_session(session)
     super
 
-    # Configure input/output to match the payload
-    session.user_input  = self.user_input if self.user_input
-    session.user_output = self.user_output if self.user_output
-    if self.platform and self.platform.kind_of? Msf::Module::PlatformList
-      session.platform = self.platform.platforms.first.realname.downcase
+    if architecture_abbreviations.length == 1
+      session.architecture_abbreviation = architecture_abbreviations.first
     end
-    if self.platform and self.platform.kind_of? Msf::Module::Platform
-      session.platform = self.platform.realname.downcase
+
+    platforms = platform_list.platforms
+
+    if platforms.length == 1
+      platform = platforms.first
+      session.platform_fully_qualified_name = platform.fully_qualified_name
     end
-    session.arch     = self.arch if self.arch
+
+    affixes = [
+        :in,
+        :out
+    ]
+
+    affixes.each do |affix|
+      attribute = "user_#{affix}put"
+
+      value = send(attribute)
+
+      if value
+        session.send("#{attribute}=", value)
+      end
+    end
   end
 
-end
-end
 end

@@ -3,9 +3,6 @@ require 'msf/base'
 require 'msf/base/sessions/scriptable'
 require 'shellwords'
 
-module Msf
-module Sessions
-
 ###
 #
 # This class provides basic interaction with a command shell on the remote
@@ -13,7 +10,7 @@ module Sessions
 # as the pipe for reading and writing the command shell.
 #
 ###
-class CommandShell
+class Msf::Sessions::CommandShell
 
   #
   # This interface supports basic interaction.
@@ -45,12 +42,6 @@ class CommandShell
   #
   def self.type
     "shell"
-  end
-
-  def initialize(*args)
-    self.platform ||= ""
-    self.arch     ||= ""
-    super
   end
 
   #
@@ -233,8 +224,29 @@ class CommandShell
     self.ring_seq = 0
   end
 
-  attr_accessor :arch
-  attr_accessor :platform
+  def arch
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#architecture_abbreviation instead"
+    architecture_abbreviation
+  end
+
+  def arch=(architecture_abbreviation)
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#architecture_abbreviation= instead"
+    self.architecture_abbreviation = architecture_abbreviation
+  end
+
+  attr_accessor :architecture_abbreviation
+
+  def platform
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#platform_fully_qualified_name instead"
+    platform_fully_qualified_name
+  end
+
+  def platform=(platform_fully_qualfied_name)
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#platform_fully_qualified=_name instead"
+    self.platform_fully_qualified_name = platform_fully_qualfied_name
+  end
+
+  attr_accessor :platform_fully_qualified_name
 
 protected
 
@@ -313,27 +325,3 @@ protected
   attr_accessor :ring_seq    # This tracks the last seen ring buffer sequence (for shell_read)
   attr_accessor :ring_buff   # This tracks left over read data to maintain a compatible API
 end
-
-class CommandShellWindows < CommandShell
-  def initialize(*args)
-    self.platform = "windows"
-    super
-  end
-  def shell_command_token(cmd,timeout = 10)
-    shell_command_token_win32(cmd,timeout)
-  end
-end
-
-class CommandShellUnix < CommandShell
-  def initialize(*args)
-    self.platform = "unix"
-    super
-  end
-  def shell_command_token(cmd,timeout = 10)
-    shell_command_token_unix(cmd,timeout)
-  end
-end
-
-end
-end
-
