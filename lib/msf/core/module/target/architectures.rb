@@ -3,7 +3,7 @@ module Msf::Module::Target::Architectures
   # @return (see #architecture_abbreviations)
   def arch
     ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#architecture_abbreviations instead"
-    architecture_abbreviation
+    architecture_abbreviations
   end
 
   # Abbreviations for architectures on which this target can run.
