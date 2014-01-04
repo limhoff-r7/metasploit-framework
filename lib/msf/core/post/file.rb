@@ -217,16 +217,17 @@ module Msf::Post::File
   #
   def read_file(file_name)
     data = nil
+
     if session.type == "meterpreter"
       data = _read_file_meterpreter(file_name)
     elsif session.type == "shell"
-      if session.platform =~ /win/
+      if session.platform_fully_qualified_name.start_with? 'Windows'
         data = session.shell_command_token("type \"#{file_name}\"")
       else
         data = session.shell_command_token("cat \'#{file_name}\'")
       end
-
     end
+
     data
   end
 
