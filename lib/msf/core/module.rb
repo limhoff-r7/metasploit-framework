@@ -86,7 +86,6 @@ class Module < Metasploit::Model::Base
     super(attributes)
 
     self.module_info = module_info.dup
-    generate_uuid
 
     set_defaults
 
@@ -370,14 +369,15 @@ class Module < Metasploit::Model::Base
     return true if (mod == nil)
 
     # Determine which hash to used based on the supplied module type
-    if (mod.type == Metasploit::Model::Module::Type::ENCODER)
-      ch = self.compat['Encoder']
-    elsif (mod.type == Metasploit::Model::Module::Type::NOP)
-      ch = self.compat['Nop']
-    elsif (mod.type == Metasploit::Model::Module::Type::PAYLOAD)
-      ch = self.compat['Payload']
-    else
-      return true
+    case mod.module_type
+      when Metasploit::Model::Module::Type::ENCODER
+        ch = self.compat['Encoder']
+      when Metasploit::Model::Module::Type::NOP
+        ch = self.compat['Nop']
+      when Metasploit::Model::Module::Type::PAYLOAD
+        ch = self.compat['Payload']
+      else
+        return true
     end
 
     # Enumerate each compatibility item in our hash to find out
@@ -664,13 +664,15 @@ class Module < Metasploit::Model::Base
   #
   # A unique identifier for this module instance
   #
+
+  def uuid
+    @uuid ||= Rex::Text.rand_text_alphanumeric(8).downcase
+  end
   attr_reader :uuid
 
 protected
   attr_writer :uuid
-  def generate_uuid
-    self.uuid = Rex::Text.rand_text_alphanumeric(8).downcase
-  end
+
   #
   # The list of options that support merging in an information hash.
   #
