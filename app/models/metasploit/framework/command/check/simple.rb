@@ -5,10 +5,6 @@ class Metasploit::Framework::Command::Check::Simple < Metasploit::Framework::Com
   # Validations
   #
 
-  #
-  # Attribute Validations
-  #
-
   validates :dispatcher,
             fanged: true
   validates :metasploit_instance,
