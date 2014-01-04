@@ -34,7 +34,7 @@ module Metasploit4
           'juan vazquez'
         ],
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

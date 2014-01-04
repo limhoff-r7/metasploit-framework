@@ -28,7 +28,7 @@ module Metasploit3
         'RageLtMan', # SSL support
       ],
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

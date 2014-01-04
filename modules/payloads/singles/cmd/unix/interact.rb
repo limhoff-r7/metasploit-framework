@@ -25,7 +25,7 @@ module Metasploit3
       'Description'   => 'Interacts with a shell on an established socket connection',
       'Author'        => 'hdm',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd_interact',

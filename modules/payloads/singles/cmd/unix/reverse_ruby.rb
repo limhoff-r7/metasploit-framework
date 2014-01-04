@@ -25,7 +25,7 @@ module Metasploit3
       'Description' => 'Connect back and create a command shell via Ruby',
       'Author'      => 'kris katterjohn',
       'License'     => MSF_LICENSE,
-      'Platform'    => 'unix',
+      'Platform'    => 'UNIX',
       'Arch'        => ARCH_CMD,
       'Session'     => Msf::Sessions::CommandShell,
       'PayloadType' => 'cmd',

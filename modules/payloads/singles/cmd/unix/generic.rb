@@ -25,7 +25,7 @@ module Metasploit3
       'Description'   => 'Executes the supplied command',
       'Author'        => 'hdm',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

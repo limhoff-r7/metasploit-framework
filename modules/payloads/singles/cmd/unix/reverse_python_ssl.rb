@@ -25,7 +25,7 @@ module Metasploit3
       'Description'   => 'Creates an interactive shell via python, uses SSL, encodes with base64 by design.',
       'Author'        => 'RageLtMan',
       'License'       => BSD_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

@@ -33,7 +33,7 @@ module Metasploit4
           'Ulisses Castro <uss.thebug[at]gmail.com>'
         ],
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

@@ -25,7 +25,7 @@ module Metasploit3
       'Description'   => 'Listen for a connection and spawn a command shell via perl',
       'Author'        => ['Samy <samy@samy.pl>', 'cazz'],
       'License'       => BSD_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',

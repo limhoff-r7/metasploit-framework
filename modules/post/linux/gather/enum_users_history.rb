@@ -33,7 +33,8 @@ class Metasploit3 < Msf::Post
             # based largely on get_bash_history function by Stephen Haywood
             'ohdae <bindshell[at]live.com>'
           ],
-        'Platform'      => [ 'linux' ],
+        'Arch' => [ ARCH_X86 ],
+        'Platform'      => [ 'Linux' ],
         'SessionTypes'  => [ 'shell' ]
       ))
 

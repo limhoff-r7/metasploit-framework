@@ -30,7 +30,7 @@ module Metasploit3
         },
       'Author'        => 'RageLtMan',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
+      'Platform'      => 'UNIX',
       'Arch'          => ARCH_CMD,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd_bash',
