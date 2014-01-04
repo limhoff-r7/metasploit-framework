@@ -115,6 +115,14 @@ module Msf::DBManager::Activation::Once
     # Provide access to ActiveRecord models shared w/ commercial versions
     require "metasploit_data_models"
 
+    # suppress load warnings about rails and constant already initialized errors that are to be expected.
+    quietly do
+      # eager load all paths to prevent constant resolution issues between ModuleCacheRebuild thread and msfconsole
+      # related to the non-thread-safe loading mechanism used by ActiveSupport::Dependencies
+      Metasploit::Model.configuration.autoload.eager_load!
+      MetasploitDataModels.configuration.autoload.eager_load!
+    end
+
     metasploit_data_model_migrations_pathname = MetasploitDataModels.root.join(
         'db',
         'migrate'

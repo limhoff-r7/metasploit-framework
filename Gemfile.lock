@@ -1,22 +1,22 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: 398faf2be21068880452f77dc141638dbd4a2ccc
-  tag: v0.19.3.module-cache-construction
+  revision: 8b719e29698111928019a7dbe57362fc38584e22
+  tag: v0.19.6.union-validation
   specs:
-    metasploit-model (0.19.3)
+    metasploit-model (0.19.6)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: a16e8d4c8feac432e2dd5fabc060e99c3ddbde07
-  tag: v0.54.2.module-cache-construction
+  revision: ae4a6a19e9eab9b0526fc6fa261bffa5d2cbf3b9
+  tag: v0.54.5.compatible-payloads
   specs:
-    metasploit_data_models (0.54.2)
+    metasploit_data_models (0.54.5)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
       file-find
-      metasploit-model (~> 0.19.0)
+      metasploit-model (~> 0.19.6)
       pg
 
 GEM
