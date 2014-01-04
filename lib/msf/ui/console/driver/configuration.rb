@@ -59,7 +59,7 @@ module Msf::Ui::Console::Driver::Configuration
     group = {}
 
     if (metasploit_instance)
-      group['ActiveModule'] = metasploit_instance.fullname
+      group['ActiveModule'] = metasploit_instance.full_name
     end
 
     # Save it
