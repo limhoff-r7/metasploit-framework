@@ -19,8 +19,11 @@ class Meterpreter_Java_Java < Msf::Sessions::Meterpreter
   end
   def initialize(rstream, opts={})
     super
-    self.platform      = 'java/java'
+
+    self.architecture_abbreviation = 'Java'
     self.binary_suffix = 'jar'
+    self.platform = 'java/java'
+    self.platform_fully_qualified_name = 'Java'
   end
 end
 

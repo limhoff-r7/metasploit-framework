@@ -453,7 +453,26 @@ class Meterpreter < Rex::Post::Meterpreter::Client
     sock
   end
 
-  attr_accessor :platform
+  def platform
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}##{__method__} is deprecated.  "  \
+        "Use #{self.class}#platform_fully_qualified_name to get the Mdm::Platform#fully_qualfied_name and " \
+        "use #{self.class}#architecture_abbreviation to get the Mdm::Architecture#abbreviation instead."
+    )
+    @platform
+  end
+
+  def platform=(platform)
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}##{__method__} is deprecated.  " \
+        "Use #{self.class}#platform_fully_qualified_name= to set the Mdm::Platform#fully_qualified_name and " \
+        "use #{self.class}#architecture_abbreviation to set the Mdm::Architecture#abbreviation instead"
+    )
+    @platform = platform
+  end
+
+  attr_accessor :platform_fully_qualified_name
+  attr_accessor :architecture_abbreviation
   attr_accessor :binary_suffix
   attr_accessor :console # :nodoc:
   attr_accessor :skip_ssl

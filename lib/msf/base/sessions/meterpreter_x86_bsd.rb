@@ -13,8 +13,11 @@ module Sessions
 class Meterpreter_x86_BSD < Msf::Sessions::Meterpreter
   def initialize(rstream, opts={})
     super
-    self.platform      = 'x86/bsd'
+
+    self.architecture_abbreviation = 'BSD'
     self.binary_suffix = 'bso'
+    self.platform = 'x86/bsd'
+    self.platform_fully_qualified_name = 'x86'
   end
 end
 
