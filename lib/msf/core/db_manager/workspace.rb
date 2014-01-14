@@ -7,9 +7,13 @@ module Msf::DBManager::Workspace
     end
   end
 
-  def workspace
-    find_workspace(@workspace_name)
+  def workspace(options={})
+    options.assert_valid_keys(:name)
+
+    find_workspace(options[:name] || @workspace_name)
   end
+
+  attr_accessor :workspace_name
 
   def default_workspace
     with_connection {

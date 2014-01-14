@@ -211,6 +211,8 @@ protected
   # new session.
   #
   def register_session(session)
+    before_register_session(session)
+
     # Register the session with the framework
     framework.sessions.register(session)
 

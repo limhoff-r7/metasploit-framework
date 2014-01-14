@@ -27,7 +27,7 @@ $framework = Msf::Simple::Framework.create('DisableDatabase' => true)
 $framework.exploits.each_module { |name, mod|
 	x = mod.new
 
-	x.compatible_payloads.map{|n, m|
+	x.compatible_payload_instances.map{|n, m|
 		puts "#{x.refname.ljust 40} - #{n}"
 	}
 }

@@ -224,9 +224,9 @@ class SessionManager < Hash
       # Don't let errant event handlers kill our session
       begin
         framework.events.on_session_open(session)
-      rescue ::Exception => e
-        wlog("Exception in on_session_open event handler: #{e.class}: #{e}")
-        wlog("Call Stack\n#{e.backtrace.join("\n")}")
+      rescue ::Exception => exception
+        wlog("Exception in on_session_open event handler: #{exception.class}: #{exception}")
+        wlog("Call Stack\n#{exception.backtrace.join("\n")}")
       end
 
       if session.respond_to?("console")

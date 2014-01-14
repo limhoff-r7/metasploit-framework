@@ -9,6 +9,8 @@ require 'msf/core'
 class Msf::Module::Target
   require 'msf/core/module/target/bruteforce'
 
+  extend Metasploit::Framework::ResurrectingAttribute
+
   require 'msf/core/module/target/architectures'
   include Msf::Module::Target::Architectures
 
@@ -27,6 +29,20 @@ class Msf::Module::Target
   #
   #   @return [Msf::Exploit]
   attr_accessor :metasploit_instance
+
+  #
+  # Resurrecting Attributes
+  #
+
+  # @!attribute [rw] module_ancestor
+  #   Cached metadata for this target.
+  #
+  #   @return [Mdm::Module::Target]
+  resurrecting_attr_accessor :module_target do
+    ActiveRecord::Base.connection_pool.with_connection {
+      metasploit_instance.module_instance.targets.where(name: name).first
+    }
+  end
 
   #
   # Methods

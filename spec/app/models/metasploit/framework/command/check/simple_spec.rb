@@ -34,91 +34,11 @@ describe Metasploit::Framework::Command::Check::Simple do
 
   context 'validations' do
     context 'dispatcher' do
-      subject(:dispatcher_errors) do
-        command.errors[:dispatcher]
-      end
-
-      #
-      # lets
-      #
-
-      let(:error) do
-        I18n.translate!('errors.messages.defanged')
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msf_ui_console_driver.instance_variable_set :@defanged, defanged
-
-        command.valid?
-      end
-
-      context 'with defanged' do
-        let(:defanged) do
-          true
-        end
-
-        it 'adds error on :dispatcher' do
-          expect(dispatcher_errors).to include(error)
-        end
-      end
-
-      context 'without defanged' do
-        let(:defanged) do
-          false
-        end
-
-        it 'does not add error on :dispatcher' do
-          expect(dispatcher_errors).not_to include(error)
-        end
-      end
+      it_should_behave_like 'validates Metasploit::Framework::Command#dispatcher is fanged'
     end
 
     context 'metasploit_instance' do
-      subject(:metasploit_instance_errors) do
-        command.errors[:metasploit_instance]
-      end
-
-      #
-      # lets
-      #
-
-      let(:error) do
-        I18n.translate!('errors.messages.blank')
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msf_ui_console_driver.metasploit_instance = metasploit_instance
-
-        command.valid?
-      end
-
-      context 'with present' do
-        let(:metasploit_instance) do
-          Class.new(Msf::Module).new
-        end
-
-        it 'does not add error on :metasploit_instance' do
-          expect(metasploit_instance_errors).not_to include(error)
-        end
-      end
-
-      context 'without present' do
-        let(:metasploit_instance) do
-          nil
-        end
-
-        it 'adds error on :metasploit_instance' do
-          expect(metasploit_instance_errors).to include(error)
-        end
-      end
+      it_should_behave_like 'validates presence of Metasploit::Framework::Command#metasploit_instance'
     end
 
     context 'module_type' do

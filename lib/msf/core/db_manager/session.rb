@@ -206,4 +206,19 @@ module Msf::DBManager::Session
       s
     }
   end
+
+  # Records session being opened in database by creating an `Mdm::Session`, `Mdm::Vuln`, `Mdm::ExploitAttempt`, and
+  # `Mdm::VulnAttempt`.
+  #
+  # @param session_model [Msf::Session] In-memory session model who's in-database record to create/update and return.
+  # @return [void]
+  def open_session(session)
+    framework.db.with_connection {
+      creation = Metasploit::Framework::Session::Open::Creation.new(
+          source: session
+      )
+      creation.valid!
+      creation.create
+    }
+  end
 end

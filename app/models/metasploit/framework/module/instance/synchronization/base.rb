@@ -1,5 +1,5 @@
 # Base class for class that sync the cache with metadata in a metasploit instance.
-class Metasploit::Framework::Module::Instance::Synchronization::Base < Metasploit::Framework::Synchronization::Base
+class Metasploit::Framework::Module::Instance::Synchronization::Base < Metasploit::Framework::Synchronization::Destination
   include Metasploit::Framework::Module::Instance::Logging
 
   # Whether this synchronization class can synchronize the given `module_instance`.

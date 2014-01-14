@@ -32,8 +32,15 @@ module Metasploit::Framework::Command::Child
   # Methods
   #
 
+  def option_parser
+    if parent
+      parent.option_parser
+    else
+      super
+    end
+  end
+
   delegate :dispatcher,
-           :option_parser,
            :partial_word,
            # must allow nil so that parent can be validated
            allow_nil: true,

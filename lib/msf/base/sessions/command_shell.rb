@@ -37,6 +37,12 @@ class Msf::Sessions::CommandShell
     o.run(args)
   end
 
+  def initialize(*args)
+    self.architecture_abbreviation = 'cmd'
+
+    super
+  end
+
   #
   # Returns the type of session.
   #

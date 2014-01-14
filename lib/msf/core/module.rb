@@ -307,23 +307,30 @@ class Module < Metasploit::Model::Base
     nil
   end
 
+  # @deprecated Use {#workspace_name}.
+  #
   # Returns the current `Mdm::Workspace#name`
   #
   # @return [String] `Mdm::Workspace#name`
   def workspace
-    workspace_name = datastore['WORKSPACE']
-
-    unless workspace_name
-      framework.db.with_connection {
-        workspace = framework.db.workspace
-
-        if workspace
-          workspace_name = workspace.name
-        end
-      }
-    end
-
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}##{__method__} is deprecated.  Use #{self.class}#workspace_name instead"
+    )
     workspace_name
+  end
+
+  # Returns the current `Mdm::Workspace#name`
+  #
+  # @return [String] `Mdm::Workspace#name`
+  def workspace_name
+    datastore['WORKSPACE'] || framework.db.workspace_name
+  end
+
+  # The workspace with `Mdm::Workspace#name` equal to {#workspace_name}
+  #
+  # @return [Mdm::Workspace]
+  def workspace_record
+    framework.db.workspace(name: workspace_name)
   end
 
   #

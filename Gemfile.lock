@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: ae4a6a19e9eab9b0526fc6fa261bffa5d2cbf3b9
-  tag: v0.54.5.compatible-payloads
+  revision: 1925878d016bc4706739f04aa4dd5216c661d2b1
+  tag: v0.57.0.compatible-payloads
   specs:
-    metasploit_data_models (0.54.5)
+    metasploit_data_models (0.57.0)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set

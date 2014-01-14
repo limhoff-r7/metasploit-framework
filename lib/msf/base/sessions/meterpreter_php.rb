@@ -20,7 +20,7 @@ class Meterpreter_Php_Php < Msf::Sessions::Meterpreter
   def initialize(rstream, opts={})
     super
 
-    self.architecture_abbreviation = 'PHP'
+    self.architecture_abbreviation = 'php'
     self.binary_suffix = 'php'
     self.platform = 'php/php'
     self.platform_fully_qualified_name = 'PHP'

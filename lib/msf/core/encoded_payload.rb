@@ -11,8 +11,21 @@ module Msf
 #
 ###
 class EncodedPayload
-
   include Framework::Offspring
+
+  #
+  # Attributes
+  #
+
+  # @!attribute [rw] payload_instance
+  #   Instance of payload class
+  #
+  #   @return [Msf::Payload]
+  attr_accessor :payload_instance
+
+  #
+  # Methods
+  #
 
   #
   # This method creates an encoded payload instance and returns it to the
@@ -27,12 +40,14 @@ class EncodedPayload
     return p
   end
 
-  #
   # Creates an instance of an EncodedPayload.
   #
-  def initialize(framework, pinst, reqs)
+  # @param framework [Msf::Simple::Framework]
+  # @param payload_instance [Msf::Payload] instance of payload class to be encoded.
+  # @param reqs [Array<String>] requirements
+  def initialize(framework, payload_instance, reqs)
     self.framework = framework
-    self.pinst     = pinst
+    self.payload_instance     = payload_instance
     self.reqs      = reqs
   end
 
@@ -62,7 +77,7 @@ class EncodedPayload
 
     begin
       # First, validate
-      pinst.validate()
+      payload_instance.validate()
 
       # Generate the raw version of the payload first
       generate_raw() if self.raw.nil?
@@ -90,7 +105,7 @@ class EncodedPayload
   #
   # @return [String] The raw, unencoded payload.
   def generate_raw
-    self.raw = (reqs['Prepend'] || '') + pinst.generate + (reqs['Append'] || '')
+    self.raw = (reqs['Prepend'] || '') + payload_instance.generate + (reqs['Append'] || '')
 
     # If an encapsulation routine was supplied, then we should call it so
     # that we can get the real raw payload.
@@ -107,7 +122,7 @@ class EncodedPayload
     # If the exploit has bad characters, we need to run the list of encoders
     # in ranked precedence and try to encode without them.
     if reqs['BadChars'] or reqs['Encoder'] or reqs['ForceEncode']
-      encoders = pinst.compatible_encoders
+      encoders = payload_instance.compatible_encoders
 
       # Fix encoding issue
       if reqs['Encoder']
@@ -117,7 +132,7 @@ class EncodedPayload
       if ((reqs['Encoder']) and (preferred = framework.encoders[reqs['Encoder']]))
         encoders = [ [reqs['Encoder'], preferred] ]
       elsif (reqs['Encoder'])
-        wlog("#{pinst.refname}: Failed to find preferred encoder #{reqs['Encoder']}")
+        wlog("#{payload_instance.refname}: Failed to find preferred encoder #{reqs['Encoder']}")
         raise NoEncodersSucceededError, "Failed to find preferred encoder #{reqs['Encoder']}"
       end
 
@@ -129,7 +144,7 @@ class EncodedPayload
         # encoder matches with what we're searching for.
         if ((reqs['EncoderType']) and
             (self.encoder.encoder_type.split(/\s+/).include?(reqs['EncoderType']) == false))
-          wlog("#{pinst.refname}: Encoder #{encoder.refname} is not a compatible encoder type: #{reqs['EncoderType']} != #{self.encoder.encoder_type}",
+          wlog("#{payload_instance.refname}: Encoder #{encoder.refname} is not a compatible encoder type: #{reqs['EncoderType']} != #{self.encoder.encoder_type}",
             'core', LEV_1)
           next
         end
@@ -142,13 +157,13 @@ class EncodedPayload
         if ((reqs['EncoderType'].nil?) and
             (reqs['Encoder'].nil?) and
             (self.encoder.rank_number == ManualRanking))
-          wlog("#{pinst.refname}: Encoder #{encoder.refname} is manual ranked and was not defined as a preferred encoder.",
+          wlog("#{payload_instance.refname}: Encoder #{encoder.refname} is manual ranked and was not defined as a preferred encoder.",
             'core', LEV_1)
           next
         end
 
         # Import the datastore from payload (and likely exploit by proxy)
-        self.encoder.share_datastore(pinst.datastore)
+        self.encoder.share_datastore(payload_instance.datastore)
 
         # If we have any encoder options, import them into the datastore
         # of the encoder.
@@ -160,7 +175,7 @@ class EncodedPayload
         begin
           self.encoder.validate
         rescue ::Exception
-          wlog("#{pinst.refname}: Failed to validate encoder #{encoder.refname}: #{$!}",
+          wlog("#{payload_instance.refname}: Failed to validate encoder #{encoder.refname}: #{$!}",
             'core', LEV_1)
           next
         end
@@ -175,10 +190,10 @@ class EncodedPayload
         # to using a different encoder.
         #
         1.upto(self.iterations) do |iter|
-          err_start = "#{pinst.refname}: iteration #{iter}"
+          err_start = "#{payload_instance.refname}: iteration #{iter}"
 
           begin
-            eout = self.encoder.encode(eout, reqs['BadChars'], nil, pinst.platform)
+            eout = self.encoder.encode(eout, reqs['BadChars'], nil, payload_instance.platform)
           rescue EncodingError
             wlog("#{err_start}: Encoder #{encoder.refname} failed: #{$!}", 'core', LEV_1)
             dlog("#{err_start}: Call stack\n#{$@.join("\n")}", 'core', LEV_3)
@@ -220,7 +235,7 @@ class EncodedPayload
         self.encoder = nil
 
         raise NoEncodersSucceededError,
-          "#{pinst.refname}: All encoders failed to encode.",
+          "#{payload_instance.refname}: All encoders failed to encode.",
           caller
       end
 
@@ -262,14 +277,14 @@ class EncodedPayload
 
     # Now construct the actual sled
     if (self.nop_sled_size > 0)
-      nops = pinst.compatible_nops
+      nops = payload_instance.compatible_nops
 
       # If the caller had a preferred nop, try to find it and prefix it
       if ((reqs['Nop']) and
           (preferred = framework.nops[reqs['Nop']]))
         nops.unshift([reqs['Nop'], preferred ])
       elsif (reqs['Nop'])
-        wlog("#{pinst.refname}: Failed to find preferred nop #{reqs['Nop']}")
+        wlog("#{payload_instance.refname}: Failed to find preferred nop #{reqs['Nop']}")
       end
 
       nops.each { |nopname, nopmod|
@@ -277,23 +292,23 @@ class EncodedPayload
         self.nop = nopmod.new
 
         # Propagate options from the payload and possibly exploit
-        self.nop.share_datastore(pinst.datastore)
+        self.nop.share_datastore(payload_instance.datastore)
 
         # The list of save registers
-        save_regs = (reqs['SaveRegisters'] || []) + (pinst.save_registers || [])
+        save_regs = (reqs['SaveRegisters'] || []) + (payload_instance.save_registers || [])
 
         if (save_regs.empty? == true)
           save_regs = nil
         end
 
         begin
-          nop.copy_ui(pinst)
+          nop.copy_ui(payload_instance)
 
           self.nop_sled = nop.generate_sled(self.nop_sled_size,
             'BadChars'      => reqs['BadChars'],
             'SaveRegisters' => save_regs)
         rescue
-          dlog("#{pinst.refname}: Nop generator #{nop.refname} failed to generate sled for payload: #{$!}",
+          dlog("#{payload_instance.refname}: Nop generator #{nop.refname} failed to generate sled for payload: #{$!}",
             'core', LEV_1)
 
           self.nop = nil
@@ -304,7 +319,7 @@ class EncodedPayload
 
       if (self.nop_sled == nil)
         raise NoNopsSucceededError,
-          "#{pinst.refname}: All NOP generators failed to construct sled for.",
+          "#{payload_instance.refname}: All NOP generators failed to construct sled for.",
           caller
       end
     else
@@ -332,7 +347,7 @@ class EncodedPayload
       opts[:platform] = opts[:platform].platforms
     end
 
-    emod = pinst.assoc_exploit if pinst.respond_to? :assoc_exploit
+    emod = payload_instance.assoc_exploit if payload_instance.respond_to? :assoc_exploit
 
     if emod
       if (emod.datastore["EXE::Custom"] and emod.respond_to? :get_custom_exe)
@@ -359,8 +374,8 @@ class EncodedPayload
     end
     # Lastly, try the payload's. This always happens if we don't have an
     # associated exploit module.
-    opts[:platform] ||= pinst.platform if pinst.respond_to? :platform
-    opts[:arch] ||= pinst.arch         if pinst.respond_to? :arch
+    opts[:platform] ||= payload_instance.platform if payload_instance.respond_to? :platform
+    opts[:arch] ||= payload_instance.arch         if payload_instance.respond_to? :arch
 
     Msf::Util::EXE.to_executable(framework, opts[:arch], opts[:platform], encoded, opts)
   end
@@ -375,9 +390,9 @@ class EncodedPayload
   # executes it.
   #
   def encoded_jar(opts={})
-    return pinst.generate_jar(opts) if pinst.respond_to? :generate_jar
+    return payload_instance.generate_jar(opts) if payload_instance.respond_to? :generate_jar
 
-    opts[:spawn] ||= pinst.datastore["Spawn"]
+    opts[:spawn] ||= payload_instance.datastore["Spawn"]
 
     Msf::Util::EXE.to_jar(encoded_exe(opts), opts)
   end
@@ -387,7 +402,7 @@ class EncodedPayload
   # containers such as Tomcat.
   #
   def encoded_war(opts={})
-    return pinst.generate_war(opts) if pinst.respond_to? :generate_war
+    return payload_instance.generate_war(opts) if payload_instance.respond_to? :generate_war
 
     Msf::Util::EXE.to_jsp_war(encoded_exe(opts), opts)
   end
@@ -433,10 +448,6 @@ protected
   attr_writer :nop # :nodoc:
   attr_writer :iterations # :nodoc:
 
-  #
-  # The payload instance used to generate the payload
-  #
-  attr_accessor :pinst
   #
   # The requirements used for generation
   #

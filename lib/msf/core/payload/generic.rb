@@ -234,7 +234,7 @@ protected
     # Look for one based on the exploit's compatible set
     if(assoc_exploit)
       self.actual_payload = framework.payloads.find_payload_from_set(
-        assoc_exploit.compatible_payloads,
+        assoc_exploit.compatible_payload_instances,
         actual_platform,
         actual_arch,
         handler_klass,

@@ -31,7 +31,7 @@ group :db do
   gem 'activerecord'
   # Database models shared between framework and Pro.
   # @todo change to `gem 'metasploit_data_models', '~> X.Y.Z' when version X.Y.Z is released to rubygems`
-  gem 'metasploit_data_models', git: 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.54.5.compatible-payloads'
+  gem 'metasploit_data_models', git: 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.57.0.compatible-payloads'
   # Needed for module caching in Mdm::ModuleDetails
   gem 'pg', '>= 0.11'
 end

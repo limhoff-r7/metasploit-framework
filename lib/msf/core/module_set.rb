@@ -77,6 +77,15 @@ class Msf::ModuleSet < Metasploit::Model::Base
     )
   end
 
+  # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
+  # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
+  #
+  # @param reference_name [String] An `Mdm::Module::Class#reference_name`.
+  # @return (see Msf::ModuleManager#create)
+  def create(reference_name)
+    module_manager.create("#{module_type}/#{reference_name}")
+  end
+
   # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
   # "can't add a new key into hash during iteration"
   #

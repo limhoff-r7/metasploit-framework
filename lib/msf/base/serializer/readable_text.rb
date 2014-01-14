@@ -109,7 +109,7 @@ class ReadableText
           'Description',
         ])
 
-    exploit.compatible_payloads.each { |entry|
+    exploit.compatible_payload_instances.each { |entry|
       tbl << [ entry[0], entry[1].new.description ]
     }
 
@@ -405,6 +405,8 @@ class ReadableText
       [
         'Id',
         'Type',
+        'Architecture',
+        'Platform',
         'Information',
         'Connection'
       ]
@@ -425,10 +427,27 @@ class ReadableText
         sinfo = sinfo[0,77] + "..."
       end
 
-      row = [ session.sid.to_s, session.type.to_s, sinfo, session.tunnel_to_s + " (#{session.session_host})" ]
-      if session.respond_to? :platform
-        row[1] += " " + session.platform
+      formatted_architecture = ''
+
+      if session.respond_to? :architecture_abbreviation
+        formatted_architecture = session.architecture_abbreviation.to_s
       end
+
+      formatted_platform = ''
+
+      if session.respond_to? :platform_fully_qualified_name
+        formatted_platform = session.platform_fully_qualified_name.to_s
+      end
+
+      row = [
+          session.sid.to_s,
+          session.type.to_s,
+          formatted_architecture,
+          formatted_platform,
+          sinfo,
+          session.tunnel_to_s + " (#{session.session_host})"
+      ]
+
       row << session.via_exploit if verbose and session.via_exploit
 
       tbl << row

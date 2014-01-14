@@ -76,6 +76,16 @@ module Metasploit::Framework::Command::Parent
     completions
   end
 
+  def option_parser
+    unless instance_variable_defined? :@option_parser
+      super
+
+      @option_parser.on_tail('-h', '--help', 'Show this help') do
+        self.subcommand_name = :help
+      end
+    end
+  end
+
   delegate :partial_tab_completions,
            to: :subcommand
 

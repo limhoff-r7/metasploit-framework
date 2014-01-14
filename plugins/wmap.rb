@@ -1712,6 +1712,13 @@ class Plugin::Wmap < Msf::Plugin
 					})
 				when 'exploit'
 					if not opts['PAYLOAD']
+            opts['TARGET_NAME']
+            payload_compatibility = Metasploit::Framework::Module::Target::Compatibility::Payload.new(
+
+            )
+            modinst.compatible_payload_instances(
+
+            )
 						opts['PAYLOAD'] = WmapCommandDispatcher::Exploit.choose_payload(modinst, opts['TARGET'])
 					end
 

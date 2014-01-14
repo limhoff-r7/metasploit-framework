@@ -1,63 +1,6 @@
 # -*- coding: binary -*-
 require 'msf/core'
-
-module Msf
-
-###
-#
-# Event notifications that affect sessions.
-#
-###
-module SessionEvent
-
-  #
-  # Called when a session is opened.
-  #
-  def on_session_open(session)
-  end
-
-  #
-  # Called when a session is closed.
-  #
-  def on_session_close(session, reason='')
-  end
-
-  #
-  # Called when the user interacts with a session.
-  #
-  def on_session_interact(session)
-  end
-
-  #
-  # Called when the user writes data to a session.
-  #
-  def on_session_command(session, command)
-  end
-
-  #
-  # Called when output comes back from a user command.
-  #
-  def on_session_output(session, output)
-  end
-
-  #
-  # Called when a file is uploaded.
-  #
-  def on_session_upload(session, local_path, remote_path)
-  end
-
-  #
-  # Called when a file is downloaded.
-  #
-  def on_session_download(session, remote_path, local_path)
-  end
-
-  #
-  # Called when a file is deleted.
-  #
-  def on_session_filedelete(session, path)
-  end
-end
+require 'msf/core/route_array'
 
 ###
 #
@@ -73,14 +16,14 @@ end
 # tied to a network connection.
 #
 ###
-module Session
+module Msf::Session
 
-  include Framework::Offspring
+  include Msf::Framework::Offspring
 
   def initialize
     self.alive = true
     self.uuid  = Rex::Text.rand_text_alphanumeric(8).downcase
-    @routes = RouteArray.new(self)
+    @routes = Msf::RouteArray.new(self)
     #self.routes = []
   end
 
@@ -259,11 +202,11 @@ module Session
   # exploit instance. Store references from and to the exploit module.
   #
   def set_from_exploit(m)
-    self.via = { 'Exploit' => m.fullname }
+    self.via = { 'Exploit' => m.full_name }
     self.via['Payload'] = ('payload/' + m.datastore['PAYLOAD'].to_s) if m.datastore['PAYLOAD']
     self.target_host = Rex::Socket.getaddress(m.target_host) if (m.target_host.to_s.strip.length > 0)
     self.target_port = m.target_port if (m.target_port.to_i != 0)
-    self.workspace   = m.workspace
+    self.workspace   = m.workspace_name
     self.username    = m.owner
     self.exploit_datastore = m.datastore
     self.user_input = m.user_input if m.user_input
@@ -299,11 +242,11 @@ module Session
   #
   def cleanup
     if db_record
-      framwork.db.with_connection do
+      framework.db.with_connection do
         db_record.closed_at = Time.now.utc
         # ignore exceptions
         db_record.save
-        db_record = nil
+        self.db_record = nil
       end
     end
   end
@@ -404,25 +347,4 @@ protected
 
   attr_accessor :via # :nodoc:
 
-end
-
-end
-
-class RouteArray < Array # :nodoc: all
-  def initialize(sess)
-    self.session = sess
-    super()
-  end
-
-  def <<(val)
-    session.framework.events.on_session_route(session, val)
-    super
-  end
-
-  def delete(val)
-    session.framework.events.on_session_route_remove(session, val)
-    super
-  end
-
-  attr_accessor :session
 end

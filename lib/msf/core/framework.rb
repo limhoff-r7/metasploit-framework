@@ -11,6 +11,7 @@ require 'monitor.rb'
 #
 
 require 'msf/core'
+require 'msf/core/session_event'
 require 'msf/util'
 
 module Msf
@@ -222,11 +223,11 @@ class FrameworkEventSubscriber
   def module_event(name, instance, opts={})
     framework.db.with_connection {
       event = {
-          :workspace => framework.db.find_workspace(instance.workspace),
+          :workspace => instance.workspace_record,
           :name      => name,
           :username  => instance.owner,
           :info => {
-              :module_name => instance.fullname,
+              :module_name => instance.full_name,
               :module_uuid => instance.uuid
           }.merge(opts)
       }
@@ -295,7 +296,7 @@ class FrameworkEventSubscriber
       return
     end
 
-    framework.db.with_connetion do
+    framework.db.with_connection do
       ws = framework.db.find_workspace(session.workspace)
       event = {
           :workspace => ws,
@@ -325,7 +326,7 @@ class FrameworkEventSubscriber
   def on_session_open(session)
     opts = { :datastore => session.exploit_datastore.to_h, :critical => true }
     session_event('session_open', session, opts)
-    framework.db.report_session(:session => session)
+    framework.db.open_session(session)
   end
 
   ##
@@ -429,7 +430,7 @@ class FrameworkEventSubscriber
     framework.db.report_session_event({
       :etype => 'module_run',
       :session => session,
-      :local_path => mod.fullname
+      :local_path => mod.full_name
     })
   end
 

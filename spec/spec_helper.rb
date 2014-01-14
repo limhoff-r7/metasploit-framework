@@ -47,6 +47,9 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.order = :random
   config.treat_symbols_as_metadata_keys_with_true_values = true
+
+  # catch missing translations
+  I18n.exception_handler = Metasploit::Model::Spec::I18nExceptionHandler.new
 end
 
 # Adds to RSpec configuration for different subsystems

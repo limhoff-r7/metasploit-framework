@@ -67,8 +67,16 @@ class Metasploit::Framework::Command::Base < Metasploit::Model::Base
     attr_writer :parse_words_block
 
     def parse_words_block
-      @parse_words_block ||= ->(parsable_words){}
+      @parse_words_block ||= ->(parsable_words) {
+        option_parser.parse!(parsable_words)
+      }
     end
+  end
+
+  def option_parser
+    @option_parser ||= OptionParser.new { |option_parser|
+      option_parser.banner = "Usage: #{self.class.command_name} [options]"
+    }
   end
 
   # @!method print_line(message=nil)

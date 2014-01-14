@@ -50,6 +50,43 @@ describe Metasploit::Framework::Command::Base do
     it { should == 'base' }
   end
 
+  context '#option_parser' do
+    subject(:option_parser) do
+      command.option_parser
+    end
+
+    it { should be_an OptionParser }
+
+    context 'banner' do
+      subject(:banner) do
+        option_parser.banner
+      end
+
+      it 'should include the ::command_name' do
+        expect(banner).to eq("Usage: #{described_class.command_name} [options]")
+      end
+    end
+  end
+
+  context 'parse_words_block' do
+    subject(:parse_words_block) do
+      described_class.parse_words_block
+    end
+
+    let(:parsable_words) do
+      [
+          'parsable',
+          'words'
+      ]
+    end
+
+    it 'parses parsable_words with OptionParser#parse!' do
+      expect(command.option_parser).to receive(:parse!).with(parsable_words)
+
+      command.instance_exec(parsable_words, &parse_words_block)
+    end
+  end
+
   it_should_behave_like 'delegates to #dispatcher', :print_error
   it_should_behave_like 'delegates to #dispatcher', :print_good
   it_should_behave_like 'delegates to #dispatcher', :print_line

@@ -20,7 +20,7 @@ class Meterpreter_Python_Python < Msf::Sessions::Meterpreter
   def initialize(rstream, opts={})
     super
 
-    self.architecture_abbreviation = 'Python'
+    self.architecture_abbreviation = 'python'
     self.binary_suffix = 'py'
     self.platform = 'python/python'
     self.platform_fully_qualified_name = 'Python'

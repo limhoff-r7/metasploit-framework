@@ -421,6 +421,15 @@ class Payload < Msf::Module
   #
   ##
 
+  # @note `session` will not have a {Msf::Session#sid} until it is registered.
+  #
+  # Called before {Msf::SessionManager#register} in order to allow payload and/or handler to set session attributes
+  # before it is registered with the framework and the `Mdm::Session` is created in the database.
+  #
+  # @param session [Msf::Session] an unregistered session
+  def before_register_session(session)
+  end
+
   #
   # Once an exploit completes and a session has been created on behalf of the
   # payload, the framework will call the payload's on_session notification

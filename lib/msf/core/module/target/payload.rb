@@ -1,5 +1,54 @@
 # Target-specific payload modifications
 module Msf::Module::Target::Payload
+  # Returns a list of compatible payload instances based on architecture, platform, and space/size for this target.
+  # Optionally, restrict the search set of payload module classes to a given set of
+  # `Mdm::Module::Class#reference_names`.
+  #
+  # @param options [Hash{Symbol => Array<String>}]
+  # @option options [Array<String>] :reference_names Array of `Mdm::Module::Class#reference_name` for payloads from
+  #   which to return compatible payloads.
+  # @return [Array<Msf::Payload>]  payload instances that are compatible with this target.
+  def compatible_payload_instances(options={})
+    options.assert_valid_keys(:reference_names)
+
+    payload_compatibility = self.payload_compatibility(refrence_names: options[:reference_names])
+
+    payload_compatibility.instances
+  end
+
+  def declared_payload_space
+    unless instance_variable_defined? :@declared_payload_space
+      @declared_payload_space = nil
+      payload = opts['Payload']
+
+      if payload
+        payload_space = payload['Space']
+
+        if payload_space
+          @declared_payload_space = payload_space.to_i
+        end
+      end
+    end
+
+    @declared_payload_space
+  end
+
+  # @param options [Hash{Symbol => Array<String>}]
+  # @option options [Array<String>] :reference_names Array of `Mdm::Module::Class#reference_name` for payloads from
+  #   which to return compatible payloads.
+  # @return [Metasploit::Framework::Module::Target::Compatibility::Payload]
+  def payload_compatibility(options={})
+    options.assert_valid_keys(:reference_names)
+
+    payload_compatibility = Metasploit::Framework::Module::Target::Compatibility::Payload.new(
+        reference_names: options[:reference_names],
+        target_model: self
+    )
+    payload_compatibility.valid!
+
+    payload_compatibility
+  end
+
   #
   # The bad characters specific to this target for the payload.
   #
@@ -53,7 +102,7 @@ module Msf::Module::Target::Payload
   # Payload space information for this target.
   #
   def payload_space
-    opts['Payload'] ? opts['Payload']['Space'] : nil
+    declared_payload_space || metasploit_instance.payload_space
   end
 
   #

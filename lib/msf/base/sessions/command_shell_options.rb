@@ -12,6 +12,19 @@ require 'msf/core/option_container'
 
 module Msf::Sessions::CommandShellOptions
 
+  def before_register_session(session)
+    if architecture_abbreviations.length == 1
+      session.architecture_abbreviation = architecture_abbreviations.first
+    end
+
+    platforms = platform_list.platforms
+
+    if platforms.length == 1
+      platform = platforms.first
+      session.platform_fully_qualified_name = platform.fully_qualified_name
+    end
+  end
+
   def initialize(info = {})
     super(info)
 
@@ -24,17 +37,6 @@ module Msf::Sessions::CommandShellOptions
 
   def on_session(session)
     super
-
-    if architecture_abbreviations.length == 1
-      session.architecture_abbreviation = architecture_abbreviations.first
-    end
-
-    platforms = platform_list.platforms
-
-    if platforms.length == 1
-      platform = platforms.first
-      session.platform_fully_qualified_name = platform.fully_qualified_name
-    end
 
     affixes = [
         :in,

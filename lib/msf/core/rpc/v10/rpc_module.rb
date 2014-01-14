@@ -78,7 +78,7 @@ class RPC_Module < RPC_Base
     m   = _find_module('exploit',mname)
     res = {}
     res['payloads'] = []
-    m.compatible_payloads.each do |k|
+    m.compatible_payload_instances.each do |k|
       res['payloads'] << k[0]
     end
 
@@ -98,7 +98,7 @@ class RPC_Module < RPC_Base
     res = {}
     res['payloads'] = []
     m.datastore['TARGET'] = target.to_i
-    m.compatible_payloads.each do |k|
+    m.compatible_payload_instances.each do |k|
       res['payloads'] << k[0]
     end
 

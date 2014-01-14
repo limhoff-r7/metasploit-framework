@@ -1508,8 +1508,8 @@ class Core
       print_status("Session stream closed.")
     rescue ::Interrupt
       raise $!
-    rescue ::Exception
-      log_error("Session manipulation failed: #{$!} #{$!.backtrace.inspect}")
+    rescue ::Exception => exception
+      log_error("Session manipulation failed: #{exception} #{exception.backtrace.join("\n")}")
     end
 
     # Reset the active session
@@ -2392,7 +2392,7 @@ class Core
   def option_values_payloads
     return @cache_payloads if @cache_payloads
 
-    @cache_payloads = metasploit_instance.compatible_payloads.map { |refname, payload|
+    @cache_payloads = metasploit_instance.compatible_payload_instances.map { |refname, payload|
       refname
     }
 
@@ -2658,7 +2658,7 @@ class Core
     # If an active module has been selected and it's an exploit, get the
     # list of compatible payloads and display them
     if (metasploit_instance and metasploit_instance.exploit? == true)
-      show_module_set("Compatible Payloads", metasploit_instance.compatible_payloads, regex, minrank, opts)
+      show_module_set("Compatible Payloads", metasploit_instance.compatible_payload_instances, regex, minrank, opts)
     else
       show_module_set("Payloads", framework.payloads, regex, minrank, opts)
     end
