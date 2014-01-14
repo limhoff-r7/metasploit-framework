@@ -176,29 +176,38 @@ class Metasploit::Framework::Module::Cache < Metasploit::Model::Base
     if valid
       metasploit_module = module_ancestor_load.metasploit_module
 
-      metasploit_module.each_metasploit_class do |metasploit_class|
-        module_class = metasploit_class.cache_module_class
+      begin
+        metasploit_module.each_metasploit_class do |metasploit_class|
+          module_class = metasploit_class.cache_module_class
 
-        if module_class.persisted?
-          begin
-            metasploit_instance = metasploit_class.new(framework: framework)
-          rescue Exception => error
-            # need to rescue Exception because the user could screw up #initialize in unknown ways
-            elog("#{error.class} #{error}:\n#{error.backtrace.join("\n")}")
-            written &= false
-          else
-            if metasploit_instance.valid?
-              metasploit_instance.cache_module_instance
-              written &= true
-            else
-              location = module_class_location(module_class)
-              elog("Msf::Module instance of #{location} is invalid: #{metasploit_instance.errors.full_messages}")
+          if module_class.persisted?
+            begin
+              metasploit_instance = metasploit_class.new(framework: framework)
+            rescue Exception => exception
+              # need to rescue Exception because the user could screw up #initialize in unknown ways for each combined
+              # metasploit_class
+              elog("#{exception.class} #{exception}:\n#{exception.backtrace.join("\n")}")
               written &= false
+            else
+              if metasploit_instance.valid?
+                metasploit_instance.cache_module_instance
+                written &= true
+              else
+                location = module_class_location(module_class)
+                elog("Msf::Module instance of #{location} is invalid: #{metasploit_instance.errors.full_messages}")
+                written &= false
+              end
             end
+          else
+            written &= false
           end
-        else
-          written &= false
         end
+      rescue Exception => exception
+        # need to rescue Exception because the use could screw up #initialize for the
+        # {Metasploit::Framework::Module::Ancestor::MetasploitModule#payload_metasploit_class}, which can be used by
+        # {Metasploit::Framework::Module::Ancestor::MetasploitModule#each_metasploit_class}
+        elog("#{exception.class} #{exception}:\n#{exception.backtrace.join("\n")}")
+        written = false
       end
     else
       written = false

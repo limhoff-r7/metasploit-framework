@@ -11,7 +11,6 @@ require 'msf/core/handler/bind_tcp'
 
 module Metasploit3
   extend  Metasploit::Framework::Module::Ancestor::Handler
-  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Payload::Generic

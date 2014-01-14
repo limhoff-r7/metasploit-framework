@@ -84,6 +84,8 @@ module Metasploit::Framework::Command::Parent
         self.subcommand_name = :help
       end
     end
+
+    @option_parser
   end
 
   delegate :partial_tab_completions,

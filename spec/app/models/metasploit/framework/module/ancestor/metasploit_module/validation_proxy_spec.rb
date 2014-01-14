@@ -35,7 +35,7 @@ describe Metasploit::Framework::Module::Ancestor::MetasploitModule::ValidationPr
 
   context '#usable' do
     let(:error) do
-      I18n.translate('unusable')
+      I18n.translate!('metasploit.model.errors.models.metasploit/framework/module/ancestor/metasploit_module.attributes.base.unusable')
     end
 
     before(:each) do

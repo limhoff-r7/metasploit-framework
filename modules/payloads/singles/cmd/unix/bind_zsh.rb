@@ -12,7 +12,6 @@ require 'msf/base/sessions/command_shell_options'
 
 module Metasploit4
   extend  Metasploit::Framework::Module::Ancestor::Handler
-  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Sessions::CommandShellOptions

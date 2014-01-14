@@ -10,11 +10,10 @@
 
 require 'msf/core'
 require 'msf/core/handler/reverse_tcp'
-require 'msf/base/sessions/command_shell'
 require 'msf/base/sessions/command_shell_options'
+require 'msf/base/sessions/command_shell_unix'
 
 module Metasploit3
-  extend  Metasploit::Framework::Module::Ancestor::Handler
   extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
