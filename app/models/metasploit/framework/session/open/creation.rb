@@ -29,7 +29,7 @@ class Metasploit::Framework::Session::Open::Creation < Metasploit::Framework::Cr
   # @raise [ActiveRecord::RecordInvalid] if any record is invalid.
   def create_attempts
     creation = Metasploit::Framework::Attempt::Both::Creation.new(
-        exploit_class: session.exploit_class,
+        cache_exploit_class: session.exploit_class,
         exploit_instance: exploit_instance,
         exploited: true,
         host: host,
