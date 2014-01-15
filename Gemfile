@@ -12,7 +12,7 @@ gem 'json'
 #   metasploit_data_model's dependency on metasploit-model so that the version
 #   of metasploit-model is the same without or without the db group installed.
 # @todo change to `gem 'metasploit-model', '~> X.Y.Z'`` when version X.Y.Z is released to rubygems
-gem 'metasploit-model', git: 'git://github.com/rapid7/metasploit-model.git', tag: 'v0.19.6.union-validation'
+gem 'metasploit-model', git: 'git://github.com/rapid7/metasploit-model.git', tag: 'v0.20.0.payload-reference-name'
 # Needed by msfgui and other rpc components
 gem 'msgpack'
 # Needed by anemone crawler
@@ -31,7 +31,7 @@ group :db do
   gem 'activerecord'
   # Database models shared between framework and Pro.
   # @todo change to `gem 'metasploit_data_models', '~> X.Y.Z' when version X.Y.Z is released to rubygems`
-  gem 'metasploit_data_models', git: 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.57.0.compatible-payloads'
+  gem 'metasploit_data_models', git: 'git://github.com/rapid7/metasploit_data_models.git', :tag => 'v0.58.0.payload-reference-name'
   # Needed for module caching in Mdm::ModuleDetails
   gem 'pg', '>= 0.11'
 end

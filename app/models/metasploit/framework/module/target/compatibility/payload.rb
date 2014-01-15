@@ -4,21 +4,20 @@ class Metasploit::Framework::Module::Target::Compatibility::Payload < Metasploit
   #
 
   # A list of preferred payloads in the best-first order
-  # @todo Fix derivation of payload names to strip payload_type prefix and strip handler_type from singles (MSP-2878)
   DEFAULT_REFERENCE_NAMES = [
-      'stages/windows/meterpreter/reverse_tcp',
-      'stages/java/meterpreter/reverse_tcp',
-      'stages/php/meterpreter/reverse_tcp',
-      'singles/php/meterpreter_reverse_tcp/reverse_tcp',
-      'singles/ruby/shell_reverse_tcp/reverse_tcp',
-      'singles/cmd/unix/interact/find_shell',
-      'singles/cmd/unix/reverse/reverse_tcp_double',
-      'singles/cmd/unix/reverse_perl/reverse_tcp',
-      'singles/cmd/unix/reverse_netcat_gaping/reverse_tcp',
-      'stages/windows/meterpreter/reverse_nonx_tcp',
-      'stages/windows/meterpreter/reverse_ord_tcp',
-      'stages/windows/shell/reverse_tcp',
-      'singles/generic/shell_reverse_tcp/reverse_tcp'
+      'windows/meterpreter/reverse_tcp',
+      'java/meterpreter/reverse_tcp',
+      'php/meterpreter/reverse_tcp',
+      'php/meterpreter_reverse_tcp',
+      'ruby/shell_reverse_tcp',
+      'cmd/unix/interact',
+      'cmd/unix/reverse',
+      'cmd/unix/reverse_perl',
+      'cmd/unix/reverse_netcat_gaping',
+      'windows/meterpreter/reverse_nonx_tcp',
+      'windows/meterpreter/reverse_ord_tcp',
+      'windows/shell/reverse_tcp',
+      'generic/shell_reverse_tcp'
   ].freeze
 
   #
