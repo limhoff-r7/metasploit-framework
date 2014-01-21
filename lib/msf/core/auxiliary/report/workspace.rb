@@ -10,8 +10,10 @@ module Msf::Auxiliary::Report::Workspace
     allowed
   end
 
+  # TODO fix this so that the method doesn't rely on side effects
+  # for Spaghetti Monster's sake!
   def myworkspace
-    @myworkspace ||= framework.db.with_connection {
+    @myworkspace = framework.db.with_connection {
       Mdm::Workspace.where(name: workspace).first
     }
   end

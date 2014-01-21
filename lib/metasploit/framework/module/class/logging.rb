@@ -1,5 +1,8 @@
 # Methods for more consistent logging of Module::Class error message.
 module Metasploit::Framework::Module::Class::Logging
+  # Make all methods class methods as well
+  extend self
+
   # Location of this class and its ancestors.
   #
   # @return [String] contains module_class full_name and ancestor real_paths.

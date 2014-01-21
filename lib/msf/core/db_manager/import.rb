@@ -206,7 +206,7 @@ module Msf::DBManager::Import
   # If there is no match, an error is raised instead.
   def import_filetype_detect(data)
 
-    if data and data.kind_of? Zip::ZipFile
+    if data and data.kind_of? ::Zip::ZipFile
       raise DBImportError.new("The zip file provided is empty.") if data.entries.empty?
       @import_filedata ||= {}
       @import_filedata[:zip_filename] = File.split(data.to_s).last
