@@ -18,6 +18,8 @@ describe Metasploit::Framework do
         configuration.autoload
       end
 
+      it { should be_a Metasploit::Framework::Configuration::Autoload }
+
       context 'once_paths' do
         subject(:once_paths) do
           autoload.once_paths

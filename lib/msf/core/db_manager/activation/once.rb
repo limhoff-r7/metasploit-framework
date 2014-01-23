@@ -64,6 +64,7 @@ module Msf::DBManager::Activation::Once
           require 'active_record'
 
           activate_metasploit_data_models_once
+          activate_metasploit_framework_once
           activate_adapter_once
 
           # write inside synchronize as only reads are safe outside synchronize
@@ -137,6 +138,15 @@ module Msf::DBManager::Activation::Once
     unless ActiveRecord::Migrator.migrations_paths.include? metasploit_data_model_migrations_path
       ActiveRecord::Migrator.migrations_paths << metasploit_data_model_migrations_path
     end
+  end
+
+  # @note Should only be run once by {#activate_once}.
+  #
+  # Eagerly loads Metasploit::Framework to prevent thread loading errors
+  #
+  # @return [void]
+  def activate_metasploit_framework_once
+    Metasploit::Framework.configuration.autoload.eager_load!
   end
 
   # @note Runs {#activate_once}, but {#activate_once} only does work if not already run.

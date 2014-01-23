@@ -158,6 +158,12 @@ shared_examples_for 'Msf::DBManager::Activation::Once' do
         activate_once
       end
 
+      it 'activates metasploit-framework once' do
+        expect(db_manager).to receive(:activate_metasploit_framework_once)
+
+        activate_once
+      end
+
       it 'should activate adapter once' do
         db_manager.should_receive(:activate_adapter_once)
 
@@ -251,6 +257,18 @@ shared_examples_for 'Msf::DBManager::Activation::Once' do
           }
         end
       end
+    end
+  end
+
+  context '#activate_metasploit_framework_once' do
+    subject(:activate_metasploit_framework_once) do
+      db_manager.send(:activate_metasploit_framework_once)
+    end
+
+    it 'eager loads autoload paths' do
+      expect(Metasploit::Framework.configuration.autoload).to receive(:eager_load!)
+
+      activate_metasploit_framework_once
     end
   end
 end

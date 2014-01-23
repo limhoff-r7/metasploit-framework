@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: 2a4151904af07bae742e8ec49948c769a47fe713
-  tag: v0.20.0.payload-reference-name
+  revision: cdd5a72893ad3965e532f03d54559e82bc03bd14
+  tag: v0.20.1.configuration-child-class-override
   specs:
-    metasploit-model (0.20.0)
+    metasploit-model (0.20.1)
       activesupport
 
 GIT

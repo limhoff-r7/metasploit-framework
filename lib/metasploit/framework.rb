@@ -9,6 +9,14 @@ module Metasploit
   module Framework
     extend Metasploit::Model::Configured
 
+    # Manual requires because autoload is being setup by this and so is not available to set itself up.
+    require 'metasploit/framework/configuration'
+    require 'metasploit/framework/configuration/autoload'
+
+    # Set class overrides before any other part of the configuration is accessed so nothing will be memoized with the
+    # wrong class.
+    configuration.autoload_class = Metasploit::Framework::Configuration::Autoload
+
     pathname = Pathname.new(__FILE__)
     configuration.root = pathname.parent.parent.parent
 
