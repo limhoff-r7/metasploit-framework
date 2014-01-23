@@ -12,6 +12,7 @@ module Msf
 #
 ###
 class Module < Metasploit::Model::Base
+
   require 'msf/core/module/reference'
   require 'msf/core/module/target'
   require 'msf/core/module/auxiliary_action'
@@ -44,6 +45,13 @@ class Module < Metasploit::Model::Base
 
   # Make include public so we can runtime extend
   public_class_method :include
+
+  #
+  # CONSTANTS
+  #
+
+  # Attributes that are skipped when {#replicant} dupes ivars
+  MANUALLY_SET_REPLICANT_IVAR_NAMES = [:@datastore, :@framework, :@module_store, :@user_input, :@user_output]
 
   #
   # Attributes
@@ -132,13 +140,13 @@ class Module < Metasploit::Model::Base
     true
   end
 
-  #
-  # Creates a fresh copy of an instantiated module
-  #
+  # Creates a fresh copy of an instantiated module, retaining the original framework
+  # @return [Msf::Module]
   def replicant
+    obj = self.class.new(framework: self.framework)
 
-    obj = self.class.new
     self.instance_variables.each { |k|
+      next if MANUALLY_SET_REPLICANT_IVAR_NAMES.include? k
       v = instance_variable_get(k)
       v = v.dup rescue v
       obj.instance_variable_set(k, v)
@@ -362,7 +370,9 @@ class Module < Metasploit::Model::Base
     self.datastore['WORKSPACE']    = (ref.datastore['WORKSPACE'] ? ref.datastore['WORKSPACE'].dup : nil)
     self.datastore['PROUSER']      = (ref.datastore['PROUSER']   ? ref.datastore['PROUSER'].dup   : nil)
     self.datastore['MODULE_OWNER'] = ref.owner.dup
-    self.datastore['ParentUUID']   = ref.uuid.dup
+    #self.datastore['ParentUUID']   = ref.uuid.dup
+    # TODO: remove this hack
+    self.datastore['ParentUUID']   = "MAH-INVALID-UUID"
   end
 
   #

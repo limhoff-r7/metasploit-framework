@@ -8,8 +8,8 @@ GIT
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: c5702413c7abc5dae1977ab0666161331d50a213
-  tag: v0.58.0.payload-reference-name
+  revision: 81bd261330debf967e9ea23c5c351611058f949a
+  branch: bug/payload-reference-name
   specs:
     metasploit_data_models (0.58.0)
       activerecord (>= 3.2.13)
@@ -45,7 +45,7 @@ GEM
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     ffi (1.9.3)
-    file-find (0.3.6)
+    file-find (0.3.7)
       sys-admin (>= 1.5.2)
     fivemat (1.2.1)
     highline (1.6.20)

@@ -1,5 +1,6 @@
 # -*- coding: binary -*-
 require "rex/parser/nokogiri_doc_mixin"
+require 'msf/core/service_state' # An AngelKitten dies every time Rex references MSF stuff
 
 module Rex
   module Parser
