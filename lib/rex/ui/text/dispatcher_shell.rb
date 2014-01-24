@@ -464,7 +464,7 @@ module DispatcherShell
     arguments = parse_line(line)
     method    = arguments.shift
     found     = false
-    error     = false
+    error_raised = false
 
     # If output is disabled output will be nil
     output.reset_color if (output)
@@ -479,19 +479,20 @@ module DispatcherShell
           if (dispatcher.commands.has_key?(method) or dispatcher.deprecated_commands.include?(method))
             self.on_command_proc.call(line.strip) if self.on_command_proc
             run_command(dispatcher, method, arguments)
-            found = true
           end
-        rescue
-          error = $!
+        rescue => error
+          error_raised = true
 
           print_error(
-            "Error while running command #{method}: #{$!}" +
-            "\n\nCall stack:\n#{$@.join("\n")}")
-        rescue ::Exception
-          error = $!
+            "Error while running command #{method}: #{error}" +
+            "\n\nCall stack:\n#{error.backtrace.join("\n")}")
+        rescue ::Exception => exception
+          error_raised = true
 
           print_error(
-            "Error while running command #{method}: #{$!}")
+            "Error while running command #{method}: #{exception}")
+        else
+          found = true
         end
 
         # If the dispatcher stack changed as a result of this command,
@@ -499,7 +500,7 @@ module DispatcherShell
         break if (dispatcher_stack.length != entries)
       }
 
-      if (found == false and error == false)
+      unless found || error_raised
         unknown_command(method, line)
       end
     end
