@@ -64,7 +64,12 @@ class Payload < Msf::Module
   # Creates an instance of a payload module using the supplied information.
   #
   def initialize(info = {})
-    super
+    merged_info = info.merge(
+        # used for compatibility filtering purposes.
+        'ConnectionType' => self.class.connection_type
+    )
+
+    super(merged_info)
 
     # If this is a staged payload but there is no stage information,
     # then this is actually a stager + single combination.  Set up the
@@ -87,11 +92,6 @@ class Payload < Msf::Module
     else
       @staged = false
     end
-
-    # Update the module info hash with the connection type
-    # that is derived from the handler for this payload.  This is
-    # used for compatibility filtering purposes.
-    self.module_info['ConnectionType'] = self.class.connection_type
   end
 
   ##
@@ -262,9 +262,9 @@ class Payload < Msf::Module
   end
 
   #
-  # Substitutes variables with values from the module's datastore in the
+  # Substitutes variables with values from the module's {Msf::Module::DataStore#data_store} in the
   # supplied raw buffer for a given set of named offsets.  For instance,
-  # RHOST is substituted with the RHOST value from the datastore which will
+  # RHOST is substituted with the RHOST value from the {Msf::Module::DataStore#data_store} which will
   # have been populated by the framework.
   #
   # Supprted packing types:
@@ -288,7 +288,7 @@ class Payload < Msf::Module
       next if (replace_var(raw, name, offset, pack) == true)
 
       # Now it's our turn...
-      if ((val = datastore[name]))
+      if ((val = data_store[name]))
         if (pack == 'ADDR')
           val = Rex::Socket.resolv_nbo(val)
 
@@ -387,32 +387,18 @@ class Payload < Msf::Module
   #
   ##
 
+  # `Mdm::Module::Instances` that are encoders and share at least 1 `Mdm::Architecture` with this payload.
   #
-  # Returns the array of compatible encoders for this payload instance.
-  #
-  def compatible_encoders
-    encoders = []
-
-    framework.encoders.each_module_ranked(
-      'Arch' => self.arch) { |name, mod|
-      encoders << [ name, mod ]
-    }
-
-    return encoders
+  # @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  def compatible_cache_encoder_instances
+    Mdm::Module::Instance.encoders_compatible_with(module_instance)
   end
 
+  # `Mdm::Module::Instances` that are nops and share at least 1 `Mdm::Architecture` with this payload.
   #
-  # Returns the array of compatible nops for this payload instance.
-  #
-  def compatible_nops
-    nops = []
-
-    framework.nops.each_module_ranked(
-      'Arch' => self.arch) { |name, mod|
-      nops << [ name, mod ]
-    }
-
-    return nops
+  # @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  def compatible_cache_nop_instances
+    Mdm::Module::Instance.nops_compatible_with(module_instance)
   end
 
   ##
@@ -514,7 +500,7 @@ protected
 
     off.each_pair { |option, val|
       if (val[1] == 'RAW')
-        asm = asm.gsub(/#{option}/){ datastore[option] }
+        asm = asm.gsub(/#{option}/){ data_store[option] }
         off.delete(option)
       end
     }

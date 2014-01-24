@@ -4,6 +4,8 @@ source 'http://rubygems.org'
 gem 'activesupport', '>= 3.0.0'
 # terminal info that works cross-platform including Windows and JRuby
 gem 'highline'
+# Deep freeze objects to prevent down stream consumers from modifying arguments passed to them
+gem 'ice_nine'
 # Needed for some admin modules (scrutinizer_add_user.rb)
 gem 'json'
 # Used for Metasploit::Framework::* ActiveModels that mirror Mdm::* ActiveRecord

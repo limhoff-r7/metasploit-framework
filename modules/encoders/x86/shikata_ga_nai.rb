@@ -18,7 +18,7 @@ class Metasploit3 < Msf::Encoder::XorAdditiveFeedback
 
   def initialize(info={})
     super(
-        update_info(
+        Msf::Module::ModuleInfo.update!(
             info,
             'Name'             => 'Polymorphic XOR Additive Feedback Encoder',
             'Description'      => %q{
@@ -155,10 +155,10 @@ protected
     sub4 = Proc.new { |b| sub_immediate(b.regnum_of(addr_reg), -4) }
     add4 = Proc.new { |b| add_immediate(b.regnum_of(addr_reg), 4) }
 
-    if (datastore["BufferRegister"])
+    if (data_store["BufferRegister"])
 
-      buff_reg = Rex::Poly::LogicalRegister::X86.new('buff', datastore["BufferRegister"])
-      offset = (datastore["BufferOffset"] ? datastore["BufferOffset"].to_i : 0)
+      buff_reg = Rex::Poly::LogicalRegister::X86.new('buff', data_store["BufferRegister"])
+      offset = (data_store["BufferOffset"] ? data_store["BufferOffset"].to_i : 0)
       if ((offset < -255 or offset > 255) and state.badchars.include? "\x00")
         raise EncodingError.new("Can't generate NULL-free decoder with a BufferOffset bigger than one byte")
       end

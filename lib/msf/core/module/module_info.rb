@@ -35,7 +35,7 @@ module Msf::Module::ModuleInfo
   # require special attention.
   #
   # @return [Hash] `current`
-  def self.merge!(current, updates)
+  def self.merge!(current, updates={})
     updates.each_pair { |name, val|
       merge_check_key!(current, name, val)
     }
@@ -149,7 +149,7 @@ module Msf::Module::ModuleInfo
   # platforms, and options.
   #
   # @return [Hash] `current`
-  def self.update!(current, updates)
+  def self.update!(current, updates={})
     updates.each_pair { |name, val|
       # If the supplied option name is one of the ones that we should
       # override by default
@@ -173,7 +173,7 @@ module Msf::Module::ModuleInfo
 
   # (see Msf::Module::ModuleInfo.merge!)
   # @deprecated Use {Msf::Module::ModuleInfo.merge!}
-  def merge_info(info, opts)
+  def merge_info(info, opts={})
     ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use Msf::Module::ModuleInfo.merge! instead"
     Msf::Module::ModuleInfo.merge!(info, opts)
   end

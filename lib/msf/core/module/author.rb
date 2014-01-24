@@ -127,7 +127,9 @@ class Msf::Module::Author
       end
     end
 
-    self.name.strip! if self.name
+    if self.name
+      self.name = self.name.strip
+    end
 
     return true
   end
