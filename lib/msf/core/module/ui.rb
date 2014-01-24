@@ -3,6 +3,8 @@ require 'rex/ui/subscriber'
 
 module Msf::Module::UI
   include Msf::Module::DataStore
+
+  require 'msf/core/module/ui/verbose'
   include Msf::Module::UI::Verbose
 
   # Modules can subscribe to a user-interface, and as such they include the

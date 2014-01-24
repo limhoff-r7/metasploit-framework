@@ -28,15 +28,24 @@ module Msf::Module::DataStore
   # Imports default options into the module's datastore, optionally clearing
   # all of the values currently set in the datastore.
   #
-  def import_defaults(clear_datastore = true)
-    # Clear the datastore if the caller asked us to
-    self.datastore.clear if clear_datastore
+  # @param options [Hash{Symbol => Boolean}]
+  # @option options [Boolean] :clear_data_store (true) `Hash#clear` the {#data_store} before importing the defaults.
+  # @return [void]
+  def import_defaults(options={})
+    options.assert_valid_keys(:clear_data_store)
 
-    self.datastore.import_options(self.options, 'self', true)
+    clear_data_store = options.fetch(:clear_data_store, true)
+
+    # Clear the datastore if the caller asked us to
+    data_store.clear if clear_data_store
+
+    data_store.import_options(self.options, 'self', true)
 
     # If there are default options, import their values into the datastore
-    if (module_info['DefaultOptions'])
-      self.datastore.import_options_from_hash(module_info['DefaultOptions'], true, 'self')
+    default_options = module_info['DefaultOptions']
+
+    if default_options
+      data_store.import_options_from_hash(default_options, true, 'self')
     end
   end
 

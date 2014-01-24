@@ -18,10 +18,11 @@ require 'msf/core'
 # authors, etc) and by managing the module's data store.
 class Msf::Module < Metasploit::Model::Base
 
-  require 'msf/core/module/reference'
-  require 'msf/core/module/target'
   require 'msf/core/module/auxiliary_action'
   require 'msf/core/module/has_actions'
+  require 'msf/core/module/reference'
+  require 'msf/core/module/site_reference'
+  require 'msf/core/module/target'
 
   require 'msf/core/module/architectures'
   include Msf::Module::Architectures
@@ -30,7 +31,7 @@ class Msf::Module < Metasploit::Model::Base
   include Msf::Module::Authors
 
   require 'msf/core/module/compatibility'
-  include Msf::Module::Compatiblity
+  include Msf::Module::Compatibility
 
   require 'msf/core/module/full_name'
   include Msf::Module::FullName
@@ -245,8 +246,8 @@ class Msf::Module < Metasploit::Model::Base
           module_info['References'],
           Array,
           [
-              SiteReference,
-              Reference
+              Msf::Module::SiteReference,
+              Msf::Module::Reference
           ],
           'Ref'
       )

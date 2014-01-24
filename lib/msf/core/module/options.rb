@@ -47,8 +47,8 @@ module Msf::Module::Options
   #
   def register_advanced_options(options, owner = self.class)
     self.options.add_advanced_options(options, owner)
-    self.datastore.import_options(self.options, 'self', true)
-    import_defaults(false)
+    data_store.import_options(self.options, 'self', true)
+    import_defaults(clear_data_store: false)
   end
 
   #
@@ -56,15 +56,15 @@ module Msf::Module::Options
   #
   def register_evasion_options(options, owner = self.class)
     self.options.add_evasion_options(options, owner)
-    self.datastore.import_options(self.options, 'self', true)
-    import_defaults(false)
+    data_store.import_options(self.options, 'self', true)
+    import_defaults(clear_data_store: false)
   end
 
   # Register options with a specific owning class.
   #
   def register_options(options, owner = self.class)
     self.options.add_options(options, owner)
-    self.datastore.import_options(self.options, 'self', true)
-    import_defaults(false)
+    data_store.import_options(self.options, 'self', true)
+    import_defaults(clear_data_store: false)
   end
 end

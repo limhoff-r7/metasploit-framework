@@ -1,12 +1,17 @@
+require 'msf/core/module/data_store'
+require 'msf/core/module/options'
+require 'msf/core/option_container'
+
 module Msf::Module::UI::Verbose
   include Msf::Module::DataStore
+  include Msf::Module::Options
 
   def initialize(info={})
     super
 
     register_advanced_options(
         [
-            OptBool.new(
+            Msf::OptBool.new(
                 'VERBOSE',
                 [
                     false,

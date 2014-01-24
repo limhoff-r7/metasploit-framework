@@ -1,10 +1,17 @@
+require 'msf/core/module/data_store'
+require 'msf/core/module/options'
+require 'msf/core/option_container'
+
 module Msf::Module::Workspace
+  include Msf::Module::DataStore
+  include Msf::Module::Options
+
   def initialize(info={})
     super
 
     register_advanced_options(
         [
-            OptString.new(
+            Msf::OptString.new(
                 'WORKSPACE',
                 [
                     false,
