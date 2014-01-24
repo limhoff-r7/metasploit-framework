@@ -32,7 +32,7 @@ module Metasploit3
       'Description'   => 'Use an established connection',
       'Author'        => 'skape',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86,
       'Stager'        =>
         {

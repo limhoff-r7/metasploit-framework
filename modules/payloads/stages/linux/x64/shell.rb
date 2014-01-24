@@ -19,7 +19,7 @@ module Metasploit3
       'Description'   => 'Spawn a command shell (staged)',
       'Author'        => 'ricky',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86_64,
       'Session'       => Msf::Sessions::CommandShellUnix,
       'Stage'         =>

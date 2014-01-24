@@ -22,7 +22,7 @@ module Metasploit3
       'Description'   => 'Listen for a connection',
       'Author'        => 'ricky',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86_64,
       'Stager'        =>
         {

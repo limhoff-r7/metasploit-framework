@@ -18,7 +18,7 @@ module Metasploit3
       'Name'          => 'Linux Meterpreter',
       'Description'   => 'Staged meterpreter server',
       'Author'        => ['PKS', 'egypt'],
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86,
       'License'       => MSF_LICENSE,
       'Session'       => Msf::Sessions::Meterpreter_x86_Linux))

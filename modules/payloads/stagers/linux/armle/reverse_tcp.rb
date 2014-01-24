@@ -31,7 +31,7 @@ module Metasploit3
       'Description'   => 'Connect back to the attacker',
       'Author'        => 'nemo <nemo[at]felinemenace.org>',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_ARMLE,
       'Stager'        =>
         {

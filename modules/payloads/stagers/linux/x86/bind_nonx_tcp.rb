@@ -33,7 +33,7 @@ module Metasploit3
       'Description'   => 'Listen for a connection',
       'Author'        => 'skape',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86,
       'Stager'        =>
         {

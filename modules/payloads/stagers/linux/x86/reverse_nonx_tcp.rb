@@ -33,7 +33,7 @@ module Metasploit3
       'Description'   => 'Connect back to the attacker',
       'Author'        => 'skape',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86,
       'Stager'        =>
         {

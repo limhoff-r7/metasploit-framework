@@ -24,7 +24,7 @@ module Metasploit3
       'Description' => 'Connect back to attacker over IPv6',
       'Author'      => 'kris katterjohn',
       'License'     => MSF_LICENSE,
-      'Platform'    => 'linux',
+      'Platform'    => 'Linux',
       'Arch'        => ARCH_X86,
       'Stager'      => {
           'Offsets' => {

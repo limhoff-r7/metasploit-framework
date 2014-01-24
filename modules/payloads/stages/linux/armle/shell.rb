@@ -19,7 +19,7 @@ module Metasploit3
       'Description'   => 'dup2 socket in r12, then execve',
       'Author'        => 'nemo <nemo[at]felinemenace.org>',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_ARMLE,
       'Session'       => Msf::Sessions::CommandShell,
       'Stage'         =>

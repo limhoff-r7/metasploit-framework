@@ -27,7 +27,7 @@ module Metasploit3
           'egypt',           # NX support
         ],
       'License'     => MSF_LICENSE,
-      'Platform'    => 'linux',
+      'Platform'    => 'Linux',
       'Arch'        => ARCH_X86,
       'Stager'      => {
           'Offsets' => { 'LPORT' => [ 0x18, 'n' ] },

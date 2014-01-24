@@ -22,7 +22,7 @@ module Metasploit3
       'Description'   => 'Connect back to the attacker',
       'Author'        => 'ricky',
       'License'       => MSF_LICENSE,
-      'Platform'      => 'linux',
+      'Platform'      => 'Linux',
       'Arch'          => ARCH_X86_64,
       'Stager'        =>
         {
