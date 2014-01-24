@@ -54,7 +54,7 @@ class Msf::Module::Target
   def self.from_a(ary)
     return nil if (ary.length < 2)
 
-    self.new(ary.shift, ary.shift)
+    self.new(ary[0], ary[1])
   end
 
   #
