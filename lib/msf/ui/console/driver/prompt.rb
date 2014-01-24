@@ -12,11 +12,11 @@ module Msf::Ui::Console::Driver::Prompt
   #
 
   def framework_prompt
-    framework.datastore['Prompt'] || DEFAULT_PROMPT
+    framework.data_store['Prompt'] || DEFAULT_PROMPT
   end
 
   def framework_prompt_char
-    framework.datastore['PromptChar'] || DEFAULT_PROMPT_CHAR
+    framework.data_store['PromptChar'] || DEFAULT_PROMPT_CHAR
   end
 
   # @note Only use if {Msf::Ui::Console::Driver#metasploit_instance} is `nil`, otherwise use

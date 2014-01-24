@@ -66,7 +66,7 @@ end
 #-------------------------------------------------------------------------------
 def create_multi_handler(payload_to_inject)
 	mul = @client.framework.exploits.create("multi/handler")
-	mul.share_datastore(payload_to_inject.datastore)
+	mul.share_data_store(payload_to_inject.datastore)
 	mul.datastore['WORKSPACE'] = @client.workspace
 	mul.datastore['PAYLOAD'] = payload_to_inject
 	mul.datastore['EXITFUNC'] = 'process'

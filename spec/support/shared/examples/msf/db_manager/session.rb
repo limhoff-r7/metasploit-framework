@@ -40,7 +40,7 @@ shared_examples_for 'Msf::DBManager::Session' do
           end
 
           context 'with Msf::Session' do
-            let(:exploit_datastore) do
+            let(:exploit_data_store) do
               Msf::ModuleDataStore.new(module_instance).tap do |datastore|
                 datastore['ParentModule'] = parent_module_fullname
 
@@ -81,7 +81,7 @@ shared_examples_for 'Msf::DBManager::Session' do
 
             let(:session) do
               session_class.new.tap do |session|
-                session.exploit_datastore = exploit_datastore
+                session.exploit_data_store = exploit_data_store
                 session.info = 'Info'
                 session.platform = 'Platform'
                 session.session_host = host.address
@@ -237,7 +237,7 @@ shared_examples_for 'Msf::DBManager::Session' do
                   before(:each) do
                     Timecop.freeze
 
-                    session.exploit_datastore['RPORT'] = rport
+                    session.exploit_data_store['RPORT'] = rport
 
                     report_session
                   end
@@ -326,7 +326,7 @@ shared_examples_for 'Msf::DBManager::Session' do
                   before(:each) do
                     Timecop.freeze
 
-                    session.exploit_datastore['RPORT'] = rport
+                    session.exploit_data_store['RPORT'] = rport
 
                     report_session
                   end
@@ -404,7 +404,7 @@ shared_examples_for 'Msf::DBManager::Session' do
                   session.via_exploit.should be_present
                 end
 
-                its(:datastore) { should == session.exploit_datastore.to_h }
+                its(:datastore) { should == session.exploit_data_store.to_h }
                 its(:desc) { should == session.info }
                 its(:host_id) { should == Mdm::Host.last.id }
                 its(:last_seen) { should be_within(1.second).of(Time.now.utc) }
@@ -422,7 +422,7 @@ shared_examples_for 'Msf::DBManager::Session' do
 
                   context "with session.exploit_datastore['ParentModule']" do
                     it "should have session.exploit_datastore['ParentModule']" do
-                      session.exploit_datastore['ParentModule'].should_not be_nil
+                      session.exploit_data_store['ParentModule'].should_not be_nil
                     end
 
                     its(:via_exploit) { should == parent_module_fullname }

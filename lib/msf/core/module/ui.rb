@@ -41,17 +41,17 @@ module Msf::Module::UI
   private
 
   def print_line_prefix
-    datastore['CustomPrintPrefix'] || framework.datastore['CustomPrintPrefix'] || ''
+    data_store['CustomPrintPrefix'] || framework.data_store['CustomPrintPrefix'] || ''
   end
 
   def print_prefix
-    if (datastore['TimestampOutput'] =~ /^(t|y|1)/i) || (
-      framework && framework.datastore['TimestampOutput'] =~ /^(t|y|1)/i
+    if (data_store['TimestampOutput'] =~ /^(t|y|1)/i) || (
+      framework && framework.data_store['TimestampOutput'] =~ /^(t|y|1)/i
     )
       prefix = "[#{Time.now.strftime("%Y.%m.%d-%H:%M:%S")}] "
 
-      xn ||= datastore['ExploitNumber']
-      xn ||= framework.datastore['ExploitNumber']
+      xn ||= data_store['ExploitNumber']
+      xn ||= framework.data_store['ExploitNumber']
       if xn.is_a?(Fixnum)
         prefix << "[%04d] " % xn
       end

@@ -114,7 +114,7 @@ module Msf::Module::Target::Payload
   end
 
   #
-  # A hash of options that be initialized in the select encoder's datastore
+  # A hash of options that be initialized in the select encoder's data_store
   # that may be required as parameters for the encoding operation.  This is
   # particularly useful when a specific encoder type is being used (as
   # specified by the EncoderType hash element).

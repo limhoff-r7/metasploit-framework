@@ -111,13 +111,19 @@ class Framework < Metasploit::Model::Base
   require 'msf/core/plugin_manager'
   require 'msf/core/session_manager'
 
-  # The global framework datastore that can be used by modules.
+  # (see #data_store)
+  # @deprecated Use {#data_store}
+  def datastore
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#data_store instead"
+    data_store
+  end
+
+  # The global framework data store that can be used by modules.
   #
   # @return [Msf::DataStore]
-  # @todo https://www.pivotaltracker.com/story/show/57456210
-  def datastore
+  def data_store
     synchronize {
-      @datastore ||= Msf::DataStore.new
+      @data_store ||= Msf::DataStore.new
     }
   end
 
@@ -239,7 +245,7 @@ class FrameworkEventSubscriber
   ##
   # :category: ::Msf::GeneralEventSubscriber implementors
   def on_module_run(instance)
-    opts = { :datastore => instance.datastore.to_h }
+    opts = { :datastore => instance.data_store.to_h }
     module_event('module_run', instance, opts)
   end
 
@@ -324,7 +330,7 @@ class FrameworkEventSubscriber
   ##
   # :category: ::Msf::SessionEvent implementors
   def on_session_open(session)
-    opts = { :datastore => session.exploit_datastore.to_h, :critical => true }
+    opts = { :datastore => session.exploit_data_store.to_h, :critical => true }
     session_event('session_open', session, opts)
     framework.db.open_session(session)
   end

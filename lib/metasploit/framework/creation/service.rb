@@ -11,7 +11,7 @@ module Metasploit::Framework::Creation::Service
 
       if host
         if exploit_instance.options['RPORT']
-          port = exploit_instance.datastore['RPORT']
+          port = exploit_instance.data_store['RPORT']
 
           if port
             @service = host.services.where(

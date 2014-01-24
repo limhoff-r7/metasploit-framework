@@ -33,6 +33,9 @@ class Msf::Module < Metasploit::Model::Base
   require 'msf/core/module/compatibility'
   include Msf::Module::Compatibility
 
+  require 'msf/core/module/data_store'
+  include Msf::Module::DataStore
+
   require 'msf/core/module/full_name'
   include Msf::Module::FullName
 
@@ -68,7 +71,7 @@ class Msf::Module < Metasploit::Model::Base
   #
 
   # Attributes that are skipped when {#replicant} dupes ivars
-  MANUALLY_SET_REPLICANT_IVAR_NAMES = [:@datastore, :@framework, :@module_store, :@user_input, :@user_output]
+  MANUALLY_SET_REPLICANT_IVAR_NAMES = [:@data_store, :@framework, :@module_store, :@user_input, :@user_output]
 
   #
   # Attributes
@@ -121,10 +124,10 @@ class Msf::Module < Metasploit::Model::Base
 
   #
   # Returns true if this module is being debugged.  The debug flag is set
-  # by setting datastore['DEBUG'] to 1|true|yes
+  # by setting data_store['DEBUG'] to 1|true|yes
   #
   def debugging?
-    (datastore['DEBUG'] || '') =~ /^(1|t|y)/i
+    (data_store['DEBUG'] || '') =~ /^(1|t|y)/i
   end
 
   # Checks to see if a derived instance of a given module implements a method
@@ -208,11 +211,11 @@ class Msf::Module < Metasploit::Model::Base
   #
   def owner
     # Generic method to configure a module owner
-    username = self.datastore['MODULE_OWNER'].to_s.strip
+    username = self.data_store['MODULE_OWNER'].to_s.strip
 
     # Specific method used by the commercial products
     if username.empty?
-      username = self.datastore['PROUSER'].to_s.strip
+      username = self.data_store['PROUSER'].to_s.strip
     end
 
     # Fallback when neither prior method is available, common for msfconsole
@@ -263,12 +266,12 @@ class Msf::Module < Metasploit::Model::Base
   # is used to inherit common settings (owner, workspace, parent uuid, etc).
   #
   def register_parent(ref)
-    self.datastore['WORKSPACE']    = (ref.datastore['WORKSPACE'] ? ref.datastore['WORKSPACE'].dup : nil)
-    self.datastore['PROUSER']      = (ref.datastore['PROUSER']   ? ref.datastore['PROUSER'].dup   : nil)
-    self.datastore['MODULE_OWNER'] = ref.owner.dup
-    #self.datastore['ParentUUID']   = ref.uuid.dup
+    self.data_store['WORKSPACE']    = (ref.data_store['WORKSPACE'] ? ref.data_store['WORKSPACE'].dup : nil)
+    self.data_store['PROUSER']      = (ref.data_store['PROUSER']   ? ref.data_store['PROUSER'].dup   : nil)
+    self.data_store['MODULE_OWNER'] = ref.owner.dup
+    #self.data_store['ParentUUID']   = ref.uuid.dup
     # TODO: remove this hack
-    self.datastore['ParentUUID']   = "MAH-INVALID-UUID"
+    self.data_store['ParentUUID']   = "MAH-INVALID-UUID"
   end
 
   # Creates a fresh copy of an instantiated module, retaining the original framework
@@ -283,7 +286,7 @@ class Msf::Module < Metasploit::Model::Base
       obj.instance_variable_set(k, v)
     }
 
-    obj.datastore    = self.datastore.copy
+    obj.data_store   = self.data_store.copy
     obj.user_input   = self.user_input
     obj.user_output  = self.user_output
     obj.module_store = self.module_store.clone
@@ -307,8 +310,8 @@ class Msf::Module < Metasploit::Model::Base
       return rhost()
     end
 
-    if(self.datastore['RHOST'])
-      return self.datastore['RHOST']
+    if(self.data_store['RHOST'])
+      return self.data_store['RHOST']
     end
 
     nil
@@ -322,8 +325,8 @@ class Msf::Module < Metasploit::Model::Base
       return rport()
     end
 
-    if(self.datastore['RPORT'])
-      return self.datastore['RPORT']
+    if(self.data_store['RPORT'])
+      return self.data_store['RPORT']
     end
 
     nil
@@ -343,6 +346,6 @@ class Msf::Module < Metasploit::Model::Base
   # container.
   #
   def validate
-    self.options.validate(self.datastore)
+    self.options.validate(self.data_store)
   end
 end

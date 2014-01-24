@@ -39,7 +39,7 @@ module Msf::Module::Workspace
   #
   # @return [String] `Mdm::Workspace#name`
   def workspace_name
-    datastore['WORKSPACE'] || framework.db.workspace_name
+    data_store['WORKSPACE'] || framework.db.workspace_name
   end
 
   # The workspace with `Mdm::Workspace#name` equal to {#workspace_name}

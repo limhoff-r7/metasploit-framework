@@ -125,9 +125,11 @@ class Msf::Ui::Console::Driver < Msf::Ui::Driver
     # Initialize attributes
     self.framework = opts['Framework'] || Msf::Simple::Framework.create(opts)
 
-    if self.framework.datastore['Prompt']
-      prompt = self.framework.datastore['Prompt']
-      prompt_char = self.framework.datastore['PromptChar'] || DEFAULT_PROMPT_CHAR
+    framework_data_store_prompt = self.framework.data_store['Prompt']
+
+    if framework_data_store_prompt
+      prompt = framework_data_store_prompt
+      prompt_char = self.framework.data_store['PromptChar'] || DEFAULT_PROMPT_CHAR
     end
 
     # Call the parent

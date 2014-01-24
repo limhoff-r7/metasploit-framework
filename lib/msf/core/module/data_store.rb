@@ -8,7 +8,7 @@ module Msf::Module::DataStore
     data_store
   end
 
-  # Data Store for this module that defers to the {Msf::Module#framework} {Msf::Framework#datastore} if a variable is not
+  # Data Store for this module that defers to the {Msf::Module#framework} {Msf::Framework#data_store} if a variable is not
   # set for this module specifically.
   #
   # @return [Msf::ModuleDataStore]
@@ -25,8 +25,8 @@ module Msf::Module::DataStore
   attr_writer :data_store
 
   #
-  # Imports default options into the module's datastore, optionally clearing
-  # all of the values currently set in the datastore.
+  # Imports default options into {#data_store}, optionally clearing
+  # all of the values currently set in the {#data_store}.
   #
   # @param options [Hash{Symbol => Boolean}]
   # @option options [Boolean] :clear_data_store (true) `Hash#clear` the {#data_store} before importing the defaults.
@@ -36,12 +36,12 @@ module Msf::Module::DataStore
 
     clear_data_store = options.fetch(:clear_data_store, true)
 
-    # Clear the datastore if the caller asked us to
+    # Clear the data_store if the caller asked us to
     data_store.clear if clear_data_store
 
     data_store.import_options(self.options, 'self', true)
 
-    # If there are default options, import their values into the datastore
+    # If there are default options, import their values into the data_store
     default_options = module_info['DefaultOptions']
 
     if default_options
@@ -49,12 +49,14 @@ module Msf::Module::DataStore
     end
   end
 
-  # Overrides the class' own datastore with the one supplied.  This is used
-  # to allow modules to share datastores, such as a payload sharing an
-  # exploit module's datastore.
+  # Overrides the class' own {#data_store} with the one supplied.  This is used
+  # to allow modules to share {#data_store data stores}, such as a payload sharing an
+  # exploit module's {#data_store}.
   #
-  def share_datastore(ds)
-    self.datastore = ds
-    self.datastore.import_options(self.options)
+  # @param data_store [Msf::ModuleDataStore]
+  # @return [void]
+  def share_data_store(data_store)
+    self.data_store = data_store
+    self.data_store.import_options(self.options)
   end
 end

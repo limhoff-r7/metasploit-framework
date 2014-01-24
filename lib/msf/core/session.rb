@@ -203,12 +203,12 @@ module Msf::Session
   #
   def set_from_exploit(m)
     self.via = { 'Exploit' => m.full_name }
-    self.via['Payload'] = ('payload/' + m.datastore['PAYLOAD'].to_s) if m.datastore['PAYLOAD']
+    self.via['Payload'] = ('payload/' + m.data_store['PAYLOAD'].to_s) if m.data_store['PAYLOAD']
     self.target_host = Rex::Socket.getaddress(m.target_host) if (m.target_host.to_s.strip.length > 0)
     self.target_port = m.target_port if (m.target_port.to_i != 0)
     self.workspace   = m.workspace_name
     self.username    = m.owner
-    self.exploit_datastore = m.datastore
+    self.exploit_data_store = m.data_store
     self.user_input = m.user_input if m.user_input
     self.user_output = m.user_output if m.user_output
     self.exploit_uuid = m.uuid
@@ -308,9 +308,9 @@ module Msf::Session
   #
   attr_accessor :target_port
   #
-  # The datastore of the exploit that created this session
+  # The data_store of the exploit that created this session
   #
-  attr_accessor :exploit_datastore
+  attr_accessor :exploit_data_store
   #
   # The task that ran the exploit that got the session (that swallowed the fly)
   #

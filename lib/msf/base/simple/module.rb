@@ -20,14 +20,14 @@ module Module
     # If options were supplied, import them into the payload's
     # datastore
     if (opts['Options'])
-      self.datastore.import_options_from_hash(opts['Options'])
+      data_store.import_options_from_hash(opts['Options'])
     elsif (opts['OptionStr'])
-      self.datastore.import_options_from_s(opts['OptionStr'])
+      data_store.import_options_from_s(opts['OptionStr'])
     end
   end
 
   def inspect
-    "#<Module:#{full_name} datastore=[#{datastore.inspect}]>"
+    "#<Module:#{full_name} datastore=[#{data_store.inspect}]>"
   end
 
   #
@@ -41,14 +41,14 @@ module Module
   # Populates the datastore from the config file.
   #
   def load_config
-    self.datastore.from_file(Msf::Config.config_file, reference_name)
+    data_store.from_file(Msf::Config.config_file, reference_name)
   end
 
   #
   # Saves the module's datastore to the file.
   #
   def save_config
-    self.datastore.to_file(Msf::Config.config_file, reference_name)
+    data_store.to_file(Msf::Config.config_file, reference_name)
   end
 
 end

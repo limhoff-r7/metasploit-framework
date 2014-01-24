@@ -18,7 +18,7 @@ module Msf::Module::Options
   def deregister_options(*names)
     names.each { |name|
       self.options.remove_option(name)
-      self.datastore.delete(name)
+      self.data_store.delete(name)
     }
   end
 

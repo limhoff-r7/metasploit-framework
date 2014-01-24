@@ -22,31 +22,41 @@ class Metasploit3 < Msf::Post
 
 
   def initialize(info={})
-    super( update_info( info,
-        'Name'          => 'Multiple Linux / Unix Post Sudo Upgrade Shell',
-        'Description'   => %q{
-          This module attempts to upgrade a shell account to UID 0 by reusing the
-          given password and passing it to sudo. This technique relies on sudo
-          versions from 2008 and later which support -A.
-        },
-        'License'       => MSF_LICENSE,
-        'Author'        =>
-          [
-            'todb <todb[at]metasploit.com>',
-            'Ryan Baxendale <rbaxendale[at]gmail.com>' #added password option
-          ],
-        'Platform'      => [ 'linux','unix','osx','solaris','aix' ],
-        'References'    =>
-          [
-            # Askpass first added March 2, 2008, looks like
-            [ 'URL', 'http://www.sudo.ws/repos/sudo/file/05780f5f71fd/sudo.h']
-          ],
-        'SessionTypes'  => [ 'shell' ] # Need to test 'meterpreter'
-      ))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Multiple Linux / Unix Post Sudo Upgrade Shell',
+            'Description'   => %q{
+              This module attempts to upgrade a shell account to UID 0 by reusing the
+              given password and passing it to sudo. This technique relies on sudo
+              versions from 2008 and later which support -A.
+            },
+            'License'       => MSF_LICENSE,
+            'Arch' => ARCH_X86,
+            'Author'        =>
+                [
+                    'todb <todb[at]metasploit.com>',
+                    'Ryan Baxendale <rbaxendale[at]gmail.com>' #added password option
+                ],
+            'Platform'      => [
+                'AIX',
+                'Linux',
+                'OSX',
+                'Solaris',
+                'UNIX'
+            ],
+            'References'    =>
+                [
+                    # Askpass first added March 2, 2008, looks like
+                    [ 'URL', 'http://www.sudo.ws/repos/sudo/file/05780f5f71fd/sudo.h']
+                ],
+            'SessionTypes'  => [ 'shell' ] # Need to test 'meterpreter'
+        )
+    )
 
-      register_options(
+    register_options(
         [
-          OptString.new('PASSWORD', [false, 'The password to use when running sudo.'])
+            OptString.new('PASSWORD', [false, 'The password to use when running sudo.'])
         ], self.class)
   end
 
@@ -66,10 +76,10 @@ class Metasploit3 < Msf::Post
   end
 
   def get_root
-    if datastore['PASSWORD']
-      password = datastore['PASSWORD']
+    if data_store['PASSWORD']
+      password = data_store['PASSWORD']
     else
-      password = session.exploit_datastore['PASSWORD']
+      password = session.exploit_data_store['PASSWORD']
     end
 
     if password.to_s.empty?
@@ -85,7 +95,7 @@ class Metasploit3 < Msf::Post
       report_note(
         :host => session,
         :type => "host.escalation",
-        :data => "User `#{session.exploit_datastore['USERNAME']}' sudo'ed to a root shell"
+        :data => "User `#{session.exploit_data_store['USERNAME']}' sudo'ed to a root shell"
       )
     end
   end

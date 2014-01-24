@@ -19,7 +19,7 @@ class Metasploit::Framework::Session::Creation < Metasploit::Framework::Creation
   #   @raise [ActiveRecord::RecordInvalid] if `Mdm::Session` is invalid
   create do
     destination.architecture = architecture
-    destination.datastore = source.exploit_datastore.to_h
+    destination.datastore = source.exploit_data_store.to_h
     destination.desc = source.info
     destination.exploit_class = exploit_class
     destination.host = host

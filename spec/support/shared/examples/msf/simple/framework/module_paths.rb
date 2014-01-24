@@ -6,19 +6,19 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
 	it { should be_a Msf::Simple::Framework::ModulePaths }
 
   context '#add_datastore_module_paths' do
-    subject(:add_datastore_module_paths) do
-      framework.add_datastore_module_paths
+    subject(:add_data_store_module_paths) do
+      framework.add_data_store_module_paths
     end
 
     context "with datastore['MsfModulePaths']" do
-      let(:datastore_module_paths) do
+      let(:data_store_module_paths) do
         2.times.collect {
           FactoryGirl.generate :metasploit_model_module_path_real_path
         }
       end
 
       let(:formatted_datastore_module_paths) do
-        datastore_module_paths.join(';')
+        data_store_module_paths.join(';')
       end
 
       before(:each) do
@@ -26,7 +26,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
       end
 
       it 'should add each path in datastore' do
-        datastore_module_paths.each do |datastore_module_path|
+        data_store_module_paths.each do |datastore_module_path|
           module_manager.should_receive(:add_path).with(
               datastore_module_path,
               hash_including(
@@ -35,7 +35,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
           )
         end
 
-        add_datastore_module_paths
+        add_data_store_module_paths
       end
     end
 
@@ -43,7 +43,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
       it 'should not add any module paths' do
         module_manager.should_not_receive(:add_path)
 
-        add_datastore_module_paths
+        add_data_store_module_paths
       end
     end
   end
@@ -56,7 +56,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
     end
 
     it 'should add datastore module paths' do
-      framework.should_receive(:add_datastore_module_paths)
+      framework.should_receive(:add_data_store_module_paths)
 
       add_module_paths
     end
@@ -83,8 +83,8 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
   end
 
   context '#datastore_module_paths' do
-    subject(:datastore_module_paths) do
-      framework.datastore_module_paths
+    subject(:data_store_module_paths) do
+      framework.data_store_module_paths
     end
 
     context "with blank datastore['MsfModulePaths']" do
@@ -107,7 +107,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
       end
 
       it "should split datastore value on ';'" do
-        datastore_module_paths.should == expected_datastore_module_paths
+        data_store_module_paths.should == expected_datastore_module_paths
       end
     end
   end

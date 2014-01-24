@@ -15,7 +15,7 @@ module Msf::Module::HasActions
   end
 
   def action
-    sa = datastore['ACTION']
+    sa = data_store['ACTION']
     return find_action(default_action) if not sa
     return find_action(sa)
   end

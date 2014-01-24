@@ -71,7 +71,7 @@ class RPC_Session < RPC_Base
 
   def rpc_shell_upgrade( sid, lhost, lport)
     s = _valid_session(sid,"shell")
-    s.exploit_datastore['LHOST'] = lhost
+    s.exploit_data_store['LHOST'] = lhost
     s.exploit_datastore['LPORT'] = lport
     s.execute_script('spawn_meterpreter', nil)
     { "result" => "success" }

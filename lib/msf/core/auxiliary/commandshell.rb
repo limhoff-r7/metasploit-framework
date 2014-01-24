@@ -43,7 +43,7 @@ module Auxiliary::CommandShell
     sess.info = info
 
     # Clean up the stored data
-    sess.exploit_datastore.merge!(ds_merge)
+    sess.exploit_data_store.merge!(ds_merge)
 
     # Prevent the socket from being closed
     obj.sockets.delete(sock)

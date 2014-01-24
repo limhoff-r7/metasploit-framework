@@ -26,31 +26,31 @@ module Msf::Module::UI::Verbose
 
   # Verbose version of #print_debug
   def vprint_debug(msg)
-    print_debug(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_debug(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 
   # Verbose version of #print_error
   def vprint_error(msg)
-    print_error(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_error(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 
   # Verbose version of #print_good
   def vprint_good(msg)
-    print_good(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_good(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 
   # Verbose version of #print_line
   def vprint_line(msg)
-    print_line(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_line(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 
   # Verbose version of #print_status
   def vprint_status(msg)
-    print_status(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_status(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 
   # Verbose version of #print_warning
   def vprint_warning(msg)
-    print_warning(msg) if datastore['VERBOSE'] || framework.datastore['VERBOSE']
+    print_warning(msg) if data_store['VERBOSE'] || framework.data_store['VERBOSE']
   end
 end

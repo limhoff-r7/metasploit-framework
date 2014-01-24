@@ -1,4 +1,3 @@
-
 ###
 #
 # DataStore wrapper for modules that will attempt to back values against the
@@ -23,7 +22,7 @@ class Msf::ModuleDataStore < Msf::DataStore
     val = nil
     val = super if(@imported_by[key] != 'self')
     if (val.nil? and @_module and @_module.framework)
-      val = @_module.framework.datastore[key]
+      val = @_module.framework.data_store[key]
     end
     val = super if val.nil?
     val
@@ -37,7 +36,7 @@ class Msf::ModuleDataStore < Msf::DataStore
     val = nil
     val = super if(@imported_by[key] != 'self')
     if (val.nil? and @_module and @_module.framework)
-      val = @_module.framework.datastore[key]
+      val = @_module.framework.data_store[key]
     end
     val = super if val.nil?
     val

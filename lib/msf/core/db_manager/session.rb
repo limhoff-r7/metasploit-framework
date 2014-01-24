@@ -99,7 +99,7 @@ module Msf::DBManager::Session
             :via_payload => session.via_payload,
             :via_exploit => session.via_exploit,
             :routes      => [],
-            :datastore   => session.exploit_datastore.to_h,
+            :datastore   => session.exploit_data_store.to_h,
             :port        => session.session_port,
             :opened_at   => Time.now.utc,
             :last_seen   => Time.now.utc,
@@ -175,7 +175,7 @@ module Msf::DBManager::Session
             :info => "Exploited by #{mod_fullname} to create Session #{s.id}"
         }
 
-        port    = session.exploit_datastore["RPORT"]
+        port    = session.exploit_data_store["RPORT"]
         service = (port ? host.services.find_by_port(port.to_i) : nil)
 
         vuln_info[:service] = service if service

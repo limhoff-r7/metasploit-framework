@@ -221,7 +221,7 @@ protected
 
     # Process the auto-run scripts for this session
     if session.respond_to?('process_autoruns')
-      session.process_autoruns(datastore)
+      session.process_autoruns(data_store)
     end
 
     # If there is an exploit associated with this payload, then let's notify

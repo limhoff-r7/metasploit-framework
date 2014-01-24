@@ -67,29 +67,29 @@ module ReverseTcp
   # if it fails to start the listener.
   #
   def setup_handler
-    if datastore['Proxies'] and not datastore['ReverseAllowProxy']
+    if data_store['Proxies'] and not data_store['ReverseAllowProxy']
       raise RuntimeError, 'TCP connect-back payloads cannot be used with Proxies. Can be overriden by setting ReverseAllowProxy to true'
     end
 
     ex = false
     # Switch to IPv6 ANY address if the LHOST is also IPv6
-    addr = Rex::Socket.resolv_nbo(datastore['LHOST'])
+    addr = Rex::Socket.resolv_nbo(data_store['LHOST'])
     # First attempt to bind LHOST. If that fails, the user probably has
     # something else listening on that interface. Try again with ANY_ADDR.
     any = (addr.length == 4) ? "0.0.0.0" : "::0"
 
     addrs = [ Rex::Socket.addr_ntoa(addr), any  ]
 
-    comm  = datastore['ReverseListenerComm']
+    comm  = data_store['ReverseListenerComm']
     if comm.to_s == "local"
       comm = ::Rex::Socket::Comm::Local
     else
       comm = nil
     end
 
-    if not datastore['ReverseListenerBindAddress'].to_s.empty?
+    if not data_store['ReverseListenerBindAddress'].to_s.empty?
       # Only try to bind to this specific interface
-      addrs = [ datastore['ReverseListenerBindAddress'] ]
+      addrs = [ data_store['ReverseListenerBindAddress'] ]
 
       # Pick the right "any" address if either wildcard is used
       addrs[0] = any if (addrs[0] == "0.0.0.0" or addrs == "::0")
@@ -99,7 +99,7 @@ module ReverseTcp
 
         self.listener_sock = Rex::Socket::TcpServer.create(
           'LocalHost' => ip,
-          'LocalPort' => datastore['LPORT'].to_i,
+          'LocalPort' => data_store['LPORT'].to_i,
           'Comm'      => comm,
           'Context'   =>
             {
@@ -119,11 +119,11 @@ module ReverseTcp
           via = ""
         end
 
-        print_status("Started reverse handler on #{ip}:#{datastore['LPORT']} #{via}")
+        print_status("Started reverse handler on #{ip}:#{data_store['LPORT']} #{via}")
         break
       rescue
         ex = $!
-        print_error("Handler failed to bind to #{ip}:#{datastore['LPORT']}")
+        print_error("Handler failed to bind to #{ip}:#{data_store['LPORT']}")
       end
     }
     raise ex if (ex)
@@ -140,7 +140,7 @@ module ReverseTcp
   # Starts monitoring for an inbound connection.
   #
   def start_handler
-    self.listener_thread = framework.threads.spawn("ReverseTcpHandlerListener-#{datastore['LPORT']}", false) {
+    self.listener_thread = framework.threads.spawn("ReverseTcpHandlerListener-#{data_store['LPORT']}", false) {
       client = nil
 
       begin
@@ -159,7 +159,7 @@ module ReverseTcp
       end while true
     }
 
-    self.handler_thread = framework.threads.spawn("ReverseTcpHandlerWorker-#{datastore['LPORT']}", false) {
+    self.handler_thread = framework.threads.spawn("ReverseTcpHandlerWorker-#{data_store['LPORT']}", false) {
       while true
         client = self.handler_queue.pop
         begin
@@ -173,7 +173,7 @@ module ReverseTcp
   end
 
   def wrap_aes_socket(sock)
-    if datastore["PAYLOAD"] !~ /java\// or (datastore["AESPassword"] || "") == ""
+    if data_store["PAYLOAD"] !~ /java\// or (data_store["AESPassword"] || "") == ""
       return sock
     end
 
@@ -183,7 +183,7 @@ module ReverseTcp
 
     m = OpenSSL::Digest::Digest.new('md5')
     m.reset
-    key = m.digest(datastore["AESPassword"] || "")
+    key = m.digest(data_store["AESPassword"] || "")
 
     Rex::ThreadFactory.spawn('AESEncryption', false) {
       c1 = OpenSSL::Cipher::Cipher.new('aes-128-cfb8')
