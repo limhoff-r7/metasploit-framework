@@ -10,12 +10,57 @@ module Util
 #
 class EXE
 
-require 'rex'
-require 'rex/peparsey'
-require 'rex/pescan'
-require 'rex/zip'
-require 'metasm'
-require 'digest/sha1'
+  require 'rex'
+  require 'rex/peparsey'
+  require 'rex/pescan'
+  require 'rex/zip'
+  require 'metasm'
+  require 'digest/sha1'
+
+  #
+  # CONSTANTS
+  #
+
+  EXECUTABLE_GENERATOR_BY_PLATFORM_FULLY_QUALIFIED_NAME_BY_ARCHITECTURE_ABBREVIATION = {
+      ARCH_ARMLE => {
+          'Linux' => :to_linux_armle_elf,
+          'OSX' => :to_osx_arm_macho
+      },
+      ARCH_MIPSBE => {
+          'Linux' => :to_linux_mipsbe_elf
+      },
+      ARCH_MIPSLE => {
+          'Linux' => :to_linux_mipsle_elf
+      },
+      ARCH_PPC => {
+          'OSX' => :to_osx_ppc_macho
+      },
+      ARCH_X86 => {
+          'BSD' => :to_bsd_x86_elf,
+          'OSX' => :to_osx_x86_macho,
+          'Linux' => :to_linux_x86_elf,
+          'Solaris' => :to_solaris_x86_elf,
+          'Windows' => :to_win32pe
+      },
+      ARCH_X86_64 => {
+          'Linux' => :to_linux_x64_elf,
+          'OSX' => :to_osx_x64_macho,
+          'Windows' => :to_win64pe
+      }
+  }
+
+
+  # `options` Hash#keys that all generator method must accept as valid keys to meet the interface expected by
+  # {#to_executable}.
+  EXECUTABLE_GENERATOR_OPTIONS_KEYS = [
+      :code,
+      :fallback,
+      :framework,
+      :inject,
+      :sub_method,
+      :template,
+      :template_path
+  ]
 
   ##
   #
@@ -72,103 +117,98 @@ require 'digest/sha1'
   #
   ##
 
-  def self.to_executable(framework, arch, plat, code='', opts={})
-    if (arch.index(ARCH_X86))
 
-      if (plat.index(Msf::Module::Platform::Windows))
-        return to_win32pe(framework, code, opts)
+  # Generates an executable for the given combination of architectures and platforms.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Array<String>] :architecture_abbreviations Architecture(s) of the executable.
+  # @option options [String] :code ('') Code to add to the executable.
+  # @option options [Object] :fallback
+  # @option options [Msf::Framework] :framework The framework generating this executable.
+  # @option options [Object] :inject
+  # @option options [Array] :platforms Platform(s) the executable should run on.
+  # @option options [Object] :sub_method
+  # @option options [String] :template The actual template string.
+  # @option options [String] :template_path Path to the executable template.
+  # @raise [KeyError] unless :architecture_abbreviations is given.
+  # @raise [KeyError] unless :platforms is given.
+  # @return [String] The executable.
+  # @return [nil] if no (architecture, platform)-specific executable generator is available.
+  def self.to_executable(options={})
+    options.assert_valid_keys(
+        :architecture_abbreviations,
+        :platforms,
+        *EXECUTABLE_GENERATOR_OPTIONS_KEYS
+    )
+
+    architecture_abbreviations = options.fetch(:architecture_abbreviations)
+    platforms = options.fetch(:platforms)
+
+    fully_qualified_names = platforms.map(&:fully_qualified_name)
+    cache_platforms = Mdm::Platform.where(fully_qualified_name: fully_qualified_names)
+    executable = nil
+
+    EXECUTABLE_GENERATOR_BY_PLATFORM_FULLY_QUALIFIED_NAME_BY_ARCHITECTURE_ABBREVIATION.each do |architecture_abbreviation, executable_generator_by_platform_fully_qualified_name|
+      if architecture_abbreviations.include? architecture_abbreviation
+        executable_generator_by_platform_fully_qualified_name.each do |platform_fully_qualified_name, executable_generator|
+          generator_cache_platform = Mdm::Platform.where(fully_qualified_name: platform_fully_qualified_name).first
+
+          is_or_is_descendant_of_generator_cache_platform = cache_platforms.where(
+              Mdm::Platform.arel_table[:left].gteq(generator_cache_platform.left).and(
+                  Mdm::Platform.arel_table[:left].lt(generator_cache_platform.right)
+              )
+          ).exists?
+
+          if is_or_is_descendant_of_generator_cache_platform
+            generator_options = options.except(:architecture_abbreviations, :platforms)
+            executable = send(executable_generator, generator_options)
+
+            break
+          end
+        end
+
+        if executable
+          break
+        end
       end
-
-      if (plat.index(Msf::Module::Platform::Linux))
-        return to_linux_x86_elf(framework, code)
-      end
-
-      if(plat.index(Msf::Module::Platform::OSX))
-        return to_osx_x86_macho(framework, code)
-      end
-
-      if(plat.index(Msf::Module::Platform::BSD))
-        return to_bsd_x86_elf(framework, code)
-      end
-
-      if(plat.index(Msf::Module::Platform::Solaris))
-        return to_solaris_x86_elf(framework, code)
-      end
-
-      # XXX: Add remaining x86 systems here
     end
 
-    if( arch.index(ARCH_X86_64) )
-      if (plat.index(Msf::Module::Platform::Windows))
-        return to_win64pe(framework, code, opts)
-      end
-
-      if (plat.index(Msf::Module::Platform::Linux))
-        return to_linux_x64_elf(framework, code, opts)
-      end
-
-      if (plat.index(Msf::Module::Platform::OSX))
-        return to_osx_x64_macho(framework, code)
-      end
-    end
-
-    if(arch.index(ARCH_ARMLE))
-      if(plat.index(Msf::Module::Platform::OSX))
-        return to_osx_arm_macho(framework, code)
-      end
-
-      if(plat.index(Msf::Module::Platform::Linux))
-        return to_linux_armle_elf(framework, code)
-      end
-
-      # XXX: Add remaining ARMLE systems here
-    end
-
-    if(arch.index(ARCH_PPC))
-      if(plat.index(Msf::Module::Platform::OSX))
-        return to_osx_ppc_macho(framework, code)
-      end
-      # XXX: Add PPC OS X and Linux here
-    end
-
-    if(arch.index(ARCH_MIPSLE))
-      if(plat.index(Msf::Module::Platform::Linux))
-        return to_linux_mipsle_elf(framework, code)
-      end
-      # XXX: Add remaining MIPSLE systems here
-    end
-
-    if(arch.index(ARCH_MIPSBE))
-      if(plat.index(Msf::Module::Platform::Linux))
-        return to_linux_mipsbe_elf(framework, code)
-      end
-      # XXX: Add remaining MIPSLE systems here
-    end
-    nil
+    executable
   end
 
-  def self.to_win32pe(framework, code, opts={})
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code Code to include in the executable.
+  # @option options [Msf::Simple] :framework The framework for which to generate the executable.
+  # @option options [Object] :inject
+  # @option options [Object] :sub_method
+  # @option options [String] :template path to the exe template.
+  # @return [String] The executable code
+  def self.to_win32pe(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
 
     # For backward compatability, this is roughly equivalent to 'exe-small' fmt
-    if opts[:sub_method]
-      if opts[:inject]
+    if options[:sub_method]
+      if options[:inject]
         raise RuntimeError, 'NOTE: using the substitution method means no inject support'
       end
 
       # use
-      return self.to_win32pe_exe_sub(framework, code, opts)
+      return self.to_win32pe_exe_sub(framework, code, options)
     end
 
     # Allow the user to specify their own EXE template
-    set_template_default(opts, "template_x86_windows.exe")
+    set_template_default(options, "template_x86_windows.exe")
 
     # Copy the code to a new RWX segment to allow for self-modifying encoders
     payload = win32_rwx_exec(code)
 
     # Create a new PE object and run through sanity checks
     endjunk = true
-    fsize = File.size(opts[:template])
-    pe = Rex::PeParsey::Pe.new_from_file(opts[:template], true)
+    fsize = File.size(options[:template])
+    pe = Rex::PeParsey::Pe.new_from_file(options[:template], true)
     text = nil
     sections_end = 0
     pe.sections.each do |sec|
@@ -184,7 +224,7 @@ require 'digest/sha1'
     end
 
     #try to inject code into executable by adding a section without affecting executable behavior
-    if(opts[:inject])
+    if(options[:inject])
       if endjunk
         raise RuntimeError, "Junk at end of file. Is this a packed exe?"
       end
@@ -224,7 +264,7 @@ require 'digest/sha1'
 
       # Create the modified version of the input executable
       exe = ''
-      File.open(opts[:template], 'rb') { |fd|
+      File.open(options[:template], 'rb') { |fd|
         exe = fd.read(fd.stat.size)
       }
 
@@ -272,7 +312,7 @@ require 'digest/sha1'
 
     p_length = payload.length + 256
     if(text.size < p_length)
-      fname = ::File.basename(opts[:template])
+      fname = ::File.basename(options[:template])
       msg  = "The .text section for '#{fname}' is too small. "
       msg << "Minimum is #{p_length.to_s} bytes, your .text section is #{text.size.to_s} bytes"
       raise RuntimeError, msg
@@ -353,7 +393,7 @@ require 'digest/sha1'
 
     # Create the modified version of the input executable
     exe = ''
-    File.open(opts[:template], 'rb') { |fd|
+    File.open(options[:template], 'rb') { |fd|
       exe = fd.read(fd.stat.size)
     }
 
@@ -475,13 +515,19 @@ require 'digest/sha1'
     return pe
   end
 
-  def self.to_win64pe(framework, code, opts={})
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [String] :template The path to the template file.
+  # @return [String] PE
+  # @raise [KeyError] unless :code is given.
+  def self.to_win64pe(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
 
     # Allow the user to specify their own EXE template
-    set_template_default(opts, "template_x64_windows.exe")
+    set_template_default(options, "template_x64_windows.exe")
 
     pe = ''
-    File.open(opts[:template], "rb") { |fd|
+    File.open(options[:template], "rb") { |fd|
       pe = fd.read(fd.stat.size)
     }
 
@@ -617,13 +663,19 @@ require 'digest/sha1'
     return pe
   end
 
-  def self.to_osx_arm_macho(framework, code, opts={})
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Msf::Simple] :framework IGNORED
+  # @option options [String] :code Code to included in the Mach-O template.
+  # @option options [String] :template path to the template.
+  # @return MACH-O
+  def self.to_osx_arm_macho(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
 
     # Allow the user to specify their own template
-    set_template_default(opts, "template_armle_darwin.bin")
+    set_template_default(options, "template_armle_darwin.bin")
 
     mo = ''
-    File.open(opts[:template], "rb") { |fd|
+    File.open(options[:template], "rb") { |fd|
       mo = fd.read(fd.stat.size)
     }
 
@@ -634,13 +686,22 @@ require 'digest/sha1'
     return mo
   end
 
-  def self.to_osx_ppc_macho(framework, code, opts={})
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the MACH-O template.
+  # @option options [Msf::Simple] :framework IGNORED
+  # @option options [String] :template Path to the template file.
+  # @return [String] MACH-O
+  # @raise [KeyError] unless :code is given.
+  def self.to_osx_ppc_macho(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
 
     # Allow the user to specify their own template
-    set_template_default(opts, "template_ppc_darwin.bin")
+    set_template_default(options, "template_ppc_darwin.bin")
 
     mo = ''
-    File.open(opts[:template], "rb") { |fd|
+    File.open(options[:template], "rb") { |fd|
       mo = fd.read(fd.stat.size)
     }
 
@@ -651,13 +712,22 @@ require 'digest/sha1'
     return mo
   end
 
-  def self.to_osx_x86_macho(framework, code, opts={})
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Simple] :framework IGNORED.
+  # @option options [String] :template Path to the template.
+  # @return [String] MACH-O
+  # @raise [KeyError] unless :code is given
+  def self.to_osx_x86_macho(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
 
     # Allow the user to specify their own template
-    set_template_default(opts, "template_x86_darwin.bin")
+    set_template_default(options, "template_x86_darwin.bin")
 
     mo = ''
-    File.open(opts[:template], "rb") { |fd|
+    File.open(options[:template], "rb") { |fd|
       mo = fd.read(fd.stat.size)
     }
 
@@ -668,17 +738,24 @@ require 'digest/sha1'
     return mo
   end
 
-  def self.to_osx_x64_macho(framework, code, opts={})
-    set_template_default(opts, "template_x64_darwin.bin")
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [String] :template The MACH-O template.
+  def self.to_osx_x64_macho(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    set_template_default(options, "template_x64_darwin.bin")
 
     macho = ''
 
-    File.open(opts[:template], 'rb') { |fd|
+    File.open(options[:template], 'rb') { |fd|
       macho = fd.read(fd.stat.size)
     }
 
     bin = macho.index('PAYLOAD:')
     raise RuntimeError, "Invalid Mac OS X x86_64 Mach-O template: missing \"PAYLOAD:\" tag" if not bin
+
+    code = options.fetch(:code)
     macho[bin, code.length] = code
 
     return macho
@@ -739,21 +816,34 @@ require 'digest/sha1'
     return elf
   end
 
-  # Create a 32-bit Linux ELF containing the payload provided in +code+
-  def self.to_linux_x86_elf(framework, code, opts={})
-    unless opts[:template]
+  # Create a 32-bit Linux ELF containing the payload provided in `code`.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Simple] :framework The framework for which this ELF is being generated.
+  # @option options [String] :template The path to the template.
+  # @return [String] ELF
+  # @raise [KeyError] unless :code is given.
+  # @raise [KeyError] unless :framework is given.
+  def self.to_linux_x86_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+
+    unless options[:template]
       default = true
     end
 
     if default
-      elf = to_exe_elf(framework, opts, "template_x86_linux.bin", code)
+      framework = options.fetch(:framework)
+      elf = to_exe_elf(framework, options, "template_x86_linux.bin", code)
     else
       # If this isn't our normal template, we have to do some fancy
       # header patching to mark the .text section rwx before putting our
       # payload into the entry point.
 
       # read in the template and parse it
-      e = Metasm::ELF.decode_file(opts[:template])
+      e = Metasm::ELF.decode_file(options[:template])
 
       # This will become a modified copy of the template's original phdr
       new_phdr = Metasm::EncodedData.new
@@ -768,7 +858,7 @@ require 'digest/sha1'
       }
 
       # Copy the original file
-      elf = File.open(opts[:template], "rb") {|fd| fd.read(fd.stat.size) }
+      elf = File.open(options[:template], "rb") {|fd| fd.read(fd.stat.size) }
 
       # Replace the header with our rwx modified version
       elf[e.header.phoff, new_phdr.data.length] = new_phdr.data
@@ -781,36 +871,102 @@ require 'digest/sha1'
     return elf
   end
 
-  # Create a 32-bit BSD (test on FreeBSD) ELF containing the payload provided in +code+
-  def self.to_bsd_x86_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_x86_bsd.bin", code)
+  # Create a 32-bit BSD (test on FreeBSD) ELF containing the payload provided in `code`
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Simple] :framework The framework for which this ELF is being generated.
+  # @return (see #to_exe_elf)
+  # @raise [KeyError] unless :code is given.
+  # @raise [KeyError] unless :framework is given.
+  def self.to_bsd_x86_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    elf = to_exe_elf(framework, options, "template_x86_bsd.bin", code)
     return elf
   end
 
-  # Create a 32-bit Solaris ELF containing the payload provided in +code+
-  def self.to_solaris_x86_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_x86_solaris.bin", code)
+  # Create a 32-bit Solaris ELF containing the payload provided in `code`.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Framework] :framework The framework for which this ELF is being generated.
+  # @return (see #to_exe_elf)
+  # @raise [KeyError] unless :code given.
+  # @raise [KeyError] unless :framework given.
+  def self.to_solaris_x86_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    elf = to_exe_elf(framework, options, "template_x86_solaris.bin", code)
     return elf
   end
 
-  # Create a 64-bit Linux ELF containing the payload provided in +code+
-  def self.to_linux_x64_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_x64_linux.bin", code)
+  # Create a 64-bit Linux ELF containing the payload provided in `code`.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Framework] :framework The framework for which this ELF is being generated.
+  # @return (see #to_exe_elf)
+  # @raise [KeyError] unless :code is given.
+  # @raise [KeyError] unless :framework is given.
+  def self.to_linux_x64_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    to_exe_elf(framework, options, "template_x64_linux.bin", code)
+  end
+
+  # @param options [Hash{Symbol => Object}]
+  # @option options [String] :code The code to include in the template.
+  # @option options [Msf::Simple] :framework The framework for which this ELF is being executed.
+  # @return [String] ELF
+  def self.to_linux_armle_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    elf = to_exe_elf(framework, options, "template_armle_linux.bin", code)
     return elf
   end
 
-  def self.to_linux_armle_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_armle_linux.bin", code)
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Msf::Simple] :framework The framework for which the ELF is being generated.
+  # @option options [String] :code The code to be included in the template.
+  # @return (see #to_exe_elf)
+  # @raise [KeyError] unless :code is given.
+  # @raise [KeyError] unless :framework is given.
+  def self.to_linux_mipsle_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
+
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    elf = to_exe_elf(framework, options, "template_mipsle_linux.bin", code)
     return elf
   end
 
-  def self.to_linux_mipsle_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_mipsle_linux.bin", code)
-    return elf
-  end
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Msf::Simple] :framework The framework for which this ELF is being generated.
+  # @option options [String] :code The code to include in the template.
+  # @return [String] ELF
+  # @raise [KeyError] unless :code is given.
+  # @raise [KeyError] unless :framework is given.
+  def self.to_linux_mipsbe_elf(options={})
+    options.assert_valid_keys(EXECUTABLE_GENERATOR_OPTIONS_KEYS)
 
-  def self.to_linux_mipsbe_elf(framework, code, opts={})
-    elf = to_exe_elf(framework, opts, "template_mipsbe_linux.bin", code, true)
+    code = options.fetch(:code)
+    framework = options.fetch(:framework)
+
+    elf = to_exe_elf(framework, options, "template_mipsbe_linux.bin", code, true)
     return elf
   end
 
@@ -984,7 +1140,13 @@ def self.to_vba(framework,code,opts={})
   end
 
   def self.to_win32pe_vbs(framework, code, opts={})
-    to_exe_vbs(to_win32pe(framework, code, opts), opts)
+    executable = to_win32pe(
+        opts.merge(
+            code: code,
+            framework: framework
+        )
+    )
+    to_exe_vbs(executable, opts)
   end
 
   # Creates a jar file that drops the provided +exe+ into a random file name
@@ -1022,12 +1184,12 @@ def self.to_vba(framework,code,opts={})
   #   in the archive. This will be compiled by the victim servlet container
   #   (e.g., Tomcat) and act as the main function for the servlet.
   # @param opts [Hash]
-  # @option opts :jsp_name [String] Name of the <jsp-file> in the archive
+  # @option options :jsp_name [String] Name of the <jsp-file> in the archive
   #   _without the .jsp extension_. Defaults to random.
-  # @option opts :app_name [String] Name of the app to put in the <servlet-name>
+  # @option options :app_name [String] Name of the app to put in the <servlet-name>
   #   tag. Mostly irrelevant, except as an identifier in web.xml. Defaults to
   #   random.
-  # @option opts :extra_files [Array<String,String>] Additional files to add
+  # @option options :extra_files [Array<String,String>] Additional files to add
   #   to the archive. First elment is filename, second is data
   #
   # @todo Refactor to return a {Rex::Zip::Archive} or {Rex::Zip::Jar}
@@ -1080,7 +1242,7 @@ def self.to_vba(framework,code,opts={})
   # @see to_war
   # @param exe [String] Executable to drop and run.
   # @param opts (see to_war)
-  # @option opts (see to_war)
+  # @option options (see to_war)
   # @return (see to_war)
   def self.to_jsp_war(exe, opts={})
 
@@ -1671,9 +1833,21 @@ def self.to_vba(framework,code,opts={})
         end
     when 'exe'
       output = case arch
-        when ARCH_X86,nil then to_win32pe(framework, code, exeopts)
-        when ARCH_X86_64  then to_win64pe(framework, code, exeopts)
-        end
+                 when ARCH_X86,nil
+                   to_win32pe(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+                 when ARCH_X86_64
+                   to_win64pe(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+               end
 
     when 'exe-service'
       output = case arch
@@ -1695,29 +1869,95 @@ def self.to_vba(framework,code,opts={})
     when 'elf'
       if (not plat or (plat.index(Msf::Module::Platform::Linux)))
         output = case arch
-          when ARCH_X86,nil then to_linux_x86_elf(framework, code, exeopts)
-          when ARCH_X86_64  then to_linux_x64_elf(framework, code, exeopts)
-          when ARCH_ARMLE   then to_linux_armle_elf(framework, code, exeopts)
-          when ARCH_MIPSBE  then to_linux_mipsbe_elf(framework, code, exeopts)
-          when ARCH_MIPSLE  then to_linux_mipsle_elf(framework, code, exeopts)
-          end
+                   when ARCH_X86, nil
+                     to_linux_x86_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                   when ARCH_X86_64
+                     to_linux_x64_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                   when ARCH_ARMLE
+                     to_linux_armle_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                   when ARCH_MIPSBE
+                     to_linux_mipsbe_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                   when ARCH_MIPSLE
+                     to_linux_mipsle_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                 end
       elsif(plat and (plat.index(Msf::Module::Platform::BSD)))
         output = case arch
-          when ARCH_X86,nil then Msf::Util::EXE.to_bsd_x86_elf(framework, code, exeopts)
-          end
+                   when ARCH_X86, nil
+                     to_bsd_x86_elf(
+                         exeopts.merge(
+                             code: code,
+                             framework: framework
+                         )
+                     )
+                 end
       elsif(plat and (plat.index(Msf::Module::Platform::Solaris)))
         output = case arch
-          when ARCH_X86,nil then to_solaris_x86_elf(framework, code, exeopts)
-          end
+                   when ARCH_X86,nil
+                     to_solaris_x86_elf(
+                         exeopts.merge(
+                             framework: framework,
+                             code: code
+                         )
+                     )
+                 end
       end
 
     when 'macho'
       output = case arch
-        when ARCH_X86,nil then to_osx_x86_macho(framework, code, exeopts)
-        when ARCH_X86_64  then to_osx_x64_macho(framework, code, exeopts)
-        when ARCH_ARMLE   then to_osx_arm_macho(framework, code, exeopts)
-        when ARCH_PPC     then to_osx_ppc_macho(framework, code, exeopts)
-        end
+                 when ARCH_X86,nil
+                   to_osx_x86_macho(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+                 when ARCH_X86_64
+                   to_osx_x64_macho(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+                 when ARCH_ARMLE
+                   to_osx_arm_macho(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+                 when ARCH_PPC
+                   to_osx_ppc_macho(
+                       exeopts.merge(
+                           code: code,
+                           framework: framework
+                       )
+                   )
+               end
 
     when 'vba'
       output = Msf::Util::EXE.to_vba(framework, code, exeopts)
@@ -1738,7 +1978,14 @@ def self.to_vba(framework,code,opts={})
       arch ||= [ ARCH_X86 ]
       tmp_plat = plat.platforms if plat
       tmp_plat ||= Msf::Module::PlatformList.transform('win')
-      exe = Msf::Util::EXE.to_executable(framework, arch, tmp_plat, code, exeopts)
+      exe = Msf::Util::EXE.to_executable(
+          exeopts.merge(
+              architecture_abbreviations: arch,
+              code: code,
+              framework: framework,
+              platforms: tmp_plat
+          )
+      )
       output = Msf::Util::EXE.to_jsp_war(exe)
 
     when 'psh'

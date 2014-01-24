@@ -1,5 +1,6 @@
 # -*- coding: binary -*-
 require 'msf/core'
+require 'msf/core/encoder_state'
 
 ###
 #
@@ -102,7 +103,7 @@ class Msf::Encoder < Msf::Module
 
     # Initialize the encoding state and key as necessary
     if (state == nil)
-      state = EncoderState.new
+      state = Msf::EncoderState.new
     end
 
     # Prepend data to the buffer as necessary
@@ -294,7 +295,7 @@ protected
   # opportunity to find the key.
   #
   def obtain_key(buf, badchars, state)
-    if datastore['EnableContextEncoding']
+    if data_store['EnableContextEncoding']
       return find_context_key(buf, badchars, state)
     else
       return find_key(buf, badchars, state)
@@ -360,7 +361,7 @@ protected
   #
   def find_context_key(buf, badchars, state)
     # Make sure our context information file is sane
-    if File.exists?(datastore['ContextInformationFile']) == false
+    if File.exists?(data_store['ContextInformationFile']) == false
       raise NoKeyError, "A context information file must specified when using context encoding", caller
     end
 
@@ -370,7 +371,7 @@ protected
 
     # Now, parse records from the information file searching for entries
     # that are compatible with our bad character set
-    File.open(datastore['ContextInformationFile']) { |f|
+    File.open(data_store['ContextInformationFile']) { |f|
       begin
         # Keep looping until we hit an EOF error or we find
         # a compatible key
@@ -428,7 +429,7 @@ protected
     # If the key is nil after all is said and done, then we failed to locate
     # a compatible context-sensitive key
     if key.nil?
-      raise NoKeyError, "No context key could be located in #{datastore['ContextInformationFile']}", caller
+      raise NoKeyError, "No context key could be located in #{data_store['ContextInformationFile']}", caller
     # Otherwise, we successfully determined the key, now we need to update
     # the encoding state with our context address and set context encoding
     # to true so that the encoders know to use it

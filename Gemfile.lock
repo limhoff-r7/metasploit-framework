@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 81bd261330debf967e9ea23c5c351611058f949a
-  branch: bug/payload-reference-name
+  revision: 257ddd054fd07230a3cdcf2e09cc52368c906f9e
+  tag: v0.59.0.compatible-encoders-and-nops
   specs:
-    metasploit_data_models (0.58.0)
+    metasploit_data_models (0.59.0)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
@@ -86,7 +86,7 @@ GEM
       multi_json
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
-    sys-admin (1.6.0)
+    sys-admin (1.6.1)
       ffi (>= 1.1.0)
     table_print (1.5.1)
     timecop (0.6.1)

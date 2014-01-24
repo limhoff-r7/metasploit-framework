@@ -2640,7 +2640,7 @@ class Core
     # If an active module has been selected and it's an exploit, get the
     # list of compatible encoders and display them
     if (metasploit_instance and metasploit_instance.exploit? == true)
-      show_module_set("Compatible Encoders", metasploit_instance.compatible_encoders, regex, minrank, opts)
+      show_module_set("Compatible Encoders", metasploit_instance.compatible_cache_encoder_instances, regex, minrank, opts)
     else
       show_module_set("Encoders", framework.encoders, regex, minrank, opts)
     end
@@ -2719,7 +2719,7 @@ class Core
         return
       end
 
-      p.share_datastore(mod.datastore)
+      p.share_data_store(mod.datastore)
 
       if (p)
         p_opt = Serializer::ReadableText.dump_advanced_options(p, '   ')
@@ -2742,7 +2742,7 @@ class Core
         return
       end
 
-      p.share_datastore(mod.datastore)
+      p.share_data_store(mod.datastore)
 
       if (p)
         p_opt = Serializer::ReadableText.dump_evasion_options(p, '   ')

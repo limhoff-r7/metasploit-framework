@@ -83,12 +83,12 @@ module Payload::Generic
     redirect_to_actual(:replace_var, *args)
   end
 
-  def compatible_encoders
-    redirect_to_actual(:compatible_encoders)
+  def compatible_cache_encoder_instances
+    redirect_to_actual(:compatible_cache_encoder_instances)
   end
 
-  def compatible_nops
-    redirect_to_actual(:compatible_nops)
+  def compatible_cache_nop_instances
+    redirect_to_actual(:compatible_cache_nop_instances)
   end
 
   def handle_connection(*args)
@@ -258,7 +258,7 @@ protected
       dlog("Selected payload #{actual_payload.refname} from generic payload #{refname}", 'core', LEV_2)
       # Share our datastore with the actual payload so that it has the
       # appropriate values to substitute ad so on.
-      self.actual_payload.share_datastore(self.datastore)
+      self.actual_payload.share_data_store(self.datastore)
 
       # Set the associated exploit for the payload.
       self.actual_payload.assoc_exploit  = self.assoc_exploit

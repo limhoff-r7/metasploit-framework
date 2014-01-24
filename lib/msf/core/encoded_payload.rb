@@ -122,31 +122,60 @@ class EncodedPayload
     # If the exploit has bad characters, we need to run the list of encoders
     # in ranked precedence and try to encode without them.
     if reqs['BadChars'] or reqs['Encoder'] or reqs['ForceEncode']
-      encoders = payload_instance.compatible_encoders
+      cache_encoder_instances = payload_instance.compatible_cache_encoder_instances
 
       # Fix encoding issue
       if reqs['Encoder']
         reqs['Encoder'] = reqs['Encoder'].encode(framework.encoders.keys[0].encoding)
       end
-      # If the caller had a preferred encoder, use this encoder only
-      if ((reqs['Encoder']) and (preferred = framework.encoders[reqs['Encoder']]))
-        encoders = [ [reqs['Encoder'], preferred] ]
-      elsif (reqs['Encoder'])
-        wlog("#{payload_instance.refname}: Failed to find preferred encoder #{reqs['Encoder']}")
-        raise NoEncodersSucceededError, "Failed to find preferred encoder #{reqs['Encoder']}"
+
+      required_encoder_reference_name = reqs['Encoder']
+
+      if required_encoder_reference_name.present?
+        ActiveRecord::Base.connection_pool.with_connection do
+          cache_encoder_instances = Mdm::Module::Instance.with_module_type(
+              'encoder'
+          ).joins(
+              :module_class
+          ).where(
+              Mdm::Module::Class.arel_table[:reference_name].eq(required_encoder_reference_name)
+          )
+
+          unless cache_encoder_instances.exists?
+            wlog("#{payload_instance.reference_name}: Failed to find preferred encoder #{required_encoder_reference_name}")
+
+            raise NoEncodersSucceededError, "Failed to find preferred encoder #{required_encoder_reference_name}"
+          end
+        end
       end
 
-      encoders.each { |encname, encmod|
-        self.encoder = encmod.new
+      # include module_class association as it will be accessed immediately to create the in-memory instance.
+      cache_encoder_instances = cache_encoder_instances.includes(:module_class)
+
+      # Use find_each to return found `Mdm::Module::Instance` in batches to better handle large number of modules.
+      cache_encoder_instances.each { |cache_encoder_instance|
+        cache_encoder_class = cache_encoder_instance.module_class
+        self.encoder = framework.modules.create_from_module_class(cache_encoder_class)
         self.encoded = nil
 
         # If there is an encoder type restriction, check to see if this
         # encoder matches with what we're searching for.
-        if ((reqs['EncoderType']) and
-            (self.encoder.encoder_type.split(/\s+/).include?(reqs['EncoderType']) == false))
-          wlog("#{payload_instance.refname}: Encoder #{encoder.refname} is not a compatible encoder type: #{reqs['EncoderType']} != #{self.encoder.encoder_type}",
-            'core', LEV_1)
-          next
+        required_encoder_type = reqs['EncoderType']
+
+        if required_encoder_type
+          allowed_encoder_types = encoder.encoder_type.split /\s+/
+
+          unless allowed_encoder_types.include?(required_encoder_type)
+            wlog(
+                "#{payload_instance.reference_name}: " \
+                  "Encoder #{encoder.reference_name} is not a compatible encoder type: " \
+                  "#{required_encoder_type} is not in #{self.encoder.encoder_type}",
+                'core',
+                LEV_1
+            )
+
+            next
+          end
         end
 
         # If the exploit did not explicitly request a kind of encoder and
@@ -154,29 +183,40 @@ class EncodedPayload
         # considered as a valid encoder.  A manual ranking tells the
         # framework that an encoder must be explicitly defined as the
         # encoder of choice for an exploit.
-        if ((reqs['EncoderType'].nil?) and
-            (reqs['Encoder'].nil?) and
-            (self.encoder.rank_number == ManualRanking))
-          wlog("#{payload_instance.refname}: Encoder #{encoder.refname} is manual ranked and was not defined as a preferred encoder.",
-            'core', LEV_1)
+        if required_encoder_type.nil? &&
+            reqs['Encoder'].nil? &&
+            self.encoder.rank_name == 'Manual'
+          wlog(
+              "#{payload_instance.reference_name}: " \
+              "Encoder #{encoder.reference_name} is manual ranked and was not defined as a preferred encoder.",
+              'core',
+              LEV_1
+          )
+
           next
         end
 
-        # Import the datastore from payload (and likely exploit by proxy)
-        self.encoder.share_datastore(payload_instance.datastore)
+        # Import the data_store from payload (and likely exploit by proxy)
+        self.encoder.share_data_store(payload_instance.data_store)
 
-        # If we have any encoder options, import them into the datastore
+        # If we have any encoder options, import them into the data_store
         # of the encoder.
-        if (reqs['EncoderOptions'])
-          self.encoder.datastore.import_options_from_hash(reqs['EncoderOptions'])
+        required_encoder_options = reqs['EncoderOptions']
+
+        if required_encoder_options
+          self.encoder.data_store.import_options_from_hash(required_encoder_options)
         end
 
         # Validate the encoder to make sure it's properly initialized.
         begin
           self.encoder.validate
-        rescue ::Exception
-          wlog("#{payload_instance.refname}: Failed to validate encoder #{encoder.refname}: #{$!}",
-            'core', LEV_1)
+        rescue ::Exception => exception
+          wlog(
+              "#{payload_instance.reference_name}: Failed to validate encoder #{encoder.reference_name}: #{exception}",
+              'core',
+              LEV_1
+          )
+
           next
         end
 
@@ -190,19 +230,19 @@ class EncodedPayload
         # to using a different encoder.
         #
         1.upto(self.iterations) do |iter|
-          err_start = "#{payload_instance.refname}: iteration #{iter}"
+          err_start = "#{payload_instance.reference_name}: iteration #{iter}"
 
           begin
-            eout = self.encoder.encode(eout, reqs['BadChars'], nil, payload_instance.platform)
-          rescue EncodingError
-            wlog("#{err_start}: Encoder #{encoder.refname} failed: #{$!}", 'core', LEV_1)
-            dlog("#{err_start}: Call stack\n#{$@.join("\n")}", 'core', LEV_3)
+            eout = self.encoder.encode(eout, reqs['BadChars'], nil, payload_instance.platform_list)
+          rescue EncodingError => encoding_error
+            wlog("#{err_start}: Encoder #{encoder.reference_name} failed: #{encoding_error}", 'core', LEV_1)
+            dlog("#{err_start}: Call stack\n#{encoding_error.backtrace.join("\n")}", 'core', LEV_3)
             next_encoder = true
             break
 
-          rescue ::Exception
-            elog("#{err_start}: Broken encoder #{encoder.refname}: #{$!}", 'core', LEV_0)
-            dlog("#{err_start}: Call stack\n#{$@.join("\n")}", 'core', LEV_1)
+          rescue ::Exception => exception
+            elog("#{err_start}: Broken encoder #{encoder.reference_name}: #{exception}", 'core', LEV_0)
+            dlog("#{err_start}: Call stack\n#{exception.backtrace.join("\n")}", 'core', LEV_1)
             next_encoder = true
             break
           end
@@ -212,31 +252,36 @@ class EncodedPayload
           min = 0 if reqs['DisableNops']
 
           # Check to see if we have enough room for the minimum requirements
-          if ((reqs['Space']) and (reqs['Space'] < eout.length + min))
-            wlog("#{err_start}: Encoded payload version is too large with encoder #{encoder.refname}",
+          required_space = reqs['Space']
+
+          if required_space && required_space < (eout.length + min)
+            wlog("#{err_start}: Encoded payload version is too large with encoder #{encoder.reference_name}",
               'core', LEV_1)
             next_encoder = true
+
+            # break iterations loop for this encoder, go to next encoder in outer loop
             break
           end
 
-          ilog("#{err_start}: Successfully encoded with encoder #{encoder.refname} (size is #{eout.length})",
-            'core', LEV_0)
+          ilog(
+              "#{err_start}: Successfully encoded with encoder #{encoder.reference_name} (size is #{eout.length})",
+              'core',
+              LEV_0
+          )
         end
 
+        # required space was exceeded by current encoder, so try the next encoder to see if it can fit
         next if next_encoder
 
         self.encoded = eout
+
         break
       }
 
-      # If the encoded payload is nil, raise an exception saying that we
-      # suck at life.
-      if (self.encoded == nil)
+      if self.encoded.nil?
         self.encoder = nil
 
-        raise NoEncodersSucceededError,
-          "#{payload_instance.refname}: All encoders failed to encode.",
-          caller
+        raise NoEncodersSucceededError, "#{payload_instance.reference_name}: All encoders failed to encode."
       end
 
     # If there are no bad characters, then the raw is the same as the
@@ -277,50 +322,77 @@ class EncodedPayload
 
     # Now construct the actual sled
     if (self.nop_sled_size > 0)
-      nops = payload_instance.compatible_nops
+      cache_nop_instances = payload_instance.compatible_cache_nop_instances
 
-      # If the caller had a preferred nop, try to find it and prefix it
-      if ((reqs['Nop']) and
-          (preferred = framework.nops[reqs['Nop']]))
-        nops.unshift([reqs['Nop'], preferred ])
-      elsif (reqs['Nop'])
-        wlog("#{payload_instance.refname}: Failed to find preferred nop #{reqs['Nop']}")
+      required_nop_reference_name = reqs['Nop']
+
+      if required_nop_reference_name.present?
+        ActiveRecord::Base.connection_pool.with_connection do
+          module_class_reference_name = Mdm::Module::Class.arel_table[:reference_name]
+
+          required_cache_nop_instances = Mdm::Module::Instance.with_module_type(
+              'nop'
+          ).joins(
+              :module_class
+          ).where(
+              module_class_reference_name.eq(required_nop_reference_name)
+          )
+
+          # exclude required_nop_reference_name from the list of all nop instance so it isn't tried twice
+          cache_nop_instances = cache_nop_instances.joins(
+              :module_class
+          ).where(
+              module_class_reference_name.not_eq(required_nop_reference_name)
+          )
+
+          unless required_cache_nop_instances.exist?
+            wlog("#{payload_instance.reference_name}: Failed to find preferred nop #{required_nop_reference_name}")
+          end
+        end
       end
 
-      nops.each { |nopname, nopmod|
-        # Create an instance of the nop module
-        self.nop = nopmod.new
+      [required_cache_nop_instances, cache_nop_instances].each do |relation|
+        # include module_class as it will be accessed immediately to instantiate the in-memory instance
+        relation = relation.includes(:module_class)
 
-        # Propagate options from the payload and possibly exploit
-        self.nop.share_datastore(payload_instance.datastore)
+        relation.each do |cache_nop_instance|
+          cache_nop_class = cache_nop_instance.module_class
+          self.nop = framework.modules.create_from_module_class(cache_nop_class)
 
-        # The list of save registers
-        save_regs = (reqs['SaveRegisters'] || []) + (payload_instance.save_registers || [])
+          # Propagate options from the payload and possibly exploit
+          self.nop.share_data_store(payload_instance.data_store)
 
-        if (save_regs.empty? == true)
-          save_regs = nil
+          # The list of save registers
+          save_regs = (reqs['SaveRegisters'] || []) + (payload_instance.save_registers || [])
+
+          if save_regs.empty?
+            save_regs = nil
+          end
+
+          begin
+            nop.copy_ui(payload_instance)
+
+            self.nop_sled = nop.generate_sled(self.nop_sled_size,
+                                              'BadChars'      => reqs['BadChars'],
+                                              'SaveRegisters' => save_regs)
+          rescue => error
+            dlog(
+                "#{payload_instance.refname}: " \
+                "Nop generator #{nop.refname} failed to generate sled for payload: #{error}",
+                'core',
+                LEV_1
+            )
+
+            next
+          else
+            break
+          end
         end
+      end
 
-        begin
-          nop.copy_ui(payload_instance)
-
-          self.nop_sled = nop.generate_sled(self.nop_sled_size,
-            'BadChars'      => reqs['BadChars'],
-            'SaveRegisters' => save_regs)
-        rescue
-          dlog("#{payload_instance.refname}: Nop generator #{nop.refname} failed to generate sled for payload: #{$!}",
-            'core', LEV_1)
-
-          self.nop = nil
-        end
-
-        break
-      }
-
-      if (self.nop_sled == nil)
+      unless self.nop_sled
         raise NoNopsSucceededError,
-          "#{payload_instance.refname}: All NOP generators failed to construct sled for.",
-          caller
+              "#{payload_instance.reference_name}: All NOP generators failed to construct sled for."
       end
     else
       self.nop_sled = ''
@@ -350,20 +422,20 @@ class EncodedPayload
     emod = payload_instance.assoc_exploit if payload_instance.respond_to? :assoc_exploit
 
     if emod
-      if (emod.datastore["EXE::Custom"] and emod.respond_to? :get_custom_exe)
+      if (emod.data_store["EXE::Custom"] and emod.respond_to? :get_custom_exe)
         return emod.get_custom_exe
       end
-      # This is a little ghetto, grabbing datastore options from the
+      # This is a little ghetto, grabbing data_store options from the
       # associated exploit, but it doesn't really make sense for the
       # payload to have exe options if the exploit doesn't need an exe.
       # Msf::Util::EXE chooses reasonable defaults if these aren't given,
       # so it's not that big of an issue.
       opts.merge!({
-        :template_path => emod.datastore['EXE::Path'],
-        :template => emod.datastore['EXE::Template'],
-        :inject => emod.datastore['EXE::Inject'],
-        :fallback => emod.datastore['EXE::FallBack'],
-        :sub_method => emod.datastore['EXE::OldMethod']
+        :template_path => emod.data_store['EXE::Path'],
+        :template => emod.data_store['EXE::Template'],
+        :inject => emod.data_store['EXE::Inject'],
+        :fallback => emod.data_store['EXE::FallBack'],
+        :sub_method => emod.data_store['EXE::OldMethod']
       })
       # Prefer the target's platform/architecture information, but use
       # the exploit module's if no target specific information exists.
@@ -377,7 +449,14 @@ class EncodedPayload
     opts[:platform] ||= payload_instance.platform if payload_instance.respond_to? :platform
     opts[:arch] ||= payload_instance.arch         if payload_instance.respond_to? :arch
 
-    Msf::Util::EXE.to_executable(framework, opts[:arch], opts[:platform], encoded, opts)
+    Msf::Util::EXE.to_executable(
+        opts.merge(
+            architecture_abbreviations: opts[:arch],
+            code: encoded,
+            framework: framework,
+            platforms: opts[:platform]
+        )
+    )
   end
 
   #
@@ -392,7 +471,7 @@ class EncodedPayload
   def encoded_jar(opts={})
     return payload_instance.generate_jar(opts) if payload_instance.respond_to? :generate_jar
 
-    opts[:spawn] ||= payload_instance.datastore["Spawn"]
+    opts[:spawn] ||= payload_instance.data_store["Spawn"]
 
     Msf::Util::EXE.to_jar(encoded_exe(opts), opts)
   end

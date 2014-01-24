@@ -154,12 +154,17 @@ if (cmd =~ /^(p|y|r|d|c|h|j|x|b|v|w|n)$/)
 			" Length: " + buf.length.to_s + "\n" +
 			"Options: " + options.inspect + "\n"
 
-		arch = payload.arch
-		plat = payload.platform.platforms
+		architecture_abbreviations = payload.architcture_abbreviations
+		platforms = payload.platform_list.platforms
 
-		exe  = Msf::Util::EXE.to_executable($framework, arch, plat, buf)
+		exe  = Msf::Util::EXE.to_executable(
+        architecture_abbreviations: architecture_abbreviations,
+        code: buf,
+        framework: $framework,
+        platforms: platforms,
+    )
 
-		if(!exe and plat.index(Msf::Module::Platform::Java))
+		if(!exe and platforms.index(Msf::Module::Platform::Java))
 			exe = payload.generate_jar.pack
 		end
 
@@ -174,7 +179,10 @@ if (cmd =~ /^(p|y|r|d|c|h|j|x|b|v|w|n)$/)
 	end
 
 	if(cmd =~ /^v$/)
-		exe = Msf::Util::EXE.to_win32pe($framework, buf)
+		exe = Msf::Util::EXE.to_win32pe(
+        code: buf,
+        framework: $framework
+    )
 		note =
 			"'Created by msfpayload (http://www.metasploit.com).\r\n" +
 			"'Payload: " + payload.refname + "\r\n" +
@@ -211,11 +219,17 @@ if (cmd =~ /^(p|y|r|d|c|h|j|x|b|v|w|n)$/)
 			" Length: " + buf.length.to_s + "\n" +
 			"Options: " + options.inspect + "\n"
 
-		arch = payload.arch
-		plat = payload.platform.platforms
+		architecture_abbreviations = payload.architecture_abbreviations
+		platforms = payload.platform_list.platforms
 
-		exe  = Msf::Util::EXE.to_executable($framework, arch, plat, buf)
-		if(!exe and plat.index(Msf::Module::Platform::Java))
+		exe  = Msf::Util::EXE.to_executable(
+        architecture_abbreviations: architecture_abbreviations,
+        code: buf,
+        framework: $framework,
+        plaforms: platforms
+    )
+
+		if(!exe and platforms.index(Msf::Module::Platform::Java))
 			exe = payload.generate_war.pack
 		else
 			exe  = Msf::Util::EXE.to_jsp_war(exe)

