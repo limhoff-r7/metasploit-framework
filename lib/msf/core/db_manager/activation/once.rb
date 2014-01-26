@@ -116,10 +116,13 @@ module Msf::DBManager::Activation::Once
     # Provide access to ActiveRecord models shared w/ commercial versions
     require "metasploit_data_models"
 
-    # eager load all paths to prevent constant resolution issues between ModuleCacheRebuild thread and msfconsole
-    # related to the non-thread-safe loading mechanism used by ActiveSupport::Dependencies
-    Metasploit::Model.configuration.autoload.eager_load!
-    MetasploitDataModels.configuration.autoload.eager_load!
+    # suppress load warnings about rails not found for defining engines
+    silence_rails_engine_warnings do
+      # eager load all paths to prevent constant resolution issues between ModuleCacheRebuild thread and msfconsole
+      # related to the non-thread-safe loading mechanism used by ActiveSupport::Dependencies
+      Metasploit::Model.configuration.autoload.eager_load!
+      MetasploitDataModels.configuration.autoload.eager_load!
+    end
 
     metasploit_data_model_migrations_pathname = MetasploitDataModels.root.join(
         'db',
@@ -156,6 +159,19 @@ module Msf::DBManager::Activation::Once
     if adapter_activation_error
       # use @adapter_activation_error to skip overhead of checking if activated once again.
       errors[:adapter] << @adapter_activation_error.to_s
+    end
+  end
+
+  def silence_rails_engine_warnings
+    stderr = capture(:stderr) do
+      yield
+    end
+
+    # print unknown warnings
+    stderr.each_line do |line|
+      if line !~ /rails could not be loaded, so .*::Engine will not be defined: cannot load such file -- rails/
+        puts line
+      end
     end
   end
 end
