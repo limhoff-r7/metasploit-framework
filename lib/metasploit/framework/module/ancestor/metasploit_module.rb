@@ -136,6 +136,7 @@ module Metasploit::Framework::Module::Ancestor::MetasploitModule
 
   # @yieldreturn [void]
   # @return [void]
+  # @see https://docs.google.com/spreadsheet/ccc?key=0Ah1hRHfpRW92dDRFd2oxSkFqMXNsYVlLZmlIMDlwUHc&usp=sharing
   def each_staged_payload_class
     if payload_type == 'stage'
       stage_metasploit_module = self
@@ -158,9 +159,13 @@ module Metasploit::Framework::Module::Ancestor::MetasploitModule
         dlog("Reusing payload Msf::Payloads::#{relative_class_name}")
       else
         payload_class = Class.new(Msf::Payload)
-        payload_class.send(:include, stage_metasploit_module)
-        payload_class.send(:include, stager_metasploit_module)
+        # The defer to the stage first, then the stager, and finally the stager's handler.  Remember, the last
+        # module included is the first ancestor whose methods are used, so include order is opposite the desired
+        # precedence.
+        # @see https://docs.google.com/spreadsheet/ccc?key=0Ah1hRHfpRW92dDRFd2oxSkFqMXNsYVlLZmlIMDlwUHc&usp=sharing
         payload_class.send(:include, stager_metasploit_module.handler_module)
+        payload_class.send(:include, stager_metasploit_module)
+        payload_class.send(:include, stage_metasploit_module)
 
         Msf::Payloads.const_set(relative_class_name, payload_class)
         dlog("Creating payload Msf::Payload::#{relative_class_name}")
