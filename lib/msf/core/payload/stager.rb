@@ -98,7 +98,7 @@ module Msf::Payload::Stager
   # @return [Boolean]
   def encode_stage?
     # Convert to string in case it hasn't been normalized
-    !!(datastore['EnableStageEncoding'].to_s == "true")
+    !!(data_store['EnableStageEncoding'].to_s == "true")
   end
 
   #

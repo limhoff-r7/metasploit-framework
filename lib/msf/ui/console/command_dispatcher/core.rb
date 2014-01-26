@@ -147,7 +147,7 @@ class Core
   end
 
   #
-  # Initializes the datastore cache
+  # Initializes the data_store cache
   #
   def initialize(driver)
     super
@@ -169,9 +169,9 @@ class Core
   # @return [Msf::Module, nil] `metasploit_instance`
   def metasploit_instance=(metasploit_instance)
     if self.metasploit_instance
-      # Save the module's datastore so that we can load it later
+      # Save the module's data_store so that we can load it later
       # if the module is used again
-      data_store_by_module_class_full_name[self.metasploit_instance.full_name] = self.metasploit_instance.datastore.dup
+      data_store_by_module_class_full_name[self.metasploit_instance.full_name] = self.metasploit_instance.data_store.dup
       @module_class_full_name_was = self.metasploit_instance.full_name
     end
 
@@ -1120,14 +1120,14 @@ class Core
   def cmd_save_help
     print_line "Usage: save"
     print_line
-    print_line "Save the active datastore contents to disk for automatic use across restarts of the console"
+    print_line "Save the active data_store contents to disk for automatic use across restarts of the console"
     print_line
     print_line "The configuration is stored in #{Msf::Config.config_file}"
     print_line
   end
 
   #
-  # Saves the active datastore contents to disk for automatic use across
+  # Saves the active data_store contents to disk for automatic use across
   # restarts of the console.
   #
   def cmd_save(*args)
@@ -1136,7 +1136,7 @@ class Core
     # Save the console config
     driver.save_config
 
-    # Save the framework's datastore
+    # Save the framework's data_store
     begin
       framework.save_config
 
@@ -1552,7 +1552,7 @@ class Core
     print_line "If both are omitted, print options that are currently set."
     print_line
     print_line "If run from a module context, this will set the value in the module's"
-    print_line "datastore.  Use -g to operate on the global datastore"
+    print_line "data_store.  Use -g to operate on the global data_store"
     print_line
   end
 
@@ -1579,31 +1579,31 @@ class Core
 
     # Determine which data store we're operating on
     if (metasploit_instance and global == false)
-      datastore = metasploit_instance.datastore
+      data_store = metasploit_instance.data_store
     else
       global = true
-      datastore = self.framework.datastore
+      data_store = self.framework.data_store
     end
 
-    # Dump the contents of the active datastore if no args were supplied
+    # Dump the contents of the active data_store if no args were supplied
     if (args.length == 0)
       # If we aren't dumping the global data store, then go ahead and
       # dump it first
       if (!global)
         print("\n" +
           Msf::Serializer::ReadableText.dump_datastore(
-            "Global", framework.datastore))
+            "Global", framework.data_store))
       end
 
-      # Dump the active datastore
+      # Dump the active data_store
       print("\n" +
         Msf::Serializer::ReadableText.dump_datastore(
-          (global) ? "Global" : "Module: #{metasploit_instance.refname}",
-          datastore) + "\n")
+          (global) ? "Global" : "Module: #{metasploit_instance.reference_name}",
+          data_store) + "\n")
       return true
     elsif (args.length == 1)
-      if (not datastore[args[0]].nil?)
-        print_line("#{args[0]} => #{datastore[args[0]]}")
+      if (not data_store[args[0]].nil?)
+        print_line("#{args[0]} => #{data_store[args[0]]}")
         return true
       else
         print_error("Unknown variable")
@@ -1635,12 +1635,12 @@ class Core
     end
 
     if append
-      datastore[name] = datastore[name] + value
+      data_store[name] = data_store[name] + value
     else
-      datastore[name] = value
+      data_store[name] = value
     end
 
-    print_line("#{name} => #{datastore[name]}")
+    print_line("#{name} => #{data_store[name]}")
   end
 
   #
@@ -1715,12 +1715,12 @@ class Core
   def cmd_setg_help
     print_line "Usage: setg [option] [value]"
     print_line
-    print_line "Exactly like set -g, set a value in the global datastore."
+    print_line "Exactly like set -g, set a value in the global data_store."
     print_line
   end
 
   #
-  # Sets the supplied variables in the global datastore.
+  # Sets the supplied variables in the global data_store.
   #
   def cmd_setg(*args)
     args.unshift('-g')
@@ -1897,7 +1897,7 @@ class Core
     print_line
     print_line "The unset command is used to unset one or more variables."
     print_line "To flush all entires, specify 'all' as the variable name."
-    print_line "With -g, operates on global datastore variables."
+    print_line "With -g, operates on global data_store variables."
     print_line
   end
 
@@ -1929,12 +1929,12 @@ class Core
 
     # If all was specified, then flush all of the entries
     if args[0] == 'all'
-      print_line("Flushing datastore...")
+      print_line("Flushing data_store...")
 
-      # Re-import default options into the module's datastore
+      # Re-import default options into the module's data_store
       if (metasploit_instance and global == false)
         metasploit_instance.import_defaults
-      # Or simply clear the global datastore
+      # Or simply clear the global data_store
       else
         datastore.clear
       end
