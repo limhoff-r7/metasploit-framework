@@ -121,7 +121,7 @@ class EncodedPayload
   def encode
     # If the exploit has bad characters, we need to run the list of encoders
     # in ranked precedence and try to encode without them.
-    if reqs['BadChars'] or reqs['Encoder'] or reqs['ForceEncode']
+    if reqs['BadChars'].present? or reqs['Encoder'] or reqs['ForceEncode']
       cache_encoder_instances = payload_instance.compatible_cache_encoder_instances
 
       # Fix encoding issue
