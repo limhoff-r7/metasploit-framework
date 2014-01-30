@@ -26,7 +26,7 @@ module Payload::Windows::ReflectiveDllInject
             'Description'   => 'Inject a DLL via a reflective loader',
             'Author'        => [ 'sf' ],
             'References'    => [ [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ] ],
-            'Platform'      => 'win',
+            'Platform'      => 'Windows',
             'Arch'          => ARCH_X86,
             'PayloadCompat' =>
                 {
