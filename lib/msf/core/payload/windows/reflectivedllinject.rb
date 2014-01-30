@@ -18,27 +18,30 @@ module Payload::Windows::ReflectiveDllInject
   include Msf::Payload::Windows
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'          => 'Reflective DLL Injection',
-      'Version'       => '$Revision$',
-      'Description'   => 'Inject a DLL via a reflective loader',
-      'Author'        => [ 'sf' ],
-      'References'    => [ [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ] ],
-      'Platform'      => 'win',
-      'Arch'          => ARCH_X86,
-      'PayloadCompat' =>
-        {
-          'Convention' => 'sockedi -https',
-        },
-      'Stage'         =>
-        {
-          'Offsets' =>
-            {
-              'EXITFUNC' => [ 33, 'V' ]
-            },
-          'Payload' => ""
-        }
-      ))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Reflective DLL Injection',
+            'Version'        => '$Revision$',
+            'Description'   => 'Inject a DLL via a reflective loader',
+            'Author'        => [ 'sf' ],
+            'References'    => [ [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ] ],
+            'Platform'      => 'win',
+            'Arch'          => ARCH_X86,
+            'PayloadCompat' =>
+                {
+                    'Convention' => 'sockedi -https',
+                },
+            'Stage'         =>
+                {
+                    'Offsets' =>
+                        {
+                            'EXITFUNC' => [ 33, 'V' ]
+                        },
+                    'Payload' => ""
+                }
+        )
+    )
 
     register_options( [ OptPath.new( 'DLL', [ true, "The local path to the Reflective DLL to upload" ] ), ], self.class )
   end
