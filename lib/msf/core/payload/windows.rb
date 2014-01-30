@@ -46,17 +46,25 @@ module Msf::Payload::Windows
       if( info['Alias'] )
         info['Alias'] = 'windows/x64/' + info['Alias']
       end
-      merge_info( info, 'SaveRegisters' => [ 'rsp' ] )
+
+      Msf::Module::ModuleInfo.merge!(
+          info,
+          'SaveRegisters' => [
+              'rsp'
+          ]
+      )
     elsif( info['Arch'] == ARCH_X86 )
       if( info['Alias'] )
         info['Alias'] = 'windows/' + info['Alias']
       end
-      merge_info( info, 'SaveRegisters' => [ 'esp' ] )
-    end
 
-    #if (info['Alias'])
-    #	info['Alias'] = 'windows/' + info['Alias']
-    #end
+      Msf::Module::ModuleInfo.merge!(
+          info,
+          'SaveRegisters' => [
+              'esp'
+          ]
+      )
+    end
 
     register_options(
       [
