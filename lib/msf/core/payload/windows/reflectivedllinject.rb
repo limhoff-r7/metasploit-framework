@@ -22,7 +22,6 @@ module Payload::Windows::ReflectiveDllInject
         Msf::Module::ModuleInfo.update!(
             info,
             'Name'          => 'Reflective DLL Injection',
-            'Version'        => '$Revision$',
             'Description'   => 'Inject a DLL via a reflective loader',
             'Author'        => [ 'sf' ],
             'References'    => [ [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ] ],
