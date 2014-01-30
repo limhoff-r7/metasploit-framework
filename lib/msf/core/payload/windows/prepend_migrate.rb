@@ -36,15 +36,13 @@ module Msf::Payload::Windows::PrependMigrate
   def prepends(buf)
     pre = ''
 
-    test_arch = [ *(self.arch) ]
-
     if prepend_migrate?
       # Handle all x86 code here
-      if test_arch.include?(ARCH_X86)
+      if architecture_abbrevations.include?(ARCH_X86)
         migrate_asm = prepend_migrate(buf)
         pre << Metasm::Shellcode.assemble(Metasm::Ia32.new, migrate_asm).encode_string
       # Handle all x64 code here
-      elsif test_arch.include?(ARCH_X86_64)
+      elsif architecture_abbrevations.include?(ARCH_X86_64)
         migrate_asm = prepend_migrate_64(buf)
         pre << Metasm::Shellcode.assemble(Metasm::X64.new, migrate_asm).encode_string
       end
