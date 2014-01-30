@@ -46,7 +46,7 @@ module Payload::Windows::ReflectiveDllInject
   end
 
   def library_path
-    datastore['DLL']
+    data_store['DLL']
   end
 
   def stage_payload(target_id=nil)
