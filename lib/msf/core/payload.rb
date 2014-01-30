@@ -240,12 +240,19 @@ class Payload < Msf::Module
     end
   end
 
-  #
-  # Returns the session class that is associated with this payload and will
+  # (see #session_class)
+  # @deprecated Use {#session_class}
+  def session
+    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#session_class instead"
+    session_class
+  end
+
+  # The session class that is associated with this payload and will
   # be used to create a session as necessary.
   #
-  def session
-    return module_info['Session']
+  # @return [Class<Msf::Session>]
+  def session_class
+    module_info['Session']
   end
 
   ##
