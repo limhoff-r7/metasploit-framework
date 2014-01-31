@@ -17,17 +17,19 @@ module Metasploit3
   handler module_name: 'Msf::Handler::None'
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Custom Payload',
-      'Description'   => 'Use custom string or file as payload. Set either PAYLOADFILE or
-                PAYLOADSTR.',
-      'Author'        => 'scriptjunkie <scriptjunkie[at]scriptjunkie.us>',
-      'License'       => MSF_LICENSE,
-      'Payload'	    =>
-        {
-          'Payload' => "" # not really
-        }
-      ))
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'Custom Payload',
+            'Description'   => 'Use custom string or file as payload. Set either PAYLOADFILE or PAYLOADSTR.',
+            'Author'        => 'scriptjunkie <scriptjunkie[at]scriptjunkie.us>',
+            'License'       => MSF_LICENSE,
+            'Payload'	    =>
+                {
+                    'Payload' => "" # not really
+                }
+        )
+    )
 
     # Register options
     register_options(
@@ -42,7 +44,7 @@ module Metasploit3
   #
   def generate
     if datastore['ARCH']
-      self.arch = actual_arch
+      self.arch = actual_architecture_abbreviations
     end
 
     if datastore['PAYLOADFILE']

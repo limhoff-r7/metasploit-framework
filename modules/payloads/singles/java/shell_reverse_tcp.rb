@@ -20,23 +20,25 @@ module Metasploit3
   handler module_name: 'Msf::Handler::ReverseTcp'
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Java Command Shell, Reverse TCP Inline',
-      'Description'   => 'Connect back to attacker and spawn a command shell',
-      'Author'        => [
-          'mihi', # all the hard work
-          'egypt' # msf integration
-        ],
-      'License'       => MSF_LICENSE,
-      'Platform'      => [ 'java' ],
-      'Arch'          => ARCH_JAVA,
-      'Session'       => Msf::Sessions::CommandShell,
-      'Payload'       =>
-        {
-          'Offsets' => { },
-          'Payload' => ''
-        }
-      ))
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'Java Command Shell, Reverse TCP Inline',
+            'Description'   => 'Connect back to attacker and spawn a command shell',
+            'Author'        => [
+                'mihi', # all the hard work
+                'egypt' # msf integration
+            ],
+            'License'       => MSF_LICENSE,
+            'Platform'      => [ 'Java' ],
+            'Arch'          => ARCH_JAVA,
+            'Session'       => Msf::Sessions::CommandShell,
+            'Payload'       => {
+                'Offsets' => { },
+                'Payload' => ''
+            }
+        )
+    )
     @class_files = [
       [ "metasploit", "Payload.class" ],
       [ "javapayload", "stage", "Stage.class" ],

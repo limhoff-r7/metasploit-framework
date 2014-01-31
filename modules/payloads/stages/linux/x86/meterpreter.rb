@@ -14,14 +14,18 @@ module Metasploit3
   include Msf::Sessions::MeterpreterOptions
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'          => 'Linux Meterpreter',
-      'Description'   => 'Staged meterpreter server',
-      'Author'        => ['PKS', 'egypt'],
-      'Platform'      => 'Linux',
-      'Arch'          => ARCH_X86,
-      'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::Meterpreter_x86_Linux))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Linux Meterpreter',
+            'Description'   => 'Staged meterpreter server',
+            'Author'        => ['PKS', 'egypt'],
+            'Platform'      => 'Linux',
+            'Arch'          => ARCH_X86,
+            'License'       => MSF_LICENSE,
+            'Session'       => Msf::Sessions::Meterpreter_x86_Linux
+        )
+    )
 
     register_options([
       OptBool.new('PrependFork', [ false, "Add a fork() / exit_group() (for parent) code" ]),

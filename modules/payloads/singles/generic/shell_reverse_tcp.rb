@@ -18,13 +18,16 @@ module Metasploit3
   handler module_name: 'Msf::Handler::ReverseTcp'
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Generic Command Shell, Reverse TCP Inline',
-      'Description'   => 'Connect back to attacker and spawn a command shell',
-      'Author'        => 'skape',
-      'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::CommandShell
-      ))
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'Generic Command Shell, Reverse TCP Inline',
+            'Description'   => 'Connect back to attacker and spawn a command shell',
+            'Author'        => 'skape',
+            'License'       => MSF_LICENSE,
+            'Session'       => Msf::Sessions::CommandShell
+        )
+    )
   end
 
 end

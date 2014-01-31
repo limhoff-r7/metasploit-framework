@@ -19,19 +19,22 @@ module Metasploit3
   handler module_name: 'Msf::Handler::ReverseTcp'
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Java Reverse TCP Stager',
-      'Description'   => 'Connect back stager',
-      'Author'        => [
-          'mihi',  # all the hard work
-          'egypt', # msf integration
-        ],
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'java',
-      'Arch'          => ARCH_JAVA,
-      'Convention'    => 'javasocket',
-      'Stager'        => {'Payload' => ""}
-      ))
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'Java Reverse TCP Stager',
+            'Description'   => 'Connect back stager',
+            'Author'        => [
+                'mihi',  # all the hard work
+                'egypt', # msf integration
+            ],
+            'License'       => MSF_LICENSE,
+            'Platform'      => 'Java',
+            'Arch'          => ARCH_JAVA,
+            'Convention'    => 'javasocket',
+            'Stager'        => {'Payload' => ""}
+        )
+    )
 
     register_advanced_options(
       [

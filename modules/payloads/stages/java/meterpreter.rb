@@ -19,21 +19,25 @@ module Metasploit3
   #include Msf::Payload::Java
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'          => 'Java Meterpreter',
-      'Description'   => 'Run a meterpreter server in Java',
-      'Author'        => [
-          'mihi', # all the hard work
-          'egypt' # msf integration
-        ],
-      'Platform'      => 'java',
-      'Arch'          => ARCH_JAVA,
-      'PayloadCompat' =>
-        {
-          'Convention' => 'javasocket javaurl',
-        },
-      'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::Meterpreter_Java_Java))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Java Meterpreter',
+            'Description'   => 'Run a meterpreter server in Java',
+            'Author'        => [
+                'mihi', # all the hard work
+                'egypt' # msf integration
+            ],
+            'Platform'      => 'Java',
+            'Arch'          => ARCH_JAVA,
+            'PayloadCompat' =>
+                {
+                    'Convention' => 'javasocket javaurl',
+                },
+            'License'       => MSF_LICENSE,
+            'Session'       => Msf::Sessions::Meterpreter_Java_Java
+        )
+    )
     # Order matters.  Classes can only reference classes that have already
     # been sent.  The last .class must implement Stage, i.e. have a start()
     # method.

@@ -20,21 +20,24 @@ module Metasploit3
   include Msf::Sessions::CommandShellOptions
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'          => 'Command Shell',
-      'Description'   => 'Spawn a piped command shell (cmd.exe on Windows, /bin/sh everywhere else)',
-      'Author'        => [
-          'mihi', # all the hard work
-          'egypt' # msf integration
-        ],
-      'Platform'      => 'java',
-      'Arch'          => ARCH_JAVA,
-      'PayloadCompat' =>
-        {
-          'Convention' => 'javasocket',
-        },
-      'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::CommandShell))
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'Command Shell',
+            'Description'   => 'Spawn a piped command shell (cmd.exe on Windows, /bin/sh everywhere else)',
+            'Author'        => [
+                'mihi', # all the hard work
+                'egypt' # msf integration
+            ],
+            'Platform'      => 'Java',
+            'Arch'          => ARCH_JAVA,
+            'PayloadCompat' => {
+                'Convention' => 'javasocket',
+            },
+            'License'       => MSF_LICENSE,
+            'Session'       => Msf::Sessions::CommandShell
+        )
+    )
 
     # Order matters.  Classes can only reference classes that have already
     # been sent.  The last .class must implement Stage, i.e. have a start()

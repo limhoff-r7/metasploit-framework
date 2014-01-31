@@ -24,24 +24,26 @@ module Metasploit3
   #
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'AIX Command Shell, Reverse TCP Inline',
-      'Description'   => 'Connect back to attacker and spawn a command shell',
-      'Author'        => 'Ramon de C Valle',
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'aix',
-      'Arch'          => ARCH_PPC,
-      'Session'       => Msf::Sessions::CommandShellUnix,
-      'Payload'       =>
-        {
-          'Offsets' =>
-            {
-              'LHOST'    => [ 32, 'ADDR' ],
-              'LPORT'    => [ 30, 'n'    ],
-            },
-        }
-    ))
-
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'AIX Command Shell, Reverse TCP Inline',
+            'Description'   => 'Connect back to attacker and spawn a command shell',
+            'Author'        => 'Ramon de C Valle',
+            'License'       => MSF_LICENSE,
+            'Platform'      => 'AIX',
+            'Arch'          => ARCH_PPC,
+            'Session'       => Msf::Sessions::CommandShellUnix,
+            'Payload'       =>
+                {
+                    'Offsets' =>
+                        {
+                            'LHOST'    => [ 32, 'ADDR' ],
+                            'LPORT'    => [ 30, 'n'    ],
+                        },
+                }
+        )
+    )
   end
 
   def generate(*args)
