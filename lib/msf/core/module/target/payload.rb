@@ -11,7 +11,7 @@ module Msf::Module::Target::Payload
   def compatible_payload_instances(options={})
     options.assert_valid_keys(:reference_names)
 
-    payload_compatibility = self.payload_compatibility(refrence_names: options[:reference_names])
+    payload_compatibility = self.payload_compatibility(reference_names: options[:reference_names])
 
     payload_compatibility.instances
   end
