@@ -12,9 +12,9 @@ module Msf::Ui::Console::Driver::Callback::Variable
         if (framework and framework.payloads.valid?(val) == false)
           return false
         elsif (metasploit_instance)
-          metasploit_instance.datastore.clear_non_user_defined
+          metasploit_instance.data_store.clear_non_user_defined
         elsif (framework)
-          framework.datastore.clear_non_user_defined
+          framework.data_store.clear_non_user_defined
         end
       when "sessionlogging"
         handle_session_logging(val) if (glob)
@@ -25,7 +25,7 @@ module Msf::Ui::Console::Driver::Callback::Variable
       when "prompt"
         update_prompt(val, prompt_char, true)
       when "promptchar"
-        update_prompt(framework.datastore['Prompt'], val, true)
+        update_prompt(framework.data_store['Prompt'], val, true)
     end
   end
 

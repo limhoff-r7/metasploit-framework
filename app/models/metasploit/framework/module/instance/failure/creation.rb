@@ -42,7 +42,7 @@ class Metasploit::Framework::Module::Instance::Failure::Creation < Metasploit::F
 
   # @note Caller is responsible for saving the returned `Mdm::Host`.
   #
-  # Finds or builds an `Mdm::Host` for {Msf::Module#workspace_record} with `exploit_instance.datastore['RHOST']` is
+  # Finds or builds an `Mdm::Host` for {Msf::Module#workspace_record} with `exploit_instance.data_store['RHOST']` is
   # its `Mdm::Host#address`.
   #
   # @return [Mdm::Host] if `exploit_instance` has an 'RHOST' option and it is set.
@@ -53,7 +53,7 @@ class Metasploit::Framework::Module::Instance::Failure::Creation < Metasploit::F
 
       if exploit_instance
         if exploit_instance.options['RHOST']
-          address = exploit_instance.datastore['RHOST']
+          address = exploit_instance.data_store['RHOST']
 
           if address
             @host = exploit_instance.workspace_record.hosts.where(address: address).first_or_initialize

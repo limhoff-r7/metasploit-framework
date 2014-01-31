@@ -183,7 +183,7 @@ class Core
       data_store = data_store_by_module_class_full_name[metasploit_instance.full_name]
 
       if data_store
-        metasploit_instance.datastore.update(data_store)
+        metasploit_instance.data_store.update(data_store)
       end
     end
 
@@ -1699,8 +1699,8 @@ class Core
       res << "ACTION"
     end
 
-    if (mod.exploit? and mod.datastore['PAYLOAD'])
-      p = framework.payloads.create(mod.datastore['PAYLOAD'])
+    if (mod.exploit? and mod.data_store['PAYLOAD'])
+      p = framework.payloads.create(mod.data_store['PAYLOAD'])
       if (p)
         p.options.sorted.each { |e|
           name, opt = e
@@ -1916,9 +1916,9 @@ class Core
 
     # Determine which data store we're operating on
     if (metasploit_instance and global == false)
-      datastore = metasploit_instance.datastore
+      data_store = metasploit_instance.data_store
     else
-      datastore = framework.datastore
+      data_store = framework.data_store
     end
 
     # No arguments?  No cookie.
@@ -1936,7 +1936,7 @@ class Core
         metasploit_instance.import_defaults
       # Or simply clear the global data_store
       else
-        datastore.clear
+        data_store.clear
       end
 
       return true
@@ -1950,7 +1950,7 @@ class Core
 
       print_line("Unsetting #{val}...")
 
-      datastore.delete(val)
+      data_store.delete(val)
     end
   end
 
@@ -1962,8 +1962,8 @@ class Core
   # at least 1 when tab completion has reached this stage since the command itself has been completed
 
   def cmd_unset_tabs(str, words)
-    datastore = metasploit_instance ? metasploit_instance.datastore : self.framework.datastore
-    datastore.keys
+    data_store = metasploit_instance ? metasploit_instance.data_store : self.framework.data_store
+    data_store.keys
   end
 
   def cmd_unsetg_help
@@ -1990,7 +1990,7 @@ class Core
   # at least 1 when tab completion has reached this stage since the command itself has been completed
 
   def cmd_unsetg_tabs(str, words)
-    self.framework.datastore.keys
+    self.framework.data_store.keys
   end
 
   alias cmd_unsetg_help cmd_unset_help
@@ -2309,8 +2309,8 @@ class Core
     end
 
     # How about the selected payload?
-    if (mod.exploit? and mod.datastore['PAYLOAD'])
-      p = framework.payloads.create(mod.datastore['PAYLOAD'])
+    if (mod.exploit? and mod.data_store['PAYLOAD'])
+      p = framework.payloads.create(mod.data_store['PAYLOAD'])
       if (p and p.options.include?(opt))
         res.concat(option_values_dispatch(p.options[opt], str, words))
       end
@@ -2336,7 +2336,7 @@ class Core
               res << addr
             end
           when 'LHOST'
-            rh = self.metasploit_instance.datastore["RHOST"]
+            rh = self.metasploit_instance.data_store["RHOST"]
             if rh and not rh.empty?
               res << Rex::Socket.source_address(rh)
             else
@@ -2452,7 +2452,7 @@ class Core
 
     framework.db.with_connection do
       # List only those hosts with matching open ports?
-      mport = self.metasploit_instance.datastore['RPORT']
+      mport = self.metasploit_instance.data_store['RPORT']
       if (mport)
         mport = mport.to_i
         hosts = {}
@@ -2482,7 +2482,7 @@ class Core
   #
   def option_values_target_ports
     res = [ ]
-    rhost = self.metasploit_instance.datastore['RHOST']
+    rhost = self.metasploit_instance.data_store['RHOST']
 
     unless rhost
       framework.db.with_connection do
@@ -2682,14 +2682,14 @@ class Core
       'Columns' => columns
       )
     [
-      [ 'ConsoleLogging', framework.datastore['ConsoleLogging'] || '', 'Log all console input and output' ],
-      [ 'LogLevel', framework.datastore['LogLevel'] || '', 'Verbosity of logs (default 0, max 5)' ],
-      [ 'MinimumRank', framework.datastore['MinimumRank'] || '', 'The minimum rank of exploits that will run without explicit confirmation' ],
-      [ 'SessionLogging', framework.datastore['SessionLogging'] || '', 'Log all input and output for sessions' ],
-      [ 'TimestampOutput', framework.datastore['TimestampOutput'] || '', 'Prefix all console output with a timestamp' ],
-      [ 'Prompt', framework.datastore['Prompt'] || '', "The prompt string, defaults to \"#{Msf::Ui::Console::Driver::DEFAULT_PROMPT}\"" ],
-      [ 'PromptChar', framework.datastore['PromptChar'] || '', "The prompt character, defaults to \"#{Msf::Ui::Console::Driver::DEFAULT_PROMPT_CHAR}\"" ],
-      [ 'PromptTimeFormat', framework.datastore['PromptTimeFormat'] || '', 'A format for timestamp escapes in the prompt, see ruby\'s strftime docs' ],
+      [ 'ConsoleLogging', framework.data_store['ConsoleLogging'] || '', 'Log all console input and output' ],
+      [ 'LogLevel', framework.data_store['LogLevel'] || '', 'Verbosity of logs (default 0, max 5)' ],
+      [ 'MinimumRank', framework.data_store['MinimumRank'] || '', 'The minimum rank of exploits that will run without explicit confirmation' ],
+      [ 'SessionLogging', framework.data_store['SessionLogging'] || '', 'Log all input and output for sessions' ],
+      [ 'TimestampOutput', framework.data_store['TimestampOutput'] || '', 'Prefix all console output with a timestamp' ],
+      [ 'Prompt', framework.data_store['Prompt'] || '', "The prompt string, defaults to \"#{Msf::Ui::Console::Driver::DEFAULT_PROMPT}\"" ],
+      [ 'PromptChar', framework.data_store['PromptChar'] || '', "The prompt character, defaults to \"#{Msf::Ui::Console::Driver::DEFAULT_PROMPT_CHAR}\"" ],
+      [ 'PromptTimeFormat', framework.data_store['PromptTimeFormat'] || '', 'A format for timestamp escapes in the prompt, see ruby\'s strftime docs' ],
     ].each { |r| tbl << r }
 
     print(tbl.to_s)
@@ -2711,19 +2711,19 @@ class Core
 
     # If it's an exploit and a payload is defined, create it and
     # display the payload's options
-    if (mod.exploit? and mod.datastore['PAYLOAD'])
-      p = framework.payloads.create(mod.datastore['PAYLOAD'])
+    if (mod.exploit? and mod.data_store['PAYLOAD'])
+      p = framework.payloads.create(mod.data_store['PAYLOAD'])
 
       if (!p)
-        print_error("Invalid payload defined: #{mod.datastore['PAYLOAD']}\n")
+        print_error("Invalid payload defined: #{mod.data_store['PAYLOAD']}\n")
         return
       end
 
-      p.share_data_store(mod.datastore)
+      p.share_data_store(mod.data_store)
 
       if (p)
         p_opt = Serializer::ReadableText.dump_advanced_options(p, '   ')
-        print("\nPayload advanced options (#{mod.datastore['PAYLOAD']}):\n\n#{p_opt}\n") if (p_opt and p_opt.length > 0)
+        print("\nPayload advanced options (#{mod.data_store['PAYLOAD']}):\n\n#{p_opt}\n") if (p_opt and p_opt.length > 0)
       end
     end
   end
@@ -2734,19 +2734,19 @@ class Core
 
     # If it's an exploit and a payload is defined, create it and
     # display the payload's options
-    if (mod.exploit? and mod.datastore['PAYLOAD'])
-      p = framework.payloads.create(mod.datastore['PAYLOAD'])
+    if (mod.exploit? and mod.data_store['PAYLOAD'])
+      p = framework.payloads.create(mod.data_store['PAYLOAD'])
 
       if (!p)
-        print_error("Invalid payload defined: #{mod.datastore['PAYLOAD']}\n")
+        print_error("Invalid payload defined: #{mod.data_store['PAYLOAD']}\n")
         return
       end
 
-      p.share_data_store(mod.datastore)
+      p.share_data_store(mod.data_store)
 
       if (p)
         p_opt = Serializer::ReadableText.dump_evasion_options(p, '   ')
-        print("\nPayload evasion options (#{mod.datastore['PAYLOAD']}):\n\n#{p_opt}\n") if (p_opt and p_opt.length > 0)
+        print("\nPayload evasion options (#{mod.data_store['PAYLOAD']}):\n\n#{p_opt}\n") if (p_opt and p_opt.length > 0)
       end
     end
   end
@@ -2793,7 +2793,7 @@ class Core
             mod_opt_keys = o.options.keys.map { |x| x.downcase }
 
             opts.each do |opt,val|
-              if mod_opt_keys.include?(opt.downcase) == false or (val != nil and o.datastore[opt] != val)
+              if mod_opt_keys.include?(opt.downcase) == false or (val != nil and o.data_store[opt] != val)
                 show = false
               end
             end

@@ -47,10 +47,10 @@ module Metasploit3
   end
 
   def config
-    spawn = datastore["Spawn"] || 2
+    spawn = data_store["Spawn"] || 2
     c =  ""
     c << "Spawn=#{spawn}\n"
-    pass = datastore["AESPassword"] || ""
+    pass = data_store["AESPassword"] || ""
     if pass != ""
       c << "AESPassword=#{pass}\n"
       @class_files = [
@@ -59,8 +59,8 @@ module Metasploit3
     else
       @class_files = [ ]
     end
-    c << "LHOST=#{datastore["LHOST"]}\n" if datastore["LHOST"]
-    c << "LPORT=#{datastore["LPORT"]}\n" if datastore["LPORT"]
+    c << "LHOST=#{data_store["LHOST"]}\n" if data_store["LHOST"]
+    c << "LPORT=#{data_store["LPORT"]}\n" if data_store["LPORT"]
 
     c
   end

@@ -69,8 +69,8 @@ module Metasploit3
 
   def config
     c =  ""
-    c << "LHOST=#{datastore["LHOST"]}\n" if datastore["LHOST"]
-    c << "LPORT=#{datastore["LPORT"]}\n" if datastore["LPORT"]
+    c << "LHOST=#{data_store["LHOST"]}\n" if data_store["LHOST"]
+    c << "LPORT=#{data_store["LPORT"]}\n" if data_store["LPORT"]
     # Magical, means use stdin/stdout.  Used for debugging
     #c << "LPORT=0\n"
     c << "EmbeddedStage=Shell\n"
