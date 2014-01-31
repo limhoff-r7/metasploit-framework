@@ -105,7 +105,7 @@ module ReverseTcp
             {
               'Msf'        => framework,
               'MsfPayload' => self,
-              'MsfExploit' => assoc_exploit
+              'MsfExploit' => exploit_instance
             })
 
         ex = false

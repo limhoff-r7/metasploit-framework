@@ -33,14 +33,6 @@ module Msf::Payload::Aix
   def generate(*args)
     @aix = datastore['AIX']
 
-    #if not assoc_exploit.nil?
-    #	note = find_note(assoc_exploit.rhost, 'AIX')
-
-    #	if not note.nil?
-    #		@aix = note['data']
-    #	end
-    #end
-
     if (not @aix)
       raise RuntimeError, 'AIX version is not set!'
     end

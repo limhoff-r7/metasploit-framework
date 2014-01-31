@@ -419,7 +419,7 @@ class EncodedPayload
       opts[:platform] = opts[:platform].platforms
     end
 
-    emod = payload_instance.assoc_exploit if payload_instance.respond_to? :assoc_exploit
+    emod = payload_instance.exploit_instance if payload_instance.respond_to? :exploit_instance
 
     if emod
       if (emod.data_store["EXE::Custom"] and emod.respond_to? :get_custom_exe)

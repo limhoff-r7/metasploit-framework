@@ -193,7 +193,7 @@ protected
 
       # Associate this system with the original exploit
       # and any relevant information
-      s.set_from_exploit(assoc_exploit)
+      s.set_from_exploit(exploit_instance)
 
       # If the session is valid, register it with the framework and
       # notify any waiters we may have.
@@ -226,8 +226,8 @@ protected
 
     # If there is an exploit associated with this payload, then let's notify
     # anyone who is interested that this exploit succeeded
-    if assoc_exploit
-      framework.events.on_exploit_success(assoc_exploit, session)
+    if exploit_instance
+      framework.events.on_exploit_success(exploit_instance, session)
     end
 
     # Notify waiters that they should be ready to rock

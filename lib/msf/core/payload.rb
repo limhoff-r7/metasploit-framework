@@ -436,25 +436,25 @@ class Payload < Msf::Module
     # that a session has been created and potentially shut down any
     # open sockets. This allows active exploits to continue hammering
     # on a service until a session is created.
-    if (assoc_exploit)
+    if (exploit_instance)
 
       # Signal that a new session is created by calling the exploit's
       # on_new_session handler. The default behavior is to set an
       # instance variable, which the exploit will have to check.
       begin
-        assoc_exploit.on_new_session(session)
+        exploit_instance.on_new_session(session)
       rescue ::Exception => e
-        dlog("#{assoc_exploit.refname}: on_new_session handler triggered exception: #{e.class} #{e} #{e.backtrace}", 'core', LEV_1)	rescue nil
+        dlog("#{exploit_instance.refname}: on_new_session handler triggered exception: #{e.class} #{e} #{e.backtrace}", 'core', LEV_1)	rescue nil
       end
 
       # Set the abort sockets flag only if the exploit is not passive
       # and the connection type is not 'find'
       if (
-        (assoc_exploit.exploit_type == Exploit::Type::Remote) and
-        (!assoc_exploit.passive?) and
+        (exploit_instance.exploit_type == Exploit::Type::Remote) and
+        (!exploit_instance.passive?) and
         (self.class.connection_type != 'find')
          )
-         assoc_exploit.abort_sockets
+         exploit_instance.abort_sockets
       end
 
     end
@@ -478,10 +478,10 @@ class Payload < Msf::Module
   attr_accessor :prepend_encoder
 
   #
-  # If this payload is associated with an exploit, the assoc_exploit
+  # If this payload is associated with an exploit, the exploit_instance
   # attribute will point to that exploit instance.
   #
-  attr_accessor :assoc_exploit
+  attr_accessor :exploit_instance
 
 protected
 

@@ -122,7 +122,7 @@ module BindTcp
               {
                 'Msf'        => framework,
                 'MsfPayload' => self,
-                'MsfExploit' => assoc_exploit
+                'MsfExploit' => exploit_instance
               })
         rescue Rex::ConnectionRefused
           # Connection refused is a-okay
