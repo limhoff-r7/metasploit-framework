@@ -14,7 +14,7 @@ module Msf::Auxiliary::Report::Workspace
   # for Spaghetti Monster's sake!
   def myworkspace
     @myworkspace = framework.db.with_connection {
-      Mdm::Workspace.where(name: workspace).first
+      Mdm::Workspace.where(name: workspace_name).first
     }
   end
 end
