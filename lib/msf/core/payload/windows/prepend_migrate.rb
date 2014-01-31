@@ -27,7 +27,7 @@ module Msf::Payload::Windows::PrependMigrate
   # for discussion.
   #
   def prepend_migrate?
-    !!(datastore['PrependMigrate'] && datastore['PrependMigrate'].to_s.downcase == 'true')
+    !!(data_store['PrependMigrate'] && data_store['PrependMigrate'].to_s.downcase == 'true')
   end
 
   #
