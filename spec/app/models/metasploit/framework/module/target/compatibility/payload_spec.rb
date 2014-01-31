@@ -46,7 +46,7 @@ describe Metasploit::Framework::Module::Target::Compatibility::Payload do
     # lets
     #
 
-    let(:compatible_instances) do
+    let(:each_compatible_instance) do
       reference_names.collect { |reference_name|
         double('compatible instance', reference_name: reference_name)
       }
@@ -63,25 +63,11 @@ describe Metasploit::Framework::Module::Target::Compatibility::Payload do
     #
 
     before(:each) do
-      allow(payload_compatibility).to receive(:compatible_instances).and_return(compatible_instances)
+      allow(payload_compatibility).to receive(:each_compatible_instance).and_return(compatible_instances)
     end
 
-    it 'is reference_names from #compatible_instances' do
+    it 'is reference_names from #each_compatible_instance' do
       expect(compatible_class_reference_names).to match_array(reference_names)
-    end
-  end
-
-  context '#compatible_instances' do
-    subject(:compatible_instances) do
-      payload_compatibility.compatible_instances
-    end
-
-    context 'with Mdm::Module::Instances' do
-
-    end
-
-    context 'without Mdm::Module::Instances' do
-
     end
   end
 end

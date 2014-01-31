@@ -13,7 +13,7 @@ module Msf::Module::Target::Payload
 
     payload_compatibility = self.payload_compatibility(reference_names: options[:reference_names])
 
-    payload_compatibility.instances
+    payload_compatibility.each_compatible_instance
   end
 
   def declared_payload_space

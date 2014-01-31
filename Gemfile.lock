@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 257ddd054fd07230a3cdcf2e09cc52368c906f9e
-  tag: v0.59.0.compatible-encoders-and-nops
+  revision: dd30a6b99e1c2c8f0287b5b6be6996b9c9e6abfc
+  tag: v0.59.2.exploit
   specs:
-    metasploit_data_models (0.59.0)
+    metasploit_data_models (0.59.2)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
