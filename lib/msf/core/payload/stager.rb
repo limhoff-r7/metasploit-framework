@@ -109,15 +109,20 @@ module Msf::Payload::Stager
     # XXX: This is nearly identical to Payload#internal_generate
 
     # Compile the stage as necessary
-    if stage_assembly and !stage_assembly.empty?
-      raw = build(stage_assembly, stage_offset_relative_address_and_type_by_name)
+    if stage_assembly.present?
+      assembled = assemble(stage_assembly, stage_offset_relative_address_and_type_by_name)
     else
-      raw = stage_payload.dup
+      assembled = Metasploit::Framework::Payload::Assembled.new(
+          shellcode: stage_payload,
+          offset_relative_address_and_type_by_name: stage_offset_relative_address_and_type_by_name
+      )
     end
 
-    substitute_vars(raw, stage_offset_relative_address_and_type_by_name) if (stage_offset_relative_address_and_type_by_name)
+    # MUST dup because {Msf::Payload#substitute_vars} will mutate the String passed to it.
+    generated = assembled.shellcode.dup
+    substitute_vars(generated, assembled.offset_relative_address_and_type_by_name)
 
-    return raw
+    generated
   end
 
   #

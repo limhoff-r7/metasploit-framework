@@ -360,29 +360,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # Adds a blob to the blob cache so that the payload does not have to be
-  # recompiled in the future
-  #
-  def add_blob_cache(key, blob, offsets)
-    @blob_cache[key] = [ blob, offsets ]
-  end
-
-  #
-  # Checks to see if a payload has a blob cache entry.  If it does, the blob
-  # is returned to the caller.
-  #
-  def check_blob_cache(key)
-    @blob_cache[key]
-  end
-
-  #
-  # Flushes all entries from the blob cache
-  #
-  def flush_blob_cache
-    @blob_cache.clear
-  end
-
-  #
   # The list of stages that have been loaded.
   #
   attr_reader :stages

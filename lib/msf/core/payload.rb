@@ -491,66 +491,19 @@ protected
   # Blobs will be cached in the framework's PayloadSet
   #
   # @see PayloadSet#check_blob_cache
-  # @param asm [String] Assembly code to be assembled into a raw payload
-  # @return [String] The final, assembled payload
-  # @raise ArgumentError if +asm+ is blank
-  def build(asm, off={})
-    if(asm.nil? or asm.empty?)
-      raise ArgumentError, "Assembly must not be empty"
-    end
+  # @param assembly [String] Assembly code to be assembled into a raw payload
+  # @param offset_relative_address_and_type_by_name [Hash{String => Array<(Integer, String)>}]
+  # @return (see Metasploit::Framework::Payload::Assemble)
+  # @raise ArgumentError if `asm` is blank.
+  def assemble(assembly, offset_relative_address_and_type_by_name={})
+    assemble = Metasploit::Framework::Payload::Assemble.new(
+        assembly: assembly,
+        offset_relative_address_and_type_by_name: offset_relative_address_and_type_by_name,
+        payload_instance: self
+    )
+    assemble.valid!
 
-    # Use the refname so blobs can be flushed when the module gets
-    # reloaded and use the hash value to ensure that we're actually
-    # getting the right blob for the given assembly.
-    cache_key   = refname + asm.hash.to_s
-    cache_entry = framework.payloads.check_blob_cache(cache_key)
-
-    off.each_pair { |option, val|
-      if (val[1] == 'RAW')
-        asm = asm.gsub(/#{option}/){ data_store[option] }
-        off.delete(option)
-      end
-    }
-
-    # If there is a valid cache entry, then we don't need to worry about
-    # rebuilding the assembly
-    if cache_entry
-      # Update the local offsets from the cache
-      off.each_key { |option|
-        off[option] = cache_entry[1][option]
-      }
-
-      # Return the cached payload blob
-      return cache_entry[0].dup
-    end
-
-    # Assemble the payload from the assembly
-    a = self.arch
-    if a.kind_of? Array
-      a = self.arch.first
-    end
-    cpu = case a
-      when ARCH_X86    then Metasm::Ia32.new
-      when ARCH_X86_64 then Metasm::X86_64.new
-      when ARCH_PPC    then Metasm::PowerPC.new
-      when ARCH_ARMLE  then Metasm::ARM.new
-      else
-        elog("Broken payload #{refname} has arch unsupported with assembly: #{module_info["Arch"].inspect}")
-        elog("Call stack:\n#{caller.join("\n")}")
-        return ""
-      end
-    sc = Metasm::Shellcode.assemble(cpu, asm).encoded
-
-    # Calculate the actual offsets now that it's been built
-    off.each_pair { |option, val|
-      off[option] = [ sc.offset_of_reloc(option) || val[0], val[1] ]
-    }
-
-    # Cache the payload blob
-    framework.payloads.add_blob_cache(cache_key, sc.data, off)
-
-    # Return a duplicated copy of the assembled payload
-    sc.data.dup
+    assemble.assembled
   end
 
   #
@@ -559,19 +512,21 @@ protected
   def internal_generate
     # Build the payload, either by using the raw payload blob defined in the
     # module or by actually assembling it
-    if assembly and !assembly.empty?
-      raw = build(assembly, offsets)
+    if assembly.present?
+      assembled = assemble(assembly, offset_relative_address_and_type_by_name)
     else
-      raw = payload.dup
+      assembled = Metasploit::Framework::Payload::Assembled.new(
+          data: payload,
+          offset_relative_address_and_type_by_name: offset_relative_address_and_type_by_name
+      )
+      assembled.valid!
     end
 
-    # If the payload is generated and there are offsets to substitute,
-    # do that now.
-    if (raw and offsets)
-      substitute_vars(raw, offsets)
-    end
+    # MUST dup because {Msf::Payload#substitute_vars} will mutate the String passed to it.
+    generated = assembled.data.dup
+    substitute_vars(generated, assembled.offset_relative_address_and_type_by_name)
 
-    return raw
+    generated
   end
 
   ##
