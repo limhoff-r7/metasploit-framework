@@ -79,7 +79,7 @@ module Msf::Payload::Stager
   # stage.
   #
   # @return [Hash]
-  def stage_offsets
+  def stage_offset_relative_address_and_type_by_name
     return module_info['Stage']['Offsets']
   end
 
@@ -110,13 +110,12 @@ module Msf::Payload::Stager
 
     # Compile the stage as necessary
     if stage_assembly and !stage_assembly.empty?
-      raw = build(stage_assembly, stage_offsets)
+      raw = build(stage_assembly, stage_offset_relative_address_and_type_by_name)
     else
       raw = stage_payload.dup
     end
 
-    # Substitute variables in the stage
-    substitute_vars(raw, stage_offsets) if (stage_offsets)
+    substitute_vars(raw, stage_offset_relative_address_and_type_by_name) if (stage_offset_relative_address_and_type_by_name)
 
     return raw
   end

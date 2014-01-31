@@ -187,7 +187,7 @@ class Payload < Msf::Module
   #
   # Returns the offsets to variables that must be substitute, if any.
   #
-  def offsets
+  def offset_relative_address_and_type_by_name
     return module_info['Payload'] ? module_info['Payload']['Offsets'] : nil
   end
 

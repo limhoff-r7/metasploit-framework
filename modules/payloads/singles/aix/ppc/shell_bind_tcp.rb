@@ -117,8 +117,8 @@ module Metasploit3
 
       # If the payload is generated and there are offsets to substitute,
       # do that now.
-      if (payload and offsets)
-        substitute_vars(payload, offsets)
+      if (payload and offset_relative_address_and_type_by_name)
+        substitute_vars(payload, offset_relative_address_and_type_by_name)
       end
 
       payload
