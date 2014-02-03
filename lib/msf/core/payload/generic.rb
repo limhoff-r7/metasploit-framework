@@ -20,11 +20,11 @@ module Msf::Payload::Generic
   #   @return [Msf::Payload]
   attr_writer :actual_payload_instance
 
-  # @!attribute [rw] explicit_arch
+  # @!attribute [rw] explicit_architecture_abbreviations
   #   Makes it possible to define an explicit architecture.  This is used for things like payload regeneration.
   #
   #   @return [String, Array<String>]
-  attr_accessor :explicit_arch
+  attr_accessor :explicit_architecture_abbreviations
 
   # @!attribute [rw] explicit_platform
   #  Makes it possible to define an explicit platform.  This is used for things like payload regeneration.
@@ -184,7 +184,7 @@ module Msf::Payload::Generic
   # actual payload.
   #
   def reset
-    self.explicit_arch     = nil
+    self.explicit_architecture_abbreviations     = nil
     self.explicit_platform = nil
     self.actual_payload_instance = nil
   end
@@ -211,8 +211,8 @@ module Msf::Payload::Generic
   def actual_architecture_abbreviations
     architecture_abbreviations = nil
 
-    if explicit_arch.nil? == false
-      architecture_abbreviations = explicit_arch
+    if explicit_architecture_abbreviations.nil? == false
+      architecture_abbreviations = explicit_architecture_abbreviations
     elsif data_store['ARCH']
       architecture_abbreviations = data_store['ARCH']
     elsif exploit_instance
