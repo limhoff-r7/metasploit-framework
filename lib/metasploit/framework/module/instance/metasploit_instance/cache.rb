@@ -32,7 +32,7 @@ module Metasploit::Framework::Module::Instance::MetasploitInstance::Cache
 
     # use explicit `self.` so that ruby raises the more specific NoMethodError instead of NameError when it can't
     # determine if `description` is an undefined local variable or method.
-    [:description, :license, :name, :privileged].each do |attribute|
+    [:description, :disclosed_on, :license, :name, :privileged].each do |attribute|
       # user could have undefined these methods or subclassed the wrong thing when writing a module, so handle bad
       # modules here
       rescue_module_instance_error(module_instance, NoMethodError) {

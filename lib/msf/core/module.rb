@@ -152,6 +152,8 @@ class Msf::Module < Metasploit::Model::Base
     Date.parse(module_info['DisclosureDate'].to_s) rescue nil
   end
 
+  alias_method :disclosed_on, :disclosure_date
+
   #
   # Support fail_with for all module types, allow specific classes to override
   #
