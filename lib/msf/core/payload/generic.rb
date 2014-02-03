@@ -26,11 +26,11 @@ module Msf::Payload::Generic
   #   @return [String, Array<String>]
   attr_accessor :explicit_architecture_abbreviations
 
-  # @!attribute [rw] explicit_platform
+  # @!attribute [rw] explicit_platform_list
   #  Makes it possible to define an explicit platform.  This is used for things like payload regeneration.
   #
   #  @return [String, Msf::Module::PlatformList]
-  attr_accessor :explicit_platform
+  attr_accessor :explicit_platform_list
 
   #
   # Methods
@@ -185,7 +185,7 @@ module Msf::Payload::Generic
   #
   def reset
     self.explicit_architecture_abbreviations     = nil
-    self.explicit_platform = nil
+    self.explicit_platform_list = nil
     self.actual_payload_instance = nil
   end
 
@@ -252,8 +252,8 @@ module Msf::Payload::Generic
   def actual_platform_list
     platform_list = nil
 
-    if explicit_platform.nil? == false
-      platform_list = explicit_platform
+    if explicit_platform_list.nil? == false
+      platform_list = explicit_platform_list
     elsif data_store['PLATFORM']
       platform_list = data_store['PLATFORM']
     elsif exploit_instance
