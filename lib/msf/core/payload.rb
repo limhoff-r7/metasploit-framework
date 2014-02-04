@@ -435,15 +435,14 @@ class Payload < Msf::Module
     # that a session has been created and potentially shut down any
     # open sockets. This allows active exploits to continue hammering
     # on a service until a session is created.
-    if (exploit_instance)
-
+    if exploit_instance
       # Signal that a new session is created by calling the exploit's
       # on_new_session handler. The default behavior is to set an
       # instance variable, which the exploit will have to check.
       begin
         exploit_instance.on_new_session(session)
-      rescue ::Exception => e
-        dlog("#{exploit_instance.refname}: on_new_session handler triggered exception: #{e.class} #{e} #{e.backtrace}", 'core', LEV_1)	rescue nil
+      rescue ::Exception => exception
+        dlog("#{exploit_instance.full_name}: #{exception.class} #{exception}:\n#{exception.backtrace.join("\n")}", 'core', LEV_1)
       end
 
       # Set the abort sockets flag only if the exploit is not passive
