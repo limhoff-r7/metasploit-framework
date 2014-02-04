@@ -1,6 +1,7 @@
 # -*- coding: binary -*-
 require 'msf/core'
 require 'metasm'
+require 'metasploit/framework/deprecation'
 
 module Msf
 
@@ -240,12 +241,10 @@ class Payload < Msf::Module
     end
   end
 
-  # (see #session_class)
-  # @deprecated Use {#session_class}
-  def session
-    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#session_class instead"
-    session_class
-  end
+  # @!method session
+  #   (see #session_class)
+  #   @deprecated Use {#session_class}
+  Metasploit::Framework::Deprecation.rename_methods(self, session: :session_class)
 
   # The session class that is associated with this payload and will
   # be used to create a session as necessary.
