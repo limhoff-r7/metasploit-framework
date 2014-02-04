@@ -180,30 +180,30 @@ protected
   # associated session.
   #
   def create_session(conn, opts={})
-    # If there is a parent payload, then use that in preference.
-    return parent_payload.create_session(conn, opts) if (parent_payload)
+    session_instance = nil
 
+    if parent_payload
+      session_instance = parent_payload.create_session(conn, opts)
     # If the payload we merged in with has an associated session factory,
     # allocate a new session.
-    if (self.session)
-      s = self.session.new(conn, opts)
+    elsif session_class
+      session_instance = session_class.new(conn, opts)
 
       # Pass along the framework context
-      s.framework = framework
+      session_instance.framework = framework
 
       # Associate this system with the original exploit
       # and any relevant information
-      s.set_from_exploit(exploit_instance)
+      session_instance.set_from_exploit(exploit_instance)
 
       # If the session is valid, register it with the framework and
       # notify any waiters we may have.
-      if (s)
-        register_session(s)
+      if session_instance
+        register_session(session_instance)
       end
-
-      return s
     end
-    nil
+
+    session_instance
   end
 
   #
