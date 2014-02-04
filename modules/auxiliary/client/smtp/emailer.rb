@@ -19,19 +19,23 @@ class Metasploit3 < Msf::Auxiliary
   include Msf::Exploit::EXE
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'           => 'Generic Emailer (SMTP)',
-      'Description'    => %q{
-          This module can be used to automate email delivery.
-        This code is based on Joshua Abraham's email script for social
-        engineering.
-      },
-      'License'        => MSF_LICENSE,
-      'References'     =>
-        [
-          [ 'URL', 'http://spl0it.org/' ],
-        ],
-      'Author'         => [ 'et <et[at]metasploit.com>' ]))
+    super(
+        Msf::Module::ModuleInfo.update_info(
+            info,
+            'Name'           => 'Generic Emailer (SMTP)',
+            'Description'    => %q{
+                This module can be used to automate email delivery.
+              This code is based on Joshua Abraham's email script for social
+              engineering.
+            },
+            'License'        => MSF_LICENSE,
+            'References'     =>
+                [
+                    [ 'URL', 'http://spl0it.org/' ],
+                ],
+            'Author'         => [ 'et <et[at]metasploit.com>' ]
+        )
+    )
 
       register_options(
         [
