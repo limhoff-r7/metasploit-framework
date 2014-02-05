@@ -22,6 +22,7 @@ class Payload < Msf::Module
   require 'msf/core/payload/single'
   require 'msf/core/payload/generic'
   require 'msf/core/payload/stager'
+  require 'msf/core/payload/type'
 
   # Platform specific includes
   require 'msf/core/payload/aix'
@@ -33,33 +34,6 @@ class Payload < Msf::Module
   require 'msf/core/payload/netware'
   require 'msf/core/payload/java'
   require 'msf/core/payload/dalvik'
-
-  ##
-  #
-  # Payload types
-  #
-  ##
-  module Type
-    #
-    # Single payload type.  These types of payloads are self contained and
-    # do not go through any staging.
-    #
-    Single = (1 << 0)
-
-    #
-    # The stager half of a staged payload.  Its responsibility in life is to
-    # read in the stage and execute it.
-    #
-    Stager = (1 << 1)
-
-    #
-    # The stage half of a staged payload.  This payload performs whatever
-    # arbitrary task it's designed to do, possibly making use of the same
-    # connection that the stager used to read the stage in on, if
-    # applicable.
-    #
-    Stage  = (1 << 2)
-  end
 
   #
   # Creates an instance of a payload module using the supplied information.
