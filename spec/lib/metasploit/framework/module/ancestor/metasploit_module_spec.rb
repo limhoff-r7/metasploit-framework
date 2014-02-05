@@ -960,7 +960,7 @@ describe Metasploit::Framework::Module::Ancestor::MetasploitModule do
                 each_staged_payload_class { }
               end
 
-              it 'should include the stage, stager, and finally handler' do
+              it 'should include the handler, the stager, and finally the stage' do
                 each_staged_payload_class { |staged_payload_class|
                   ancestors = staged_payload_class.ancestors
 
@@ -976,8 +976,8 @@ describe Metasploit::Framework::Module::Ancestor::MetasploitModule do
                   handler_index = ancestors.index(stager.handler_module)
 
                   # a latter call to include means a closer ancestor and a lower index
-                  handler_index.should be < stager_index
-                  stager_index.should be < stage_index
+                  handler_index.should be > stager_index
+                  stager_index.should be > stage_index
                 }
               end
 
@@ -1059,7 +1059,7 @@ describe Metasploit::Framework::Module::Ancestor::MetasploitModule do
                 each_staged_payload_class { }
               end
 
-              it 'should include the stage, stager, and finally handler' do
+              it 'should include the handler, the stager, and finally the stage' do
                 each_staged_payload_class { |staged_payload_class|
                   ancestors = staged_payload_class.ancestors
 
@@ -1075,8 +1075,8 @@ describe Metasploit::Framework::Module::Ancestor::MetasploitModule do
                   handler_index = ancestors.index(metasploit_module.handler_module)
 
                   # a latter call to include means a closer ancestor and a lower index
-                  handler_index.should be < stager_index
-                  stager_index.should be < stage_index
+                  handler_index.should be > stager_index
+                  stager_index.should be > stage_index
                 }
               end
 
