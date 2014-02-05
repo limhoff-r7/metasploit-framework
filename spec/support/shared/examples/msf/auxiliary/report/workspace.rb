@@ -43,11 +43,19 @@ shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
       auxiliary_metasploit_instance.myworkspace
     end
 
-    it 'should be memoized' do
+    it 'is not be memoized' do
       memoized = double('Mdm::Workspace')
       auxiliary_metasploit_instance.instance_variable_set :@myworkspace, memoized
 
-      myworkspace.should == memoized
+      expect(myworkspace).not_to eq(memoized)
+    end
+
+    it 'sets @myworkspace' do
+      expect {
+        myworkspace
+      }.to change {
+        auxiliary_metasploit_instance.instance_variable_defined? :@myworkspace
+      }.to(true)
     end
 
     context 'connected' do
