@@ -63,7 +63,7 @@ describe Metasploit::Framework::Module::Target::Compatibility::Payload do
     #
 
     before(:each) do
-      allow(payload_compatibility).to receive(:each_compatible_instance).and_return(compatible_instances)
+      allow(payload_compatibility).to receive(:each_compatible_instance).and_return(each_compatible_instance)
     end
 
     it 'is reference_names from #each_compatible_instance' do
