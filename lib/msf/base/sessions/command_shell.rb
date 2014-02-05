@@ -252,7 +252,33 @@ class Msf::Sessions::CommandShell
     self.platform_fully_qualified_name = platform_fully_qualfied_name
   end
 
-  attr_accessor :platform_fully_qualified_name
+  def platform_fully_qualified_name
+    unless instance_variable_defined? :@platform_fully_qualified_name
+      platforms = exploit.target_platform_list.platforms
+
+      if platforms.length == 1
+        platform = platforms.first
+        @platform_fully_qualified_name = platform.fully_qualified_name
+      else
+        target_clause = ''
+        target = exploit.target
+
+        if target
+          target_clause = " target (#{target.name})"
+        end
+
+        wlog(
+            "#{self.class}##{__method__} cannot be derived from exploit: " \
+            "exploit (#{exploit.full_name})#{target_clause} has multiple platforms (#{platforms.to_sentence}).\n" \
+            "#{caller.join("\n")}"
+        )
+      end
+    end
+
+    @platform_fully_qualified_name
+  end
+
+  attr_writer :platform_fully_qualified_name
 
 protected
 
