@@ -16,7 +16,7 @@ describe Msf::Simple::Module do
     # lets
     #
 
-    let(:datastore) do
+    let(:data_store) do
       Msf::DataStore.new.tap { |data_store|
         data_store['DATA_STORE_KEY'] = 'DATA_STORE_VALUE'
       }
@@ -32,13 +32,13 @@ describe Msf::Simple::Module do
 
     before(:each) do
       simple_module.stub(
-          datastore: datastore,
+          data_store: data_store,
           full_name: full_name
       )
     end
 
-    it 'includes #datastore' do
-      inspect.should include datastore.inspect
+    it 'includes #data_store' do
+      inspect.should include data_store.inspect
     end
 
     it 'includes #full_name' do
@@ -52,7 +52,7 @@ describe Msf::Simple::Module do
     end
 
     it 'calls #reference_name' do
-      simple_module.datastore.stub(:from_file)
+      simple_module.data_store.stub(:from_file)
 
       simple_module.should_receive(:reference_name)
 
@@ -66,7 +66,7 @@ describe Msf::Simple::Module do
     end
 
     it 'calls #reference_name' do
-      simple_module.datastore.stub(:to_file)
+      simple_module.data_store.stub(:to_file)
 
       simple_module.should_receive(:reference_name)
 
