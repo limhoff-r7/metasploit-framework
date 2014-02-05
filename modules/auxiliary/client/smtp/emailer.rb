@@ -20,7 +20,7 @@ class Metasploit3 < Msf::Auxiliary
 
   def initialize(info = {})
     super(
-        Msf::Module::ModuleInfo.update_info(
+        Msf::Module::ModuleInfo.update!(
             info,
             'Name'           => 'Generic Emailer (SMTP)',
             'Description'    => %q{
