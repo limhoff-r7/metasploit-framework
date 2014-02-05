@@ -37,7 +37,7 @@ class Metasploit3 < Msf::Auxiliary
             'Author'	       => ['willis'],
             'References'	 =>
                 [
-                    'URL','http://wiki.squid-cache.org/SquidFaq/SecurityPitfalls'
+                    ['URL', 'http://wiki.squid-cache.org/SquidFaq/SecurityPitfalls']
                 ],
 
             'License'	=> MSF_LICENSE
