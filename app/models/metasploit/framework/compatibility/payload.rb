@@ -50,6 +50,15 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
       if payload_instance
         payload_instance.exploit_instance = exploit_instance
 
+        # Include exploit_instance's data_store in payload_instance so that fields set on the exploit, like LHOST are
+        # available to the payload when it generates to find its size.
+        #
+        # CANNOT use Msf::Module#share_data_store because the options from payload_instance will be imported into
+        # exploit_instance's data_store, which means that all previous, incompatible payload_instance's options and
+        # their defaults will be in the data_store (potentially) leading to the wrong default being used for the final
+        # compatible payload_instance.
+        payload_instance.data_store.merge!(exploit_instance.data_store)
+
         yield payload_instance
       else
         payload_class_location = module_class_location(cache_payload_class)
