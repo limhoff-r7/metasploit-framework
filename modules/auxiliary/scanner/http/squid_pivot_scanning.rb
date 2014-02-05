@@ -18,7 +18,7 @@ class Metasploit3 < Msf::Auxiliary
 
   def initialize(info={})
     super(
-        update_info(
+        Msf::Module::ModuleInfo.update!(
             info,
             'Name'          => 'Squid Proxy Port Scanner',
             'Description'   => %q{
