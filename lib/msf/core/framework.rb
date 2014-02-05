@@ -111,12 +111,10 @@ class Framework < Metasploit::Model::Base
   require 'msf/core/plugin_manager'
   require 'msf/core/session_manager'
 
-  # (see #data_store)
-  # @deprecated Use {#data_store}
-  def datastore
-    ActiveSupport::Deprecation.warn "#{self.class}##{__method__} is deprecated.  Use #{self.class}#data_store instead"
-    data_store
-  end
+  # @!method datastore
+  #   (see #data_store)
+  #   @deprecated Use {#data_store}
+  Metasploit::Framework::Deprecation.rename_methods self, datastore: :data_store
 
   # The global framework data store that can be used by modules.
   #

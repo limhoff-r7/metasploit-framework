@@ -71,6 +71,18 @@ describe Msf::Framework do
       framework.datastore
     end
 
+    it 'calls #data_store' do
+      expected = double('#data_store')
+      expect(framework).to receive(:data_store).and_return(expected)
+      expect(datastore).to eq(expected)
+    end
+  end
+
+  context '#data_store' do
+    subject(:data_store) do
+      framework.data_store
+    end
+
     it 'should use lazy initialization' do
       Msf::DataStore.should_not_receive(:new)
 
@@ -80,14 +92,14 @@ describe Msf::Framework do
     it 'should be synchronized' do
       framework.should_receive(:synchronize)
 
-      datastore
+      data_store
     end
 
     it 'should be memoized' do
       memoized = double('Msf::Datastore')
-      framework.instance_variable_set :@datastore, memoized
+      framework.instance_variable_set :@data_store, memoized
 
-      datastore.should == memoized
+      data_store.should == memoized
     end
 
     it { should be_a Msf::DataStore }
