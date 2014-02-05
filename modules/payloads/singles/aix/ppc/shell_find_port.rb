@@ -25,7 +25,7 @@ module Metasploit3
 
   def initialize(info = {})
     super(
-        Msf::Module::ModulInfo.merge!(
+        Msf::Module::ModuleInfo.merge!(
             info,
             'Name'          => 'AIX Command Shell, Find Port Inline',
             'Description'   => 'Spawn a shell on an established connection',
