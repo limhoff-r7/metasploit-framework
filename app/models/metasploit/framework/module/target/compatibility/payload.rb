@@ -50,7 +50,8 @@ class Metasploit::Framework::Module::Target::Compatibility::Payload < Metasploit
   #
 
   def compatible_class_reference_names
-    each_compatible_instance.map(&:reference_name)
+    # memoize because each_compatible_instance isn't memoized
+    @compatible_class_reference_names ||= each_compatible_instance.map(&:reference_name)
   end
 
   # @note Do not set :include_generics `true` inside of {Msf::Payload::Generic#actual_payload_instance} or it will
