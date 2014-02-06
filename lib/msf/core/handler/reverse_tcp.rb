@@ -160,7 +160,7 @@ module ReverseTcp
     }
 
     self.handler_thread = framework.threads.spawn("ReverseTcpHandlerWorker-#{data_store['LPORT']}", false) {
-      while true
+      loop do
         client = self.handler_queue.pop
         begin
           handle_connection(wrap_aes_socket(client))
