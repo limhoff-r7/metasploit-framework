@@ -1,5 +1,7 @@
 # Base class for classes that determine {#each_compatible_instance} of {Msf::Payload} subclasses.
 class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
+  include Metasploit::Framework::Module::Class::Logging
+
   #
   # Attributes
   #
