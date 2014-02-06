@@ -16,16 +16,24 @@ module Msf::Payload::Windows
   include Msf::Payload::Windows::PrependMigrate
 
   #
-  # ROR hash associations for some of the exit technique routines.
+  # CONSTANTS
   #
-  @@exit_types =
-    {
+
+  # Default exit type to use in {#replace_vars} if the given exit type does not have an exit function address in
+  # {EXIT_FUNCTION_ADDRESS_BY_TYPE}.
+  DEFAULT_EXIT_TECHNIQUE = 'thread'
+
+  # Maps exit type to the address of the function used to perform that type of exit.
+  EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE = {
       'seh'     => 0xEA320EFE, # SetUnhandledExceptionFilter
       'thread'  => 0x0A2A1DE0, # ExitThread
       'process' => 0x56A2B5F0, # ExitProcess
       'none'    => 0x5DE2C5AA, # GetLastError
-    }
+  }
 
+  #
+  # Methods
+  #
 
   def generate
     return prepends(super)
@@ -68,7 +76,7 @@ module Msf::Payload::Windows
 
     register_options(
       [
-        Msf::OptRaw.new('EXITFUNC', [ true, "Exit technique: #{@@exit_types.keys.join(", ")}", 'process' ])
+        Msf::OptRaw.new('EXITFUNC', [ true, "Exit technique: #{EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE.keys.join(", ")}", 'process' ])
       ], Msf::Payload::Windows )
     ret
   end
@@ -77,16 +85,20 @@ module Msf::Payload::Windows
   # Replace the EXITFUNC variable like madness
   #
   def replace_var(raw, name, offset, pack)
-    if (name == 'EXITFUNC')
-      method = datastore[name]
-      method = 'thread' if (!method or @@exit_types.include?(method) == false)
+    if name == 'EXITFUNC'
+      technique = data_store[name]
+      exit_function_address = EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE[technique]
 
-      raw[offset, 4] = [ @@exit_types[method] ].pack(pack || 'V')
+      unless exit_function_address
+        exit_function_address = EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE[DEFAULT_EXIT_TECHNIQUE]
+      end
 
-      return true
+      raw[offset, 4] = [exit_function_address].pack(pack || 'V')
+
+      true
+    else
+      false
     end
-
-    return false
   end
 
   #

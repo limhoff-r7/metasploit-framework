@@ -69,7 +69,7 @@ module Payload::Windows::ReflectiveDllInject_x64
       return
     end
 
-    exit_funk = [ @@exit_types['thread'] ].pack( "V" ) # Default to ExitThread for migration
+    exit_funk = [ EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE[DEFAULT_EXIT_TECHNIQUE] ].pack( "V" )
 
     bootstrap = "\x4D\x5A" +                        # pop r10             ; pop r10 = 'MZ'
           "\x41\x52" +                        # push r10            ; push r10 back
