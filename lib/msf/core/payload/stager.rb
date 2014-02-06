@@ -101,25 +101,14 @@ module Msf::Payload::Stager
     !!(data_store['EnableStageEncoding'].to_s == "true")
   end
 
-  #
-  # Generates the stage payload and substitutes all offsets.
+  # Assembles the stage payload and substitutes all offsets.
   #
   # @return [String] The generated payload stage, as a string.
   def generate_stage
-    # XXX: This is nearly identical to Payload#internal_generate
-
-    # Compile the stage as necessary
-    if stage_assembly.present?
-      assembled = assemble(stage_assembly, stage_offset_relative_address_and_type_by_name)
-    else
-      assembled = Metasploit::Framework::Payload::Assembled.new(
-          shellcode: stage_payload,
-          offset_relative_address_and_type_by_name: stage_offset_relative_address_and_type_by_name
-      )
-    end
+    assembled = assemble_stage
 
     # MUST dup because {Msf::Payload#substitute_vars} will mutate the String passed to it.
-    generated = assembled.shellcode.dup
+    generated = assembled.data.dup
     substitute_vars(generated, assembled.offset_relative_address_and_type_by_name)
 
     generated
@@ -234,5 +223,21 @@ module Msf::Payload::Stager
   #
   attr_accessor :stage_prefix
 
+  private
+
+  # Either {#assemble assembles} the {#stage_assembly} or uses the pre-assembled {#stage_payload} to make a
+  # {Metasploit::Framework::Payload::Assembled} that can be used for variable substitution.
+  #
+  # @return [Metasploit::Framework::Payload::Assembled]
+  def assemble_stage
+    if stage_assembly.present?
+      assemble(stage_assembly, stage_offset_relative_address_and_type_by_name)
+    else
+      Metasploit::Framework::Payload::Assembled.new(
+          data: stage_payload,
+          offset_relative_address_and_type_by_name: stage_offset_relative_address_and_type_by_name
+      )
+    end
+  end
 end
 
