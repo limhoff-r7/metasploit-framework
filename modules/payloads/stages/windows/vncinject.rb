@@ -23,12 +23,15 @@ module Metasploit3
   include Msf::Sessions::VncInjectOptions
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name'          => 'VNC Server (Reflective Injection)',
-      'Description'   => 'Inject a VNC Dll via a reflective loader (staged)',
-      'Author'        => [ 'sf' ],
-      'Session'       => Msf::Sessions::VncInject ))
-
+    super(
+        Msf::Module::ModuleInfo.update!(
+            info,
+            'Name'          => 'VNC Server (Reflective Injection)',
+            'Description'   => 'Inject a VNC Dll via a reflective loader (staged)',
+            'Author'        => [ 'sf' ],
+            'Session'       => Msf::Sessions::VncInject
+        )
+    )
   end
 
   def library_path

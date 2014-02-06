@@ -13,7 +13,7 @@ class Metasploit3 < Msf::Encoder::Xor
 
   def initialize(info={})
     super(
-        update_info(
+        Msf::Module::ModuleInfo.update!(
             info,
             'Name'             => 'Single-byte XOR Countdown Encoder',
             'Description'      => %q{

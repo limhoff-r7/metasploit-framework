@@ -14,17 +14,20 @@ module Metasploit3
   include Msf::Payload::Single
 
   def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'DNS TXT Record Payload Download and Execution',
-      'Description'   => 'Performs a TXT query against a series of DNS record(s) and executes the returned payload',
-      'Author'        =>
-        [
-          'corelanc0d3r <peter.ve[at]corelan.be>'
-        ],
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'win',
-      'Arch'          => ARCH_X86
-    ))
+    super(
+        Msf::Module::ModuleInfo.merge!(
+            info,
+            'Name'          => 'DNS TXT Record Payload Download and Execution',
+            'Description'   => 'Performs a TXT query against a series of DNS record(s) and executes the returned payload',
+            'Author'        =>
+                [
+                    'corelanc0d3r <peter.ve[at]corelan.be>'
+                ],
+            'License'       => MSF_LICENSE,
+            'Platform'      => 'Windows',
+            'Arch'          => ARCH_X86
+        )
+    )
 
     # EXITFUNC is not supported
     deregister_options('EXITFUNC')
