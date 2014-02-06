@@ -162,10 +162,11 @@ module ReverseTcp
     self.handler_thread = framework.threads.spawn("ReverseTcpHandlerWorker-#{data_store['LPORT']}", false) {
       loop do
         client = self.handler_queue.pop
+
         begin
           handle_connection(wrap_aes_socket(client))
-        rescue ::Exception
-          elog("Exception raised from handle_connection: #{$!.class}: #{$!}\n\n#{$@.join("\n")}")
+        rescue ::Exception => exception
+          elog("Exception raised from handle_connection: #{exception.class}: #{exception}\n\n#{exception.backtrace.join("\n")}")
         end
       end
     }
