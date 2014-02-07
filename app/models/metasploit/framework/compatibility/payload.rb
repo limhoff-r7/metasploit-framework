@@ -34,7 +34,7 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
   # @yieldparam cache_payload_class [Mdm::Module::Class] cache payload class to create in {#each_compatible_instance}.
   # @yieldreturn [void]
   # @return [void]
-  def each_compatible_cache_class
+  def each_compatible_cache_class(options={})
     raise NotImplementedError
   end
 
