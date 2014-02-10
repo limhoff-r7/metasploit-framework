@@ -10,12 +10,26 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
     )
   end
 
+  #
+  # lets
+  #
+
   let(:cache_module_classes) do
-    FactoryGirl.create_list(:mdm_module_class, 2)
+    cache_module_instances.map(&:module_class)
   end
 
   let(:module_manager) do
     framework.modules
+  end
+
+  #
+  # let!s
+  #
+
+  # need to create module instance to generate creatable Msf::Module instances as the :mdm_module_instance factory
+  # create a valid file on disk
+  let!(:cache_module_instances) do
+    FactoryGirl.create_list(:mdm_module_instance, 2)
   end
 
   it { should be_a Enumerable }
@@ -26,6 +40,8 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
   end
 
   context '#each' do
+    include_context 'Metasploit::Framework::Spec::Constants cleaner'
+
     subject(:each) do
       enumerator.each(&block)
     end
@@ -91,7 +107,7 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
 
       it 'includes the module class locaton in the error' do
         expect(enumerator).to receive(:elog) do |message|
-          module_class_module = Metasploit::Framework::Module::Class::Logging.module_class_location(uncreatable_cache_module_class)
+          module_class_location = Metasploit::Framework::Module::Class::Logging.module_class_location(uncreatable_cache_module_class)
           expect(message).to include(module_class_location)
         end
 
@@ -104,7 +120,7 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
         enumerator.each do |module_instance|
           count += 1
 
-          expect(module_instance.class.module_class).to be(creatable_cache_module_class)
+          expect(module_instance.class.module_class).to eq(creatable_cache_module_class)
         end
 
         expect(count).to be > 0
