@@ -1,0 +1,15 @@
+<%- actions = module_instance.actions -%>
+<%- unless actions.blank? -%>
+        'Actions' => [
+<%-
+action_renders = module_instance.actions.collect { |module_action|
+   render 'methods/initialize/action',
+           locals: {
+             module_action: module_action
+           }
+}
+actions_render = action_renders.join(",\n")
+-%>
+<%= actions_render %>
+        ]
+<%- end -%>

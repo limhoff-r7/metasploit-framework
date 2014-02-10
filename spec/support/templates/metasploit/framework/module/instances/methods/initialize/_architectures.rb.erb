@@ -1,0 +1,5 @@
+<%= render 'methods/initialize/scoped_architectures',
+           locals: {
+             architectures: module_instance.module_architectures.map(&:architecture),
+             indent: ' ' * 8
+           } %>

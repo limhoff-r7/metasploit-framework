@@ -1,0 +1,15 @@
+<%-
+authority = reference.authority
+
+if authority
+  context_id = authority.abbreviation
+  context_value = reference.designation
+else
+  context_id = 'URL'
+  context_value = reference.url
+end
+-%>
+          [
+            <%= context_id.inspect %>,
+            <%= context_value.inspect %>
+          ]

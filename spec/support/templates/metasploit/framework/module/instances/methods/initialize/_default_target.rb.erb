@@ -1,0 +1,4 @@
+<%- default_target = module_instance.default_target -%>
+<%- if default_target -%>
+        'DefaultTarget' => <%= module_instance.module_target.index(default_target) %>
+<%- end -%>

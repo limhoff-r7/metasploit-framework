@@ -1,0 +1,11 @@
+<%-
+subsection_renders = subsections.each_with_object([]) { |subsection, subsection_renders|
+  rendered_subsection = render "methods/initialize/#{subsection}"
+
+  unless rendered_subsection.blank?
+    subsection_renders << rendered_subsection.rstrip
+  end
+}
+rendered_subsections = subsection_renders.join(",\n")
+-%>
+<%= rendered_subsections %>

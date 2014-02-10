@@ -1,0 +1,12 @@
+        'Targets' => [
+<%-
+target_renders = module_instance.targets.collect { |module_target|
+  render 'methods/initialize/target',
+         locals: {
+           module_target: module_target
+         }
+}
+targets_render = target_renders.join(",\n")
+-%>
+<%= targets_render %>
+        ]

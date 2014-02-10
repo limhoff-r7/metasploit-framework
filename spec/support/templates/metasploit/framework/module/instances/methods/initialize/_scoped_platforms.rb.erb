@@ -1,0 +1,14 @@
+<%= indent %>'Platform' => [
+<%-
+# access platforms through module_platforms as near has-many-through association will not be set on build
+platform_renders = platforms.collect { |platform|
+  render 'methods/initialize/platform',
+         locals: {
+           platform: platform,
+           indent: indent + '  '
+         }
+}
+platforms_render = platform_renders.join(",\n")
+-%>
+<%= platforms_render %>
+<%= indent %>]

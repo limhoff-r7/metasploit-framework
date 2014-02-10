@@ -1,0 +1,12 @@
+        'Author' => [
+<%-
+author_renders = module_instance.module_authors.collect { |module_author|
+  render 'methods/initialize/author',
+         locals: {
+           module_author: module_author
+         }
+}
+authors_render = author_renders.join(",\n")
+-%>
+<%= authors_render %>
+        ]

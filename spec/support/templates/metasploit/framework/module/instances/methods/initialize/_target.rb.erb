@@ -1,0 +1,7 @@
+          [
+            <%= module_target.name.inspect %>,
+            {
+<%= render 'methods/initialize/target/architectures', locals: { module_target: module_target } %>,
+<%= render 'methods/initialize/target/platforms', locals: { module_target: module_target } %>
+            }
+          ]

@@ -1,0 +1,4 @@
+<%- default_action = module_instance.default_action -%>
+<%- if default_action -%>
+        'DefaultAction' => <%= default_action.name.inspect %>
+<%- end -%>

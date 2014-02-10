@@ -1,0 +1,14 @@
+<%= indent %>'Arch' => [
+<%-
+# access architectures through module_architectures as near has-many-through association will not be set on build
+architecture_renders = architectures.collect { |architecture|
+  render 'methods/initialize/architecture',
+         locals: {
+           architecture: architecture,
+           indent: indent + '  '
+         }
+}
+architectures_render = architecture_renders.join(",\n")
+-%>
+<%= architectures_render %>
+<%= indent %>]

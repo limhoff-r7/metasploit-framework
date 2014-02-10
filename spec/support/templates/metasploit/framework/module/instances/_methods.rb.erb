@@ -1,0 +1,14 @@
+  #
+  # Methods
+  #
+
+  # @param info [Hash{String,Symbol => Object]
+  # @option info [Msf::Simple::Framework] :framework The framework in which this instance was created.
+  def initialize(info={})
+    super(
+      Msf::Module::ModuleInfo.update!(
+        info,
+<%= render "methods/initialize/module_types/#{module_class.module_type}" %>
+      )
+    )
+  end

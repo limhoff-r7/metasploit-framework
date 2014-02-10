@@ -1,0 +1,11 @@
+<%-
+author = Msf::Module::Author.new
+author.name = module_author.author.name
+
+email_address = module_author.email_address
+
+if email_address
+  author.email = email_address.full
+end
+-%>
+          <%= author.to_s.inspect %>

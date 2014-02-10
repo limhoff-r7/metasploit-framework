@@ -6,6 +6,14 @@ module Metasploit::Framework::Spec::FactoryGirl
 
       RSpec.configure do |config|
         config.before(:suite) do
+          Metasploit::Model::Spec::Template.root = Metasploit::Framework.root.join(
+              'spec',
+              'support',
+              'templates',
+              'metasploit',
+              'framework'
+          )
+
           ::FactoryGirl.definition_file_paths = Metasploit::Framework::Spec::ROOTED_MODULES.collect { |rooted|
             rooted.root.join('spec', 'factories')
           }

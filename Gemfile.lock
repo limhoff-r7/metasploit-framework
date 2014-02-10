@@ -1,22 +1,22 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: cdd5a72893ad3965e532f03d54559e82bc03bd14
-  tag: v0.20.1.configuration-child-class-override
+  revision: 56fc013f4f2e164e3291110986c9b75c1aa60202
+  tag: v0.21.1.exploit
   specs:
-    metasploit-model (0.20.1)
+    metasploit-model (0.21.1)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 9c8c879541c9dc4503f369c00b1562a25f069acb
-  tag: v0.59.3.exploit
+  revision: 00089a9cf32fb892d9932e47f7e88e971ef260a2
+  tag: v0.59.4.exploit
   specs:
-    metasploit_data_models (0.59.3)
+    metasploit_data_models (0.59.4)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
       file-find
-      metasploit-model (~> 0.20.0)
+      metasploit-model (~> 0.21.1)
       pg
 
 GEM

@@ -1,0 +1,5 @@
+<%= render 'methods/initialize/scoped_platforms',
+           locals: {
+             platforms: module_instance.module_platforms.map(&:platform),
+             indent: ' ' * 8
+           } %>

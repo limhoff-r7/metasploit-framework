@@ -1,0 +1,18 @@
+<%-
+# access references through module_references as near has-many-through association will not be set on build
+references = module_instance.module_references.map(&:reference)
+-%>
+<%- unless references.blank? -%>
+        'References' => [
+<%-
+reference_renders = references.collect { |reference|
+   render 'methods/initialize/reference',
+           locals: {
+             reference: reference
+           }
+}
+references_render = reference_renders.join(",\n")
+-%>
+<%= references_render %>
+        ]
+<%- end -%>
