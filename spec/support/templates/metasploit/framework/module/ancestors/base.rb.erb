@@ -5,4 +5,8 @@
 #   http://metasploit.com/
 ##
 
+# The following line is needed to ensure that the SHA1 hex digest is unique for different ancestors and class generated
+# ancestors, which don't contain a unique, non-cyclic field in their templates by default.  In instance generated
+# ancestors, the description serves this purpose.
+# Full Name: <%= module_ancestor.full_name %>
 <%= render "module_types/#{module_ancestor.module_type}" %>
