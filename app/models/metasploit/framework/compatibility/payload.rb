@@ -46,18 +46,16 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
   # @yieldreturn [void]
   # @return [void]
   def each_compatible_instance(options={})
-    each_compatible_cache_class(options) { |cache_payload_class|
-      payload_instance = module_manager.create_from_module_class(cache_payload_class)
+    enumerator = Metasploit::Framework::Module::Instance::Enumerator.new(
+        cache_module_classes: each_compatible_cache_class(options),
+        module_manager: module_manager
+    )
 
-      if payload_instance
-        connect_exploit_instance(payload_instance)
+    enumerator.each do |payload_instance|
+      connect_exploit_instance(payload_instance)
 
-        yield payload_instance
-      else
-        payload_class_location = module_class_location(cache_payload_class)
-        elog("Skipping #{payload_class_location}: failed to create instance")
-      end
-    }
+      yield payload_instance
+    end
   end
 
   def module_manager
