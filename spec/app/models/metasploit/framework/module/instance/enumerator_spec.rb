@@ -35,8 +35,45 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
   it { should be_a Enumerable }
 
   context 'validations' do
-    it { should validate_presence_of :cache_module_classes }
     it { should validate_presence_of :module_manager }
+
+    context 'cache_module_class' do
+      subject(:cache_module_class_errors) do
+        enumerator.errors[:cache_module_classes]
+      end
+
+      #
+      # lets
+      #
+
+      let(:error) do
+        I18n.translate!('errors.messages.nil')
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        enumerator.valid?
+      end
+
+      context 'with nil' do
+        let(:cache_module_classes) do
+          nil
+        end
+
+        it { should include(error) }
+      end
+
+      context 'with empty' do
+        let(:cache_module_classes) do
+          Mdm::Module::Class.limit(0)
+        end
+
+        it { should_not include(error) }
+      end
+    end
   end
 
   context '#each' do

@@ -20,11 +20,21 @@ class Metasploit::Framework::Module::Instance::Enumerator < Metasploit::Model::B
   attr_accessor :module_manager
 
   #
+  #
   # Validations
   #
+  #
 
-  validates :cache_module_classes,
-            presence: true
+  #
+  # Method Validations
+  #
+
+  validate :cache_module_classes_not_nil
+
+  #
+  # Attribute Validations
+  #
+
   validates :module_manager,
             presence: true
 
@@ -49,6 +59,18 @@ class Metasploit::Framework::Module::Instance::Enumerator < Metasploit::Model::B
           elog("Skipping #{module_class_location}: failed to create instance")
         end
       end
+    end
+  end
+
+  private
+
+  # Validates the {#cache_module_classes} is not `nil`.  Cannot validate for presence as that will fail if the
+  # {#cache_module_classes} is not `nil`, but is empty and empty scopes should be allowed.
+  #
+  # @return [void]
+  def cache_module_classes_not_nil
+    if cache_module_classes.nil?
+      errors.add(:cache_module_classes, :nil)
     end
   end
 end
