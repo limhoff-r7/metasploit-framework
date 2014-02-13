@@ -381,6 +381,21 @@ class Payload < Msf::Module
     Mdm::Module::Instance.nops_compatible_with(module_instance)
   end
 
+  # All the {Msf::Nop} from {#compatible_cache_nop_instances}.
+  #
+  # @return [Metasploit::Framework::Module::Instance::Enumerator<Msf::Nop>]
+  def compatible_nop_instances
+    cache_module_classes = Mdm::Module::Class.with_module_instances(compatible_cache_nop_instances)
+    enumerator = Metasploit::Framework::Module::Instance::Enumerator.new(
+        cache_module_classes: cache_module_classes,
+        module_manager: framework.modules
+
+    )
+    enumerator.valid!
+
+    enumerator
+  end
+
   ##
   #
   # Event notifications.
