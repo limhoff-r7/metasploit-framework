@@ -1,25 +1,7 @@
   extend Metasploit::Framework::Module::Ancestor::Handler
 
 <%-
-handler_module_relative_names = %w{
-  BindTcp
-  FindPort
-  FindShell
-  FindTag
-  FindTty
-  None
-  ReverseHttp
-  ReverseHttps
-  ReverseHttpsProxy
-  ReverseIPv6Http
-  ReverseIPv6Https
-  ReverseTcp
-  ReverseTcpAllPorts
-  ReverseTcpDouble
-  ReverseTcpDoubleSSL
-  ReverseTcpSsl
-}
-handler_module_relative_name = handler_module_relative_names.sample
-handler_module_name = "Msf::Handler::#{handler_module_relative_name}"
-  -%>
+handler_module_names = Metasploit::Framework::Spec::Handler.module_names_by_type[module_ancestor.handler_type]
+handler_module_name = handler_module_names.sample
+-%>
   handler module_name: <%= handler_module_name.inspect %>
