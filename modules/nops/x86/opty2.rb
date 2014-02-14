@@ -21,6 +21,9 @@ require 'rex/nop/opty2'
 ###
 class Metasploit3 < Msf::Nop
 
+  # Must be better than rank for single_byte so opty2 is favored over single_byte
+  Rank = ExcellentRanking
+
   def initialize(info={})
     super(
         update_info(

@@ -385,7 +385,9 @@ class Payload < Msf::Module
   #
   # @return [Metasploit::Framework::Module::Instance::Enumerator<Msf::Nop>]
   def compatible_nop_instances
-    cache_module_classes = Mdm::Module::Class.with_module_instances(compatible_cache_nop_instances)
+    cache_module_classes = Mdm::Module::Class.with_module_instances(
+        compatible_cache_nop_instances
+    ).ranked
     enumerator = Metasploit::Framework::Module::Instance::Enumerator.new(
         cache_module_classes: cache_module_classes,
         module_manager: framework.modules

@@ -17,6 +17,9 @@ require 'msf/core'
 ###
 class Metasploit3 < Msf::Nop
 
+  # Must be worse than rank for opty2 so opty2 is favored over single_byte
+  Rank = GreatRanking
+
 SINGLE_BYTE_SLED =
   {
     # opcode  affected registers
