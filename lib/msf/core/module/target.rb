@@ -20,6 +20,9 @@ class Msf::Module::Target
   require 'msf/core/module/target/platforms'
   include Msf::Module::Target::Platforms
 
+  require 'msf/core/module/target/save_registers'
+  include Msf::Module::Target::SaveRegisters
+
   #
   # Attributes
   #
@@ -100,7 +103,6 @@ class Msf::Module::Target
     opts ||= {}
 
     self.name           = name
-    self.save_registers = opts['SaveRegisters']
     self.ret            = opts['Ret']
     self.opts           = opts
 
@@ -139,10 +141,6 @@ class Msf::Module::Target
   #
   attr_reader :ret
   #
-  # The list of registers that need to be saved.
-  #
-  attr_reader :save_registers
-  #
   # The bruteforce target information that will be non-nil if a Bruteforce
   # option is passed to the constructor of the class.
   #
@@ -150,7 +148,7 @@ class Msf::Module::Target
 
 protected
 
-  attr_writer :name, :platform, :opts, :ret, :save_registers # :nodoc:
+  attr_writer :name, :platform, :opts, :ret # :nodoc:
   attr_writer :bruteforce # :nodoc:
 
 end

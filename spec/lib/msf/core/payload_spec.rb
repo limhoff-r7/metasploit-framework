@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Msf::Payload do
-  shared_context '#compatible_cache_nop_instances' do
-    include_context 'Metasploit::Framework::Spec::Constants cleaner'
-    include_context 'Msf::Simple::Framework'
+  include_context 'Metasploit::Framework::Spec::Constants cleaner'
+  include_context 'Msf::Simple::Framework'
 
+  shared_context '#compatible_cache_nop_instances' do
     #
     # lets
     #
@@ -92,8 +92,36 @@ describe Msf::Payload do
     end
   end
 
+  subject(:payload_instance) do
+    framework.modules.create_from_module_class(cache_payload_instance.module_class)
+  end
+
+  #
+  # lets
+  #
+
+  let(:cache_payload_class) do
+    FactoryGirl.create(
+        :mdm_module_class,
+        module_type: 'payload'
+    )
+  end
+
+  let(:cache_payload_instance) do
+    FactoryGirl.create(
+        :mdm_module_instance,
+        module_class: cache_payload_class
+    )
+  end
+
   it 'should extend Metasploit::Framework::Module::Class::Handler' do
     described_class.should be_a Metasploit::Framework::Module::Class::Handler
+  end
+
+  it_should_behave_like 'Msf::Module::SaveRegisters' do
+    let(:metasploit_instance) do
+      payload_instance
+    end
   end
 
   context '#compatible_cache_nop_instances' do

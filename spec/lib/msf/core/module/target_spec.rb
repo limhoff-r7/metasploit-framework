@@ -14,4 +14,5 @@ describe Msf::Module::Target do
   end
 
   it_should_behave_like 'Msf::Module::Target::Platforms'
+  it_should_behave_like 'Msf::Module::Target::SaveRegisters'
 end

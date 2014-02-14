@@ -1,5 +1,6 @@
 # -*- coding: binary -*-
 require 'msf/core'
+require 'msf/core/module/save_registers'
 require 'metasm'
 require 'metasploit/framework/deprecation'
 
@@ -34,6 +35,8 @@ class Payload < Msf::Module
   require 'msf/core/payload/netware'
   require 'msf/core/payload/java'
   require 'msf/core/payload/dalvik'
+
+  include Msf::Module::SaveRegisters
 
   #
   # Creates an instance of a payload module using the supplied information.
@@ -80,14 +83,6 @@ class Payload < Msf::Module
   #
   def badchars
     return self.module_info['BadChars']
-  end
-
-  #
-  # The list of registers that should be saved by any NOP generators or
-  # encoders, if possible.
-  #
-  def save_registers
-    return self.module_info['SaveRegisters']
   end
 
   #
