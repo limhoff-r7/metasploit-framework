@@ -461,7 +461,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::MetasploitInstance
           formatted_authors = self.formatted_authors
           formatted_architectures = self.formatted_architectures
 
-          Class.new(Msf::Exploit) do
+          Class.new(Msf::Nop) do
             include described_class
 
             define_method(:initialize) do |attributes={}|
