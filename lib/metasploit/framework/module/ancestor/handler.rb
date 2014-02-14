@@ -43,7 +43,7 @@ module Metasploit::Framework::Module::Ancestor::Handler
     @handler_module_name ||= 'Msf::Handler::None'
   end
 
-  # Type to use as suffix in `Metasploit::Model::Module::Class#refernce_name`.
+  # Type to use as suffix in `Metasploit::Model::Module::Class#reference_name`.
   #
   # @return [String] `:type_alias` passed to {#handler}.
   # @return [String] {#handler_module handler Module's} `#handler_type` if `:type_alias` not passed to {#handler}
