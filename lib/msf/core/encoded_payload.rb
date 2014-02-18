@@ -349,9 +349,13 @@ class EncodedPayload
             wlog("#{payload_instance.reference_name}: Failed to find preferred nop #{required_nop_reference_name}")
           end
         end
+
+        relations = [required_cache_nop_instances, cache_nop_instances]
+      else
+        relations = [cache_nop_instances]
       end
 
-      [required_cache_nop_instances, cache_nop_instances].each do |relation|
+      relations.each do |relation|
         # include module_class as it will be accessed immediately to instantiate the in-memory instance
         relation = relation.includes(:module_class)
 
