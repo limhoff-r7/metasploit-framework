@@ -20,7 +20,7 @@ module Metasploit3
 
   def initialize(info = {})
     super(
-        Msf::Module::ModuleInfo.merge_info(
+        Msf::Module::ModuleInfo.merge!(
             info,
             'Name'          => 'Reverse HTTP Stager (IPv6)',
             'Description'   => 'Tunnel communication over HTTP and IPv6',

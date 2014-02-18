@@ -22,7 +22,7 @@ module Metasploit3
 
   def initialize(info = {})
     super(
-        Msf::ModuleInfo.merge!(
+        Msf::Module::ModuleInfo.merge!(
             info,
             'Name'          => 'Reverse TCP Stager (RC4 stage encryption DNS)',
             'Description'   => 'Connect back to the attacker',
