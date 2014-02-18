@@ -4,7 +4,7 @@ class Metasploit::Framework::Module::Instance::Payload::Generic::Compatibility::
   #
 
   # @!attribute [rw] handler_module
-  #   @return [Class]
+  #   @return [Module]
   attr_accessor :handler_module
 
   # @!attribute [rw] parent
@@ -23,14 +23,10 @@ class Metasploit::Framework::Module::Instance::Payload::Generic::Compatibility::
   # Validations
   #
 
-  validates :handler_module,
-            presence: true
   validates :payload_type,
             inclusion: {
                 in: Metasploit::Model::Module::Class::PAYLOAD_TYPES
             }
-  validates :session_class,
-            presence: true
 
   def each_compatible_instance
     unless block_given?
@@ -46,8 +42,45 @@ class Metasploit::Framework::Module::Instance::Payload::Generic::Compatibility::
 
   private
 
+  # Whether the :candidate is compatible with :attribute.
+  #
+  # @return [true] if :candidate and :attribute are both `nil`.
+  # @return [true] if :candidate is not `nil` and :attribute is not `nil` and
+  #   :attribute is in `Module#ancestors` of :candidate
+  # @return [false] if :candidate is `nil` and :attribute is not `nil` or vice-versa.
+  # @return [false] if :candidate is not `nil` and :attribute is not `nil`, but :attribute is not in `Module#ancestors` of
+  #   :candidate.
+  def compatible_ancestors?(options={})
+    options.assert_valid_keys(:attribute, :candidate)
+
+    attribute = options[:attribute]
+    candidate = options[:candidate]
+
+    if attribute
+      if candidate
+        compatible = candidate.ancestors.include? attribute
+      else
+        # the generic payload is looking for an actual payload with the attribute, but payload_instance doesn't have
+        # one, so it's incompatible
+        compatible = false
+      end
+    elsif candidate
+      # the generic payload is looking for an actual payload without the attribute, but candidate is not nil, so it's
+      # incompatible
+      compatible = false
+    else
+      # both have no value, so they are compatible.
+      compatible = true
+    end
+
+    compatible
+  end
+
   def handler_module_compatible?(payload_instance)
-    payload_instance.class.ancestor_handler_module.ancestors.include? handler_module
+    compatible_ancestors?(
+        attribute: handler_module,
+        candidate: payload_instance.class.ancestor_handler_module
+    )
   end
 
   # Whether the `payload_instance` has (1) {Metasploit::Framework::Module::Class::Handler#ancestor_handler_module}
@@ -65,6 +98,9 @@ class Metasploit::Framework::Module::Instance::Payload::Generic::Compatibility::
   end
 
   def session_class_compatible?(payload_instance)
-    payload_instance.session_class.ancestors.include? session_class
+    compatible_ancestors?(
+        attribute: session_class,
+        candidate: payload_instance.session_class
+    )
   end
 end
