@@ -1,7 +1,7 @@
   extend Metasploit::Framework::Module::Ancestor::Handler
 
 <%-
-handler_module_names = Metasploit::Framework::Spec::Handler.module_names_by_type[module_ancestor.handler_type]
-handler_module_name = handler_module_names.sample
+handler_module_name = Metasploit::Framework::Spec::Handler.module_names.sample
 -%>
-  handler module_name: <%= handler_module_name.inspect %>
+  handler module_name: <%= handler_module_name.inspect %>,
+          type_alias: <%= module_ancestor.handler_type.inspect %>

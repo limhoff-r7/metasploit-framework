@@ -1,22 +1,22 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: e0ae5d012d9e3db5970a8b7974a94a4a0e76bdee
-  tag: v0.22.0.exploit
+  revision: 48faba9c0d4e589f7bc3f6fefeef6f74722c0261
+  tag: v0.23.0.exploit
   specs:
-    metasploit-model (0.22.0)
+    metasploit-model (0.23.0)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: c14fe996a045f5840cd53d41d6a4d5c86e3735c7
-  tag: v0.60.0.exploit
+  revision: 81919ad5f2250287469420c5edd5cd1806cd6c09
+  tag: v0.61.0.exploit
   specs:
-    metasploit_data_models (0.60.0)
+    metasploit_data_models (0.61.0)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
       file-find
-      metasploit-model (~> 0.22.0)
+      metasploit-model (~> 0.23.0)
       pg
 
 GEM

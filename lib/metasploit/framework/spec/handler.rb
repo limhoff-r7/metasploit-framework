@@ -18,14 +18,9 @@ module Metasploit::Framework::Spec::Handler
     ReverseTcpSsl
   }
 
-  def self.module_names_by_type
-    @module_names_by_type ||= MODULE_RELATIVE_NAMES.each_with_object({})  { |module_relative_name, module_names_by_type|
-      module_name = "Msf::Handler::#{module_relative_name}"
-      handler_module = module_name.constantize
-      type = handler_module.handler_type
-
-      module_names_by_type[type] ||= []
-      module_names_by_type[type] << module_name
+  def self.module_names
+    @module_names ||= MODULE_RELATIVE_NAMES.collect { |relative_name|
+      "Msf::Handler::#{relative_name}"
     }
   end
 end
