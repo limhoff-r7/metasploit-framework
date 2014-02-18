@@ -53,7 +53,9 @@ describe Metasploit::Framework::Compatibility::Payload do
   end
 
   let(:exploit_instance) do
-    framework.modules.create_from_module_class(cache_exploit_class)
+    framework.modules.create_from_module_class(cache_exploit_class).tap { |exploit_instance|
+      expect(exploit_instance).not_to be_nil
+    }
   end
 
   #
@@ -103,7 +105,9 @@ describe Metasploit::Framework::Compatibility::Payload do
     end
 
     let(:payload_instance) do
-      framework.modules.create_from_module_class(compatible_payload_class)
+      framework.modules.create_from_module_class(compatible_payload_class).tap { |payload_instance|
+        expect(payload_instance).not_to be_nil
+      }
     end
 
     it 'sets payload_instance.exploit_instance to #exploit_instance' do
