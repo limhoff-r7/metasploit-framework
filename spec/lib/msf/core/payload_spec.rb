@@ -57,7 +57,7 @@ describe Msf::Payload do
 
         cache_payload_instance.save!
 
-        Metasploit::Model::Module::Instance::Spec::Template.write(module_instance: cache_payload_instance)
+        Metasploit::Model::Module::Instance::Spec::Template.write!(module_instance: cache_payload_instance)
       }
     end
 
@@ -72,7 +72,7 @@ describe Msf::Payload do
 
         cache_nop_instance.save!
 
-        Metasploit::Model::Module::Instance::Spec::Template.write(module_instance: cache_nop_instance)
+        Metasploit::Model::Module::Instance::Spec::Template.write!(module_instance: cache_nop_instance)
       }
     end
 
@@ -87,7 +87,7 @@ describe Msf::Payload do
 
         cache_nop_instance.save!
 
-        Metasploit::Model::Module::Instance::Spec::Template.write(module_instance: cache_nop_instance)
+        Metasploit::Model::Module::Instance::Spec::Template.write!(module_instance: cache_nop_instance)
       }
     end
   end

@@ -21,7 +21,7 @@ describe Metasploit::Framework::Compatibility::Payload do
     module_platform = module_instance.module_platforms.build
     module_platform.platform = compatible_platform
 
-    Metasploit::Model::Module::Instance::Spec::Template.write(module_instance: module_instance)
+    Metasploit::Model::Module::Instance::Spec::Template.write!(module_instance: module_instance)
 
     module_instance.save!
   end
