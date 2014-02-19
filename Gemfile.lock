@@ -1,22 +1,22 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: 94bbe14af6e42eb0aa4ebc86351ef51b2fcddb2c
-  tag: v0.20.1.zdi-authority
+  revision: 287cb2f569052fd10fbb98915fb4653d57f821f9
+  tag: v0.20.2.zdi-authority
   specs:
-    metasploit-model (0.20.1)
+    metasploit-model (0.20.2)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 008acca6392be351e8335c4b7560bda71dd7c3a3
-  tag: v0.54.3.zdi-authority
+  revision: d4bc8bec310feb16612ea70e9947a8e970e48704
+  tag: v0.54.4.zdi-authority
   specs:
-    metasploit_data_models (0.54.3)
+    metasploit_data_models (0.54.4)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
       file-find
-      metasploit-model (~> 0.20.1)
+      metasploit-model (~> 0.20.2)
       pg
 
 GEM
@@ -45,8 +45,8 @@ GEM
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     ffi (1.9.3)
-    file-find (0.3.7)
-      sys-admin (>= 1.5.2)
+    file-find (0.3.8)
+      sys-admin (>= 1.6.0)
     fivemat (1.2.1)
     highline (1.6.20)
     i18n (0.6.1)
@@ -85,7 +85,7 @@ GEM
       multi_json
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
-    sys-admin (1.6.0)
+    sys-admin (1.6.2)
       ffi (>= 1.1.0)
     table_print (1.5.1)
     timecop (0.6.1)
