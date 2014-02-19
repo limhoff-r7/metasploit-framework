@@ -271,9 +271,6 @@ class Msf::Module < Metasploit::Model::Base
     self.data_store['WORKSPACE']    = (ref.data_store['WORKSPACE'] ? ref.data_store['WORKSPACE'].dup : nil)
     self.data_store['PROUSER']      = (ref.data_store['PROUSER']   ? ref.data_store['PROUSER'].dup   : nil)
     self.data_store['MODULE_OWNER'] = ref.owner.dup
-    #self.data_store['ParentUUID']   = ref.uuid.dup
-    # TODO: remove this hack
-    self.data_store['ParentUUID']   = "MAH-INVALID-UUID"
   end
 
   # Creates a fresh copy of an instantiated module, retaining the original framework
