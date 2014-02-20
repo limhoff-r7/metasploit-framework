@@ -218,6 +218,13 @@ class Msfcli
     end
   end
 
+  def show_ids_evasion
+    each_instance do |instance|
+      puts "#{instance.module_type}"
+      puts Msf::Serializer::ReadableText.dump_evasion_options(instance, INDENT)
+    end
+  end
+
   def show_summary
     each_instance do |instance|
       puts Msf::Serializer::ReadableText.dump_module(instance, INDENT)
@@ -255,16 +262,6 @@ class Msfcli
     $stdout.puts extra + "\n" if extra
     $stdout.puts
   end
-
-
-  def show_ids_evasion(m)
-    readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_evasion_options(m[:module], INDENT))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_evasion_options(m[:payload], INDENT)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_evasion_options(m[:encoder], INDENT)) if m[:encoder]
-    $stdout.puts("\nNOP:\n\n" + readable.dump_evasion_options(m[:nop], INDENT))         if m[:nop]
-  end
-
 
   def show_payloads(m)
     readable = Msf::Serializer::ReadableText
@@ -349,7 +346,7 @@ class Msfcli
       when "a"
         show_advanced
       when "i"
-        show_ids_evasion(modules)
+        show_ids_evasion
       when "p"
         if modules[:module].file_path =~ /auxiliary\//i
           $stdout.puts("\nError: This type of module does not support payloads")
