@@ -152,6 +152,52 @@ describe Msfcli do
     end
   end
 
+  context "#init_modules" do
+    it "should have multi/handler module initialized" do
+      args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
+      m    = ''
+      stdout = get_stdout {
+        cli = Msfcli.new(args.split(' '))
+        m = cli.init_modules
+      }
+
+      m[:module].class.to_s.should =~ /^Msf::Modules::/
+    end
+
+    it "should have my payload windows/meterpreter/reverse_tcp initialized" do
+      args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
+      m    = ''
+      stdout = get_stdout {
+        cli = Msfcli.new(args.split(' '))
+        m = cli.init_modules
+      }
+
+      m[:payload].class.to_s.should =~ /<Class:/
+    end
+
+    it "should have my modules initialized with the correct parameters" do
+      args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
+      m    = ''
+      stdout = get_stdout {
+        cli = Msfcli.new(args.split(' '))
+        m = cli.init_modules
+      }
+
+      m[:module].datastore['lhost'].should eq("127.0.0.1")
+    end
+
+    it "should give me an empty hash as a result of an invalid module name" do
+      args = "WHATEVER payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
+      m    = ''
+      stdout = get_stdout {
+        cli = Msfcli.new(args.split(' '))
+        m = cli.init_modules
+      }
+
+      m.should eq({})
+    end
+  end
+
   context "#usage" do
     include_context 'output'
 
@@ -161,54 +207,6 @@ describe Msfcli do
 
     it "should see a help menu" do
       expect(output).to include('Usage')
-    end
-  end
-
-  pending 'Msfcli#init_modules connects to database to access module cache' do
-    context "#init_modules" do
-      it "should have multi/handler module initialized" do
-        args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-        m    = ''
-        stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
-          m = cli.init_modules
-        }
-
-        m[:module].class.to_s.should =~ /^Msf::Modules::/
-      end
-
-      it "should have my payload windows/meterpreter/reverse_tcp initialized" do
-        args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-        m    = ''
-        stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
-          m = cli.init_modules
-        }
-
-        m[:payload].class.to_s.should =~ /<Class:/
-      end
-
-      it "should have my modules initialized with the correct parameters" do
-        args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-        m    = ''
-        stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
-          m = cli.init_modules
-        }
-
-        m[:module].datastore['lhost'].should eq("127.0.0.1")
-      end
-
-      it "should give me an empty hash as a result of an invalid module name" do
-        args = "WHATEVER payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-        m    = ''
-        stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
-          m = cli.init_modules
-        }
-
-        m.should eq({})
-      end
     end
   end
 

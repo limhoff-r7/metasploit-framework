@@ -88,42 +88,9 @@ class Msfcli
   end
 
   #
-  # Returns a usage Rex table
-  #
-  def usage (str = nil, extra = nil)
-    tbl = Rex::Ui::Text::Table.new(
-        'Header'  => "Usage: #{$0} <exploit_name> <option=value> [mode]",
-        'Indent'  => 4,
-        'Columns' => ['Mode', 'Description']
-    )
-
-    tbl << ['(H)elp',        "You're looking at it baby!"]
-    tbl << ['(S)ummary',     'Show information about this module']
-    tbl << ['(O)ptions',     'Show available options for this module']
-    tbl << ['(A)dvanced',    'Show available advanced options for this module']
-    tbl << ['(I)DS Evasion', 'Show available ids evasion options for this module']
-    tbl << ['(P)ayloads',    'Show available payloads for this module']
-    tbl << ['(T)argets',     'Show available targets for this exploit module']
-    tbl << ['(AC)tions',     'Show available actions for this auxiliary module']
-    tbl << ['(C)heck',       'Run the check routine of the selected module']
-    tbl << ['(E)xecute',     'Execute the selected module']
-
-    tbl.to_s
-
-    $stdout.puts "Error: #{str}\n\n" if str
-    $stdout.puts tbl.to_s + "\n"
-    $stdout.puts "Examples:" + "\n"
-    $stdout.puts "msfcli multi/handler payload=windows/meterpreter/reverse_tcp lhost=IP E" + "\n"
-    $stdout.puts "msfcli auxiliary/scanner/http/http_version rhosts=IP encoder= post= nop= E" + "\n"
-    $stdout.puts extra + "\n" if extra
-    $stdout.puts
-  end
-
-  #
   # Initializes exploit/payload/encoder/nop modules.
   #
   def init_modules
-    @framework = Msf::Simple::Framework.create({'DeferModuleLoads'=>true})
     $stdout.puts "[*] Initializing modules..."
 
     module_name = @args[:module_name]
@@ -135,7 +102,7 @@ class Msfcli
     }
 
     # Load up all the possible modules, this is where things get slow again
-    @framework.add_module_paths
+    framework.add_module_paths
     if (@framework.modules.module_load_error_by_path.length > 0)
       print("Warning: The following modules could not be loaded!\n\n")
 
@@ -201,6 +168,38 @@ class Msfcli
     end
 
     modules
+  end
+
+  #
+  # Returns a usage Rex table
+  #
+  def usage (str = nil, extra = nil)
+    tbl = Rex::Ui::Text::Table.new(
+        'Header'  => "Usage: #{$0} <exploit_name> <option=value> [mode]",
+        'Indent'  => 4,
+        'Columns' => ['Mode', 'Description']
+    )
+
+    tbl << ['(H)elp',        "You're looking at it baby!"]
+    tbl << ['(S)ummary',     'Show information about this module']
+    tbl << ['(O)ptions',     'Show available options for this module']
+    tbl << ['(A)dvanced',    'Show available advanced options for this module']
+    tbl << ['(I)DS Evasion', 'Show available ids evasion options for this module']
+    tbl << ['(P)ayloads',    'Show available payloads for this module']
+    tbl << ['(T)argets',     'Show available targets for this exploit module']
+    tbl << ['(AC)tions',     'Show available actions for this auxiliary module']
+    tbl << ['(C)heck',       'Run the check routine of the selected module']
+    tbl << ['(E)xecute',     'Execute the selected module']
+
+    tbl.to_s
+
+    $stdout.puts "Error: #{str}\n\n" if str
+    $stdout.puts tbl.to_s + "\n"
+    $stdout.puts "Examples:" + "\n"
+    $stdout.puts "msfcli multi/handler payload=windows/meterpreter/reverse_tcp lhost=IP E" + "\n"
+    $stdout.puts "msfcli auxiliary/scanner/http/http_version rhosts=IP encoder= post= nop= E" + "\n"
+    $stdout.puts extra + "\n" if extra
+    $stdout.puts
   end
 
 
