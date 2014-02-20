@@ -208,95 +208,6 @@ class Msfcli
     [/post\/#{p}/]
   end
 
-
-  #
-  # Returns possible patterns like exploit/aux, encoders, nops we want to
-  # load to the whitelist.
-  #
-  def generate_whitelist
-    whitelist = []
-    whitelist << /#{@args[:module_name]}/ # Add exploit
-
-    # nil = not set, empty = manually set to load nothing
-    encoder_val   = nil
-    nops_val      = nil
-    post_val      = nil
-    payload_param = ''
-    junk_args     = []
-
-    @args[:params].each { |args|
-      var, val = args.split('=', 2)
-
-      case var.downcase
-        when 'payload'
-          payload_param = val
-          if val.empty?
-            junk_args << args
-          else
-            whitelist.concat(guess_payload_name(val))
-          end
-
-        when 'encoder'
-          encoder_val = val
-          if val.empty?
-            junk_args << args
-          else
-            whitelist.concat(guess_encoder_name(val))
-          end
-
-        when 'nop'
-          nops_val = val
-          if val.empty?
-            junk_args << args
-          else
-            whitelist.concat(guess_nop_name(val))
-          end
-
-        when 'post'
-          post_val = val
-          if val.empty?
-            junk_args << args
-          else
-            whitelist.concat(guess_post_name(val))
-          end
-      end
-    }
-
-    # Cleanup empty args
-    junk_args.each { |args| @args[:params].delete(args) }
-
-    # If it's an exploit and no payload set, load them all.
-    if @args[:module_name] !~ /auxiliary\// and payload_param.empty?
-      whitelist << /payloads\/.+/
-    end
-
-    # Add post modules list if not set
-    if post_val.nil?
-      whitelist << /post\/.+/
-    end
-
-    # Add default encoders if not set
-    # This one is needed no matter what
-    whitelist << /encoders\/generic\/*/
-    if encoder_val.nil?
-      if payload_param =~ /^.+\.x64.+/
-        whitelist << /encoders\/x64\/.+/
-      elsif payload_param =~ /^.+\.x86.+/
-        whitelist << /encoders\/x86\/.+/
-      else
-        whitelist << /encoders\/.+/
-      end
-    end
-
-    # Add default NOP modules if not set
-    if nops_val.nil?
-      whitelist << /nops\/.+/
-    end
-
-    whitelist
-  end
-
-
   #
   # Initializes exploit/payload/encoder/nop modules.
   #
@@ -311,8 +222,6 @@ class Msfcli
         :encoder => nil,  # encoder instance
         :nop     => nil   # nop instance
     }
-
-    whitelist = generate_whitelist
 
     # Load up all the possible modules, this is where things get slow again
     @framework.add_module_paths
