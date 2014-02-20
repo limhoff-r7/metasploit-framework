@@ -210,23 +210,23 @@ describe Msfcli do
     # lets
     #
 
-    let(:cache_exploit_class) do
+    let(:cache_auxiliary_class) do
       FactoryGirl.create(
           :mdm_module_class,
-          module_type: 'exploit'
+          module_type: 'auxiliary'
       )
     end
 
-    let(:cache_exploit_instance) do
+    let(:cache_auxiliary_instance) do
       FactoryGirl.create(
           :mdm_module_instance,
-          module_class: cache_exploit_class
+          module_class: cache_auxiliary_class
       )
     end
 
-    let(:exploit_instance) do
-      framework.modules.create_from_module_class(cache_exploit_instance.module_class).tap { |exploit_instance|
-        expect(exploit_instance).not_to be_nil
+    let(:auxiliary_instance) do
+      framework.modules.create_from_module_class(cache_auxiliary_instance.module_class).tap { |auxiliary_instance|
+        expect(auxiliary_instance).not_to be_nil
       }
     end
 
@@ -235,12 +235,12 @@ describe Msfcli do
     #
 
     before(:each) do
-      msfcli.metasploit_instance = exploit_instance
+      msfcli.auxiliary_instance = auxiliary_instance
     end
 
     it 'calls Msf::Seralizer::ReadableText.dump_module' do
       expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                   exploit_instance,
+                                                   auxiliary_instance,
                                                    described_class::INDENT
                                                ).and_call_original
 
@@ -280,7 +280,7 @@ describe Msfcli do
         msfcli.payload_instance = payload_instance
 
         expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     exploit_instance,
+                                                     auxiliary_instance,
                                                      described_class::INDENT
                                                  )
       end
@@ -328,7 +328,7 @@ describe Msfcli do
         msfcli.encoder_instance = encoder_instance
 
         expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     exploit_instance,
+                                                     auxiliary_instance,
                                                      described_class::INDENT
                                                  )
       end
@@ -376,7 +376,7 @@ describe Msfcli do
         msfcli.nop_instance = nop_instance
 
         expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     exploit_instance,
+                                                     auxiliary_instance,
                                                      described_class::INDENT
                                                  )
       end

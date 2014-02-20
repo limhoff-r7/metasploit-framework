@@ -33,17 +33,23 @@ class Msfcli
   #   @return [Msf::Simple::Framework]
   attr_writer :framework
 
+  # @!attribute [rw] auxiliary_instance
+  #   The auxiliary instance specified as the first argument.
+  #
+  #   @return [Msf::Auxiliary]
+  attr_accessor :auxiliary_instance
+
   # @!attribute [rw] encoder_instance
   #   The encoder instance specified with 'encoder=<reference name>'.
   #
   #   @return [Msf::Encoder]
   attr_accessor :encoder_instance
 
-  # @!attribute [rw] metasploit_instance
-  #   The auxiliary or exploit instance that is the target of this command.
+  # @!attribute [rw] exploit_instance
+  #   The exploit instance specified as the first argument.
   #
-  #   @return [Msf::Auxiliary, Msf::Exploit]
-  attr_accessor :metasploit_instance
+  #   @return [Msf::Exploit]
+  attr_accessor :exploit_instance
 
   # @!attribute [rw] nop_instance
   #   The nop instance specified with 'nop=<reference name>'.
@@ -56,6 +62,12 @@ class Msfcli
   #
   #   @return [Msf::Payload]
   attr_accessor :payload_instance
+
+  # @!attribute [rw] post_instance
+  #   The post instance specified with 'post=<reference name>'.
+  #
+  #   @return [Msf::Post]
+  attr_accessor :post_instance
 
   #
   # Methods
@@ -200,12 +212,8 @@ class Msfcli
   end
 
   def show_summary
-    [:metasploit_instance, :payload_instance, :encoder_instance, :nop_instance].each do |attribute|
-      value = send(attribute)
-
-      if value
-        puts Msf::Serializer::ReadableText.dump_module(value, INDENT)
-      end
+    each_instance do |instance|
+      puts Msf::Serializer::ReadableText.dump_module(instance, INDENT)
     end
   end
 
@@ -240,15 +248,6 @@ class Msfcli
     $stdout.puts extra + "\n" if extra
     $stdout.puts
   end
-
-  def show_options(m)
-    readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_options(m[:module], INDENT))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_options(m[:payload], INDENT)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_options(m[:encoder], INDENT)) if m[:encoder]
-    $stdout.puts("\nNOP\n\n" + readable.dump_options(m[:nop], INDENT))          if m[:nop]
-  end
-
 
   def show_advanced(m)
     readable = Msf::Serializer::ReadableText
@@ -415,6 +414,18 @@ class Msfcli
 
     engage_mode(modules)
     $stdout.puts
+  end
+
+  private
+
+  def each_instance
+    Metasploit::Model::Module::Type::ALL.each do |module_type|
+      instance = send("#{module_type}_instance")
+
+      if instance
+        yield instance
+      end
+    end
   end
 end
 
