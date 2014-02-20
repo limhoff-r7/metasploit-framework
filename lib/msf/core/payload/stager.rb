@@ -33,7 +33,15 @@ module Msf::Payload::Stager
   #
   # @return [String,nil]
   def payload
-    return module_info['Stager']['Payload']
+    stager_module_info['Payload']
+  end
+
+  def stager_module_info
+    unless instance_variable_defined? :@stager_module_info
+      @stager_module_info = module_info['Stager'] || {}.freeze
+    end
+
+    @stager_module_info
   end
 
   #
@@ -41,7 +49,7 @@ module Msf::Payload::Stager
   #
   # @return [String,nil]
   def assembly
-    return module_info['Stager']['Assembly']
+    stager_module_info['Assembly']
   end
 
   #
@@ -51,7 +59,7 @@ module Msf::Payload::Stager
   #
   # @return [Hash]
   def offsets
-    return module_info['Stager']['Offsets']
+    stager_module_info['Offsets']
   end
 
   #
