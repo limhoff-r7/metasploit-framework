@@ -29,6 +29,13 @@ module Msf::Module::Platforms
     )
   end
 
+  # Comma-separated list of {Metasploit::Framework::Platform#fully_qualified_name platform fully qualified names}.
+  #
+  # @return [String]
+  def platform_list_to_s
+    platform_list.platforms.map(&:fully_qualified_name).sort.join(", ")
+  end
+
   # Sets the supported platform_list for this module.
   #
   # @param platform_list [Msf::Module::PlatformList, Array<String>, String] one or more platform_list that this module should
