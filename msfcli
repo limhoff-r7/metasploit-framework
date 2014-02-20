@@ -120,13 +120,6 @@ class Msfcli
   end
 
   #
-  # Returns a whitelist for post modules
-  #
-  def guess_post_name(p)
-    [/post\/#{p}/]
-  end
-
-  #
   # Initializes exploit/payload/encoder/nop modules.
   #
   def init_modules
