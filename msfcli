@@ -18,6 +18,12 @@ require 'table_print'
 
 class Msfcli
   #
+  # CONSTANTS
+  #
+
+  INDENT =  ' ' * 3
+
+  #
   # Attributes
   #
 
@@ -26,6 +32,30 @@ class Msfcli
   #
   #   @return [Msf::Simple::Framework]
   attr_writer :framework
+
+  # @!attribute [rw] encoder_instance
+  #   The encoder instance specified with 'encoder=<reference name>'.
+  #
+  #   @return [Msf::Encoder]
+  attr_accessor :encoder_instance
+
+  # @!attribute [rw] metasploit_instance
+  #   The auxiliary or exploit instance that is the target of this command.
+  #
+  #   @return [Msf::Auxiliary, Msf::Exploit]
+  attr_accessor :metasploit_instance
+
+  # @!attribute [rw] nop_instance
+  #   The nop instance specified with 'nop=<reference name>'.
+  #
+  #   @return [Msf::Nop]
+  attr_accessor :nop_instance
+
+  # @!attribute [rw] payload_instance
+  #   The payload instance specified with 'payload=<reference name>'.
+  #
+  #   @return [Msf::Payload]
+  attr_accessor :payload_instance
 
   #
   # Methods
@@ -75,7 +105,6 @@ class Msfcli
 
   def initialize(args)
     @args      = {}
-    @indent    = '   '
 
     @args[:module_name] = args.shift      # First argument should be the module name
     @args[:mode]        = args.pop || 'h' # Last argument should be the mode
@@ -170,6 +199,16 @@ class Msfcli
     modules
   end
 
+  def show_summary
+    [:metasploit_instance, :payload_instance, :encoder_instance, :nop_instance].each do |attribute|
+      value = send(attribute)
+
+      if value
+        puts Msf::Serializer::ReadableText.dump_module(value, INDENT)
+      end
+    end
+  end
+
   #
   # Returns a usage Rex table
   #
@@ -202,59 +241,49 @@ class Msfcli
     $stdout.puts
   end
 
-
-  def show_summary(m)
-    readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_module(m[:module], @indent))
-    $stdout.puts("\n" + readable.dump_module(m[:payload], @indent)) if m[:payload]
-    $stdout.puts("\n" + readable.dump_module(m[:encoder], @indent)) if m[:encoder]
-    $stdout.puts("\n" + readable.dump_module(m[:nop], @indent))     if m[:nop]
-  end
-
-
   def show_options(m)
     readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_options(m[:module], @indent))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_options(m[:payload], @indent)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_options(m[:encoder], @indent)) if m[:encoder]
-    $stdout.puts("\nNOP\n\n" + readable.dump_options(m[:nop], @indent))          if m[:nop]
+    $stdout.puts("\n" + readable.dump_options(m[:module], INDENT))
+    $stdout.puts("\nPayload:\n\n" + readable.dump_options(m[:payload], INDENT)) if m[:payload]
+    $stdout.puts("\nEncoder:\n\n" + readable.dump_options(m[:encoder], INDENT)) if m[:encoder]
+    $stdout.puts("\nNOP\n\n" + readable.dump_options(m[:nop], INDENT))          if m[:nop]
   end
 
 
   def show_advanced(m)
     readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_advanced_options(m[:module], @indent))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_advanced_options(m[:payload], @indent)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_advanced_options(m[:encoder], @indent)) if m[:encoder]
-    $stdout.puts("\nNOP:\n\n" + readable.dump_advanced_options(m[:nop], @indent))         if m[:nop]
+    $stdout.puts("\n" + readable.dump_advanced_options(m[:module], INDENT))
+    $stdout.puts("\nPayload:\n\n" + readable.dump_advanced_options(m[:payload], INDENT)) if m[:payload]
+    $stdout.puts("\nEncoder:\n\n" + readable.dump_advanced_options(m[:encoder], INDENT)) if m[:encoder]
+    $stdout.puts("\nNOP:\n\n" + readable.dump_advanced_options(m[:nop], INDENT))         if m[:nop]
   end
 
 
   def show_ids_evasion(m)
     readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_evasion_options(m[:module], @indent))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_evasion_options(m[:payload], @indent)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_evasion_options(m[:encoder], @indent)) if m[:encoder]
-    $stdout.puts("\nNOP:\n\n" + readable.dump_evasion_options(m[:nop], @indent))         if m[:nop]
+    $stdout.puts("\n" + readable.dump_evasion_options(m[:module], INDENT))
+    $stdout.puts("\nPayload:\n\n" + readable.dump_evasion_options(m[:payload], INDENT)) if m[:payload]
+    $stdout.puts("\nEncoder:\n\n" + readable.dump_evasion_options(m[:encoder], INDENT)) if m[:encoder]
+    $stdout.puts("\nNOP:\n\n" + readable.dump_evasion_options(m[:nop], INDENT))         if m[:nop]
   end
 
 
   def show_payloads(m)
     readable = Msf::Serializer::ReadableText
     txt      = "Compatible payloads"
-    $stdout.puts("\n" + readable.dump_compatible_payloads(m[:module], @indent, txt))
+    $stdout.puts("\n" + readable.dump_compatible_payloads(m[:module], INDENT, txt))
   end
 
 
   def show_targets(m)
     readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_exploit_targets(m[:module], @indent))
+    $stdout.puts("\n" + readable.dump_exploit_targets(m[:module], INDENT))
   end
 
 
   def show_actions(m)
     readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_auxiliary_actions(m[:module], @indent))
+    $stdout.puts("\n" + readable.dump_auxiliary_actions(m[:module], INDENT))
   end
 
 
@@ -316,7 +345,7 @@ class Msfcli
       when 'h'
         usage
       when "s"
-        show_summary(modules)
+        show_summary
       when "o"
         show_options(modules)
       when "a"
