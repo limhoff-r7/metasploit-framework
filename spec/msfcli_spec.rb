@@ -164,15 +164,6 @@ describe Msfcli do
     end
   end
 
-  context "#guess_encoder_name" do
-    cli = Msfcli.new([])
-    it "should contain a match for x86/shikata_ga_nai" do
-      encoder = 'x86/shikata_ga_nai'
-      m = cli.guess_encoder_name(encoder)
-      m.should eq([/encoders\/#{encoder}/])
-    end
-  end
-
   context "#guess_nop_name" do
     cli = Msfcli.new([])
     it "should contain a match for guess_nop_name" do

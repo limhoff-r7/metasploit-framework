@@ -120,14 +120,6 @@ class Msfcli
   end
 
   #
-  # Returns a whitelist for encoder modules
-  #
-  def guess_encoder_name(e)
-    [/encoders\/#{e}/]
-  end
-
-
-  #
   # Returns a whitelist for nop modules
   #
   def guess_nop_name(n)
