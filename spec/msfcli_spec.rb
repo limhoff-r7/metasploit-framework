@@ -164,50 +164,6 @@ describe Msfcli do
     end
   end
 
-  context "#guess_payload_name" do
-    cli = Msfcli.new([])
-
-    it "should contain matches nedded for windows/meterpreter/reverse_tcp" do
-      m = cli.guess_payload_name('windows/meterpreter/reverse_tcp')
-      m.should eq([/stages\/windows\/meterpreter/, /payloads\/(stagers|stages)\/windows\/.*(reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for windows/shell/reverse_tcp" do
-      m = cli.guess_payload_name('windows/shell/reverse_tcp')
-      m.should eq([/stages\/windows\/shell/, /payloads\/(stagers|stages)\/windows\/.*(reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for windows/shell_reverse_tcp" do
-      m = cli.guess_payload_name('windows/shell_reverse_tcp')
-      m.should eq([/stages\/windows\/shell/, /payloads\/(singles|stagers|stages)\/windows\/.*(shell_reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for php/meterpreter_reverse_tcp" do
-      m = cli.guess_payload_name('php/meterpreter_reverse_tcp')
-      m.should eq([/stages\/php\/meterpreter/, /payloads\/(stagers|stages)\/php\/.*(meterpreter_reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for linux/x86/meterpreter/reverse_tcp" do
-      m = cli.guess_payload_name('linux/x86/meterpreter/reverse_tcp')
-      m.should eq([/stages\/linux\/x86\/meterpreter/, /payloads\/(stagers|stages)\/linux\/x86\/.*(reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for java/meterpreter/reverse_tcp" do
-      m = cli.guess_payload_name('java/meterpreter/reverse_tcp')
-      m.should eq([/stages\/java\/meterpreter/, /payloads\/(stagers|stages)\/java\/.*(reverse_tcp)\.rb$/])
-    end
-
-    it "should contain matches needed for cmd/unix/reverse" do
-      m = cli.guess_payload_name('cmd/unix/reverse')
-      m.should eq([/stages\/cmd\/shell/, /payloads\/(singles|stagers|stages)\/cmd\/.*(reverse)\.rb$/])
-    end
-
-    it "should contain matches needed for bsd/x86/shell_reverse_tcp" do
-      m = cli.guess_payload_name('bsd/x86/shell_reverse_tcp')
-      m.should eq([/stages\/bsd\/x86\/shell/, /payloads\/(singles|stagers|stages)\/bsd\/x86\/.*(shell_reverse_tcp)\.rb$/])
-    end
-  end
-
   context "#guess_encoder_name" do
     cli = Msfcli.new([])
     it "should contain a match for x86/shikata_ga_nai" do
