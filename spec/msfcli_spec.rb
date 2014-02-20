@@ -164,15 +164,6 @@ describe Msfcli do
     end
   end
 
-  context "#guess_nop_name" do
-    cli = Msfcli.new([])
-    it "should contain a match for guess_nop_name" do
-      nop = 'x86/single_byte'
-      m = cli.guess_nop_name(nop)
-      m.should eq([/nops\/#{nop}/])
-    end
-  end
-
   pending 'Msfcli#init_modules connects to database to access module cache' do
     context "#init_modules" do
       it "should have multi/handler module initialized" do

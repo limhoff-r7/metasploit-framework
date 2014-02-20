@@ -120,14 +120,6 @@ class Msfcli
   end
 
   #
-  # Returns a whitelist for nop modules
-  #
-  def guess_nop_name(n)
-    [/nops\/#{n}/]
-  end
-
-
-  #
   # Returns a whitelist for post modules
   #
   def guess_post_name(p)
