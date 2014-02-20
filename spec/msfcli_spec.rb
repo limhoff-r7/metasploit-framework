@@ -8,6 +8,13 @@ require 'msf/base'
 
 
 describe Msfcli do
+  subject(:msfcli) do
+    Msfcli.new(args)
+  end
+
+  let(:args) do
+    []
+  end
 
   # Get stdout:
   # http://stackoverflow.com/questions/11349270/test-output-to-command-line-with-rspec
@@ -67,12 +74,14 @@ describe Msfcli do
   end
 
   context "#usage" do
+    include_context 'output'
+
+    subject(:usage) do
+      msfcli.usage
+    end
+
     it "should see a help menu" do
-      out = get_stdout {
-        cli = Msfcli.new([])
-        cli.usage
-      }
-      out.should =~ /Usage/
+      expect(output).to include('Usage')
     end
   end
 
