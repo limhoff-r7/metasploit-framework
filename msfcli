@@ -211,6 +211,13 @@ class Msfcli
     modules
   end
 
+  def show_advanced
+    each_instance do |instance|
+      puts "#{instance.module_type}:"
+      puts Msf::Serializer::ReadableText.dump_advanced_options(instance, INDENT)
+    end
+  end
+
   def show_summary
     each_instance do |instance|
       puts Msf::Serializer::ReadableText.dump_module(instance, INDENT)
@@ -247,14 +254,6 @@ class Msfcli
     $stdout.puts "msfcli auxiliary/scanner/http/http_version rhosts=IP encoder= post= nop= E" + "\n"
     $stdout.puts extra + "\n" if extra
     $stdout.puts
-  end
-
-  def show_advanced(m)
-    readable = Msf::Serializer::ReadableText
-    $stdout.puts("\n" + readable.dump_advanced_options(m[:module], INDENT))
-    $stdout.puts("\nPayload:\n\n" + readable.dump_advanced_options(m[:payload], INDENT)) if m[:payload]
-    $stdout.puts("\nEncoder:\n\n" + readable.dump_advanced_options(m[:encoder], INDENT)) if m[:encoder]
-    $stdout.puts("\nNOP:\n\n" + readable.dump_advanced_options(m[:nop], INDENT))         if m[:nop]
   end
 
 
@@ -348,7 +347,7 @@ class Msfcli
       when "o"
         show_options(modules)
       when "a"
-        show_advanced(modules)
+        show_advanced
       when "i"
         show_ids_evasion(modules)
       when "p"
