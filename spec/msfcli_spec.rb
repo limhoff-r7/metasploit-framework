@@ -8,8 +8,12 @@ require 'msf/base'
 
 
 describe Msfcli do
+  include_context 'Msf::Simple::Framework'
+
   subject(:msfcli) do
-    Msfcli.new(args)
+    Msfcli.new(args).tap { |msfcli|
+      msfcli.framework = framework
+    }
   end
 
   let(:args) do
@@ -33,14 +37,73 @@ describe Msfcli do
   # This one is slow because we're loading all modules
   #
   context "#dump_module_list" do
-    pending 'Msfcli#dump_module_list connects to database to access module cache' do
-      it "it should dump a list of modules" do
-        tbl = ''
-        stdout = get_stdout {
-          cli = Msfcli.new([])
-          tbl = cli.dump_module_list
-        }
-        tbl.should =~ /Exploits/ and stdout.should =~ /Please wait/
+    include_context 'database cleaner'
+
+    subject(:dump_module_list) do
+      msfcli.dump_module_list
+    end
+
+    #
+    # lets
+    #
+
+    let(:cache_auxiliary_class) do
+      FactoryGirl.create(
+          :mdm_module_class,
+          module_type: 'auxiliary'
+      )
+    end
+
+    let(:cache_exploit_class) do
+      FactoryGirl.create(
+          :mdm_module_class,
+          module_type: 'exploit'
+      )
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:cache_auxiliary_instance) do
+      FactoryGirl.create(
+          :mdm_module_instance,
+          module_class: cache_auxiliary_class
+      )
+    end
+
+    let!(:cache_exploit_instance) do
+      FactoryGirl.create(
+          :mdm_module_instance,
+          module_class: cache_exploit_class
+      )
+    end
+
+    context 'auxiliary' do
+      it 'includes title' do
+        expect(msfcli.dump_module_list).to include('Auxiliary')
+      end
+
+      it 'includes module_class.full_name' do
+        expect(msfcli.dump_module_list).to include(cache_auxiliary_class.full_name)
+      end
+
+      it 'includes name' do
+        expect(msfcli.dump_module_list).to include(cache_auxiliary_instance.name)
+      end
+    end
+
+    context 'exploit' do
+      it 'includes title' do
+        expect(msfcli.dump_module_list).to include('Exploits')
+      end
+
+      it 'includes module_class.full_name' do
+        expect(msfcli.dump_module_list).to include(cache_exploit_class.full_name)
+      end
+
+      it 'includes name' do
+        expect(msfcli.dump_module_list).to include(cache_exploit_instance.name)
       end
     end
   end

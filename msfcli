@@ -14,46 +14,68 @@ end
 $:.unshift(File.expand_path(File.join(File.dirname(msfbase), 'lib')))
 require 'rex'
 
+require 'table_print'
 
 class Msfcli
+  #
+  # Attributes
+  #
+
+  # @!attribute [rw] framework
+  #   The framework being accessed from the command-line
+  #
+  #   @return [Msf::Simple::Framework]
+  attr_writer :framework
+
+  #
+  # Methods
+  #
+
   #
   # Loads up everything in framework, and then returns the module list
   #
   def dump_module_list
-    # This is what happens if the user doesn't specify a module name:
-    # msfcli will end up loading EVERYTHING to memory to show you a help
-    # menu plus a list of modules available. Really expensive if you ask me.
-    $stdout.puts "[*] Please wait while we load the module tree..."
-    framework = Msf::Simple::Framework.create
-    ext = ''
+    lines = []
 
-    tbl = Rex::Ui::Text::Table.new(
-        'Header'  => 'Exploits',
-        'Indent'  => 4,
-        'Columns' => [ 'Name', 'Description' ])
+    ['auxiliary', 'exploit'].each do |module_type|
+      directory =  Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE[module_type]
+      title = directory.titleize
+      lines << title
 
-    framework.exploits.each_module { |name, mod|
-      tbl << [  'exploit/' + name, mod.new.name ]
-    }
-    ext << tbl.to_s + "\n"
+      module_instances = Mdm::Module::Instance.joins(
+          :module_class
+      ).where(
+          Mdm::Module::Class.arel_table[:module_type].eq(module_type)
+      )
 
-    tbl = Rex::Ui::Text::Table.new(
-        'Header'  => 'Auxiliary',
-        'Indent'  => 4,
-        'Columns' => [ 'Name', 'Description' ])
+      printer = TablePrint::Printer.new(
+          module_instances,
+          [
+              'module_class.full_name',
+              'name'
+          ]
+      )
 
-    framework.auxiliary.each_module { |name, mod|
-      tbl << [ 'auxiliary/' + name, mod.new.name ]
-    }
+      max_width_before = TablePrint::Config.max_width
+      TablePrint::Config.max_width = Float::INFINITY
 
-    ext << tbl.to_s + "\n"
-    ext
+      begin
+        lines << printer.table_print
+      ensure
+        TablePrint::Config.max_width = max_width_before
+      end
+    end
+
+   lines.join("\n")
+  end
+
+  def framework
+    @framework ||= Msf::Simple::Framework.create
   end
 
   def initialize(args)
     @args      = {}
     @indent    = '   '
-    @framework = nil
 
     @args[:module_name] = args.shift      # First argument should be the module name
     @args[:mode]        = args.pop || 'h' # Last argument should be the mode
