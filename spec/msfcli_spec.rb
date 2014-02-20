@@ -29,6 +29,22 @@ describe Msfcli do
     fake.string
   end
 
+  #
+  # This one is slow because we're loading all modules
+  #
+  context "#dump_module_list" do
+    pending 'Msfcli#dump_module_list connects to database to access module cache' do
+      it "it should dump a list of modules" do
+        tbl = ''
+        stdout = get_stdout {
+          cli = Msfcli.new([])
+          tbl = cli.dump_module_list
+        }
+        tbl.should =~ /Exploits/ and stdout.should =~ /Please wait/
+      end
+    end
+  end
+
   context "#initialize" do
     it "should give me the correct module name in key :module_name after object initialization" do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
@@ -82,22 +98,6 @@ describe Msfcli do
 
     it "should see a help menu" do
       expect(output).to include('Usage')
-    end
-  end
-
-  #
-  # This one is slow because we're loading all modules
-  #
-  context "#dump_module_list" do
-    pending 'Msfcli#dump_module_list connects to database to access module cache' do
-      it "it should dump a list of modules" do
-        tbl = ''
-        stdout = get_stdout {
-          cli = Msfcli.new([])
-          tbl = cli.dump_module_list
-        }
-        tbl.should =~ /Exploits/ and stdout.should =~ /Please wait/
-      end
     end
   end
 
