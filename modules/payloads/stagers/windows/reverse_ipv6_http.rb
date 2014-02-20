@@ -26,7 +26,7 @@ module Metasploit3
             'Description'   => 'Tunnel communication over HTTP and IPv6',
             'Author'        => 'hdm',
             'License'       => MSF_LICENSE,
-            'Platform'      => 'win',
+            'Platform'      => 'Windows',
             'Arch'          => ARCH_X86,
             'Convention'    => 'sockedi http',
             'Stager'        =>

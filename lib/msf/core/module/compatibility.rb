@@ -92,7 +92,7 @@ module Msf::Module::Compatibility
 
         # Verify that any negate values are not matched
         if (x[0,1] == '-' and mv.include?(x[1, x.length-1]))
-          dlog("Module #{mod.refname} is incompatible with #{self.full_name} for #{k}: limiter was #{x}, value was #{mval}", 'core', LEV_1)
+          dlog("Module (#{mod.full_name}) is incompatible with this module (#{full_name}) for #{k}: limiter was #{x}, value was #{mval}", 'core', LEV_1)
           return false
         end
 

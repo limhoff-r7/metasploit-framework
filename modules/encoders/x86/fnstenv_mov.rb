@@ -13,7 +13,7 @@ class Metasploit3 < Msf::Encoder::Xor
 
   def initialize(info={})
     super(
-        update_info(
+        Msf::Module::ModuleInfo.update!(
             info,
             'Name'             => 'Variable-length Fnstenv/mov Dword XOR Encoder',
             'Description'      => %q{
