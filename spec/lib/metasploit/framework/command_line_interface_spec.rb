@@ -1,18 +1,11 @@
 require 'spec_helper'
 
-load Metasploit::Framework.root.join('msfcli').to_path
-
-require 'msfenv'
-require 'msf/ui'
-require 'msf/base'
-
-
-describe Msfcli do
+describe Metasploit::Framework::CommandLineInterface do
   include_context 'Msf::Simple::Framework'
 
-  subject(:msfcli) do
-    Msfcli.new(args).tap { |msfcli|
-      msfcli.framework = framework
+  subject(:command_line_interface) do
+    described_class.new(args).tap { |command_line_interface|
+      command_line_interface.framework = framework
     }
   end
 
@@ -70,7 +63,7 @@ describe Msfcli do
             #
 
             before(:each) do
-              msfcli.send("#{module_type}_instance=", instance)
+              command_line_interface.send("#{module_type}_instance=", instance)
             end
 
             dump_method_receiver = Msf::Serializer::ReadableText
@@ -104,7 +97,7 @@ describe Msfcli do
     end
 
     subject(:dump_instances) do
-      msfcli.send(:dump_instances, dump_type)
+      command_line_interface.send(:dump_instances, dump_type)
     end
 
     it_should_behave_like 'dump_type', :advanced_options
@@ -120,7 +113,7 @@ describe Msfcli do
     include_context 'database cleaner'
 
     subject(:dump_module_list) do
-      msfcli.dump_module_list
+      command_line_interface.dump_module_list
     end
 
     #
@@ -161,29 +154,29 @@ describe Msfcli do
 
     context 'auxiliary' do
       it 'includes title' do
-        expect(msfcli.dump_module_list).to include('Auxiliary')
+        expect(command_line_interface.dump_module_list).to include('Auxiliary')
       end
 
       it 'includes module_class.full_name' do
-        expect(msfcli.dump_module_list).to include(cache_auxiliary_class.full_name)
+        expect(command_line_interface.dump_module_list).to include(cache_auxiliary_class.full_name)
       end
 
       it 'includes name' do
-        expect(msfcli.dump_module_list).to include(cache_auxiliary_instance.name)
+        expect(command_line_interface.dump_module_list).to include(cache_auxiliary_instance.name)
       end
     end
 
     context 'exploit' do
       it 'includes title' do
-        expect(msfcli.dump_module_list).to include('Exploits')
+        expect(command_line_interface.dump_module_list).to include('Exploits')
       end
 
       it 'includes module_class.full_name' do
-        expect(msfcli.dump_module_list).to include(cache_exploit_class.full_name)
+        expect(command_line_interface.dump_module_list).to include(cache_exploit_class.full_name)
       end
 
       it 'includes name' do
-        expect(msfcli.dump_module_list).to include(cache_exploit_instance.name)
+        expect(command_line_interface.dump_module_list).to include(cache_exploit_instance.name)
       end
     end
   end
@@ -191,43 +184,43 @@ describe Msfcli do
   context "#initialize" do
     it "should give me the correct module name in key :module_name after object initialization" do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:module_name].should eq('multi/handler')
     end
 
     it "should give me the correct mode in key :mode after object initialization" do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:mode].should eq('E')
     end
 
     it "should give me the correct module parameters after object initialization" do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:params].should eq(['payload=windows/meterpreter/reverse_tcp', 'lhost=127.0.0.1'])
     end
 
     it "should give me an exploit name without the prefix 'exploit'" do
       args = "exploit/windows/browser/ie_cbutton_uaf payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:module_name].should eq("windows/browser/ie_cbutton_uaf")
     end
 
     it "should give me an exploit name without the prefix 'exploits'" do
       args = "exploits/windows/browser/ie_cbutton_uaf payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:module_name].should eq("windows/browser/ie_cbutton_uaf")
     end
 
     it "should set mode 's' (summary)" do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp s"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:mode].should eq('s')
     end
 
     it "should set mode 'h' (help) as default" do
       args = "multi/handler"
-      cli = Msfcli.new(args.split(' '))
+      cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
       cli.instance_variable_get(:@args)[:mode].should eq('h')
     end
   end
@@ -237,7 +230,7 @@ describe Msfcli do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Msfcli.new(args.split(' '))
+        cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -248,7 +241,7 @@ describe Msfcli do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Msfcli.new(args.split(' '))
+        cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -259,7 +252,7 @@ describe Msfcli do
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Msfcli.new(args.split(' '))
+        cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -270,7 +263,7 @@ describe Msfcli do
       args = "WHATEVER payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Msfcli.new(args.split(' '))
+        cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -282,7 +275,7 @@ describe Msfcli do
     include_context 'output'
 
     subject(:usage) do
-      msfcli.usage
+      command_line_interface.usage
     end
 
     it "should see a help menu" do
@@ -290,12 +283,12 @@ describe Msfcli do
     end
   end
 
-  pending 'Msfcli#engate_module connects to database to access module cache' do
+  pending 'Metasploit::Framework::CommandLineInterface#engate_module connects to database to access module cache' do
     context "#engage_mode" do
       it "should show me the summary of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version s'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -306,7 +299,7 @@ describe Msfcli do
       it "should show me the options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version O'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -317,7 +310,7 @@ describe Msfcli do
       it "should me the advanced options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version A'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -328,7 +321,7 @@ describe Msfcli do
       it "should show me the IDS options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version I'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -338,7 +331,7 @@ describe Msfcli do
       it "should show me the targets available for module windows/browser/ie_cbutton_uaf" do
         args = "windows/browser/ie_cbutton_uaf T"
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -348,7 +341,7 @@ describe Msfcli do
       it "should show me the payloads available for module windows/browser/ie_cbutton_uaf" do
         args = "windows/browser/ie_cbutton_uaf P"
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -358,7 +351,7 @@ describe Msfcli do
       it "should try to run the check function of an exploit" do
         args = "windows/smb/ms08_067_netapi rhost=0.0.0.1 C"  # Some BS IP so we can fail
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -368,7 +361,7 @@ describe Msfcli do
       it "should warn my auxiliary module isn't supported by mode 'p' (show payloads)" do
         args = 'auxiliary/scanner/http/http_version p'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -378,7 +371,7 @@ describe Msfcli do
       it "should warn my auxiliary module isn't supported by mode 't' (show targets)" do
         args = 'auxiliary/scanner/http/http_version t'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -388,7 +381,7 @@ describe Msfcli do
       it "should warn my exploit module isn't supported by mode 'ac' (show actions)" do
         args = 'windows/browser/ie_cbutton_uaf ac'
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -398,7 +391,7 @@ describe Msfcli do
       it "should show actions available for module auxiliary/scanner/http/http_put" do
         args = "auxiliary/scanner/http/http_put ac"
         stdout = get_stdout {
-          cli = Msfcli.new(args.split(' '))
+          cli = Metasploit::Framework::CommandLineInterface.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
