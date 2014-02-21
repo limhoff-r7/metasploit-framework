@@ -322,7 +322,7 @@ class Msfcli
       when "s"
         dump_instances(:module)
       when "o"
-        show_options(modules)
+        dump_instances(:options)
       when "a"
         dump_instances(:advanced_options)
       when "i"

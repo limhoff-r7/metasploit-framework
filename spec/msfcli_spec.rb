@@ -110,6 +110,7 @@ describe Msfcli do
     it_should_behave_like 'dump_type', :advanced_options
     it_should_behave_like 'dump_type', :evasion_options
     it_should_behave_like 'dump_type', :module
+    it_should_behave_like 'dump_type', :options
   end
 
   #
