@@ -34,68 +34,72 @@ describe Msfcli do
   end
 
   context '#dump_instances' do
-    shared_context 'dump_type' do |dump_type|
-      shared_context 'module_type' do |module_type|
-        include_context 'Metasploit::Framework::Spec::Constants cleaner'
-        include_context 'output'
+    shared_examples_for 'dump_type' do |dump_type|
+      context dump_type do
+        shared_examples_for 'module_type' do |module_type|
+          context module_type do
+            include_context 'Metasploit::Framework::Spec::Constants cleaner'
+            include_context 'output'
+
+            #
+            # lets
+            #
+
+            let(:cache_class) do
+              FactoryGirl.create(
+                  :mdm_module_class,
+                  module_type: module_type
+              )
+            end
+
+            let(:cache_instance) do
+              FactoryGirl.create(
+                  :mdm_module_instance,
+                  module_class: cache_class
+              )
+            end
+
+            let(:instance) do
+              framework.modules.create_from_module_class(cache_instance.module_class).tap { |instance|
+                expect(instance).not_to be_nil
+              }
+            end
+
+            #
+            # Callbacks
+            #
+
+            before(:each) do
+              msfcli.send("#{module_type}_instance=", instance)
+            end
+
+            dump_method_receiver = Msf::Serializer::ReadableText
+            dump_method_name = "dump_#{dump_type}"
+
+            it "calls #{dump_method_receiver}.#{dump_method_name}" do
+              expect(dump_method_receiver).to receive(dump_method_name).with(
+                                                  instance,
+                                                  described_class::INDENT
+                                              # and_call_original is crucial to ensure that the dump method can handle this
+                                              # module_type and this test is not making assumptions about its interface.
+                                              ).and_call_original
+
+              quietly
+            end
+          end
+        end
 
         #
         # lets
         #
 
-        let(:cache_class) do
-          FactoryGirl.create(
-              :mdm_module_class,
-              module_type: module_type
-          )
+        let(:dump_type) do
+          dump_type
         end
 
-        let(:cache_instance) do
-          FactoryGirl.create(
-              :mdm_module_instance,
-              module_class: cache_class
-          )
+        Metasploit::Model::Module::Type::ALL.each do |module_type|
+          it_should_behave_like 'module_type', module_type
         end
-
-        let(:instance) do
-          framework.modules.create_from_module_class(cache_instance.module_class).tap { |instance|
-            expect(instance).not_to be_nil
-          }
-        end
-
-        #
-        # Callbacks
-        #
-
-        before(:each) do
-          msfcli.send("#{module_type}_instance=", instance)
-        end
-
-        dump_method_receiver = Msf::Serializer::ReadableText
-        dump_method_name = "dump_#{dump_type}"
-
-        it "calls #{dump_method_receiver}.#{dump_method_name}" do
-          expect(dump_method_receiver).to receive(dump_method_name).with(
-                                              instance,
-                                              described_class::INDENT
-                                          # and_call_original is crucial to ensure that the dump method can handle this
-                                          # module_type and this test is not making assumptions about its interface.
-                                          ).and_call_original
-
-          quietly
-        end
-      end
-
-      #
-      # lets
-      #
-
-      let(:dump_type) do
-        dump_type
-      end
-
-      Metasploit::Model::Module::Type::ALL.each do |module_type|
-        it_should_behave_like 'module_type', module_type
       end
     end
 
