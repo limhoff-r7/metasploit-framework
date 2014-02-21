@@ -211,26 +211,6 @@ class Msfcli
     modules
   end
 
-  def show_advanced
-    each_instance do |instance|
-      puts "#{instance.module_type}:"
-      puts Msf::Serializer::ReadableText.dump_advanced_options(instance, INDENT)
-    end
-  end
-
-  def show_ids_evasion
-    each_instance do |instance|
-      puts "#{instance.module_type}"
-      puts Msf::Serializer::ReadableText.dump_evasion_options(instance, INDENT)
-    end
-  end
-
-  def show_summary
-    each_instance do |instance|
-      puts Msf::Serializer::ReadableText.dump_module(instance, INDENT)
-    end
-  end
-
   #
   # Returns a usage Rex table
   #
@@ -340,13 +320,13 @@ class Msfcli
       when 'h'
         usage
       when "s"
-        show_summary
+        dump_instances(:module)
       when "o"
         show_options(modules)
       when "a"
-        show_advanced
+        dump_instances(:advanced_options)
       when "i"
-        show_ids_evasion
+        dump_instances(:evasion_options)
       when "p"
         if modules[:module].file_path =~ /auxiliary\//i
           $stdout.puts("\nError: This type of module does not support payloads")
@@ -413,6 +393,15 @@ class Msfcli
   end
 
   private
+
+  def dump_instances(dump_type)
+    dump_method = Msf::Serializer::ReadableText.method("dump_#{dump_type}")
+
+    each_instance do |instance|
+      puts "#{instance.module_type}:"
+      puts dump_method.call(instance, INDENT)
+    end
+  end
 
   def each_instance
     Metasploit::Model::Module::Type::ALL.each do |module_type|

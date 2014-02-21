@@ -33,6 +33,81 @@ describe Msfcli do
     fake.string
   end
 
+  context '#dump_instances' do
+    shared_context 'dump_type' do |dump_type|
+      shared_context 'module_type' do |module_type|
+        include_context 'Metasploit::Framework::Spec::Constants cleaner'
+        include_context 'output'
+
+        #
+        # lets
+        #
+
+        let(:cache_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: module_type
+          )
+        end
+
+        let(:cache_instance) do
+          FactoryGirl.create(
+              :mdm_module_instance,
+              module_class: cache_class
+          )
+        end
+
+        let(:instance) do
+          framework.modules.create_from_module_class(cache_instance.module_class).tap { |instance|
+            expect(instance).not_to be_nil
+          }
+        end
+
+        #
+        # Callbacks
+        #
+
+        before(:each) do
+          msfcli.send("#{module_type}_instance=", instance)
+        end
+
+        dump_method_receiver = Msf::Serializer::ReadableText
+        dump_method_name = "dump_#{dump_type}"
+
+        it "calls #{dump_method_receiver}.#{dump_method_name}" do
+          expect(dump_method_receiver).to receive(dump_method_name).with(
+                                              instance,
+                                              described_class::INDENT
+                                          # and_call_original is crucial to ensure that the dump method can handle this
+                                          # module_type and this test is not making assumptions about its interface.
+                                          ).and_call_original
+
+          quietly
+        end
+      end
+
+      #
+      # lets
+      #
+
+      let(:dump_type) do
+        dump_type
+      end
+
+      Metasploit::Model::Module::Type::ALL.each do |module_type|
+        it_should_behave_like 'module_type', module_type
+      end
+    end
+
+    subject(:dump_instances) do
+      msfcli.send(:dump_instances, dump_type)
+    end
+
+    it_should_behave_like 'dump_type', :advanced_options
+    it_should_behave_like 'dump_type', :evasion_options
+    it_should_behave_like 'dump_type', :module
+  end
+
   #
   # This one is slow because we're loading all modules
   #
@@ -195,588 +270,6 @@ describe Msfcli do
       }
 
       m.should eq({})
-    end
-  end
-
-  context '#show_advanced' do
-    include_context 'Metasploit::Framework::Spec::Constants cleaner'
-    include_context 'output'
-
-    subject(:show_advanced) do
-      msfcli.show_advanced
-    end
-
-    #
-    # lets
-    #
-
-    let(:cache_auxiliary_class) do
-      FactoryGirl.create(
-          :mdm_module_class,
-          module_type: 'auxiliary'
-      )
-    end
-
-    let(:cache_auxiliary_instance) do
-      FactoryGirl.create(
-          :mdm_module_instance,
-          module_class: cache_auxiliary_class
-      )
-    end
-
-    let(:auxiliary_instance) do
-      framework.modules.create_from_module_class(cache_auxiliary_instance.module_class).tap { |auxiliary_instance|
-        expect(auxiliary_instance).not_to be_nil
-      }
-    end
-
-    #
-    # Callbacks
-    #
-
-    before(:each) do
-      msfcli.auxiliary_instance = auxiliary_instance
-    end
-
-    it 'calls Msf::Seralizer::ReadableText.dump_advanced_options' do
-      expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                   auxiliary_instance,
-                                                   described_class::INDENT
-                                               ).and_call_original
-
-      quietly
-    end
-
-    context 'with #payload_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_payload_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'payload'
-        )
-      end
-
-      let(:cache_payload_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_payload_class
-        )
-      end
-
-      let(:payload_instance) do
-        framework.modules.create_from_module_class(cache_payload_instance.module_class).tap { |payload_instance|
-          expect(payload_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.payload_instance = payload_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_advanced_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     payload_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #encoder_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_encoder_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'encoder'
-        )
-      end
-
-      let(:cache_encoder_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_encoder_class
-        )
-      end
-
-      let(:encoder_instance) do
-        framework.modules.create_from_module_class(cache_encoder_instance.module_class).tap { |encoder_instance|
-          expect(encoder_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.encoder_instance = encoder_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_advanced_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     encoder_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #nop_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_nop_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'nop'
-        )
-      end
-
-      let(:cache_nop_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_nop_class
-        )
-      end
-
-      let(:nop_instance) do
-        framework.modules.create_from_module_class(cache_nop_instance.module_class).tap { |nop_instance|
-          expect(nop_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.nop_instance = nop_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_advanced_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_advanced_options).with(
-                                                     nop_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-  end
-
-  context '#show_ids_evasion' do
-    include_context 'Metasploit::Framework::Spec::Constants cleaner'
-    include_context 'output'
-
-    subject(:show_ids_evasion) do
-      msfcli.show_ids_evasion
-    end
-
-    #
-    # lets
-    #
-
-    let(:cache_auxiliary_class) do
-      FactoryGirl.create(
-          :mdm_module_class,
-          module_type: 'auxiliary'
-      )
-    end
-
-    let(:cache_auxiliary_instance) do
-      FactoryGirl.create(
-          :mdm_module_instance,
-          module_class: cache_auxiliary_class
-      )
-    end
-
-    let(:auxiliary_instance) do
-      framework.modules.create_from_module_class(cache_auxiliary_instance.module_class).tap { |auxiliary_instance|
-        expect(auxiliary_instance).not_to be_nil
-      }
-    end
-
-    #
-    # Callbacks
-    #
-
-    before(:each) do
-      msfcli.auxiliary_instance = auxiliary_instance
-    end
-
-    it 'calls Msf::Seralizer::ReadableText.dump_evasion_options' do
-      expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                   auxiliary_instance,
-                                                   described_class::INDENT
-                                               ).and_call_original
-
-      quietly
-    end
-
-    context 'with #payload_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_payload_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'payload'
-        )
-      end
-
-      let(:cache_payload_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_payload_class
-        )
-      end
-
-      let(:payload_instance) do
-        framework.modules.create_from_module_class(cache_payload_instance.module_class).tap { |payload_instance|
-          expect(payload_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.payload_instance = payload_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_evasion_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     payload_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #encoder_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_encoder_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'encoder'
-        )
-      end
-
-      let(:cache_encoder_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_encoder_class
-        )
-      end
-
-      let(:encoder_instance) do
-        framework.modules.create_from_module_class(cache_encoder_instance.module_class).tap { |encoder_instance|
-          expect(encoder_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.encoder_instance = encoder_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_evasion_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     encoder_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #nop_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_nop_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'nop'
-        )
-      end
-
-      let(:cache_nop_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_nop_class
-        )
-      end
-
-      let(:nop_instance) do
-        framework.modules.create_from_module_class(cache_nop_instance.module_class).tap { |nop_instance|
-          expect(nop_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.nop_instance = nop_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_evasion_options' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_evasion_options).with(
-                                                     nop_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-  end
-
-  context '#show_summary' do
-    include_context 'Metasploit::Framework::Spec::Constants cleaner'
-    include_context 'output'
-
-    subject(:show_summary) do
-      msfcli.show_summary
-    end
-
-    #
-    # lets
-    #
-
-    let(:cache_auxiliary_class) do
-      FactoryGirl.create(
-          :mdm_module_class,
-          module_type: 'auxiliary'
-      )
-    end
-
-    let(:cache_auxiliary_instance) do
-      FactoryGirl.create(
-          :mdm_module_instance,
-          module_class: cache_auxiliary_class
-      )
-    end
-
-    let(:auxiliary_instance) do
-      framework.modules.create_from_module_class(cache_auxiliary_instance.module_class).tap { |auxiliary_instance|
-        expect(auxiliary_instance).not_to be_nil
-      }
-    end
-
-    #
-    # Callbacks
-    #
-
-    before(:each) do
-      msfcli.auxiliary_instance = auxiliary_instance
-    end
-
-    it 'calls Msf::Seralizer::ReadableText.dump_module' do
-      expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                   auxiliary_instance,
-                                                   described_class::INDENT
-                                               ).and_call_original
-
-      quietly
-    end
-
-    context 'with #payload_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_payload_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'payload'
-        )
-      end
-
-      let(:cache_payload_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_payload_class
-        )
-      end
-
-      let(:payload_instance) do
-        framework.modules.create_from_module_class(cache_payload_instance.module_class).tap { |payload_instance|
-          expect(payload_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.payload_instance = payload_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_module' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     payload_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #encoder_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_encoder_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'encoder'
-        )
-      end
-
-      let(:cache_encoder_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_encoder_class
-        )
-      end
-
-      let(:encoder_instance) do
-        framework.modules.create_from_module_class(cache_encoder_instance.module_class).tap { |encoder_instance|
-          expect(encoder_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.encoder_instance = encoder_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_module' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     encoder_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
-    end
-
-    context 'with #nop_instance' do
-      #
-      # lets
-      #
-
-      let(:cache_nop_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: 'nop'
-        )
-      end
-
-      let(:cache_nop_instance) do
-        FactoryGirl.create(
-            :mdm_module_instance,
-            module_class: cache_nop_class
-        )
-      end
-
-      let(:nop_instance) do
-        framework.modules.create_from_module_class(cache_nop_instance.module_class).tap { |nop_instance|
-          expect(nop_instance).not_to be_nil
-        }
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        msfcli.nop_instance = nop_instance
-
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     auxiliary_instance,
-                                                     described_class::INDENT
-                                                 )
-      end
-
-      it 'calls Msf::Seralizer::ReadableText.dump_module' do
-        expect(Msf::Serializer::ReadableText).to receive(:dump_module).with(
-                                                     nop_instance,
-                                                     described_class::INDENT
-                                                 ).and_call_original
-
-        quietly
-      end
     end
   end
 
