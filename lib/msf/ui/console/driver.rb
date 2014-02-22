@@ -226,32 +226,36 @@ class Msf::Ui::Console::Driver < Msf::Ui::Driver
       #	command line arguments
       #	environment variable
       #	configuration directory (usually ~/.msf3)
-      dbfile = opts['DatabaseYAML']
-      dbfile ||= ENV["MSF_DATABASE_CONFIG"]
-      dbfile ||= File.join(Msf::Config.get_config_root, "database.yml")
-      if (dbfile and File.exists? dbfile)
-        if File.readable?(dbfile)
-          dbinfo = YAML.load(File.read(dbfile))
-          dbenv  = opts['DatabaseEnv'] || "production"
-          db     = dbinfo[dbenv]
-        else
-          print_error("Warning, #{dbfile} is not readable. Try running as root or chmod.")
+      database_yaml_path = opts['DatabaseYAML']
+      database_yaml_pathname = nil
+
+      if database_yaml_path
+        database_yaml_pathname = Pathname.new(database_yaml_path)
+      end
+
+      database_connection = Metasploit::Framework::DatabaseConnection.new(
+          database_yaml_pathname: database_yaml_pathname,
+          db_manager: framework.db,
+          environment: opts['DatabaseEnv']
+      )
+
+      unless database_connection.valid?
+        lines = ['Database connection is invalid:']
+
+        database_connection.errors.full_messages.each do |full_message|
+          lines << "  #{full_message}"
         end
-        if not db
-          print_error("No database definition for environment #{dbenv}")
-        else
-          unless framework.db.connect(db)
-            # copy any errors into ActiveModel::Errors.
-            unless framework.db.valid?
-              print_error("Failed to connecto the database: #{framework.db.errors.full_messages.join(' ')}")
-            else
-              print_error(
-                  "Failed to connect to the database, but #{framework.db.class}#valid? returned `true`.  " \
-                  "This is a bug in the validator.  Please file a Redmine ticket."
-              )
-            end
+
+        unless framework.db.errors.empty?
+          lines << ''
+          lines << "  DBManager errors:"
+
+          framework.db.errors.full_messages.each do |full_message|
+            lines << "    #{full_message}"
           end
         end
+
+        print_error(lines.join("\n"))
       end
     end
 

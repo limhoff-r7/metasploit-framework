@@ -11,6 +11,13 @@ en:
             attributes:
               words:
                 wrong_length: "is the wrong length (should be %{count} words)"
+          metasploit/framework/database_connection:
+            attributes:
+              connected?:
+                inclusion: "is false"
+              database_yaml_pathname:
+                non_existent: "does not exist"
+                unreadable: "is not readable"
           metasploit/framework/module/ancestor/metasploit_module:
             attributes:
               base:
