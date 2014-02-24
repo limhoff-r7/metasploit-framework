@@ -16,12 +16,6 @@ class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Com
   #   @return [Msf::Ui::Console::CommandDispatcher]
   attr_accessor :dispatcher
 
-  # @!attribute [rw] words
-  #   Words parsed from console.
-  #
-  #   @return [Array<String>]
-  attr_writer :words
-
   #
   #
   # Validations
@@ -101,13 +95,6 @@ class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Com
            :print_warning,
            :width,
            to: :dispatcher
-
-  # Words from console that are passed to this command.
-  #
-  # @return [Array<String>] [] by default
-  def words
-    @words ||= []
-  end
 
   private
 

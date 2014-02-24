@@ -80,4 +80,14 @@ describe Metasploit::Framework::Command::Base do
       end
     end
   end
+
+  context '#words' do
+    subject(:words) do
+      command.words
+    end
+
+    it 'defaults to []' do
+      expect(words).to eq([])
+    end
+  end
 end
