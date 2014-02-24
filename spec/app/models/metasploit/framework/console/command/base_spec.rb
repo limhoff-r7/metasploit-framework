@@ -36,6 +36,8 @@ describe Metasploit::Framework::Console::Command::Base do
     Msf::Ui::Console::CommandDispatcher::Core.new(msf_ui_console_driver)
   end
 
+  it { should be_a Metasploit::Framework::Command::Base }
+
   it_should_behave_like 'Metasploit::Framework::Console::Command::TabCompletion'
 
   context 'validations' do
