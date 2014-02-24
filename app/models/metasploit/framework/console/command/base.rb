@@ -61,30 +61,11 @@ class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Com
     }
   end
 
-  # @!method print_line(message=nil)
-  #   Print `messages` followed by a new line.
-  #
-  #   @return [void]
-  #
-  # @!method print_error(message=nil)
-  #   Print message as an error (prefixed by red '[-]') followed by a new line.
-  #
-  #   @return [void]
-  #
-  # @!method width
-  #    The width of the TTY attached to the {#dispatcher}'s output.
-  #
-  #    @return [80] if the output is not a TTY.
-  #    @return [Integer] otherwise.
-  delegate :print_error,
-           :print_good,
-           :print_line,
-           :print_status,
-           :print_warning,
-           :width,
-           to: :dispatcher
-
   private
+
+  def output
+    dispatcher
+  end
 
   # Parses {#words} using {parse_words_block}.  `OptionParser::ParseError` are stored to `@parse_error` and converted to
   # a validation error by {#words_parsable}.

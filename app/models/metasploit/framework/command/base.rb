@@ -22,6 +22,49 @@ class Metasploit::Framework::Command::Base < Metasploit::Model::Base
   # Methods
   #
 
+  # @!method print_error(message=nil)
+  #   Print message as an error followed by a new line.
+  #
+  #   @param message [String]
+  #   @return [void]
+  #
+  # @!method print_good(message=nil)
+  #   Print a good message followed by a new line.
+  #
+  #   @param message [String]
+  #   @return [void]
+  #
+  # @!method print_line(message=nil)
+  #   Print `message` followed by a new line.
+  #
+  #   @param message [String]
+  #   @return [void]
+  #
+  # @!method print_status(message=nil)
+  #   Print neutral status.
+  #
+  #   @param message [String]
+  #   @return [void]
+  #
+  # @!method print_warning(message=nil)
+  #   Print warning message.
+  #
+  #   @param message [String]
+  #   @return [void]
+  #
+  # @!method width
+  #    The width of the TTY attached to the {#output}.
+  #
+  #    @return [80] if the output is not a TTY.
+  #    @return [Integer] otherwise.
+  delegate :print_error,
+           :print_good,
+           :print_line,
+           :print_status,
+           :print_warning,
+           :width,
+           to: :output
+
   # Runs the command.  Command is automatically validated.  If it is valid, then {#run_with_valid} will be called,
   # otherwise, if the command is invalid, {#print_validation_errors} is called.
   #
