@@ -1,6 +1,6 @@
 require 'abbrev'
 
-shared_examples_for 'Metasploit::Framework::Command::Use::SetMetasploitInstance::TabCompletion' do
+shared_examples_for 'Metasploit::Framework::Console::Command::Use::SetMetasploitInstance::TabCompletion' do
   context '#blank_tab_completions' do
     subject(:blank_tab_completions) do
       command.blank_tab_completions

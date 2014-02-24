@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Command::Search::Table do
+describe Metasploit::Framework::Console::Command::Search::Table do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do
@@ -14,15 +14,15 @@ describe Metasploit::Framework::Command::Search::Table do
   end
 
   let(:parent) do
-    Metasploit::Framework::Command::Search.new(
+    Metasploit::Framework::Console::Command::Search.new(
         dispatcher: dispatcher
     )
   end
 
-  it_should_behave_like 'Metasploit::Framework::Command::Child'
-  it_should_behave_like 'Metasploit::Framework::Command::Search::Table::Columns'
-  it_should_behave_like 'Metasploit::Framework::Command::Search::Table::TabCompletion'
-  it_should_behave_like 'Metasploit::Framework::Command::Search::Table::ValidationErrors'
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Search::Table::Columns'
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Search::Table::TabCompletion'
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Search::Table::ValidationErrors'
 
   context 'validations' do
     context 'visitor' do

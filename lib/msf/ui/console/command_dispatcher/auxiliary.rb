@@ -2,7 +2,7 @@
 
 # Auxiliary module command dispatcher.
 class Msf::Ui::Console::CommandDispatcher::Auxiliary
-  include Metasploit::Framework::Command::Dispatcher
+  include Metasploit::Framework::Console::Command::Dispatcher
   include Msf::Ui::Console::ModuleCommandDispatcher
 
   #

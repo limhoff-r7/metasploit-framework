@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Command::Dispatcher.command' do |name, options={}|
+shared_examples_for 'Metasploit::Framework::Console::Command::Dispatcher.command' do |name, options={}|
   options.assert_valid_keys(:klass)
   klass = options.fetch(:klass)
 

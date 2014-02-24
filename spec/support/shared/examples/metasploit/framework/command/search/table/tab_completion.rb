@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletion' do
+shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::TabCompletion' do
   context '#blank_tab_completions' do
     subject(:blank_tab_completions) do
       command.blank_tab_completions
@@ -11,7 +11,7 @@ shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletio
     end
 
     let(:parent) do
-      Metasploit::Framework::Command::Search.new(
+      Metasploit::Framework::Console::Command::Search.new(
           dispatcher: dispatcher,
           words: words
       )
@@ -79,7 +79,7 @@ shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletio
 
     shared_examples_for 'columns' do |type, last_word|
       let(:column_names) do
-        Metasploit::Framework::Command::Search::Argument::Column.set.to_a
+        Metasploit::Framework::Console::Command::Search::Argument::Column.set.to_a
       end
 
       context "with #{last_word}" do
@@ -93,7 +93,7 @@ shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletio
           #
 
           let(:column) do
-            Metasploit::Framework::Command::Search::Argument::Column.new(value: column_name)
+            Metasploit::Framework::Console::Command::Search::Argument::Column.new(value: column_name)
           end
 
           let(:column_name) do
@@ -307,7 +307,7 @@ shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletio
     end
 
     let(:parent) do
-      Metasploit::Framework::Command::Search.new(
+      Metasploit::Framework::Console::Command::Search.new(
           dispatcher: dispatcher,
           partial_word: partial_word,
           words: words
@@ -345,7 +345,7 @@ shared_examples_for 'Metasploit::Framework::Command::Search::Table::TabCompletio
       # parent needs to be created without partial_word set because partial_word needs to be derived from options_parser
       # and parent -> option_parser
       let(:parent) do
-        Metasploit::Framework::Command::Search.new(
+        Metasploit::Framework::Console::Command::Search.new(
             dispatcher: dispatcher,
             words: words
         )

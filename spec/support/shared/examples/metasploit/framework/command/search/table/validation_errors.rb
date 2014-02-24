@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Command::Search::Table::ValidationErrors' do
+shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::ValidationErrors' do
   include_context 'output'
 
   context '#print_operation_validation_errors' do

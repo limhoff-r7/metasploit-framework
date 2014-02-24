@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Command::Parent' do
+shared_examples_for 'Metasploit::Framework::Console::Command::Parent' do
   context 'validations' do
     it { should ensure_inclusion_of(:subcommand_name).in_array(described_class.subcommand_names) }
   end
@@ -14,7 +14,7 @@ shared_examples_for 'Metasploit::Framework::Command::Parent' do
       #
 
       let(:subcommand) do
-        double('Metasploit::Framework::Command::Child')
+        double('Metasploit::Framework::Console::Command::Child')
       end
 
       let(:subcommand_blank_tab_completions) do
@@ -127,7 +127,7 @@ shared_examples_for 'Metasploit::Framework::Command::Parent' do
         described_class.subcommand_class_by_name.keys.sample
       end
 
-      it { should be_a Metasploit::Framework::Command::Child }
+      it { should be_a Metasploit::Framework::Console::Command::Child }
 
       context 'parent' do
         subject(:parent) do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Command::Check do
+describe Metasploit::Framework::Console::Command::Check do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do
@@ -27,7 +27,7 @@ describe Metasploit::Framework::Command::Check do
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Command::Parent'
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Parent'
 
   context 'description' do
     subject(:description) do
@@ -38,8 +38,8 @@ describe Metasploit::Framework::Command::Check do
   end
 
   context 'subcommands' do
-    it { should have_subcommand(:help).class_name('Metasploit::Framework::Command::Check::Help') }
-    it { should have_subcommand(:simple).class_name('Metasploit::Framework::Command::Check::Simple').default(true) }
+    it { should have_subcommand(:help).class_name('Metasploit::Framework::Console::Command::Check::Help') }
+    it { should have_subcommand(:simple).class_name('Metasploit::Framework::Console::Command::Check::Simple').default(true) }
   end
 
   context '#option_parser' do

@@ -13,12 +13,12 @@ describe Msf::Ui::Console::CommandDispatcher::Core do
 
   it_should_behave_like 'Msf::Ui::Console::CommandDispatcher'
 
-  it_should_behave_like 'Metasploit::Framework::Command::Dispatcher.command',
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Dispatcher.command',
                         :search,
-                        klass: Metasploit::Framework::Command::Search
-  it_should_behave_like 'Metasploit::Framework::Command::Dispatcher.command',
+                        klass: Metasploit::Framework::Console::Command::Search
+  it_should_behave_like 'Metasploit::Framework::Console::Command::Dispatcher.command',
                         :use,
-                        klass: Metasploit::Framework::Command::Use
+                        klass: Metasploit::Framework::Console::Command::Use
 
   it_should_behave_like 'Msf::Ui::Console::CommandDispatcher::Core::ReloadAll'
   it_should_behave_like 'Msf::Ui::Console::CommandDispatcher::Core::Spool'

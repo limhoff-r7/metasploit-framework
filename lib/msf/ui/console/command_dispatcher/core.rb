@@ -29,7 +29,7 @@ module CommandDispatcher
 #
 ###
 class Core
-  include Metasploit::Framework::Command::Dispatcher
+  include Metasploit::Framework::Console::Command::Dispatcher
   include Msf::Ui::Console::CommandDispatcher
 
   require 'msf/ui/console/command_dispatcher/core/threads'
