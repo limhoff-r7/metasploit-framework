@@ -13,6 +13,12 @@ class Metasploit::Framework::Command::Base < Metasploit::Model::Base
   attr_writer :words
 
   #
+  # Validations
+  #
+
+  validate :words_parsable
+
+  #
   # Methods
   #
 
@@ -45,6 +51,16 @@ class Metasploit::Framework::Command::Base < Metasploit::Model::Base
   def print_validation_errors
     errors.full_messages.each do |full_message|
       print_error full_message
+    end
+  end
+
+  private
+
+  def words_parsable
+    parse_words
+
+    if @parse_error
+      errors[:words] << @parse_error.to_s
     end
   end
 end

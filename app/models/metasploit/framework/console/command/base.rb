@@ -17,19 +17,7 @@ class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Com
   attr_accessor :dispatcher
 
   #
-  #
   # Validations
-  #
-  #
-
-  #
-  # Method Validations
-  #
-
-  validate :words_parsable
-
-  #
-  # Attribute Validations
   #
 
   validates :dispatcher,
@@ -114,14 +102,6 @@ class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Com
       end
 
       @words_parsed = true
-    end
-  end
-
-  def words_parsable
-    parse_words
-
-    if @parse_error
-      errors[:words] << @parse_error.to_s
     end
   end
 end
