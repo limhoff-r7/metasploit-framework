@@ -61,14 +61,14 @@ protected
 
         new_src_instance = sup_class.from_a(src_instance)
 
-        if (new_src_instance != nil)
+        unless new_src_instance.nil?
           dst_instance << new_src_instance
           break
         end
       }
 
       # If we don't have a valid new src instance, then we suck
-      if (new_src_instance == nil)
+      if new_src_instance.nil?
         bomb_translation(src_instance, target)
       end
 
@@ -84,14 +84,14 @@ protected
 
         new_src_instance = sup_class.from_s(src_instance)
 
-        if (new_src_instance != nil)
+        unless new_src_instance.nil?
           dst_instance << new_src_instance
           break
         end
       }
 
       # If we don't have a valid new src instance, then we suck
-      if (new_src_instance == nil)
+      if new_src_instance.nil?
         bomb_translation(src_instance, target)
       end
     # Otherwise, bomb translation
