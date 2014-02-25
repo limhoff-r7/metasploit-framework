@@ -20,10 +20,10 @@ end
 # Project
 #
 
-# setups up Bundler environment
+# sets up Bundler environment
 require 'msfenv'
 
-require 'metasploit/framework/command_line_interface'
+require 'metasploit/framework'
 
-command_line_interface = Metasploit::Framework::CommandLineInterface.new(ARGV)
-command_line_interface.run!
+command_line_interface = Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface.new(words: ARGV)
+command_line_interface.run

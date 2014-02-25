@@ -1,14 +1,26 @@
-require 'metasploit/framework'
-
 # This user interface allows users to interact with the framework through a
 # command line interface (CLI) rather than having to use a prompting console
 # or web-based interface.
-class Metasploit::Framework::CommandLineInterface
+class Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface < Metasploit::Framework::CommandLineInterface::Command::Base
+  include Metasploit::Framework::Command::Parent
+
   #
   # CONSTANTS
   #
 
   INDENT =  ' ' * 3
+  SUBCOMMAND_NAME_BY_FLAG = {
+      'a' => :advanced,
+      'ac' => :actions,
+      'c' => :check,
+      'e' => :execute,
+      'h' => :help,
+      'i' => :ids_evasion,
+      'o' => :options,
+      'p' => :payloads,
+      's' => :summary,
+      't' => :targets
+  }
 
   #
   # Attributes
@@ -57,6 +69,13 @@ class Metasploit::Framework::CommandLineInterface
   attr_accessor :post_instance
 
   #
+  # Subcommands
+  #
+
+  subcommand :help,
+             default: true
+
+  #
   # Methods
   #
 
@@ -100,19 +119,6 @@ class Metasploit::Framework::CommandLineInterface
 
   def framework
     @framework ||= Msf::Simple::Framework.create
-  end
-
-  def initialize(args)
-    @args      = {}
-
-    @args[:module_name] = args.shift      # First argument should be the module name
-    @args[:mode]        = args.pop || 'h' # Last argument should be the mode
-    @args[:params]      = args            # Whatever is in the middle should be the params
-
-    if @args[:module_name] =~ /^exploit(s)*\//i
-      @args[:module_name] = @args[:module_name].split('/')
-      @args[:module_name] = @args[:module_name][1, @args[:module_name].length] * "/"
-    end
   end
 
   #
@@ -196,38 +202,6 @@ class Metasploit::Framework::CommandLineInterface
     end
 
     modules
-  end
-
-  #
-  # Returns a usage Rex table
-  #
-  def usage (str = nil, extra = nil)
-    tbl = Rex::Ui::Text::Table.new(
-        'Header'  => "Usage: #{$0} <exploit_name> <option=value> [mode]",
-        'Indent'  => 4,
-        'Columns' => ['Mode', 'Description']
-    )
-
-    tbl << ['(H)elp',        "You're looking at it baby!"]
-    tbl << ['(S)ummary',     'Show information about this module']
-    tbl << ['(O)ptions',     'Show available options for this module']
-    tbl << ['(A)dvanced',    'Show available advanced options for this module']
-    tbl << ['(I)DS Evasion', 'Show available ids evasion options for this module']
-    tbl << ['(P)ayloads',    'Show available payloads for this module']
-    tbl << ['(T)argets',     'Show available targets for this exploit module']
-    tbl << ['(AC)tions',     'Show available actions for this auxiliary module']
-    tbl << ['(C)heck',       'Run the check routine of the selected module']
-    tbl << ['(E)xecute',     'Execute the selected module']
-
-    tbl.to_s
-
-    $stdout.puts "Error: #{str}\n\n" if str
-    $stdout.puts tbl.to_s + "\n"
-    $stdout.puts "Examples:" + "\n"
-    $stdout.puts "msfcli multi/handler payload=windows/meterpreter/reverse_tcp lhost=IP E" + "\n"
-    $stdout.puts "msfcli auxiliary/scanner/http/http_version rhosts=IP encoder= post= nop= E" + "\n"
-    $stdout.puts extra + "\n" if extra
-    $stdout.puts
   end
 
   def show_payloads(m)
@@ -397,6 +371,17 @@ class Metasploit::Framework::CommandLineInterface
       if instance
         yield instance
       end
+    end
+  end
+
+  def parse_words
+    unless @words_parsed
+      if words.length > 0
+        flag = words.last.downcase
+        self.subcommand_name = SUBCOMMAND_NAME_BY_FLAG[flag]
+      end
+
+      @words_parsed = true
     end
   end
 end
