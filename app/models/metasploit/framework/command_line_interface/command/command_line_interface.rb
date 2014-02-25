@@ -10,7 +10,7 @@ class Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface
 
   INDENT =  ' ' * 3
   SUBCOMMAND_NAME_BY_FLAG = {
-      'a' => :advanced,
+      'a' => :dump_advanced_options,
       'ac' => :actions,
       'c' => :check,
       'e' => :execute,
@@ -72,6 +72,7 @@ class Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface
   # Subcommands
   #
 
+  subcommand :dump_advanced_options
   subcommand :help,
              default: true
 
