@@ -140,7 +140,20 @@ class Framework < Metasploit::Model::Base
   # @return [Msf::EventDispatcher]
   def events
     synchronize {
-      @events ||= Msf::EventDispatcher.new(self)
+      unless instance_variable_defined? :@events
+        events = Msf::EventDispatcher.new(self)
+
+        subscriber = FrameworkEventSubscriber.new(self)
+        events.add_exploit_subscriber(subscriber)
+        events.add_session_subscriber(subscriber)
+        events.add_general_subscriber(subscriber)
+        events.add_db_subscriber(subscriber)
+        events.add_ui_subscriber(subscriber)
+
+        @event = events
+      end
+
+      @events
     }
   end
 
@@ -153,13 +166,6 @@ class Framework < Metasploit::Model::Base
     # Configure the thread factory
     # @todo https://www.pivotaltracker.com/story/show/57432206
     Rex::ThreadFactory.provider = self.threads
-
-    subscriber = FrameworkEventSubscriber.new(self)
-    events.add_exploit_subscriber(subscriber)
-    events.add_session_subscriber(subscriber)
-    events.add_general_subscriber(subscriber)
-    events.add_db_subscriber(subscriber)
-    events.add_ui_subscriber(subscriber)
   end
 
   # Background job management specific to things spawned from this instance
