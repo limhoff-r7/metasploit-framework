@@ -41,4 +41,10 @@ module Metasploit::Framework::Command::Child
       []
     end
   end
+
+  private
+
+  def parse_words
+    # Do nothing.  Words are parsed by {#parent}.
+  end
 end
