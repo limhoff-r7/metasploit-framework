@@ -11,7 +11,7 @@ module Msf::Ui::Console::CommandDispatcher
   # @!attribute [rw] driver
   #   The driver for the UI.
   #
-  #   @return [Msf::Ui::Driver]
+  #   @return [Metasploit::Framework::UI::Driver]
   attr_reader :driver
 
   #

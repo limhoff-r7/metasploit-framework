@@ -28,7 +28,7 @@ require 'msf/ui/console/framework_event_manager'
 require 'msf/ui/console/table'
 
 # A user interface driver on a console interface.
-class Msf::Ui::Console::Driver < Msf::Ui::Driver
+class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
   require 'msf/ui/console/driver/callback'
   include Msf::Ui::Console::Driver::Callback
 
