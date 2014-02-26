@@ -12,11 +12,9 @@
 ##
 
 require 'msf/core'
-require 'rex/ui/text/shell'
 require 'rex/proto/tftp'
 
 class Metasploit3 < Msf::Auxiliary
-  include Rex::Ui::Text
   include Rex::Proto::TFTP
   include Msf::Exploit::Remote::Udp
   include Msf::Auxiliary::Report
