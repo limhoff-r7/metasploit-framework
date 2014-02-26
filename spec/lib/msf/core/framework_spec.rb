@@ -147,11 +147,7 @@ describe Msf::Framework do
       framework.events
     end
 
-    it 'should be initialized in #initialize to allow event subscriptions #initialize' do
-      Msf::EventDispatcher.should_receive(:new).and_call_original
-
-      framework
-    end
+    it { should be_a Msf::EventDispatcher }
 
     it 'should be synchronized' do
       framework.should_receive(:synchronize)
@@ -172,10 +168,38 @@ describe Msf::Framework do
           an_instance_of(Msf::Framework)
       ).and_call_original
 
-      framework
+      events
     end
 
-    it { should be_a Msf::EventDispatcher }
+    it 'should add exploit subscriber' do
+      Msf::EventDispatcher.any_instance.should_receive(:add_exploit_subscriber)
+
+      events
+    end
+
+    it 'should add session subscriber' do
+      Msf::EventDispatcher.any_instance.should_receive(:add_session_subscriber)
+
+      events
+    end
+
+    it 'should add general subscriber' do
+      Msf::EventDispatcher.any_instance.should_receive(:add_general_subscriber)
+
+      events
+    end
+
+    it 'should add db subscriber' do
+      Msf::EventDispatcher.any_instance.should_receive(:add_db_subscriber)
+
+      events
+    end
+
+    it 'should add ui subscriber' do
+      Msf::EventDispatcher.any_instance.should_receive(:add_ui_subscriber)
+
+      events
+    end
   end
 
   context '#initialize' do
@@ -188,46 +212,6 @@ describe Msf::Framework do
       framework
 
       Rex::ThreadFactory.class_variable_get(:@@provider).should == framework.threads
-    end
-
-    context 'events' do
-      it 'should create an Msf::FrameworkEventSubscriber' do
-        Msf::FrameworkEventSubscriber.should_receive(:new).with(
-            an_instance_of(Msf::Framework)
-        ).and_call_original
-
-        framework
-      end
-
-      it 'should add exploit subscriber' do
-        Msf::EventDispatcher.any_instance.should_receive(:add_exploit_subscriber)
-
-        framework
-      end
-
-      it 'should add session subscriber' do
-        Msf::EventDispatcher.any_instance.should_receive(:add_session_subscriber)
-
-        framework
-      end
-
-      it 'should add general subscriber' do
-        Msf::EventDispatcher.any_instance.should_receive(:add_general_subscriber)
-
-        framework
-      end
-
-      it 'should add db subscriber' do
-        Msf::EventDispatcher.any_instance.should_receive(:add_db_subscriber)
-
-        framework
-      end
-
-      it 'should add ui subscriber' do
-        Msf::EventDispatcher.any_instance.should_receive(:add_ui_subscriber)
-
-        framework
-      end
     end
   end
 
