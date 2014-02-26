@@ -9,7 +9,7 @@ require 'rex/logging'
 ###
 module Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
-  include Metasploit:Framework::UI::Text::DispatcherShell::CommandDispatcher
+  include Metasploit::Framework::UI::Text::DispatcherShell::CommandDispatcher
 
   #
   # The hash of file names to class names after a module has already been

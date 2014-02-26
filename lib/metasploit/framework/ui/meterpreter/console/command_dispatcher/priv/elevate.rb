@@ -8,7 +8,7 @@
 class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Priv::Elevate
   include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
-  Klass = Console::CommandDispatcher::Priv::Elevate
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Priv::Elevate
 
   ELEVATE_TECHNIQUE_NONE					= -1
   ELEVATE_TECHNIQUE_ANY					= 0

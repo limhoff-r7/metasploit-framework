@@ -5,10 +5,10 @@
 # Espia - Capture audio, video, screenshots from the remote system
 #
 ###
-class Metasploit::Framework::UI::Meterepreter::Console::CommandDispatcher::Espia
-  include Metasploit::Framework::UI::Meterepreter::Console::CommandDispatcher
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Espia
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
-  Klass = Metasploit::Framework::UI::Meterepreter::Console::CommandDispatcher::Espia
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Espia
 
   #
   # Initializes an instance of the espia command interaction.
