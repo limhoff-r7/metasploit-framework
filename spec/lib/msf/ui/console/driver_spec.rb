@@ -31,7 +31,7 @@ describe Msf::Ui::Console::Driver do
     }
   end
 
-  it_should_behave_like 'Rex::Ui::Text::DispatcherShell' do
+  it_should_behave_like 'Metasploit::Framework::UI::Text::DispatcherShell' do
     let(:dispatcher_shell) do
       driver
     end

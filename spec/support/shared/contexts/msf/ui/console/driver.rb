@@ -6,10 +6,10 @@ shared_context 'Msf::Ui::Console::Driver' do
   end
 
   # Have to use a dummy class because Msf::Ui::Console::Driver#initialize is too complex and does too many things
-  # with side-effects. It can safely be a subclass of Msf::Ui::Driver because Msf::Ui::Driver#initialize doesn't do
-  # anything
+  # with side-effects. It can safely be a subclass of Metasploit::Framework::UI::Driver because
+  # Metasploit::Framework::UI::Driver#initialize doesn't do anything
   let(:msf_ui_console_driver_class) do
-    Class.new(Msf::Ui::Driver) do
+    Class.new(Metasploit::Framework::UI::Driver) do
       include Msf::Ui::Console::Driver::Fangs
       include Msf::Ui::Console::Driver::Prompt
       include Rex::Ui::Text::DispatcherShell

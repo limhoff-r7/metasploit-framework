@@ -28,7 +28,7 @@ require 'msf/ui/console/framework_event_manager'
 require 'msf/ui/console/table'
 
 # A user interface driver on a console interface.
-class Msf::Ui::Console::Driver < Msf::Ui::Driver
+class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
   require 'msf/ui/console/driver/callback'
   include Msf::Ui::Console::Driver::Callback
 
@@ -56,7 +56,7 @@ class Msf::Ui::Console::Driver < Msf::Ui::Driver
   # The console driver processes various framework notified events.
   include Msf::Ui::Console::FrameworkEventManager
   # The console driver is a command shell.
-  include Rex::Ui::Text::DispatcherShell
+  include Metasploit::Framework::UI::Text::DispatcherShell
 
   #
   # Attributes

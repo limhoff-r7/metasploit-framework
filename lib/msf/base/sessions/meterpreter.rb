@@ -62,7 +62,7 @@ class Meterpreter < Rex::Post::Meterpreter::Client
     #
     # Create the console instance
     #
-    self.console = Rex::Post::Meterpreter::Ui::Console.new(self)
+    self.console = Metasploit::Framework::UI::Meterpreter::Console.new(self)
   end
 
   #

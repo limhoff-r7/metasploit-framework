@@ -2,7 +2,7 @@
 
 # The common command dispatcher base class that is shared for component-specific command dispatching.
 module Msf::Ui::Console::CommandDispatcher
-  include Rex::Ui::Text::DispatcherShell::CommandDispatcher
+  include Metasploit::Framework::UI::Text::DispatcherShell::CommandDispatcher
 
   #
   # Attributes
@@ -11,7 +11,7 @@ module Msf::Ui::Console::CommandDispatcher
   # @!attribute [rw] driver
   #   The driver for the UI.
   #
-  #   @return [Msf::Ui::Driver]
+  #   @return [Metasploit::Framework::UI::Driver]
   attr_reader :driver
 
   #

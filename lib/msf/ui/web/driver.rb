@@ -17,7 +17,7 @@ require 'msf/ui/web/console'
 # This class implements a user interface driver on a web interface.
 #
 ###
-class Driver < Msf::Ui::Driver
+class Driver < Metasploit::Framework::UI::Driver
 
 
   attr_accessor :framework # :nodoc:
