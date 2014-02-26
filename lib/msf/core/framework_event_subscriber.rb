@@ -1,5 +1,5 @@
 class Msf::FrameworkEventSubscriber
-  include Framework::Offspring
+  include Msf::Framework::Offspring
 
   def initialize(framework)
     self.framework = framework
