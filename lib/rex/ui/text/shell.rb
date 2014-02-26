@@ -12,28 +12,7 @@ module Text
 #
 ###
 module Shell
-
-  ###
-  #
-  # This module is meant to be mixed into an input medium class instance as a
-  # means of extending it to display a prompt before each call to gets.
-  #
-  ###
-  module InputShell
-    attr_accessor :prompt, :output
-
-    def pgets()
-
-      output.print(prompt)
-      output.flush
-
-      output.prompting
-      buf = gets
-      output.prompting(false)
-
-      buf
-    end
-  end
+  require 'rex/ui/text/shell/input_shell'
 
   #
   # Initializes a shell that has a prompt and can be interacted with.
@@ -80,7 +59,7 @@ module Shell
       # Extend the input medium as an input shell if the input medium
       # isn't intrinsicly a shell.
       if (self.input.intrinsic_shell? == false)
-        self.input.extend(InputShell)
+        self.input.extend(Rex::Ui::Text::Shell::InputShell)
       end
 
       self.input.output = self.output
