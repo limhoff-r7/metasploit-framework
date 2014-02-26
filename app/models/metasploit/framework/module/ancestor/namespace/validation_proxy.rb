@@ -10,6 +10,7 @@ class Metasploit::Framework::Module::Ancestor::Namespace::ValidationProxy < Meta
   #
 
   validate :metasploit_module_valid
+  validate :module_ancestor_eval_valid
 
   #
   # Attribute Validations
@@ -27,8 +28,6 @@ class Metasploit::Framework::Module::Ancestor::Namespace::ValidationProxy < Meta
             numericality: {
                 less_than_or_equal_to: Msf::Framework::VersionCore
             }
-  validates :module_ancestor_eval_exception,
-            nil: true
   validates :module_type,
             :inclusion => {
                 :in => Metasploit::Model::Module::Type::ALL
@@ -55,6 +54,16 @@ class Metasploit::Framework::Module::Ancestor::Namespace::ValidationProxy < Meta
   end
 
   private
+
+  def module_ancestor_eval_valid
+    if module_ancestor_eval_exception
+      errors.add(
+          :module_ancestor_eval,
+          "#{module_ancestor_eval_exception.class} #{module_ancestor_eval_exception}:\n" \
+          "#{module_ancestor_eval_exception.backtrace.join("\n")}"
+      )
+    end
+  end
 
   def metasploit_module_valid
     if metasploit_module and !metasploit_module.valid?
