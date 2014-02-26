@@ -56,7 +56,7 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
   # The console driver processes various framework notified events.
   include Msf::Ui::Console::FrameworkEventManager
   # The console driver is a command shell.
-  include Rex::Ui::Text::DispatcherShell
+  include Metasploit::Framework::UI::Text::DispatcherShell
 
   #
   # Attributes
