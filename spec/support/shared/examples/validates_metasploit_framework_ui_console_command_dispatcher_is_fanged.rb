@@ -1,4 +1,4 @@
-shared_examples_for 'validates Metasploit::Framework::Console::Command#dispatcher is fanged' do
+shared_examples_for 'validates Metasploit::Framework::UI::Console::Command#dispatcher is fanged' do
   subject(:dispatcher_errors) do
     command.errors[:dispatcher]
   end

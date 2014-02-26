@@ -1,4 +1,4 @@
-shared_examples_for 'validates presence of Metasploit::Framework::Console::Command#metasploit_instance' do
+shared_examples_for 'validates presence of Metasploit::Framework::UI::Console::Command#metasploit_instance' do
   subject(:metasploit_instance_errors) do
     command.errors[:metasploit_instance]
   end
