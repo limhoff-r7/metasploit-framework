@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Command::Base do
+describe Metasploit::Framework::UI::Command::Base do
   subject(:command) do
     described_class.new
   end

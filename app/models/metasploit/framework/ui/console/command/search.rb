@@ -1,5 +1,5 @@
-class Metasploit::Framework::Console::Command::Search < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Parent
+class Metasploit::Framework::UI::Console::Command::Search < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Parent
 
   self.description = 'Search for modules'
 
@@ -29,7 +29,7 @@ class Metasploit::Framework::Console::Command::Search < Metasploit::Framework::C
           'Will stop default and search operators from being shown.',
           'Overrides --display.'
       ) do |column_name|
-        hidden_column = Metasploit::Framework::Console::Command::Search::Argument::Column.new(value: column_name)
+        hidden_column = Metasploit::Framework::UI::Console::Command::Search::Argument::Column.new(value: column_name)
         subcommand_by_name[:table].hidden_columns << hidden_column
       end
 
@@ -38,7 +38,7 @@ class Metasploit::Framework::Console::Command::Search < Metasploit::Framework::C
           '--display COLUMN',
           'Column to display even if not a default column or one of the search operators.'
       ) do |column_name|
-        displayed_column = Metasploit::Framework::Console::Command::Search::Argument::Column.new(value: column_name)
+        displayed_column = Metasploit::Framework::UI::Console::Command::Search::Argument::Column.new(value: column_name)
         subcommand_by_name[:table].displayed_columns << displayed_column
       end
 

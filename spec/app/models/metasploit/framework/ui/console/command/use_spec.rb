@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Use do
+describe Metasploit::Framework::UI::Console::Command::Use do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do
@@ -27,7 +27,7 @@ describe Metasploit::Framework::Console::Command::Use do
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Parent'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Parent'
 
   context 'description' do
     subject(:description) do
@@ -38,8 +38,8 @@ describe Metasploit::Framework::Console::Command::Use do
   end
 
   context 'subcommands' do
-    it { should have_subcommand(:help).class_name('Metasploit::Framework::Console::Command::Use::Help') }
-    it { should have_subcommand(:set_metasploit_instance).class_name('Metasploit::Framework::Console::Command::Use::SetMetasploitInstance').default(true) }
+    it { should have_subcommand(:help).class_name('Metasploit::Framework::UI::Console::Command::Use::Help') }
+    it { should have_subcommand(:set_metasploit_instance).class_name('Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance').default(true) }
   end
 
   context '#option_parser' do
@@ -92,7 +92,7 @@ describe Metasploit::Framework::Console::Command::Use do
           []
         end
 
-        context 'Metasploit::Framework::Console::Command::Use::SetMetasploitInstance' do
+        context 'Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance' do
           subject(:subcommand) do
             command.send(:subcommand_by_name)[:set_metasploit_instance]
           end
@@ -114,7 +114,7 @@ describe Metasploit::Framework::Console::Command::Use do
           ]
         end
 
-        context 'Metasploit::Framework::Console::Command::Use::SetMetasploitInstance' do
+        context 'Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance' do
           subject(:subcommand) do
             command.send(:subcommand_by_name)[:set_metasploit_instance]
           end
@@ -139,7 +139,7 @@ describe Metasploit::Framework::Console::Command::Use do
           ]
         end
 
-        context 'Metasploit::Framework::Console::Command::Use::SetMetasploitInstance' do
+        context 'Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance' do
           subject(:subcommand) do
             command.send(:subcommand_by_name)[:set_metasploit_instance]
           end

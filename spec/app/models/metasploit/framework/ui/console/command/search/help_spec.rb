@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Search::Help do
+describe Metasploit::Framework::UI::Console::Command::Search::Help do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 
@@ -15,12 +15,12 @@ describe Metasploit::Framework::Console::Command::Search::Help do
   end
 
   let(:parent) do
-    Metasploit::Framework::Console::Command::Search.new(
+    Metasploit::Framework::UI::Console::Command::Search.new(
         dispatcher: dispatcher
     )
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Child'
 
   context '#column_operators' do
     subject(:column_operators) do

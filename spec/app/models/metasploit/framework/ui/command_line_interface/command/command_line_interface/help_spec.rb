@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface::Help do
+describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface::Help do
   subject(:command) do
     described_class.new(
         parent: parent
@@ -8,10 +8,10 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
   end
 
   let(:parent) do
-    Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface.new
+    Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface.new
   end
 
-  it_should_behave_like 'Metasploit::Framework::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::UI::Command::Child'
 
   context '#examples' do
     include_context 'output'

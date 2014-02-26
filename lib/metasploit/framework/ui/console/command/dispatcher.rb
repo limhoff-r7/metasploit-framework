@@ -1,15 +1,15 @@
 # @note This module and its API is a temporary measure until all commands are converted to
-#   `Metasploit::Framework::Console::Command::Base` subclasses, at which time the dispatcher will just automatically use the
+#   `Metasploit::Framework::UI::Console::Command::Base` subclasses, at which time the dispatcher will just automatically use the
 #    command classes in the correct manner.
 #
 # Allows a command dispatcher to declare which commands it supports and to have those commands automatically wired to
 # the methods it expects.
-module Metasploit::Framework::Console::Command::Dispatcher
+module Metasploit::Framework::UI::Console::Command::Dispatcher
   extend ActiveSupport::Concern
 
   module ClassMethods
     # Declares a command that this dispatcher can dispatch.  Declares cmd_<name>, cmd_<name>_help, and cmd_<name>_tabs
-    # methods on the dispatcher which use the Metasploit::Framework::Console::Command::<name> class.
+    # methods on the dispatcher which use the Metasploit::Framework::UI::Console::Command::<name> class.
     #
     # @return [void]
     def command(name)
@@ -25,7 +25,7 @@ module Metasploit::Framework::Console::Command::Dispatcher
       end
 
       method_prefix = "cmd_#{name}"
-      command_class = "Metasploit::Framework::Console::Command::#{name.to_s.camelize}".constantize
+      command_class = "Metasploit::Framework::UI::Console::Command::#{name.to_s.camelize}".constantize
 
       command_module.module_eval do
         define_method(method_prefix) do |*words|

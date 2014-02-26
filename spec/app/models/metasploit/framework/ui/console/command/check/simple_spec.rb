@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Check::Simple do
+describe Metasploit::Framework::UI::Console::Command::Check::Simple do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 
@@ -15,7 +15,7 @@ describe Metasploit::Framework::Console::Command::Check::Simple do
   end
 
   let(:parent) do
-    Metasploit::Framework::Console::Command::Check.new(
+    Metasploit::Framework::UI::Console::Command::Check.new(
         dispatcher: dispatcher,
         partial_word: partial_word,
         words: words
@@ -30,15 +30,15 @@ describe Metasploit::Framework::Console::Command::Check::Simple do
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Child'
 
   context 'validations' do
     context 'dispatcher' do
-      it_should_behave_like 'validates Metasploit::Framework::Console::Command#dispatcher is fanged'
+      it_should_behave_like 'validates Metasploit::Framework::UI::Console::Command#dispatcher is fanged'
     end
 
     context 'metasploit_instance' do
-      it_should_behave_like 'validates presence of Metasploit::Framework::Console::Command#metasploit_instance'
+      it_should_behave_like 'validates presence of Metasploit::Framework::UI::Console::Command#metasploit_instance'
     end
 
     context 'module_type' do

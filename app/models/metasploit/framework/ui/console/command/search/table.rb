@@ -4,11 +4,11 @@
 
 require 'table_print'
 
-class Metasploit::Framework::Console::Command::Search::Table < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Child
-  include Metasploit::Framework::Console::Command::Search::Table::Columns
-  include Metasploit::Framework::Console::Command::Search::Table::TabCompletion
-  include Metasploit::Framework::Console::Command::Search::Table::ValidationErrors
+class Metasploit::Framework::UI::Console::Command::Search::Table < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Child
+  include Metasploit::Framework::UI::Console::Command::Search::Table::Columns
+  include Metasploit::Framework::UI::Console::Command::Search::Table::TabCompletion
+  include Metasploit::Framework::UI::Console::Command::Search::Table::ValidationErrors
 
   #
   # Attributes

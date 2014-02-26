@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface do
+describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface do
   include_context 'Msf::Simple::Framework'
 
   subject(:command) do
@@ -35,7 +35,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Command::Parent'
+  it_should_behave_like 'Metasploit::Framework::UI::Command::Parent'
 
   context 'CONSTANTS' do
     context 'indent' do
@@ -51,7 +51,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
         described_class::SUBCOMMAND_NAME_BY_FLAG
       end
 
-      its(['a']) { should == :advanced }
+      its(['a']) { should == :dump_advanced_options }
       its(['ac']) { should == :actions }
       its(['c']) { should == :check }
       its(['e']) { should == :execute }
@@ -65,7 +65,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
   end
 
   context 'subcommands' do
-    it { should have_subcommand(:help).class_name('Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface::Help').default(true) }
+    it { should have_subcommand(:help).class_name('Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface::Help').default(true) }
   end
 
   context '#dump_instances' do
@@ -228,7 +228,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+        cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -239,7 +239,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+        cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -250,7 +250,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       args = "multi/handler payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+        cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -261,7 +261,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       args = "WHATEVER payload=windows/meterpreter/reverse_tcp lhost=127.0.0.1 E"
       m    = ''
       stdout = get_stdout {
-        cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+        cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
         m = cli.init_modules
       }
 
@@ -300,7 +300,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
         it_should_behave_like 'subcommand flag', flag.downcase => subcommand_name
       end
 
-      it_should_behave_like 'case-insensitive subcommand flag', 'a' => :advanced
+      it_should_behave_like 'case-insensitive subcommand flag', 'a' => :dump_advanced_options
       it_should_behave_like 'case-insensitive subcommand flag', 'ac' => :actions
       it_should_behave_like 'case-insensitive subcommand flag', 'c' => :check
       it_should_behave_like 'case-insensitive subcommand flag', 'e' => :execute
@@ -321,12 +321,12 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
     end
   end
 
-  pending 'Metasploit::Framework::Console::CommandLineInterface#engate_module connects to database to access module cache' do
+  pending 'Metasploit::Framework::UI::Console::CommandLineInterface#engate_module connects to database to access module cache' do
     context "#engage_mode" do
       it "should show me the summary of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version s'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -337,7 +337,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should show me the options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version O'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -348,7 +348,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should me the advanced options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version A'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -359,7 +359,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should show me the IDS options of module auxiliary/scanner/http/http_version" do
         args = 'auxiliary/scanner/http/http_version I'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -369,7 +369,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should show me the targets available for module windows/browser/ie_cbutton_uaf" do
         args = "windows/browser/ie_cbutton_uaf T"
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -379,7 +379,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should show me the payloads available for module windows/browser/ie_cbutton_uaf" do
         args = "windows/browser/ie_cbutton_uaf P"
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -389,7 +389,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should try to run the check function of an exploit" do
         args = "windows/smb/ms08_067_netapi rhost=0.0.0.1 C"  # Some BS IP so we can fail
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -399,7 +399,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should warn my auxiliary module isn't supported by mode 'p' (show payloads)" do
         args = 'auxiliary/scanner/http/http_version p'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -409,7 +409,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should warn my auxiliary module isn't supported by mode 't' (show targets)" do
         args = 'auxiliary/scanner/http/http_version t'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -419,7 +419,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should warn my exploit module isn't supported by mode 'ac' (show actions)" do
         args = 'windows/browser/ie_cbutton_uaf ac'
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }
@@ -429,7 +429,7 @@ describe Metasploit::Framework::CommandLineInterface::Command::CommandLineInterf
       it "should show actions available for module auxiliary/scanner/http/http_put" do
         args = "auxiliary/scanner/http/http_put ac"
         stdout = get_stdout {
-          cli = Metasploit::Framework::Console::Root.new(args.split(' '))
+          cli = Metasploit::Framework::UI::Console::Root.new(args.split(' '))
           m = cli.init_modules
           cli.engage_mode(m)
         }

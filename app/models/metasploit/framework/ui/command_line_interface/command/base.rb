@@ -1,4 +1,4 @@
-class Metasploit::Framework::CommandLineInterface::Command::Base < Metasploit::Framework::Command::Base
+class Metasploit::Framework::UI::CommandLineInterface::Command::Base < Metasploit::Framework::UI::Command::Base
   private
 
   def output

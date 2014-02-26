@@ -1,4 +1,4 @@
-module Metasploit::Framework::Console::Command::Search::Table::Columns
+module Metasploit::Framework::UI::Console::Command::Search::Table::Columns
   extend ActiveSupport::Concern
 
   #
@@ -30,7 +30,7 @@ module Metasploit::Framework::Console::Command::Search::Table::Columns
 
   def displayed_columns
     @display_columns ||= DEFAULT_COLUMN_NAMES.collect { |column_name|
-      Metasploit::Framework::Console::Command::Search::Argument::Column.new(
+      Metasploit::Framework::UI::Console::Command::Search::Argument::Column.new(
           value: column_name
       )
     }
@@ -54,7 +54,7 @@ module Metasploit::Framework::Console::Command::Search::Table::Columns
     @query_column_name_set ||= query.operations.each_with_object(Set.new) do |operation, set|
       operator_name = operation.operator.name.to_s
 
-      if Metasploit::Framework::Console::Command::Search::Argument::Column.set.include? operator_name
+      if Metasploit::Framework::UI::Console::Command::Search::Argument::Column.set.include? operator_name
         set.add operator_name
       end
     end

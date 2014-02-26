@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Base do
+describe Metasploit::Framework::UI::Console::Command::Base do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do
@@ -36,9 +36,9 @@ describe Metasploit::Framework::Console::Command::Base do
     Msf::Ui::Console::CommandDispatcher::Core.new(msf_ui_console_driver)
   end
 
-  it { should be_a Metasploit::Framework::Command::Base }
+  it { should be_a Metasploit::Framework::UI::Command::Base }
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::TabCompletion'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::TabCompletion'
 
   context 'validations' do
     it { should validate_presence_of :dispatcher }

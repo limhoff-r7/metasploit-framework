@@ -12,7 +12,7 @@ shared_context 'Msf::Ui::Console::Driver' do
     Class.new(Metasploit::Framework::UI::Driver) do
       include Msf::Ui::Console::Driver::Fangs
       include Msf::Ui::Console::Driver::Prompt
-      include Rex::Ui::Text::DispatcherShell
+      include Metasploit::Framework::UI::Text::DispatcherShell
 
       #
       # Attributes

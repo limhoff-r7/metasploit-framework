@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Console::Command::TabCompletion' do
+shared_examples_for 'Metasploit::Framework::UI::Console::Command::TabCompletion' do
   context '#partial_word' do
     subject(:partial_word) do
       command.partial_word

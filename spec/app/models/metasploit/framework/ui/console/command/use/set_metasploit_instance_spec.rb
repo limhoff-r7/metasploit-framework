@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Use::SetMetasploitInstance do
+describe Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 
@@ -15,7 +15,7 @@ describe Metasploit::Framework::Console::Command::Use::SetMetasploitInstance do
   end
 
   let(:parent) do
-    Metasploit::Framework::Console::Command::Use.new(
+    Metasploit::Framework::UI::Console::Command::Use.new(
         dispatcher: dispatcher,
         partial_word: partial_word,
         words: words
@@ -30,8 +30,8 @@ describe Metasploit::Framework::Console::Command::Use::SetMetasploitInstance do
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Child'
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Use::SetMetasploitInstance::TabCompletion'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance::TabCompletion'
 
   context 'validations' do
     context 'metasploit_instance' do
@@ -84,7 +84,7 @@ describe Metasploit::Framework::Console::Command::Use::SetMetasploitInstance do
 
       let(:error) do
         I18n.translate!(
-            'metasploit.model.errors.models.metasploit/framework/console/command/use/set_metasploit_instance.attributes.words.wrong_length',
+            'metasploit.model.errors.models.metasploit/framework/ui/console/command/use/set_metasploit_instance.attributes.words.wrong_length',
             count: 1
         )
       end

@@ -2,9 +2,9 @@
 # Project
 #
 
-class Metasploit::Framework::Console::Command::Use::SetMetasploitInstance < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Child
-  include Metasploit::Framework::Console::Command::Use::SetMetasploitInstance::TabCompletion
+class Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Child
+  include Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance::TabCompletion
 
   #
   # Attributes

@@ -1,5 +1,5 @@
-# Prints validation errors recursively for this command and its {Metasploit::Framework::Console::Command::Search::Table#visitor}.
-module Metasploit::Framework::Console::Command::Search::Table::ValidationErrors
+# Prints validation errors recursively for this command and its {Metasploit::Framework::UI::Console::Command::Search::Table#visitor}.
+module Metasploit::Framework::UI::Console::Command::Search::Table::ValidationErrors
   #
   # CONSTANTS
   #
@@ -84,7 +84,7 @@ module Metasploit::Framework::Console::Command::Search::Table::ValidationErrors
     end
   end
 
-  # Prints validation errors for {Metasploit::Framework::Console::Command::Search::Table#query} and for any operations on the
+  # Prints validation errors for {Metasploit::Framework::UI::Console::Command::Search::Table#query} and for any operations on the
   # query.
   #
   # @param options (see #print_indented_error)
@@ -124,7 +124,7 @@ module Metasploit::Framework::Console::Command::Search::Table::ValidationErrors
     end
   end
 
-  # Prints validation errors for {Metasploit::Framework::Console::Command::Search::Table#visitor} and its query.
+  # Prints validation errors for {Metasploit::Framework::UI::Console::Command::Search::Table#visitor} and its query.
   #
   # @param options (see #print_indented_error)
   # @option options (see #print_indented_error)

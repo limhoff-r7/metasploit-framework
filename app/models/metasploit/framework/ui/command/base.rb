@@ -1,7 +1,7 @@
 # @abstract Subclass and define `#run_with_valid` to run when the subclass instance is valid and {#run} is called.  If
 #   there are recursive validation errors, {#print_validation_errors} should be overridden and `super` called to print
 #   the errors directly on the subclass instance.
-class Metasploit::Framework::Command::Base < Metasploit::Model::Base
+class Metasploit::Framework::UI::Command::Base < Metasploit::Model::Base
   #
   # Attributes
   #

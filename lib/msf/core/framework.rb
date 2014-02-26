@@ -143,14 +143,14 @@ class Framework < Metasploit::Model::Base
       unless instance_variable_defined? :@events
         events = Msf::EventDispatcher.new(self)
 
-        subscriber = FrameworkEventSubscriber.new(self)
+        subscriber = Msf::FrameworkEventSubscriber.new(self)
         events.add_exploit_subscriber(subscriber)
         events.add_session_subscriber(subscriber)
         events.add_general_subscriber(subscriber)
         events.add_db_subscriber(subscriber)
         events.add_ui_subscriber(subscriber)
 
-        @event = events
+        @events = events
       end
 
       @events
@@ -216,3 +216,4 @@ class Framework < Metasploit::Model::Base
 end
 end
 
+require 'msf/core/framework_event_subscriber'

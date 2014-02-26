@@ -3,8 +3,8 @@
 #   the errors directly on the subclass instance.
 #
 # A command used in `msfconsole`.
-class Metasploit::Framework::Console::Command::Base < Metasploit::Framework::Command::Base
-  include Metasploit::Framework::Console::Command::TabCompletion
+class Metasploit::Framework::UI::Console::Command::Base < Metasploit::Framework::UI::Command::Base
+  include Metasploit::Framework::UI::Console::Command::TabCompletion
 
   #
   # Attributes

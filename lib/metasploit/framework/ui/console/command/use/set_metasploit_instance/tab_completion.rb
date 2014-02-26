@@ -1,4 +1,4 @@
-module Metasploit::Framework::Console::Command::Use::SetMetasploitInstance::TabCompletion
+module Metasploit::Framework::UI::Console::Command::Use::SetMetasploitInstance::TabCompletion
   #
   # Methods
   #

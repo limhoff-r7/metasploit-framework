@@ -1,4 +1,4 @@
-module Metasploit::Framework::Console::Command::Search::Table::TabCompletion
+module Metasploit::Framework::UI::Console::Command::Search::Table::TabCompletion
   #
   # Methods
   #
@@ -76,7 +76,7 @@ module Metasploit::Framework::Console::Command::Search::Table::TabCompletion
   private
 
   def column_name_tab_completions(last_word)
-    column_name_set = Metasploit::Framework::Console::Command::Search::Argument::Column.set
+    column_name_set = Metasploit::Framework::UI::Console::Command::Search::Argument::Column.set
 
     #
     # remove columns already given

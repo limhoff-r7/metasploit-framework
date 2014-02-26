@@ -1,5 +1,5 @@
-class Metasploit::Framework::Console::Command::Use < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Parent
+class Metasploit::Framework::UI::Console::Command::Use < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Parent
 
   self.description = 'Selects a module by name'
 
@@ -29,7 +29,7 @@ class Metasploit::Framework::Console::Command::Use < Metasploit::Framework::Cons
   parse_words do |parsable_words|
     positional_arguments = option_parser.parse!(parsable_words)
     # user may accidentally specify multiple Module::Class#full_names.  Allow validation to catch this without
-    # messing up {Metasploit::Framework::Console::Command::Use::ActivateModule#module_class_full_name}.
+    # messing up {Metasploit::Framework::UI::Console::Command::Use::ActivateModule#module_class_full_name}.
     subcommand_by_name[:set_metasploit_instance].module_class_full_name = positional_arguments.first
   end
 end

@@ -1,6 +1,6 @@
 # An option argument for the `search` command in `msfconsole` that holds a column name, such as for `--display` or
 # `--hide`.
-class Metasploit::Framework::Console::Command::Search::Argument::Column < Metasploit::Model::Base
+class Metasploit::Framework::UI::Console::Command::Search::Argument::Column < Metasploit::Model::Base
   #
   # Attributes
   #

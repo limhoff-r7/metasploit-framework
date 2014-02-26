@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Command::Child delegates to #parent' do |method|
+shared_examples_for 'Metasploit::Framework::UI::Command::Child delegates to #parent' do |method|
   context "##{method}" do
     # no let name so that it doesn't interfere with outer lets
     subject do

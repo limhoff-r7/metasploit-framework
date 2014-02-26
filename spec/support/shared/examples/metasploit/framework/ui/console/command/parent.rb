@@ -1,5 +1,5 @@
-shared_examples_for 'Metasploit::Framework::Console::Command::Parent' do
-  it_should_behave_like 'Metasploit::Framework::Command::Parent'
+shared_examples_for 'Metasploit::Framework::UI::Console::Command::Parent' do
+  it_should_behave_like 'Metasploit::Framework::UI::Command::Parent'
 
   context '#blank_tab_completions' do
     subject(:blank_tab_completions) do
@@ -12,7 +12,7 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Parent' do
       #
 
       let(:subcommand) do
-        double('Metasploit::Framework::Console::Command::Child')
+        double('Metasploit::Framework::UI::Console::Command::Child')
       end
 
       let(:subcommand_blank_tab_completions) do

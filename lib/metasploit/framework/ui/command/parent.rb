@@ -1,5 +1,5 @@
 # Adds support for declaring {ClassMethods#subcommands} on this command.
-module Metasploit::Framework::Command::Parent
+module Metasploit::Framework::UI::Command::Parent
   extend ActiveSupport::Concern
 
   included do
@@ -81,7 +81,7 @@ module Metasploit::Framework::Command::Parent
 
   # Subcommand class instance from {#subcommand_by_name} with {#subcommand_name}.
   #
-  # @return [Metasploit::Framework::Console::Command::Child]
+  # @return [Metasploit::Framework::UI::Console::Command::Child]
   # @return [nil] if {#subcommand_name} is invalid.
   def subcommand
     subcommand_by_name[subcommand_name]
@@ -90,7 +90,7 @@ module Metasploit::Framework::Command::Parent
   # Instance of {ClassMethods#subcommand_class_by_name subcommand class} by name so that options parsed from words can
   # be assigned to the correct subcommand.
   #
-  # @return [Hash{Symbol => Metasploit::Framework::Console::Command::Child}]
+  # @return [Hash{Symbol => Metasploit::Framework::UI::Console::Command::Child}]
   def subcommand_by_name
     @subcommand_by_name ||= Hash.new { |hash, name|
       subcommand_class = self.class.subcommand_class_by_name[name]

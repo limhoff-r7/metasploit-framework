@@ -1,5 +1,5 @@
-class Metasploit::Framework::Console::Command::Check::Simple < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Child
+class Metasploit::Framework::UI::Console::Command::Check::Simple < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Child
 
   #
   # Validations

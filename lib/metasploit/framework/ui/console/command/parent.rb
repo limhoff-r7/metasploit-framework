@@ -1,8 +1,8 @@
 # Adds support for declaring {ClassMethods#subcommands} on this command.
-module Metasploit::Framework::Console::Command::Parent
+module Metasploit::Framework::UI::Console::Command::Parent
   extend ActiveSupport::Concern
 
-  include Metasploit::Framework::Command::Parent
+  include Metasploit::Framework::UI::Command::Parent
 
   #
   # Instance Methods

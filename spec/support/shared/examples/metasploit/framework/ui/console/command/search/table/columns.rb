@@ -1,4 +1,4 @@
-shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Columns' do
+shared_examples_for 'Metasploit::Framework::UI::Console::Command::Search::Table::Columns' do
   context 'CONSTANTS' do
     context 'DEFAULT_COLUMN_NAMES' do
       subject(:default_column_names) do
@@ -65,7 +65,7 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Col
     end
 
     let(:operator_name) do
-      Metasploit::Framework::Console::Command::Search::Argument::Column.set.to_a.sample
+      Metasploit::Framework::UI::Console::Command::Search::Argument::Column.set.to_a.sample
     end
 
     context 'with hidden columns' do
@@ -78,7 +78,7 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Col
       end
 
       let(:hidden_column) do
-        Metasploit::Framework::Console::Command::Search::Argument::Column.new(value: hidden_column_name)
+        Metasploit::Framework::UI::Console::Command::Search::Argument::Column.new(value: hidden_column_name)
       end
 
       #
@@ -95,7 +95,7 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Col
         #
 
         let(:displayed_column) do
-          Metasploit::Framework::Console::Command::Search::Argument::Column.new(value: hidden_column_name)
+          Metasploit::Framework::UI::Console::Command::Search::Argument::Column.new(value: hidden_column_name)
         end
 
         #
@@ -145,11 +145,11 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Col
     end
 
     context 'default' do
-      it 'should be Array<Metasploit::Framework::Console::Command::Search::Argument::Column>' do
+      it 'should be Array<Metasploit::Framework::UI::Console::Command::Search::Argument::Column>' do
         displayed_columns.should be_an Array
 
         displayed_columns.all? { |column|
-          column.is_a? Metasploit::Framework::Console::Command::Search::Argument::Column
+          column.is_a? Metasploit::Framework::UI::Console::Command::Search::Argument::Column
         }.should be_true
       end
 
@@ -217,7 +217,7 @@ shared_examples_for 'Metasploit::Framework::Console::Command::Search::Table::Col
 
     context 'with column name' do
       let(:name) do
-        Metasploit::Framework::Console::Command::Search::Argument::Column.set.to_a.sample
+        Metasploit::Framework::UI::Console::Command::Search::Argument::Column.set.to_a.sample
       end
 
       let(:operator) do

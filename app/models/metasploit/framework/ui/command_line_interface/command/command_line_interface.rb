@@ -1,8 +1,8 @@
 # This user interface allows users to interact with the framework through a
 # command line interface (CLI) rather than having to use a prompting console
 # or web-based interface.
-class Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface < Metasploit::Framework::CommandLineInterface::Command::Base
-  include Metasploit::Framework::Command::Parent
+class Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface < Metasploit::Framework::UI::CommandLineInterface::Command::Base
+  include Metasploit::Framework::UI::Command::Parent
 
   #
   # CONSTANTS

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Search do
+describe Metasploit::Framework::UI::Console::Command::Search do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do
@@ -27,11 +27,11 @@ describe Metasploit::Framework::Console::Command::Search do
     []
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Parent'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Parent'
 
   context 'subcommands' do
-    it { should have_subcommand(:help).class_name('Metasploit::Framework::Console::Command::Search::Help') }
-    it { should have_subcommand(:table).class_name('Metasploit::Framework::Console::Command::Search::Table').default(true) }
+    it { should have_subcommand(:help).class_name('Metasploit::Framework::UI::Console::Command::Search::Help') }
+    it { should have_subcommand(:table).class_name('Metasploit::Framework::UI::Console::Command::Search::Table').default(true) }
   end
 
   context 'validations' do

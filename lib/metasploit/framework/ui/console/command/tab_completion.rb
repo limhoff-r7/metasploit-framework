@@ -1,4 +1,4 @@
-module Metasploit::Framework::Console::Command::TabCompletion
+module Metasploit::Framework::UI::Console::Command::TabCompletion
   #
   # Attributes
   #

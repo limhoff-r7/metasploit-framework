@@ -1,8 +1,8 @@
-# A command that is a subcommand for a {Metasploit::Framework::Console::Command::Parent}.
-module Metasploit::Framework::Console::Command::Child
+# A command that is a subcommand for a {Metasploit::Framework::UI::Console::Command::Parent}.
+module Metasploit::Framework::UI::Console::Command::Child
   extend ActiveSupport::Concern
 
-  include Metasploit::Framework::Command::Child
+  include Metasploit::Framework::UI::Command::Child
 
   included do
     # Undefined writers as they won't be read back out by the readers because those delegate to #parent.  Writers

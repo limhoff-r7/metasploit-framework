@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Console::Command::Use::Help do
+describe Metasploit::Framework::UI::Console::Command::Use::Help do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 
@@ -15,12 +15,12 @@ describe Metasploit::Framework::Console::Command::Use::Help do
   end
 
   let(:parent) do
-    Metasploit::Framework::Console::Command::Use.new(
+    Metasploit::Framework::UI::Console::Command::Use.new(
         dispatcher: dispatcher
     )
   end
 
-  it_should_behave_like 'Metasploit::Framework::Console::Command::Child'
+  it_should_behave_like 'Metasploit::Framework::UI::Console::Command::Child'
 
   context '#run_with_valid' do
     subject(:run_with_valid) do

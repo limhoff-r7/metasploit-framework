@@ -1,5 +1,5 @@
-class Metasploit::Framework::Console::Command::Use::Help < Metasploit::Framework::Console::Command::Base
-  include Metasploit::Framework::Console::Command::Child
+class Metasploit::Framework::UI::Console::Command::Use::Help < Metasploit::Framework::UI::Console::Command::Base
+  include Metasploit::Framework::UI::Console::Command::Child
 
   protected
 

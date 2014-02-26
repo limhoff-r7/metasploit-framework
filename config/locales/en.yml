@@ -3,11 +3,11 @@ en:
     model:
       errors:
         models:
-          metasploit/framework/console/command/exploit/simple:
+          metasploit/framework/ui/console/command/exploit/simple:
             attributes:
               rank_number:
                 minimum_rank: "is (%{rank_number} aliased as %{rank_name}) less than the minimum rank number (%{minimum_rank_number} aliased as %{minimum_rank_name})"
-          metasploit/framework/console/command/use/set_metasploit_instance:
+          metasploit/framework/ui/console/command/use/set_metasploit_instance:
             attributes:
               words:
                 wrong_length: "is the wrong length (should be %{count} words)"

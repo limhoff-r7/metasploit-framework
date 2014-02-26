@@ -1,4 +1,4 @@
-module Metasploit::Framework::Command::Child
+module Metasploit::Framework::UI::Command::Child
   extend ActiveSupport::Concern
 
   included do
@@ -23,7 +23,7 @@ module Metasploit::Framework::Command::Child
   # @!attribute [rw] parent
   #   The parent command of which this command is a subcommand.
   #
-  #   @return [Metasploit::Framework::Console::Command::Parent]
+  #   @return [Metasploit::Framework::UI::Console::Command::Parent]
   attr_accessor :parent
 
   #
