@@ -72,7 +72,6 @@ class Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInter
   # Subcommands
   #
 
-  subcommand :dump_advanced_options
   subcommand :help,
              default: true
 
