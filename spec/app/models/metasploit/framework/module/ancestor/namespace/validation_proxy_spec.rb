@@ -75,11 +75,69 @@ describe Metasploit::Framework::Module::Ancestor::Namespace::ValidationProxy do
     it_should_behave_like 'Metasploit::Framework::Module::Ancestor::Namespace::ValidationProxy#minimum_*_version',
                           'Core'
 
-    context 'module_ancestor_eval_exception' do
-      it { should allow_value(nil).for(:module_ancestor_eval_exception) }
+    context 'module_ancestor_eval' do
+      subject(:module_ancestor_eval_errors) do
+        validation_proxy.errors[:module_ancestor_eval]
+      end
 
-      it 'should not allow a non-nil value' do
-        validation_proxy.should_not allow_value(Exception.new).for(:module_ancestor_eval_exception)
+      before(:each) do
+        target.module_ancestor_eval_exception = module_ancestor_eval_exception
+
+        validation_proxy.valid?
+      end
+
+      context 'with module_ancestor_eval_exception' do
+        let(:module_ancestor_eval_exception) do
+          module_ancestor_eval_exception_class.new(module_ancestor_eval_exception_message).tap { |exception|
+            exception.set_backtrace module_ancestor_eval_exception_backtrace
+          }
+        end
+
+        let(:module_ancestor_eval_exception_backtrace) do
+          caller
+        end
+
+        let(:module_ancestor_eval_exception_class) do
+          Exception
+        end
+
+        let(:module_ancestor_eval_exception_message) do
+          'There was an exception in evaluating module_ancestor'
+        end
+
+        it 'adds error on :module_ancestor_eval' do
+          expect(module_ancestor_eval_errors).not_to be_empty
+        end
+
+        context 'error' do
+          subject(:error) do
+            module_ancestor_eval_errors.first
+          end
+
+          it 'includes module_ancestor_eval_exception backtrace separated by newlines' do
+            module_ancestor_eval_exception_backtrace.each do |line|
+              expect(error).to include("\n#{line}")
+            end
+          end
+
+          it 'includes module_ancestor_eval_exception class' do
+            expect(error).to include(module_ancestor_eval_exception_class.to_s)
+          end
+
+          it 'includes module_ancestor_eval_exception message' do
+            expect(error).to include(module_ancestor_eval_exception_message)
+          end
+        end
+      end
+
+      context 'without module_ancestor_eval_exception' do
+        let(:module_ancestor_eval_exception) do
+          nil
+        end
+
+        it 'does not add error on :module_ancestor_eval' do
+          expect(module_ancestor_eval_errors).to be_empty
+        end
       end
     end
 
