@@ -12,6 +12,20 @@ module Rex
 #
 ###
 module Socket
+  # Standardize a way of reasoning about IPv4
+  IP_V4 = :ip_v4
+  # Standardize a way of reasoning about IPv6
+  IP_V6 = :ip_v6
+  # Standardize a way of reasoning about bind-based connections
+  CONNECTION_METHOD_BIND = :bind
+  # Standardize a way of reasoning about reverse-based connections
+  CONNECTION_METHOD_REVERSE = :reverse
+  # A "throwaway" IP for resolving local IPs, etc
+  THROWAWAY_IP_ADDRESS = "50.50.50.50"
+  # A pattern for matching non-reserved IPs (e.g. RFC-1918, etc)
+  # See: http://en.wikipedia.org/wiki/Reserved_IP_addresses
+  # TODO: break this into smaller pieces
+  NON_PRIVATE_IP_PATTERN = /^(((25[0-5]|2[0-4][0-9]|19[0-1]|19[3-9]|18[0-9]|17[0-1]|17[3-9]|1[0-6][0-9]|1[1-9]|[2-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]))|(192\.(25[0-5]|2[0-4][0-9]|16[0-7]|169|1[0-5][0-9]|1[7-9][0-9]|[1-9][0-9]|[0-9]))|(172\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|1[0-5]|3[2-9]|[4-9][0-9]|[0-9])))\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/
 
   module Comm
   end
