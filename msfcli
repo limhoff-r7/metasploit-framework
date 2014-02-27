@@ -25,5 +25,5 @@ require 'msfenv'
 
 require 'metasploit/framework'
 
-command_line_interface = Metasploit::Framework::CommandLineInterface::Command::CommandLineInterface.new(words: ARGV)
+command_line_interface = Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface.new(words: ARGV)
 command_line_interface.run
