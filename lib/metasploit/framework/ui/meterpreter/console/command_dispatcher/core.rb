@@ -370,7 +370,7 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core
       case opt
         when "-l"
           exts = []
-          path = ::File.join(Msf::Config.install_root, 'data', 'meterpreter')
+          path = Metasploit::Framework.root.join('data', 'meterpreter').to_path
           ::Dir.entries(path).each { |f|
             if (::File.file?(::File.join(path, f)) && f =~ /ext_server_(.*)\.#{client.binary_suffix}/ )
               exts.push($1)
@@ -415,7 +415,7 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core
 
   def cmd_load_tabs(str, words)
     tabs = []
-    path = ::File.join(Msf::Config.install_root, 'data', 'meterpreter')
+    path = Metasploit::Framework.root.join('data', 'meterpreter').to_path
     ::Dir.entries(path).each { |f|
       if (::File.file?(::File.join(path, f)) && f =~ /ext_server_(.*)\.#{client.binary_suffix}/ )
         if (not extensions.include?($1))

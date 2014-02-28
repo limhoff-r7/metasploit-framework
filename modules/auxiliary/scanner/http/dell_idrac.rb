@@ -36,14 +36,45 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
-    register_options([
-      OptString.new('TARGETURI', [true, 'Path to the iDRAC Administration page', '/data/login']),
-      OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-        File.join(Msf::Config.install_root, "data", "wordlists", "idrac_default_user.txt") ]),
-      OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-        File.join(Msf::Config.install_root, "data", "wordlists", "idrac_default_pass.txt") ]),
-      OptInt.new('RPORT', [true, "Default remote port", 443])
-    ], self.class)
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
+
+    register_options(
+        [
+            OptString.new(
+                'TARGETURI',
+                [
+                    true,
+                    'Path to the iDRAC Administration page',
+                    '/data/login'
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    false,
+                    'File containing users, one per line',
+                    wordlists_pathname.join('idrac_default_user.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false,
+                    'File containing passwords, one per line',
+                    wordlists_pathname.join('idrac_default_pass.txt').to_path
+                ]
+            ),
+            OptInt.new(
+                'RPORT',
+                [
+                    true,
+                    "Default remote port",
+                    443
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options([
       OptBool.new('SSL', [true, "Negotiate SSL connection", true])

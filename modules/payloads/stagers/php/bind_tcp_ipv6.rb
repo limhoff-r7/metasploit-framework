@@ -36,7 +36,12 @@ module Metasploit3
       lport = '4444'
     end
 
-    bind = File.read(File.join(Msf::Config::InstallRoot, 'data', 'php', 'bind_tcp_ipv6.php'))
+    pathname = Metasploit::Framework.root.join('data', 'php', 'bind_tcp_ipv6.php')
+
+    bind = pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
+
     bind.gsub!("4444", lport)
 
     return super + bind

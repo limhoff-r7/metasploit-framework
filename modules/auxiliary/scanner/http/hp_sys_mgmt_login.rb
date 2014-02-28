@@ -25,16 +25,37 @@ class Metasploit3 < Msf::Auxiliary
       'DefaultOptions' => { 'SSL' => true }
     ))
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
-      [
-        Opt::RPORT(2381),
-        OptPath.new('USERPASS_FILE',  [ false, "File containing users and passwords separated by space, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_userpass.txt") ]),
-        OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_users.txt") ]),
-        OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_pass.txt") ]),
-      ], self.class)
+        [
+            Opt::RPORT(2381),
+            OptPath.new(
+                'USERPASS_FILE',
+                [
+                    false,
+                    'File containing users and passwords separated by space, one pair per line',
+                    wordlists_pathname.join('http_default_userpass.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    false,
+                    'File containing users, one per line',
+                    wordlists_pathname.join('http_default_users.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false,
+                    'File containing passwords, one per line',
+                    wordlists_pathname.join('http_default_pass.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
 

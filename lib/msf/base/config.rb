@@ -10,12 +10,6 @@ module Msf
 #
 ###
 class Config < Hash
-
-  #
-  # The installation root directory for the distribution
-  #
-  InstallRoot = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..'))
-
   #
   # Determines the base configuration directory.
   #
@@ -35,12 +29,13 @@ class Config < Hash
       end
     end
 
+    basename = ".msf#{Msf::Framework::Major}"
+
     begin
       # First we try $HOME/.msfx
-      File.expand_path("~#{FileSep}.msf#{Msf::Framework::Major}")
+      File.expand_path("~#{FileSep}#{basename}")
     rescue ::ArgumentError
-      # Give up and install root + ".msfx"
-      InstallRoot + ".msf#{Msf::Framework::Major}"
+      Metasploit::Framework.root.join(basename)
     end
   end
 
@@ -67,13 +62,6 @@ class Config < Hash
   # Class methods
   #
   ##
-
-  #
-  # Returns the framework installation root.
-  #
-  def self.install_root
-    InstallRoot
-  end
 
   #
   # Calls the instance method.
@@ -202,13 +190,6 @@ class Config < Hash
   end
 
   #
-  # Returns the installation root directory
-  #
-  def install_root
-    InstallRoot
-  end
-
-  #
   # Returns the configuration directory default.
   #
   def config_directory
@@ -233,14 +214,14 @@ class Config < Hash
   # Returns the global module directory.
   #
   def module_directory
-    install_root + FileSep + self['ModuleDirectory']
+    Metasploit::Framework.root.join(self['ModuleDirectory']).to_path
   end
 
   #
   # Returns the path that scripts can be loaded from.
   #
   def script_directory
-    install_root + FileSep + self['ScriptDirectory']
+    Metasploit::Framework.root.join(self['ScriptDirectory']).to_path
   end
 
   #
@@ -254,7 +235,7 @@ class Config < Hash
   # Returns the directory that plugins are stored in.
   #
   def plugin_directory
-    install_root + FileSep + self['PluginDirectory']
+    Metasploit::Framework.root.join(self['PluginDirectory']).to_path
   end
 
   #
@@ -303,7 +284,7 @@ class Config < Hash
   # Returns the data directory
   #
   def data_directory
-    install_root + FileSep + self['DataDirectory']
+    Metasploit::Framework.root.join(self['DataDirectory'])
   end
 
   #

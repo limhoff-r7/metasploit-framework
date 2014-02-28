@@ -29,7 +29,12 @@ module Metasploit3
       ))
   end
   def generate
-    bind = File.read(File.join(Msf::Config::InstallRoot, 'data', 'php', 'bind_tcp.php'))
+    pathname = Metasploit::Framework.root.join('data', 'php', 'bind_tcp.php')
+
+    bind = pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
+
     bind.gsub!("4444", "#{datastore["LPORT"]}")
 
     return super + bind

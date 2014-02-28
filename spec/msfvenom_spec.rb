@@ -2,7 +2,7 @@
 require 'spec_helper'
 require 'msf/core'
 # doesn't end in .rb or .so, so have to load instead of require
-load File.join(Msf::Config.install_root, 'msfvenom')
+load Metasploit::Framework.root.join('msfvenom').to_path
 
 shared_examples_for "nop dumper" do
 	it "should list known nops" do

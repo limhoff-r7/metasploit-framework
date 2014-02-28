@@ -24,12 +24,32 @@ class Metasploit3 < Msf::Auxiliary
     ))
 
     register_options(
-      [
-        OptString.new('DOMAIN', [ true, "The target domain name"]),
-        OptAddress.new('NS', [ false, "Specify the name server to use for queries, otherwise use the system DNS" ]),
-        OptPath.new('WORDLIST', [ true, "Wordlist file for domain name brute force.",
-              File.join(Msf::Config.install_root, "data", "wordlists", "namelist.txt")])
-      ], self.class)
+        [
+            OptString.new(
+                'DOMAIN',
+                [
+                    true,
+                    "The target domain name"
+                ]
+            ),
+            OptAddress.new(
+                'NS',
+                [
+                    false,
+                    "Specify the name server to use for queries, otherwise use the system DNS"
+                ]
+            ),
+            OptPath.new(
+                'WORDLIST',
+                [
+                    true,
+                    "Wordlist file for domain name brute force.",
+                    Metasploit::Framework.root.join('data', 'wordlists', 'namelist.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
       [

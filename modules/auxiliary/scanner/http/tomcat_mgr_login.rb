@@ -58,16 +58,17 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
       [
         Opt::RPORT(8080),
         OptString.new('URI', [true, "URI for Manager login. Default is /manager/html", "/manager/html"]),
         OptPath.new('USERPASS_FILE',  [ false, "File containing users and passwords separated by space, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "tomcat_mgr_default_userpass.txt") ]),
+          wordlists_pathname.join("tomcat_mgr_default_userpass.txt").to_path ]),
         OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "tomcat_mgr_default_users.txt") ]),
+          wordlists_pathname.join("tomcat_mgr_default_users.txt").to_path ]),
         OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "tomcat_mgr_default_pass.txt") ]),
+          wordlists_pathname.join("tomcat_mgr_default_pass.txt").to_path ]),
       ], self.class)
 
     register_autofilter_ports([ 80, 443, 8080, 8081, 8000, 8008, 8443, 8444, 8880, 8888, 9080, 19300 ])

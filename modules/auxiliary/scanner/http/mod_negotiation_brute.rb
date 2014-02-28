@@ -29,11 +29,26 @@ class Metasploit3 < Msf::Auxiliary
       'License'		=> MSF_LICENSE))
 
     register_options(
-      [
-        OptString.new('PATH', [ true,  "The path to detect mod_negotiation", '/']),
-        OptPath.new('FILEPATH',[true, "path to file with file names",
-          File.join(Msf::Config.install_root, "data", "wmap", "wmap_files.txt")])
-      ], self.class)
+        [
+            OptString.new(
+                'PATH',
+                [
+                    true,
+                    "The path to detect mod_negotiation",
+                    '/'
+                ]
+            ),
+            OptPath.new(
+                'FILEPATH',
+                [
+                    true,
+                    'path to file with file names',
+                    Metasploit::Framework.root.join('data', 'wmap', 'wmap_files.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
   end
 
   def run_host(ip)

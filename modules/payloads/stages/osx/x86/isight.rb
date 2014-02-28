@@ -33,20 +33,26 @@ module Metasploit3
 
     # Override the BUNDLE path with the iSight capture library
     register_options(
-      [
-        OptPath.new('BUNDLE',
-          [
-            true,
-            "The local path to the iSight Mach-O Bundle to upload",
-            File.join(Msf::Config.install_root, "data", "isight.bundle")
-          ]),
-        OptBool.new('AUTOVIEW',
-          [
-            true,
-            "Automatically open the picture in a browser ",
-            true
-          ])
-      ], self.class)
+        [
+            OptPath.new(
+                'BUNDLE',
+                [
+                    true,
+                    'The local path to the iSight Mach-O Bundle to upload',
+                    Metasploit::Framework.root.join('data', 'isight.bundle').to_path
+                ]
+            ),
+            OptBool.new(
+                'AUTOVIEW',
+                [
+                    true,
+                    "Automatically open the picture in a browser ",
+                    true
+                ]
+            )
+        ],
+        self.class
+    )
   end
 
   def on_session(session)

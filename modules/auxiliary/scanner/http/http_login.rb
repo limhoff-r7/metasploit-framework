@@ -37,17 +37,51 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
-      [
-        OptPath.new('USERPASS_FILE',  [ false, "File containing users and passwords separated by space, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_userpass.txt") ]),
-        OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_users.txt") ]),
-        OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_pass.txt") ]),
-        OptString.new('AUTH_URI', [ false, "The URI to authenticate against (default:auto)" ]),
-        OptString.new('REQUESTTYPE', [ false, "Use HTTP-GET or HTTP-PUT for Digest-Auth, PROPFIND for WebDAV (default:GET)", "GET" ])
-      ], self.class)
+        [
+            OptPath.new(
+                'USERPASS_FILE',
+                [
+                    false,
+                    'File containing users and passwords separated by space, one pair per line',
+                    wordlists_pathname.join('http_default_userpass.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    false,
+                    'File containing users, one per line',
+                    wordlists_pathname.join('http_default_users.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false,
+                    'File containing passwords, one per line',
+                    wordlists_pathname.join('http_default_pass.txt').to_path
+                ]
+            ),
+            OptString.new(
+                'AUTH_URI',
+                [
+                    false,
+                    'The URI to authenticate against (default:auto)'
+                ]
+            ),
+            OptString.new(
+                'REQUESTTYPE',
+                [
+                    false,
+                    "Use HTTP-GET or HTTP-PUT for Digest-Auth, PROPFIND for WebDAV (default:GET)",
+                    "GET"
+                ]
+            )
+        ],
+        self.class
+    )
     register_autofilter_ports([ 80, 443, 8080, 8081, 8000, 8008, 8443, 8444, 8880, 8888 ])
   end
 

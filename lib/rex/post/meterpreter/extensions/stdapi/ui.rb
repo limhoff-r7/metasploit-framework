@@ -155,32 +155,40 @@ class UI < Rex::Post::UI
   def screenshot( quality=50 )
     request = Packet.create_request( 'stdapi_ui_desktop_screenshot' )
     request.add_tlv( TLV_TYPE_DESKTOP_SCREENSHOT_QUALITY, quality )
+    meterpreter_pathname = Metasploit::Framework.root.join('data', 'meterpreter')
+
     # include the x64 screenshot dll if the host OS is x64
     if( client.sys.config.sysinfo['Architecture'] =~ /^\S*x64\S*/ )
-      screenshot_path = ::File.join( Msf::Config.install_root, 'data', 'meterpreter', 'screenshot.x64.dll' )
-      screenshot_path = ::File.expand_path( screenshot_path )
-      screenshot_dll  = ''
-      ::File.open( screenshot_path, 'rb' ) do |f|
-        screenshot_dll += f.read( f.stat.size )
+      screenshot_pathname = meterpreter_pathname.join('screenshot.x64.dll')
+      screenshot_dll  = nil
+
+      screenshot_pathname.open('rb') do |f|
+        screenshot_dll = f.read(f.stat.size)
       end
+
       request.add_tlv( TLV_TYPE_DESKTOP_SCREENSHOT_PE64DLL_BUFFER, screenshot_dll, false, true )
       request.add_tlv( TLV_TYPE_DESKTOP_SCREENSHOT_PE64DLL_LENGTH, screenshot_dll.length )
     end
-    # but allways include the x86 screenshot dll as we can use it for wow64 processes if we are on x64
-    screenshot_path = ::File.join( Msf::Config.install_root, 'data', 'meterpreter', 'screenshot.dll' )
-    screenshot_path = ::File.expand_path( screenshot_path )
-    screenshot_dll  = ''
-    ::File.open( screenshot_path, 'rb' ) do |f|
-      screenshot_dll += f.read( f.stat.size )
+
+    # but always include the x86 screenshot dll as we can use it for wow64 processes if we are on x64
+    screenshot_pathname = meterpreter_pathname.join('screenshot.dll')
+    screenshot_dll = nil
+
+    screenshot_pathname.open('rb') do |f|
+      screenshot_dll = f.read(f.stat.size)
     end
+
     request.add_tlv( TLV_TYPE_DESKTOP_SCREENSHOT_PE32DLL_BUFFER, screenshot_dll, false, true )
     request.add_tlv( TLV_TYPE_DESKTOP_SCREENSHOT_PE32DLL_LENGTH, screenshot_dll.length )
+
     # send the request and return the jpeg image if successfull.
     response = client.send_request( request )
-    if( response.result == 0 )
-      return response.get_tlv_value( TLV_TYPE_DESKTOP_SCREENSHOT )
+
+    if response.result == 0
+      response.get_tlv_value( TLV_TYPE_DESKTOP_SCREENSHOT )
+    else
+      nil
     end
-    return nil
   end
 
   #

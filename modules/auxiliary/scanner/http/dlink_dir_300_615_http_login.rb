@@ -41,11 +41,24 @@ class Metasploit3 < Msf::Auxiliary
     )
 
     register_options(
-      [
-        OptString.new('USERNAME',  [ false, "Username for authentication (default: admin)","admin" ]),
-        OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_pass.txt") ]),
-      ], self.class)
+        [
+            OptString.new(
+                'USERNAME',
+                [
+                    false,
+                    "Username for authentication (default: admin)","admin"
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false, 'File containing passwords, one per line',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'http_default_pass.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
   def target_url

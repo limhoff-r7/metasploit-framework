@@ -26,26 +26,74 @@ class Metasploit3 < Msf::Auxiliary
       'Author' 		=> [ 'et' ],
       'License'		=> BSD_LICENSE))
 
+    wmap_pathname = Metasploit::Framework.root.join('data', 'wmap')
     register_options(
-      [
-        OptString.new('PATH', [ true,  "The path  to identify files", '/']),
-        OptString.new('EXT', [ false, "Append file extension to use", '']),
-        OptPath.new('DICTIONARY',   [ false, "Path of word dictionary to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_files.txt")
-          ]
-        )
-      ], self.class)
+        [
+            OptString.new(
+                'PATH',
+                [
+                    true,
+                    "The path  to identify files",
+                    '/'
+                ]
+            ),
+            OptString.new(
+                'EXT',
+                [
+                    false,
+                    "Append file extension to use",
+                    ''
+                ]
+            ),
+            OptPath.new(
+                'DICTIONARY',
+                [
+                    false,
+                    'Path of word dictionary to use',
+                    wmap_pathname.join('wmap_files.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
-      [
-        OptInt.new('ErrorCode', [ true,  "The expected http code for non existant files", 404]),
-        OptPath.new('HTTP404Sigs',   [ false, "Path of 404 signatures to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_404s.txt")
-          ]
-        ),
-        OptBool.new('NoDetailMessages', [ false, "Do not display detailed test messages", true ]),
-        OptInt.new('TestThreads', [ true, "Number of test threads", 25])
-      ], self.class)
+        [
+            OptInt.new(
+                'ErrorCode',
+                [
+                    true,
+                    "The expected http code for non existant files",
+                    404
+                ]
+            ),
+            OptPath.new(
+                'HTTP404Sigs',
+                [
+                    false,
+                    'Path of 404 signatures to use',
+                    wmap_pathname.join('wmap_404s.txt').to_path
+                ]
+            ),
+            OptBool.new(
+                'NoDetailMessages',
+                [
+                    false,
+                    "Do not display detailed test messages",
+                    true
+                ]
+            ),
+            OptInt.new(
+                'TestThreads',
+                [
+                    true,
+                    "Number of test threads",
+                    25
+                ]
+            )
+        ],
+        self.class
+    )
 
   end
 

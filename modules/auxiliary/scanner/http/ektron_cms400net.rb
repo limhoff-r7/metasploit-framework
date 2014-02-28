@@ -28,16 +28,26 @@ class Metasploit3 < Msf::Auxiliary
       ))
 
     register_options(
-      [
-        OptString.new('URI', [true, "Path to the CMS400.NET login page", '/WorkArea/login.aspx']),
-        OptPath.new(
-          'USERPASS_FILE',
-          [
-            false,
-            "File containing users and passwords",
-            File.join(Msf::Config.install_root, "data", "wordlists", "cms400net_default_userpass.txt")
-          ])
-      ], self.class)
+        [
+            OptString.new(
+                'URI',
+                [
+                    true,
+                    "Path to the CMS400.NET login page",
+                    '/WorkArea/login.aspx'
+                ]
+            ),
+            OptPath.new(
+                'USERPASS_FILE',
+                [
+                    false,
+                    'File containing users and passwords',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'cms400net_default_userpass.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     # "Set to false to prevent account lockouts - it will!"
     deregister_options('BLANK_PASSWORDS')

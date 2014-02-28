@@ -23,7 +23,7 @@ module Auxiliary::MimeTypes
   end
 
   def mime_load_extension_map
-    path = File.join( Msf::Config.install_root, "data", "mime.yml")
+    path = Metasploit::Framework.root.join("data", "mime.yml").to_path
     @extension_map = YAML.load_file(path)
   end
 

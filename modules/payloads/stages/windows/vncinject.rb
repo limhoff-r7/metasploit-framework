@@ -35,6 +35,6 @@ module Metasploit3
   end
 
   def library_path
-    File.join(Msf::Config.install_root, "data", "vncdll.dll")
+    Metasploit::Framework.root.join('data', 'vncdll.dll').to_path
   end
 end

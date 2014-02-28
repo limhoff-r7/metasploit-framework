@@ -28,11 +28,27 @@ class Metasploit3 < Msf::Auxiliary
       'DisclosureDate' => 'Jan 7 2009'))
 
     register_options(
-      [
-        Opt::RPORT(1521),
-        OptString.new('SLEEP', [ false,   'Sleep() amount between each request.', '1']),
-        OptString.new('SIDFILE', [ false, 'The file that contains a list of sids.', File.join(Msf::Config.install_root, 'data', 'wordlists', 'sid.txt')]),
-      ], self.class)
+        [
+            Opt::RPORT(1521),
+            OptString.new(
+                'SLEEP',
+                [
+                    false,
+                    'Sleep() amount between each request.',
+                    '1'
+                ]
+            ),
+            OptString.new(
+                'SIDFILE',
+                [
+                    false,
+                    'The file that contains a list of sids.',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'sid.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
 
   end
 

@@ -142,7 +142,7 @@ module Metasploit3
     register_options(
       [
         OptPath.new('PEXEC', [ true, "Full path to the file to execute",
-          File.join(Msf::Config.install_root, "data", "ipwn", "ipwn")])
+          Metasploit::Framework.root.join("data", "ipwn", "ipwn").to_path])
       ], self.class)
   end
 

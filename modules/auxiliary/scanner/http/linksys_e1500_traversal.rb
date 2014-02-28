@@ -35,13 +35,34 @@ class Metasploit3 < Msf::Auxiliary
     )
 
     register_options(
-      [
-        OptPath.new('SENSITIVE_FILES',  [ true, "File containing senstive files, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "sensitive_files.txt") ]),
-        OptString.new('USERNAME',[ true, 'User to login with', 'admin']),
-        OptString.new('PASSWORD',[ true, 'Password to login with', 'password']),
-
-      ], self.class)
+        [
+            OptPath.new(
+                'SENSITIVE_FILES',
+                [
+                    true,
+                    'File containing senstive files, one per line',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                ]
+            ),
+            OptString.new(
+                'USERNAME',
+                [
+                    true,
+                    'User to login with',
+                    'admin'
+                ]
+            ),
+            OptString.new(
+                'PASSWORD',
+                [
+                    true,
+                    'Password to login with',
+                    'password'
+                ]
+            )
+        ],
+        self.class
+    )
   end
 
   def extract_words(wordfile)

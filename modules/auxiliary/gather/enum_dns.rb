@@ -30,20 +30,102 @@ class Metasploit3 < Msf::Auxiliary
       ))
 
     register_options(
-      [
-        OptString.new('DOMAIN', [ true, "The target domain name"]),
-        OptBool.new('ENUM_AXFR', [ true, 'Initiate a zone transfer against each NS record', true]),
-        OptBool.new('ENUM_TLD', [ true, 'Perform a TLD expansion by replacing the TLD with the IANA TLD list', false]),
-        OptBool.new('ENUM_STD', [ true, 'Enumerate standard record types (A,MX,NS,TXT and SOA)', true]),
-        OptBool.new('ENUM_BRT', [ true, 'Brute force subdomains and hostnames via the supplied wordlist', false]),
-        OptBool.new('ENUM_IP6', [ true, 'Brute force hosts with IPv6 AAAA records',false]),
-        OptBool.new('ENUM_RVL', [ true, 'Reverse lookup a range of IP addresses', false]),
-        OptBool.new('ENUM_SRV', [ true, 'Enumerate the most common SRV records', true]),
-        OptPath.new('WORDLIST', [ false, "Wordlist for domain name bruteforcing", ::File.join(Msf::Config.install_root, "data", "wordlists", "namelist.txt")]),
-        OptAddress.new('NS', [ false, "Specify the nameserver to use for queries (default is system DNS)" ]),
-        OptAddressRange.new('IPRANGE', [false, "The target address range or CIDR identifier"]),
-        OptBool.new('STOP_WLDCRD', [ true, 'Stops bruteforce enumeration if wildcard resolution is detected', false])
-      ], self.class)
+        [
+            OptString.new(
+                'DOMAIN',
+                [true,
+                 "The target domain name"
+                ]
+            ),
+            OptBool.new(
+                'ENUM_AXFR',
+                [
+                    true,
+                    'Initiate a zone transfer against each NS record',
+                    true
+                ]
+            ),
+            OptBool.new(
+                'ENUM_TLD',
+                [
+                    true,
+                    'Perform a TLD expansion by replacing the TLD with the IANA TLD list',
+                    false
+                ]
+            ),
+            OptBool.new(
+                'ENUM_STD',
+                [
+                    true,
+                    'Enumerate standard record types (A,MX,NS,TXT and SOA)',
+                    true
+                ]
+            ),
+            OptBool.new(
+                'ENUM_BRT',
+                [
+                    true,
+                    'Brute force subdomains and hostnames via the supplied wordlist',
+                    false
+                ]
+            ),
+            OptBool.new(
+                'ENUM_IP6',
+                [
+                    true,
+                    'Brute force hosts with IPv6 AAAA records',
+                    false
+                ]
+            ),
+            OptBool.new(
+                'ENUM_RVL',
+                [
+                    true,
+                    'Reverse lookup a range of IP addresses',
+                    false
+                ]
+            ),
+            OptBool.new(
+                'ENUM_SRV',
+                [
+                    true,
+                    'Enumerate the most common SRV records',
+                    true
+                ]
+            ),
+            OptPath.new(
+                'WORDLIST',
+                [
+                    false,
+                    'Wordlist for domain name bruteforcing',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'namelist.txt').to_path
+                ]
+            ),
+            OptAddress.new(
+                'NS',
+                [
+                    false,
+                    "Specify the nameserver to use for queries (default is system DNS)"
+                ]
+            ),
+            OptAddressRange.new(
+                'IPRANGE',
+                [
+                    false,
+                    "The target address range or CIDR identifier"
+                ]
+            ),
+            OptBool.new(
+                'STOP_WLDCRD',
+                [
+                    true,
+                    'Stops bruteforce enumeration if wildcard resolution is detected',
+                    false
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
       [

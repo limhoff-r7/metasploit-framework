@@ -56,20 +56,23 @@ class Metasploit3 < Msf::Auxiliary
     ))
 
     register_options(
-      [
-        OptEnum.new('METHOD',    [true, 'HTTP Request Method', 'GET', ['GET', 'POST', 'HEAD', 'PUT']]),
-        OptString.new('PATH',    [true, 'Vulnerable path. Ex: /foo/index.php?pg=', '/']),
-        OptString.new('DATA',    [false,'HTTP body data', '']),
-        OptInt.new('DEPTH',      [true, 'Traversal depth', 5]),
-        OptRegexp.new('PATTERN', [true, 'Regexp pattern to determine directory traversal', '^HTTP/1.1 200 OK']),
-        OptPath.new(
-          'FILELIST',
-          [
-            true,
-            'Wordlist file to brute force',
-            File.join(Msf::Config.install_root, 'data', 'wordlists', 'sensitive_files.txt')
-          ])
-      ], self.class)
+        [
+            OptEnum.new('METHOD',    [true, 'HTTP Request Method', 'GET', ['GET', 'POST', 'HEAD', 'PUT']]),
+            OptString.new('PATH',    [true, 'Vulnerable path. Ex: /foo/index.php?pg=', '/']),
+            OptString.new('DATA',    [false,'HTTP body data', '']),
+            OptInt.new('DEPTH',      [true, 'Traversal depth', 5]),
+            OptRegexp.new('PATTERN', [true, 'Regexp pattern to determine directory traversal', '^HTTP/1.1 200 OK']),
+            OptPath.new(
+                'FILELIST',
+                [
+                    true,
+                    'Wordlist file to brute force',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
       [

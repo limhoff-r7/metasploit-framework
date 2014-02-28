@@ -32,9 +32,19 @@ class Metasploit3 < Msf::Auxiliary
         ],
       'DisclosureDate' => 'Nov 10 2009'
     ))
-    register_options([
-      OptPath.new('EOTFILE', [ true, "The EOT template to use to generate the trigger", File.join(Msf::Config.install_root, "data", "exploits", "pricedown.eot")]),
-    ], self.class)
+    register_options(
+        [
+            OptPath.new(
+                'EOTFILE',
+                [
+                    true,
+                    "The EOT template to use to generate the trigger",
+                    Metasploit::Framework.root.join('data', 'exploits', 'pricedown.eot').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
 
   end
 

@@ -63,12 +63,8 @@ host,port = session.session_host, session.session_port
 
 print_status("New session on #{host}:#{port}...")
 
-logs = ::File.join(Msf::Config.install_root, 'logs', 'screenshot', host)
-
-outfile = ::File.join(Msf::Config.log_directory,file)
-
-::FileUtils.mkdir_p(logs)
-
+logs_pathname = Metasploit::Framework.root.join('logs', 'screenshot', host)
+logs_pathname.mkpath
 
 begin
 	process2mig = "explorer.exe"
@@ -94,7 +90,7 @@ begin
 
 	begin
 
-		data="<title>#{host}</title><img src='file:///#{Msf::Config.install_root}/logs/screenshot/#{host}/screenshot.jpeg' width='500' height='500'><meta http-equiv='refresh' content='1'>"
+		data="<title>#{host}</title><img src='file:///#{Metasploit::Framework.root}/logs/screenshot/#{host}/screenshot.jpeg' width='500' height='500'><meta http-equiv='refresh' content='1'>"
 		path1 = File.join(logs,"video.html")
 		File.open(path1, 'w') do |f2|
 			f2.puts(data)
@@ -105,11 +101,11 @@ begin
 
 			print_status("Runing in local mode => windows")
 			print_status("Opening Interactive view...")
-			localcmd="start firefox -width 530 -height 660 \"file:///#{Msf::Config.install_root}/logs/screenshot/#{host}/video.html\""
+			localcmd="start firefox -width 530 -height 660 \"file:///#{Metasploit::Framework.root}/logs/screenshot/#{host}/video.html\""
 		else
 			print_status("Runing in local mode => Linux")
 			print_status("Opening Interactive view...")
-			localcmd="bash firefox -width 530 -height 660 \"file:///#{Msf::Config.install_root}/logs/screenshot/#{host}/video.html&\""
+			localcmd="bash firefox -width 530 -height 660 \"file:///#{Metasploit::Framework.root}/logs/screenshot/#{host}/video.html&\""
 		end
 
 		system (localcmd)
@@ -133,7 +129,7 @@ begin
 	print_status("The interactive Session ended...")
 	data = <<-EOS
 <title>#{host} - Interactive Session ended</title>
-<img src='file:///#{Msf::Config.install_root}/logs/screenshot/#{host}/screenshot.jpeg' width='500' height='500'>
+<img src='file:///#{Metasploit::Framework.root}/logs/screenshot/#{host}/screenshot.jpeg' width='500' height='500'>
 <script>alert('Interactive Session ended - Happy Hunting')</script>
 EOS
 	File.open(path1, 'w') do |f2|

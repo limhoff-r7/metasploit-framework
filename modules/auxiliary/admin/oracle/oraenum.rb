@@ -657,26 +657,34 @@ class Metasploit3 < Msf::Auxiliary
           FROM sys.user$
           where password != 'null' and  type# = 1
         |
-        ordfltpss = "#{File.join(Msf::Config.install_root, "data", "wordlists", "oracle_default_hashes.txt")}"
         returnedstring = prepare_exec(query)
         accts = {}
         returnedstring.each do |record|
           user,pass = record.split(",")
           accts["#{pass.chomp}"] = user
         end
-        ::File.open(ordfltpss, "rb").each_line do  |l|
-          accrcrd =  l.split(",")
-          if accts.has_key?(accrcrd[2])
-            print_status("\tDefault pass for account #{accrcrd[0]} is #{accrcrd[1]} ")
-            report_note(
-              :host => datastore['RHOST'],
-              :proto => 'tcp',
-              :sname => 'oracle',
-              :port => datastore['RPORT'],
-              :type => 'ORA_ENUM',
-              :data => "Account with Default Password #{accrcrd[0]} is #{accrcrd[1]}",
-              :update => :unique_data
-            )
+
+        oracle_default_hashes_pathname = Metasploit::Framework.root.join(
+            'data',
+            'wordlists',
+            'oracle_default_hashes.txt'
+        )
+
+        oracle_default_hashes_pathname.open('rb') do |f|
+          f.each_line do  |l|
+            accrcrd =  l.split(",")
+            if accts.has_key?(accrcrd[2])
+              print_status("\tDefault pass for account #{accrcrd[0]} is #{accrcrd[1]} ")
+              report_note(
+                  :host => datastore['RHOST'],
+                  :proto => 'tcp',
+                  :sname => 'oracle',
+                  :port => datastore['RPORT'],
+                  :type => 'ORA_ENUM',
+                  :data => "Account with Default Password #{accrcrd[0]} is #{accrcrd[1]}",
+                  :update => :unique_data
+              )
+            end
           end
         end
       end

@@ -38,19 +38,83 @@ class Metasploit3 < Msf::Auxiliary
       OptInt.new('RPORT', [true, "Remote port", 80 ]),
     ], self.class)
 
-    register_advanced_options([
-      OptPath.new('CrawlerModulesDir', [true,	'The base directory containing the crawler modules',
-        File.join(Msf::Config.install_root, "data", "msfcrawler")
-      ]),
-      OptBool.new('EnableUl', [ false, "Enable maximum number of request per URI", true ]),
-      OptBool.new('StoreDB', [ false, "Store requests in database", false ]),
-      OptInt.new('MaxUriLimit', [ true, "Number max. request per URI", 10]),
-      OptInt.new('SleepTime', [ true, "Sleep time (secs) between requests", 0]),
-      OptInt.new('TakeTimeout', [ true, "Timeout for loop ending", 15]),
-      OptInt.new('ReadTimeout', [ true, "Read timeout (-1 forever)", 3]),
-      OptInt.new('ThreadNum', [ true, "Threads number", 20]),
-      OptString.new('DontCrawl',	[true,	"Filestypes not to crawl", '.exe,.zip,.tar,.bz2,.run,.asc,.gz']),
-    ], self.class)
+    register_advanced_options(
+        [
+            OptPath.new(
+                'CrawlerModulesDir',
+                [
+                    true,
+                    'The base directory containing the crawler modules',
+                    Metasploit::Framework.root.join('data', 'msfcrawler').to_path
+                ]
+            ),
+            OptBool.new(
+                'EnableUl',
+                [
+                    false,
+                    "Enable maximum number of request per URI",
+                    true
+                ]
+            ),
+            OptBool.new(
+                'StoreDB',
+                [
+                    false,
+                    "Store requests in database",
+                    false
+                ]
+            ),
+            OptInt.new(
+                'MaxUriLimit',
+                [
+                    true,
+                    "Number max. request per URI",
+                    10
+                ]
+            ),
+            OptInt.new(
+                'SleepTime',
+                [
+                    true,
+                    "Sleep time (secs) between requests",
+                    0
+                ]
+            ),
+            OptInt.new(
+                'TakeTimeout',
+                [
+                    true,
+                    "Timeout for loop ending",
+                    15
+                ]
+            ),
+            OptInt.new(
+                'ReadTimeout',
+                [
+                    true,
+                    "Read timeout (-1 forever)",
+                    3
+                ]
+            ),
+            OptInt.new(
+                'ThreadNum',
+                [
+                    true,
+                    "Threads number",
+                    20
+                ]
+            ),
+            OptString.new(
+                'DontCrawl',
+                [
+                    true,
+                    "Filestypes not to crawl",
+                    '.exe,.zip,.tar,.bz2,.run,.asc,.gz'
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
   attr_accessor :ctarget, :cport, :cssl

@@ -42,12 +42,27 @@ class Metasploit3 < Msf::Auxiliary
     )
 
     register_options(
-      [
-        Opt::RPORT(8443),
-        OptBool.new('SSL', [true, 'Use SSL', true]),
-        OptPath.new('SENSITIVE_FILES', [ true, "File containing senstive files, one per line",
-        File.join(Msf::Config.install_root, "data", "wordlists", "sensitive_files.txt") ]),
-      ], self.class)
+        [
+            Opt::RPORT(8443),
+            OptBool.new(
+                'SSL',
+                [
+                    true,
+                    'Use SSL',
+                    true
+                ]
+            ),
+            OptPath.new(
+                'SENSITIVE_FILES',
+                [
+                    true,
+                    "File containing senstive files, one per line",
+                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
   def extract_words(wordfile)

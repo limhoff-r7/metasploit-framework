@@ -38,19 +38,44 @@ class Metasploit3 < Msf::Auxiliary
           [ 'BID', '34993' ],
         ]))
 
+    wmap_pathname = Metasploit::Framework.root.join('data', 'wmap')
     register_options(
-      [
-        OptString.new('PATH', [ true,  "The path to identify files", '/']),
-        OptInt.new('ERROR_CODE', [ true, "Error code for non existent directory", 404]),
-        OptPath.new('DICTIONARY',   [ false, "Path of word dictionary to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_dirs.txt")
-          ]
-        ),
-        OptPath.new('HTTP404S',   [ false, "Path of 404 signatures to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_404s.txt")
-          ]
-        )
-      ], self.class)
+        [
+            OptString.new(
+                'PATH',
+                [
+                    true,
+                    "The path to identify files",
+                    '/'
+                ]
+            ),
+            OptInt.new(
+                'ERROR_CODE',
+                [
+                    true,
+                    "Error code for non existent directory",
+                    404
+                ]
+            ),
+            OptPath.new(
+                'DICTIONARY',
+                [
+                    false,
+                    'Path of word dictionary to use',
+                    wmap_pathname.join('wmap_dirs.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'HTTP404S',
+                [
+                    false,
+                    'Path of 404 signatures to use',
+                    wmap_pathname.join('wmap_404s.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
       [

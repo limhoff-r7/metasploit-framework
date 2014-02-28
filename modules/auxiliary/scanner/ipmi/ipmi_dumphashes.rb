@@ -35,14 +35,15 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
     [
       Opt::RPORT(623),
       OptPath.new('USER_FILE', [ true, "File containing usernames, one per line",
-        File.join(Msf::Config.install_root, 'data', 'wordlists', 'ipmi_users.txt')
+        wordlists_pathname.join('ipmi_users.txt').to_path
       ]),
       OptPath.new('PASS_FILE', [ true, "File containing common passwords for offline cracking, one per line",
-        File.join(Msf::Config.install_root, 'data', 'wordlists', 'ipmi_passwords.txt')
+        wordlists_pathname.join('ipmi_passwords.txt').to_path
       ]),
       OptString.new('OUTPUT_HASHCAT_FILE', [false, "Save captured password hashes in hashcat format"]),
       OptString.new('OUTPUT_JOHN_FILE', [false, "Save captured password hashes in john the ripper format"]),

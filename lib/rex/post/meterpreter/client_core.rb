@@ -145,15 +145,18 @@ class ClientCore < Extension
     if (mod == nil)
       raise RuntimeError, "No modules were specified", caller
     end
-    # Get us to the installation root and then into data/meterpreter, where
-    # the file is expected to be
-    path = ::File.join(Msf::Config.install_root, 'data', 'meterpreter', 'ext_server_' + mod.downcase + ".#{client.binary_suffix}")
 
     if (opts['ExtensionPath'])
-      path = opts['ExtensionPath']
+      pathname = Pathname.new(opts['ExtensionPath'])
+    else
+      pathname = Metasploit::Framework.root.join(
+          'data',
+          'meterpreter',
+          "ext_server_#{mod.downcase}.#{client.binary_suffix}"
+      )
     end
 
-    path = ::File.expand_path(path)
+    path = pathname.expand_path.to_path
 
     # Load the extension DLL
     commands = load_library(
@@ -219,7 +222,11 @@ class ClientCore < Extension
 
     # Create the migrate stager
     migrate_stager = c.new()
-    migrate_stager.datastore['DLL'] = ::File.join( Msf::Config.install_root, "data", "meterpreter", "metsrv.#{binary_suffix}" )
+    migrate_stager.datastore['DLL'] = Metasploit::Framework.root.join(
+        'data',
+        'meterpreter',
+        "metsrv.#{binary_suffix}"
+    ).to_path
 
     blob = migrate_stager.stage_payload
 

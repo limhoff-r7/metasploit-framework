@@ -28,14 +28,26 @@ class Metasploit3 < Msf::Auxiliary
       'License'		=> BSD_LICENSE))
 
     register_options(
-      [
-        OptString.new('PATH', [ true,  "The path  to identify files", '/']),
-        OptPath.new('DICTIONARY',   [ false, "Path of word dictionary to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_dirs.txt")
-          ]
-        )
-
-      ], self.class)
+        [
+            OptString.new(
+                'PATH',
+                [
+                    true,
+                    "The path  to identify files",
+                    '/'
+                ]
+            ),
+            OptPath.new(
+                'DICTIONARY',
+                [
+                    false,
+                    'Path of word dictionary to use',
+                    Metasploit::Framework.root.join('data', 'wmap', 'wmap_dirs.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
 
     register_advanced_options(
       [

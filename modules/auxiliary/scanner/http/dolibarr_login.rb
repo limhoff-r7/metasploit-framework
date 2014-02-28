@@ -25,16 +25,44 @@ class Metasploit3 < Msf::Auxiliary
       'License'        => MSF_LICENSE
     ))
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
-      [
-        OptPath.new('USERPASS_FILE',  [ false, "File containing users and passwords separated by space, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_userpass.txt") ]),
-        OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_users.txt") ]),
-        OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "http_default_pass.txt") ]),
-        OptString.new('TARGETURI', [true, 'The URI path to dolibarr', '/dolibarr/'])
-      ], self.class)
+        [
+            OptPath.new(
+                'USERPASS_FILE',
+                [
+                    false,
+                    'File containing users and passwords separated by space, one pair per line',
+                    Metasploit::Framework.root.join('http_default_userpass.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    false,
+                    'File containing users, one per line',
+                    Metasploit::Framework.root.join('http_default_users.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false,
+                    'File containing passwords, one per line',
+                    Metasploit::Framework.root.join('http_default_pass.txt').to_path
+                ]
+            ),
+            OptString.new(
+                'TARGETURI',
+                [
+                    true,
+                    'The URI path to dolibarr',
+                    '/dolibarr/'
+                ]
+            )
+        ],
+        self.class
+    )
   end
 
 

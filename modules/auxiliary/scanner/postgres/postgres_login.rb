@@ -33,14 +33,15 @@ class Metasploit3 < Msf::Auxiliary
         ]
     ))
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
       [
         OptPath.new('USERPASS_FILE',  [ false, "File containing (space-seperated) users and passwords, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "postgres_default_userpass.txt") ]),
+          wordlists_pathname.join("postgres_default_userpass.txt").to_path ]),
         OptPath.new('USER_FILE',      [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "postgres_default_user.txt") ]),
+          wordlists_pathname.join("postgres_default_user.txt").to_path ]),
         OptPath.new('PASS_FILE',      [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "postgres_default_pass.txt") ]),
+          wordlists_pathname.join("postgres_default_pass.txt").to_path ]),
       ], self.class)
 
     deregister_options('SQL')

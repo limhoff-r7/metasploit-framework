@@ -34,9 +34,18 @@ class Metasploit3 < Msf::Auxiliary
 
     register_options(
         [
-          OptString.new('CSVFILE', [ false, 'The file that contains a list of default accounts.', File.join(Msf::Config.install_root, 'data', 'wordlists', 'oracle_default_passwords.csv')]),
-          Opt::RPORT(8080),
-        ], self.class)
+            OptString.new(
+                'CSVFILE',
+                [
+                    false,
+                    'The file that contains a list of default accounts.',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'oracle_default_passwords.csv').to_path
+                ]
+            ),
+            Opt::RPORT(8080),
+        ],
+        self.class
+    )
     deregister_options('DBUSER','DBPASS')
   end
 

@@ -35,15 +35,36 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
+    wordlists_pathname = Metasploit::Farmework.root.join('data', 'wordlists')
     register_options(
-      [
-        OptPath.new('USERPASS_FILE',  [ false, "File containing (space-seperated) users and passwords, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "db2_default_userpass.txt") ]),
-        OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "db2_default_user.txt") ]),
-        OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "db2_default_pass.txt") ]),
-      ], self.class)
+        [
+            OptPath.new(
+                'USERPASS_FILE',
+                [
+                    false,
+                    'File containing (space-seperated) users and passwords, one pair per line',
+                    wordlists_pathname.join('db2_default_userpass.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    false,
+                    'File containing users, one per line',
+                    wordlists_pathname.join('db2_default_user.txt').to_path
+                ]
+            ),
+            OptPath.new(
+                'PASS_FILE',
+                [
+                    false,
+                    'File containing passwords, one per line',
+                    wordlists_pathname.join('db2_default_pass.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
   def run_host(ip)

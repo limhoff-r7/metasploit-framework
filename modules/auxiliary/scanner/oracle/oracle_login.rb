@@ -39,7 +39,7 @@ class Metasploit3 < Msf::Auxiliary
     register_options(
       [
         OptPath.new('USERPASS_FILE',  [ false, "File containing (space-seperated) users and passwords, one pair per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "oracle_default_userpass.txt") ]),
+          Metasploit::Framework.root.join("data", "wordlists", "oracle_default_userpass.txt").to_path ]),
         OptString.new('SID', [ true, 'The instance (SID) to authenticate against', 'XE'])
       ], self.class)
 

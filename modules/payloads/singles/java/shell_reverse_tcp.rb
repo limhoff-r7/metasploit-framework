@@ -49,6 +49,7 @@ module Metasploit3
 
   def generate_jar(opts={})
     jar = Rex::Zip::Jar.new
+
     @class_files.each do |path|
       1.upto(path.length - 1) do |idx|
         full = path[0,idx].join("/") + "/"
@@ -56,11 +57,15 @@ module Metasploit3
           jar.add_file(full, '')
         end
       end
-      fd = File.open(File.join( Msf::Config.install_root, "data", "java", path ), "rb")
-      data = fd.read(fd.stat.size)
+
+      pathname = Metasploit::Framework.root.join('data', 'java', *path)
+
+      data = pathname.open("rb") { |f|
+        f.read(f.stat.size)
+      }
       jar.add_file(path.join("/"), data)
-      fd.close
     end
+
     jar.build_manifest(:main_class => "metasploit.Payload")
     jar.add_file("metasploit.dat", config)
 

@@ -101,11 +101,11 @@ class EXE
   end
 
   def self.read_replace_script_template(filename, hash_sub)
-    template_pathname = File.join(Msf::Config.install_root, "data", "templates", "scripts", filename)
-
+    template_pathname = Metasploit::Framework.root.join('data', 'templates', 'scripts', filename)
     template = ''
-    File.open(template_pathname, "rb") do |f|
-      template = f.read
+
+    template_pathname.open('rb') do |f|
+      template = f.read(f.stat.size)
     end
 
     return template % hash_sub

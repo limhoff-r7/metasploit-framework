@@ -34,15 +34,42 @@ class Metasploit3 < Msf::Auxiliary
       ], self.class)
 
     register_advanced_options(
-      [
-        OptInt.new('ErrorCode', [ true,  "The expected http code for non existant directories", 404]),
-        OptPath.new('HTTP404Sigs',   [ false, "Path of 404 signatures to use",
-            File.join(Msf::Config.install_root, "data", "wmap", "wmap_404s.txt")
-          ]
-        ),
-        OptBool.new('NoDetailMessages', [ false, "Do not display detailed test messages", true ]),
-        OptInt.new('TestThreads', [ true, "Number of test threads", 25])
-      ], self.class)
+        [
+            OptInt.new(
+                'ErrorCode',
+                [
+                    true,
+                    "The expected http code for non existant directories",
+                    404
+                ]
+            ),
+            OptPath.new(
+                'HTTP404Sigs',
+                [
+                    false,
+                    'Path of 404 signatures to use',
+                    Metasploit::Framework.root.join('data', 'wmap', 'wmap_404s.txt').to_path
+                ]
+            ),
+            OptBool.new(
+                'NoDetailMessages',
+                [
+                    false,
+                    "Do not display detailed test messages",
+                    true
+                ]
+            ),
+            OptInt.new(
+                'TestThreads',
+                [
+                    true,
+                    "Number of test threads",
+                    25
+                ]
+            )
+        ],
+        self.class
+    )
 
   end
 

@@ -48,7 +48,7 @@ class Metasploit3 < Msf::Auxiliary
     register_options(
       [
         OptPath.new('SITELIST',	  [ false, "YAML file of URL/Replacement pairs for GET replacement",
-            File.join(Msf::Config.install_root, "data", "exploits", "wifi", "airpwn", "sitelist.yml")
+            Metasploit::Framework.root.join("data", "exploits", "wifi", "airpwn", "sitelist.yml").to_path
           ]),
         OptBool.new('USESITEFILE', [ true, "Use site list file for match/response", "false"]),
         OptString.new('FILTER',	  [ true, "Default BPF filter", "port 80"]),

@@ -33,6 +33,7 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
+    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
     register_options(
         [
             Opt::RPORT(110),
@@ -40,13 +41,13 @@ class Metasploit3 < Msf::Auxiliary
                         [
                             false,
                             'The file that contains a list of probable users accounts.',
-                            File.join(Msf::Config.install_root, 'data', 'wordlists', 'unix_users.txt')
+                            wordlists_pathname.join('unix_users.txt').to_path
                         ]),
             OptPath.new('PASS_FILE',
                         [
                             false,
                             'The file that contains a list of probable passwords.',
-                            File.join(Msf::Config.install_root, 'data', 'wordlists', 'unix_passwords.txt')
+                            wordlists_pathname.join('unix_passwords.txt').to_path
                         ])
         ], self.class)
   end

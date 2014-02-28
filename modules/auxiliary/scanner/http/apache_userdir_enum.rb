@@ -43,11 +43,26 @@ class Metasploit3 < Msf::Auxiliary
     )
 
     register_options(
-      [
-        OptString.new('URI', [true, 'The path to users Home Page', '/']),
-        OptPath.new('USER_FILE',  [ true, "File containing users, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "unix_users.txt") ]),
-      ], self.class)
+        [
+            OptString.new(
+                'URI',
+                [
+                    true,
+                    'The path to users Home Page',
+                    '/'
+                ]
+            ),
+            OptPath.new(
+                'USER_FILE',
+                [
+                    true,
+                    'File containing users, one per line',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'unix_users.txt').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
 
     deregister_options(
       'PASSWORD',

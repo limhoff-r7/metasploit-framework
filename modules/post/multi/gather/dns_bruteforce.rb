@@ -27,13 +27,21 @@ class Metasploit3 < Msf::Post
         'SessionTypes'  => [ 'meterpreter', 'shell' ]
       ))
     register_options(
-      [
+        [
 
-        OptString.new('DOMAIN', [true, 'Domain to do a fordward lookup bruteforce against.']),
-        OptPath.new('NAMELIST',[true, "List of hostnames or subdomains to use.",
-            ::File.join(Msf::Config.install_root, "data", "wordlists", "namelist.txt")])
+            OptString.new('DOMAIN', [true, 'Domain to do a fordward lookup bruteforce against.']),
+            OptPath.new(
+                'NAMELIST',
+                [
+                    true,
+                    "List of hostnames or subdomains to use.",
+                    Metasploit::Framework.root.join('data', 'wordlists', 'namelist.txt').to_path
+                ]
+            )
 
-      ], self.class)
+        ],
+        self.class
+    )
   end
 
   # Run Method for when run command is issued

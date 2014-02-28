@@ -10,7 +10,7 @@ if (framework.datastore['WMAP_PROFILE'] == nil)
 	profile = nil
 elsif (framework.datastore['WMAP_PROFILE'] == "profile")
 	#default profile of the metasploit installation
-	profile = "#{Msf::Config.install_root}/data/wmap/wmap_sample_profile.txt"
+	profile = Metasploit::Framework.root.join('data', 'wmap', 'wmap_sample_profile.txt').to_path
 else
 	#we are able to define an other file as the profile file, for example we are able to
 	#define a file in our .msf4 directory which we use for our webaudits

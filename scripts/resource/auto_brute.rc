@@ -14,7 +14,7 @@
 #throttling if we get too much jobs
 maxjobs = 8
 
-wordlistpath = "#{Msf::Config.install_root}/data/wordlists"
+wordlistpath = Metasploit::Framework.root.join('data', 'wordlists').to_path
 
 if (framework.datastore['USER_FILE'] == nil)
 	# we are using the default unix wordlists

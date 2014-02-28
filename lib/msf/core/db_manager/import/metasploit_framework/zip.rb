@@ -83,7 +83,7 @@ module Msf::DBManager::Import::MetasploitFramework::Zip
     data = ::File.open(args[:filename], "rb") {|f| f.read(f.stat.size)}
     wspace = args[:wspace] || args['wspace'] || workspace
     bl = validate_ips(args[:blacklist]) ? args[:blacklist].split : []
-    basedir = args[:basedir] || args['basedir'] || ::File.join(Msf::Config.install_root, "data", "msf")
+    basedir = args[:basedir] || args['basedir'] || Metasploit::Framework.root.join('data', 'msf').to_path
 
     allow_yaml = false
     btag = nil

@@ -45,20 +45,19 @@ class Priv < Extension
     request = Packet.create_request( 'priv_elevate_getsystem' )
 
     elevator_name = Rex::Text.rand_text_alpha_lower( 6 )
+    affix = ''
 
-    if( client.platform == 'x64/win64' )
-      elevator_path = ::File.join( Msf::Config.install_root, "data", "meterpreter", "elevator.x64.dll" )
-    else
-      elevator_path = ::File.join( Msf::Config.install_root, "data", "meterpreter", "elevator.dll" )
+    if client.platform == 'x64/win64'
+      affix = '.x64'
     end
 
-    elevator_path = ::File.expand_path( elevator_path )
+    elevator_pathname = Metasploit::Framework.root.join('data', 'meterpreter', "elevator#{affix}.dll").expand_path
 
     elevator_data = ""
 
-    ::File.open( elevator_path, "rb" ) { |f|
-      elevator_data += f.read( f.stat.size )
-    }
+    elevator_pathname.open('rb') do |f|
+      elevator_data = f.read(f.stat.size)
+    end
 
     request.add_tlv( TLV_TYPE_ELEVATE_TECHNIQUE, technique )
     request.add_tlv( TLV_TYPE_ELEVATE_SERVICE_NAME, elevator_name )

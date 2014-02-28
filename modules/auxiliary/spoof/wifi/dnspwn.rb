@@ -31,7 +31,7 @@ class Metasploit3 < Msf::Auxiliary
     register_options(
       [
         OptPath.new('DNSLIST',	  [ false, "YAML file of DNS entries for replacement",
-            File.join(Msf::Config.install_root, "data", "exploits", "wifi", "dnspwn", "dnslist.yml")
+            Metasploit::Framework.root.join("data", "exploits", "wifi", "dnspwn", "dnslist.yml").to_path
           ]),
         OptBool.new('USEDNSFILE', [ true, "Use dns list file for response", "false"]),
         OptString.new('FILTER',	  [ true, "Default BPF filter", "port 53"]),

@@ -42,12 +42,27 @@ class Metasploit3 < Msf::Auxiliary
     )
 
     register_options(
-      [
-        Opt::RPORT(8080),
-        OptPath.new('SENSITIVE_FILES',  [ true, "File containing senstive files, one per line",
-          File.join(Msf::Config.install_root, "data", "wordlists", "sensitive_files.txt") ]),
-        OptInt.new('MAXDIRS', [ true, 'The maximum directory depth to search', 7]),
-      ], self.class)
+        [
+            Opt::RPORT(8080),
+            OptPath.new(
+                'SENSITIVE_FILES',
+                [
+                    true,
+                    "File containing senstive files, one per line",
+                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                ]
+            ),
+            OptInt.new(
+                'MAXDIRS',
+                [
+                    true,
+                    'The maximum directory depth to search',
+                    7
+                ]
+            ),
+        ],
+        self.class
+    )
   end
 
   def extract_words(wordfile)

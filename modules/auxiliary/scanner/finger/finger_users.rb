@@ -24,13 +24,20 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
-    register_options([
-      Opt::RPORT(79),
-      OptString.new('USERS_FILE',
-        [ true, 'The file that contains a list of default UNIX accounts.',
-          File.join(Msf::Config.install_root, 'data', 'wordlists', 'unix_users.txt')
-        ]
-      )], self.class)
+    register_options(
+        [
+            Opt::RPORT(79),
+            OptString.new(
+                'USERS_FILE',
+                [
+                    true,
+                    'The file that contains a list of default UNIX accounts.',
+                    Metasploit::Framework.root.join('data', 'wordlists', 'unix_users.txt').to_path
+                ]
+            )
+        ],
+        self.class
+    )
   end
 
   def run_host(ip)

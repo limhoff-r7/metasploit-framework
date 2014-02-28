@@ -37,13 +37,34 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
-      register_options(
+    register_options(
         [
-          OptString.new('RHOST', [true, "SMTP server address",'127.0.0.1']),
-          OptString.new('RPORT', [true, "SMTP server port",'25']),
-          OptString.new('YAML_CONFIG', [true, "Full path to YAML Configuration file",
-            File.join(Msf::Config.install_root, "data","emailer_config.yaml")]),
-        ], self.class)
+            OptString.new(
+                'RHOST',
+                [
+                    true,
+                    "SMTP server address",'127.0.0.1'
+                ]
+            ),
+            OptString.new(
+                'RPORT',
+                [
+                    true,
+                    'SMTP server port',
+                    '25'
+                ]
+            ),
+            OptString.new(
+                'YAML_CONFIG',
+                [
+                    true,
+                    'Full path to YAML Configuration file',
+                    Metasploit::Framework.root.join('data', 'emailer_config.yaml').to_path
+                ]
+            ),
+        ],
+        self.class
+    )
 
     # Hide this option from the user
     deregister_options('MAILTO')
