@@ -2,16 +2,68 @@ require 'spec_helper'
 
 describe Metasploit::Framework::Framework::Configuration do
   subject(:configuration) do
-    described_class.new
+    described_class.new(attributes)
+  end
+
+  let(:attributes) do
+    {}
   end
 
   context 'CONSTANTS' do
+    context 'FILE_BASE_NAME' do
+      subject(:file_base_name) do
+        described_class::FILE_BASE_NAME
+      end
+
+      it { should == 'config' }
+    end
+
     context 'ROOT_BASE_NAME' do
       subject(:root_base_name) do
         described_class::ROOT_BASE_NAME
       end
 
       it { should == '.msf4' }
+    end
+  end
+
+  context '#file_pathname' do
+    subject(:file_pathname) do
+      configuration.file_pathname
+    end
+
+    context 'with set' do
+      let(:attributes) do
+        {
+            file_pathname: expected_file_pathname
+        }
+      end
+
+      let(:expected_file_pathname) do
+        Metasploit::Model::Spec.temporary_pathname.join('file')
+      end
+
+      it 'should use set value' do
+        expect(file_pathname).to eq(expected_file_pathname)
+      end
+    end
+
+    context 'without set' do
+      let(:attributes) do
+        {
+
+            # set #root to ensure #root is being used instead of ::root
+            root: root
+        }
+      end
+
+      let(:root) do
+        Metasploit::Model::Spec.temporary_pathname.join('root')
+      end
+
+      it 'should be FILE_BASE_NAME under #root' do
+        expect(file_pathname).to eq(root.join(described_class::FILE_BASE_NAME))
+      end
     end
   end
 

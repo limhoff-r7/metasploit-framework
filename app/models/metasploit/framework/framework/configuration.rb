@@ -7,6 +7,7 @@ class Metasploit::Framework::Framework::Configuration < Metasploit::Model::Base
   # CONSTANTS
   #
 
+  FILE_BASE_NAME = 'config'
   # The base name of the {root} of the form .msf<major>.
   ROOT_BASE_NAME = ".msf#{Msf::Framework::Major}"
   # Name of environment variables that can hold the path to the directory that is the parent directory of {root}, in
@@ -22,6 +23,11 @@ class Metasploit::Framework::Framework::Configuration < Metasploit::Model::Base
   # Attributes
   #
 
+  # @!attribute [rw] file_pathname
+  #   The path to the file where this configuration is persisted.
+  #
+  #   @return [Pathname]
+
   # @!attribute [rw] root
   #   The root directory under which the {#path} is located and the various configuration directories are
   #   created.
@@ -31,6 +37,21 @@ class Metasploit::Framework::Framework::Configuration < Metasploit::Model::Base
   #
   # Methods
   #
+
+  # The path to file where this configuration is persisted.
+  #
+  # @return [Pathname]
+  def file_pathname
+    @file_pathname ||= root.join(FILE_BASE_NAME)
+  end
+
+  # Sets path to file where this configuration is persisted.
+  #
+  # @param pathname [String, Pathname]
+  # @return [Pathname]
+  def file_pathname=(pathname)
+    @file_pathname = Pathname.new(pathname)
+  end
 
   # Determines the root directory for configuration by checking environment variables, ~ expansion and finally, using
   # {Metasploit::Framework.root}.
