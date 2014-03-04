@@ -23,16 +23,7 @@ class Config < Hash
   FileSep     = File::SEPARATOR
   Defaults    =
     {
-      'ConfigDirectory'     => get_config_root,
-      'ConfigFile'          => "config",
-      'ModuleDirectory'     => "modules",
-      'ScriptDirectory'     => "scripts",
-      'LogDirectory'        => "logs",
-      'SessionLogDirectory' => "logs/sessions",
-      'PluginDirectory'     => "plugins",
-      'DataDirectory'       => "data",
-      'LootDirectory'       => "loot",
-      'LocalDirectory'      => "local"
+      'ConfigDirectory'     => get_config_root
     }
 
   ##
@@ -178,7 +169,7 @@ class Config < Hash
   # Returns the full path to the configuration file.
   #
   def config_file
-    config_directory + FileSep + self['ConfigFile']
+    config_directory + FileSep + 'config'
   end
 
   #
@@ -192,49 +183,49 @@ class Config < Hash
   # Returns the global module directory.
   #
   def module_directory
-    Metasploit::Framework.root.join(self['ModuleDirectory']).to_path
+    Metasploit::Framework.root.join('modules').to_path
   end
 
   #
   # Returns the path that scripts can be loaded from.
   #
   def script_directory
-    Metasploit::Framework.root.join(self['ScriptDirectory']).to_path
+    Metasploit::Framework.root.join('scripts').to_path
   end
 
   #
   # Returns the directory that log files should be stored in.
   #
   def log_directory
-    config_directory + FileSep + self['LogDirectory']
+    config_directory + FileSep + 'logs'
   end
 
   #
   # Returns the directory that plugins are stored in.
   #
   def plugin_directory
-    Metasploit::Framework.root.join(self['PluginDirectory']).to_path
+    Metasploit::Framework.root.join('plugins').to_path
   end
 
   #
   # Returns the directory in which session log files are to reside.
   #
   def session_log_directory
-    config_directory + FileSep + self['SessionLogDirectory']
+    config_directory + FileSep + 'logs/sessions'
   end
 
   #
   # Returns the directory in which captured data will reside.
   #
   def loot_directory
-    config_directory + FileSep + self['LootDirectory']
+    config_directory + FileSep + 'loot'
   end
 
   #
   # Returns the directory in which locally-generated data will reside.
   #
   def local_directory
-    config_directory + FileSep + self['LocalDirectory']
+    config_directory + FileSep + 'local'
   end
 
   #
@@ -262,7 +253,7 @@ class Config < Hash
   # Returns the data directory
   #
   def data_directory
-    Metasploit::Framework.root.join(self['DataDirectory'])
+    Metasploit::Framework.root.join('data')
   end
 
   #
