@@ -28,10 +28,11 @@ module Framework
     # framework default plugin path as necessary.
     #
     def load(path, opts = {})
-      def_path = Msf::Config.plugin_directory + File::SEPARATOR + path
+      pathname = Metasploit::Framework.pathnames.plugins.join(path)
+      extensioned_pathname = Metasploit::Framework.pathnames.plugins.join("#{path}.rb")
 
-      if (File.exists?(def_path) or File.exists?(def_path + ".rb"))
-        super(def_path, opts)
+      if pathname.exists? || extensioned_pathname.exists?
+        super(pathname.to_pathm opts)
       else
         super
       end

@@ -26,13 +26,10 @@ module Metasploit3
   end
 
   def generate_stage
-    file = File.join(Msf::Config.data_directory, "meterpreter", "meterpreter.php")
+    met_pathname = Metasploit::Framework.pathnames.data.join('meterpreter', 'meterpreter.php')
 
-    met = File.open(file, "rb") {|f|
+    met_pathname.open("rb") { |f|
       f.read(f.stat.size)
     }
-    #met.gsub!(/#.*?$/, '')
-    #met = Rex::Text.compress(met)
-    met
   end
 end

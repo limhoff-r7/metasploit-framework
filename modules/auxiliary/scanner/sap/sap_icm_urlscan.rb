@@ -39,17 +39,15 @@ class Metasploit3 < Msf::Auxiliary
   # Base Structure of module borrowed from jboss_vulnscan
   def run_host(ip)
     # If URLFILE is set empty, obviously the user made a silly mistake
-    if datastore['URLFILE'].empty?
+    url_file = datastore['URLFILE']
+
+    if url_file.empty?
       print_error("Please specify a URLFILE")
       return
     end
 
-    # Initialize the actual URLFILE path
-    if datastore['URLFILE'] == "sap_icm_paths.txt"
-      url_file = "#{Msf::Config.data_directory}/wordlists/#{datastore['URLFILE']}"
-    else
-      # Not the default sap_icm_paths file
-      url_file = datastore['URLFILE']
+    if url_file == "sap_icm_paths.txt"
+      url_file = Metasploit::Framework.pathnames.wordlists.join(url_file)
     end
 
     # If URLFILE path doesn't exist, no point to continue the rest of the script

@@ -41,7 +41,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     true,
                     'File containing senstive files, one per line',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('sensitive_files.txt').to_path
                 ]
             ),
             OptString.new(

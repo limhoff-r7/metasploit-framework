@@ -43,7 +43,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'The file that contains a list of sids.',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'sid.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('sid.txt').to_path
                 ]
             ),
         ],

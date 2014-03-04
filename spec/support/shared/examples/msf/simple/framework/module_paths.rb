@@ -117,8 +117,8 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
       framework.module_path_value_by_name
     end
 
-    it "should map 'modules' to Msf::Config.module_directory" do
-      module_path_value_by_name['modules'].should == Msf::Config.module_directory
+    it "should map 'modules' to Metasploit::Framework.pathnames.modules" do
+      module_path_value_by_name['modules'].should == Metasploit::Framework.pathnames.modules.to_path
     end
 
     it "should map 'user' to Msf::Config.user_module_directory" do

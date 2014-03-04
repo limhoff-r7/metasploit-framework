@@ -34,7 +34,7 @@ class Metasploit3 < Msf::Auxiliary
                     [
                         false,
                         "File containing instance names, one per line",
-                        Metasploit::Framework.root.join("data", "wordlists", "sid.txt").to_path
+                        Metasploit::Framework.pathnames.wordlists.join("sid.txt").to_path
                     ]
         ),
         OptString.new('SID', [ false, 'A specific SID to attempt.' ]),

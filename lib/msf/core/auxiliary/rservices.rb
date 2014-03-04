@@ -13,11 +13,25 @@ module Auxiliary::RServices
     super
 
     register_options(
-      [
-        OptString.new('FROMUSER',      [ false, 'The username to login from' ]),
-        OptPath.new(  'FROMUSER_FILE', [ false, 'File containing from usernames, one per line',
-          File.join(Msf::Config.data_directory, "wordlists", "rservices_from_users.txt") ])
-      ], Msf::Auxiliary::RServices)
+        [
+            OptString.new(
+                'FROMUSER',
+                [
+                    false,
+                    'The username to login from'
+                ]
+            ),
+            OptPath.new(
+                'FROMUSER_FILE',
+                [
+                    false,
+                    'File containing from usernames, one per line',
+                    Metasploit::Framework.pathnames.wordlists.join("rservices_from_users.txt").to_path
+                ]
+            )
+        ],
+        Msf::Auxiliary::RServices
+    )
 
     register_advanced_options(
       [

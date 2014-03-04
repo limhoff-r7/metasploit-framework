@@ -65,7 +65,7 @@ class Metasploit4 < Msf::Auxiliary
         print_status("SAPSID set to '#{datastore['SAP_SID']}' - Using provided wordlist")
       else
         print_status("SAPSID set to '#{datastore['SAP_SID']}' - Setting default SAP wordlist")
-        datastore['USER_FILE'] = Msf::Config.data_directory + '/wordlists/sap_common.txt'
+        datastore['USER_FILE'] = Metasploit::Framework.pathnames.wordlists.join('sap_common.txt').to_path
       end
     end
 

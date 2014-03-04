@@ -93,7 +93,7 @@ class Metasploit4 < Msf::Auxiliary
           "pass"
         ])
     if datastore['DEFAULT_CRED']
-      credentials = extract_word_pair(Msf::Config.data_directory + '/wordlists/sap_default.txt')
+      credentials = extract_word_pair(Metasploit::Framework.pathnames.wordlists.join('sap_default.txt'))
       credentials.each do |u, p|
         client.each do |cli|
           success = bruteforce(u, p, cli)

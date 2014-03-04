@@ -664,9 +664,7 @@ class Metasploit3 < Msf::Auxiliary
           accts["#{pass.chomp}"] = user
         end
 
-        oracle_default_hashes_pathname = Metasploit::Framework.root.join(
-            'data',
-            'wordlists',
+        oracle_default_hashes_pathname = Metasploit::Framework.pathnames.wordlists.join(
             'oracle_default_hashes.txt'
         )
 

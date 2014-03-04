@@ -66,7 +66,7 @@ end
 # Default parameters
 #
 
-plink = File.join(Msf::Config.data_directory, "plink.exe")
+plink = Metasploit::Framework.pathnames.exploit_data.join("plink.exe").to_path
 
 #plinkurl = 'http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe'
 #plinkurl = 'http://the.earth.li/~sgtatham/putty/0.60/x86/plink.exe'

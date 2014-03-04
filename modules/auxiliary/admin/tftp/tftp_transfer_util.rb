@@ -95,7 +95,7 @@ class Metasploit3 < Msf::Auxiliary
         fname
       else
         fname_local = ::File.join(Msf::Config.local_directory,fname)
-        fname_data  = ::File.join(Msf::Config.data_directory,fname)
+        fname_data  = Metasploit::Framework.pathnames.data.join(fname).to_path
         return fname_local if ::File.file?(fname_local) and ::File.readable?(fname_local)
         return fname_data  if ::File.file?(fname_data)  and ::File.readable?(fname_data)
         return nil # Couldn't find it, giving up.

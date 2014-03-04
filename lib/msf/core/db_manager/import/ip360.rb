@@ -106,7 +106,7 @@ module Msf::DBManager::Import::IP360
     aspl_path  = nil
     aspl_paths = [
         ::File.join(Msf::Config.config_directory, "data", "ncircle", "ip360.aspl"),
-        ::File.join(Msf::Config.data_directory, "ncircle", "ip360.aspl")
+        Metasploit::Framework.pathnames.data.join("ncircle", "ip360.aspl").to_path
     ]
 
     aspl_paths.each do |tpath|

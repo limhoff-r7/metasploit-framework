@@ -50,6 +50,13 @@ module Metasploit
       @env
     end
 
+    # Pathnames relative to `root`.
+    #
+    # @return [Metasploit::Framework::Configuration::Pathnames]
+    def self.pathnames
+      @pathnames ||= Metasploit::Framework::Configuration::Pathnames.new(root: configuration.root)
+    end
+
     def self.setup
       super
 

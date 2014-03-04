@@ -98,7 +98,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'Wordlist for domain name bruteforcing',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'namelist.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('namelist.txt').to_path
                 ]
             ),
             OptAddress.new(

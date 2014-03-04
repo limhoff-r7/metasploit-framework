@@ -50,7 +50,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     "File containing users and passwords separated by space, one pair per line",
-                    Metasploit::Framework.root.join("data", "wordlists", "oracle_default_userpass.txt").to_path
+                    Metasploit::Framework.pathnames.wordlists.join("oracle_default_userpass.txt").to_path
                 ]
             ),
             OptBool.new('USER_AS_PASS', [ false, "Try the username as the password for all users", false]),

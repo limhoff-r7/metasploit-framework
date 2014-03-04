@@ -48,7 +48,7 @@ class Metasploit3 < Msf::Auxiliary
         OptString.new('USER_FILE',
           [
             true, 'The file that contains a list of probable users accounts.',
-            Metasploit::Framework.root.join('data', 'wordlists', 'unix_users.txt').to_path
+            Metasploit::Framework.pathnames.wordlists.join('unix_users.txt').to_path
           ]),
         OptBool.new('UNIXONLY', [ true, 'Skip Microsoft bannered servers when testing unix users', true])
       ], self.class)

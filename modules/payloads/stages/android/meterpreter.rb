@@ -38,11 +38,18 @@ module Metasploit3
   #
   def generate_stage
     clazz = 'androidpayload.stage.Meterpreter'
-    file = File.join(Msf::Config.data_directory, "android", "metstage.jar")
-    metstage = File.open(file, "rb") {|f| f.read(f.stat.size) }
+    android_pathname = Metasploit::Framework.pathnames.data.join('android')
+    metstage_pathname = android_pathname.join('metstage.jar')
 
-    file = File.join(Msf::Config.data_directory, "android", "meterpreter.jar")
-    met = File.open(file, "rb") {|f| f.read(f.stat.size) }
+    metstage = metstage_pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
+
+    met_pathname = android_pathname.join('meterpreter.jar')
+
+    met = met_pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
 
     # Name of the class to load from the stage, the actual jar to load
     # it from, and then finally the meterpreter stage

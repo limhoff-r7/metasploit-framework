@@ -36,7 +36,7 @@ module Scriptable
       full_path
     end
     def script_base
-      ::File.join(Msf::Config.script_directory, self.type)
+      Metasploit::Framework.pathnames.scripts.join(type).to_path
     end
     def user_script_base
       ::File.join(Msf::Config.user_script_directory, self.type)

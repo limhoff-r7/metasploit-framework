@@ -16,12 +16,18 @@ module Msf::Payload::Java
   #
   def generate_stage
     stage = ''
+    java_classes = Metasploit::Framework.pathnames.java_classes
+
     @stage_class_files.each do |path|
-      fd = File.open(File.join( Msf::Config.data_directory, "java", path ), "rb")
-      data = fd.read(fd.stat.size)
-      fd.close
+      pathname = java_classes.join(path)
+
+      data = pathname.open('rb') { |f|
+        f.read(f.stat.size)
+      }
+
       stage << ([data.length].pack("N") + data)
     end
+
     stage << [0].pack("N")
 
     stage
@@ -55,7 +61,7 @@ module Msf::Payload::Java
 
     jar = Rex::Zip::Jar.new
     jar.add_file("metasploit.dat", config)
-    jar.add_files(paths, File.join(Msf::Config.data_directory, "java"))
+    jar.add_files(paths, Metasploit::Framework.pathnames.java_classes.to_path)
     jar.build_manifest(:main_class => main_class)
 
     jar
@@ -100,7 +106,7 @@ module Msf::Payload::Java
     zip.add_file('WEB-INF/', '')
     zip.add_file('WEB-INF/web.xml', web_xml)
     zip.add_file("WEB-INF/classes/", "")
-    zip.add_files(paths, File.join(Msf::Config.data_directory, "java"), "WEB-INF/classes/")
+    zip.add_files(paths, Metasploit::Framework.pathnames.java_classes, "WEB-INF/classes/")
     zip.add_file("WEB-INF/classes/metasploit.dat", config)
 
     zip

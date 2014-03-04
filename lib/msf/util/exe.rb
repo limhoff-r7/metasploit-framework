@@ -1162,7 +1162,7 @@ def self.to_vba(framework,code,opts={})
     paths = [
       [ "metasploit", "Payload.class" ],
     ]
-    zip.add_files(paths, File.join(Msf::Config.data_directory, "java"))
+    zip.add_files(paths, Metasploit::Framework.pathnames.java_classes)
     zip.build_manifest :main_class => "metasploit.Payload"
     config = "Spawn=#{spawn}\r\nExecutable=#{exe_name}\r\n"
     zip.add_file("metasploit.dat", config)

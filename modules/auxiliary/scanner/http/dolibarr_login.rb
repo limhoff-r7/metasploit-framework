@@ -25,7 +25,8 @@ class Metasploit3 < Msf::Auxiliary
       'License'        => MSF_LICENSE
     ))
 
-    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
+    wordlists = Metasploit::Framework.pathnames.wordlists
+
     register_options(
         [
             OptPath.new(
@@ -33,7 +34,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'File containing users and passwords separated by space, one pair per line',
-                    Metasploit::Framework.root.join('http_default_userpass.txt').to_path
+                    wordlists.join('http_default_userpass.txt').to_path
                 ]
             ),
             OptPath.new(
@@ -41,7 +42,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'File containing users, one per line',
-                    Metasploit::Framework.root.join('http_default_users.txt').to_path
+                    wordlists.join('http_default_users.txt').to_path
                 ]
             ),
             OptPath.new(
@@ -49,7 +50,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'File containing passwords, one per line',
-                    Metasploit::Framework.root.join('http_default_pass.txt').to_path
+                    wordlists.join('http_default_pass.txt').to_path
                 ]
             ),
             OptString.new(

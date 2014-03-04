@@ -76,18 +76,11 @@ class Plugin::Lab < Msf::Plugin
 				# then the provided argument is an absolute path and is gtg.
 				good_res = res
 			elsif
-				# let's check to see if it's in the data/lab dir (like when tab completed)
-				[
-					::Msf::Config.data_directory + File::SEPARATOR + "lab",
-					# there isn't a user_data_directory, but could use:
-					#::Msf::Config.user_plugins_directory + File::SEPARATOR + "lab"
-				].each do |dir|
-					res_path = dir + File::SEPARATOR + res 
-					if (File.file?(res_path) and File.readable?(res_path))
-						good_res = res_path
-						break
-					end
-				end
+        pathname = Metasploit::Framework.pathnames.data.join('lab', res)
+
+        if pathname.file? && pathname.readable?
+          good_res = pathname.to_path
+        end
 			end
 			if good_res
 				@controller.from_file(good_res)
@@ -108,17 +101,13 @@ class Plugin::Lab < Msf::Plugin
 			elsif (not words[1] or not words[1].match(/^\//))
 				# then let's start tab completion in the data/lab directory
 				begin
-					[
-						::Msf::Config.data_directory + File::SEPARATOR + "lab",
-						# there isn't a user_data_directory, but could use:
-						#::Msf::Config.user_plugins_directory + File::SEPARATOR + "lab"
-					].each do |dir|
-						next if not ::File.exist? dir
-						tabs += ::Dir.new(dir).find_all { |e|
-							path = dir + File::SEPARATOR + e
-							::File.file?(path) and File.readable?(path)
-						}
-					end
+          pathname = Metasploit::Framework.pathnames.data.join('lab')
+
+          pathname.children.each do |child|
+            if child.file? && child.readable?
+              tabs << child.to_path
+            end
+          end
 				rescue Exception
 				end
 			else

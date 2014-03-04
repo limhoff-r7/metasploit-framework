@@ -44,7 +44,7 @@ class Metasploit3 < Msf::Auxiliary
         Opt::RPORT(5900),
         OptString.new('PASSWORD', [ false, 'The password to test' ]),
         OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
-          File.join(Msf::Config.data_directory, "wordlists", "vnc_passwords.txt") ]),
+          Metasploit::Framework.pathnames.wordlists.join("vnc_passwords.txt").to_path ]),
 
         #We need to set the following options to make sure BLANK_PASSWORDS functions properly
         OptString.new('USERNAME', [false, 'A specific username to authenticate as', '<BLANK>']),

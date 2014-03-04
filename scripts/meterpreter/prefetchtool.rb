@@ -44,7 +44,7 @@ end
 
 def prefetch_dump(options, logging=false)
 
-	lexe = File.join(Msf::Config.data_directory, "prefetch.exe")
+	lexe = Metasploit::Framework.pathnames.data.join("prefetch.exe").to_path
 	rexe = sprintf("%.5d",rand(100000)) + ".exe"
 	rlog = sprintf("%.5d",rand(100000)) + ".txt"
 
@@ -142,21 +142,28 @@ check_update  = false
 	end
 }
 unsupported if client.platform !~ /win32|win64/i
-prefetch_local = ::File.join(Msf::Config.data_directory, "prefetch.exe")
+prefetch_local_pathname = Metasploit::Framework.pathnames.data.join("prefetch.exe")
 
-if !(::File.exist?(prefetch_local))
+def download_prefetch_to(pathname)
+  Net::HTTP.start("prefetch-tool.googlecode.com") do |http|
+    req  = Net::HTTP::Get.new("/files/prefetch.exe")
+    resp = http.request(req)
+
+    pathname.open('wb') { |f|
+      f.write(resp.body)
+    }
+  end
+end
+
+unless prefetch_local_pathname.exist?
 	print_status("No local copy of prefetch.exe, downloading from the internet...")
-	Net::HTTP.start("prefetch-tool.googlecode.com") do |http|
-		req  = Net::HTTP::Get.new("/files/prefetch.exe")
-		resp = http.request(req)
-		::File.open(::File.join(Msf::Config.data_directory, "prefetch.exe"), "wb") do |fd|
-			fd.write(resp.body)
-		end
-	end
-	print_status("Downloaded prefetch.exe to #{prefetch_local}")
+
+  download_prefetch_to(prefetch_local_pathname)
+
+	print_status("Downloaded prefetch.exe to #{prefetch_local_pathname}")
 else
 	print_status("Checking for an updated copy of prefetch.exe..")
-	digest = Digest::SHA1.hexdigest(::File.read(prefetch_local, ::File.size(prefetch_local)))
+  digest = Digest::SHA1.file(prefetch_local_pathname)
 
 	Net::HTTP.start("code.google.com") do |http|
 		req     = Net::HTTP::Get.new("/p/prefetch-tool/downloads/detail?name=prefetch.exe&can=2&q=")
@@ -167,15 +174,11 @@ else
 		chksum.sub!(/ <a href/,'')
 
 		if (digest != chksum)
-			print_status("Downloading an updated version of prefetch.exe to #{prefetch_local}...")
-			Net::HTTP.start("prefetch-tool.googlecode.com") do |http|
-				req  = Net::HTTP::Get.new("/files/prefetch.exe")
-				resp = http.request(req)
-				::File.open(::File.join(Msf::Config.data_directory, "prefetch.exe"), "wb") do |fd|
-					fd.write(resp.body)
-				end
-			end
-			print_status("Downloaded prefetch.exe to #{prefetch_local}")
+			print_status("Downloading an updated version of prefetch.exe to #{prefetch_local_pathname}...")
+
+      download_prefetch_to(prefetch_local_pathname)
+
+			print_status("Downloaded prefetch.exe to #{prefetch_local_pathname}")
 		end
 	end
 end

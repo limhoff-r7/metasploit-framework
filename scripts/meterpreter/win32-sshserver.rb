@@ -72,7 +72,7 @@ end
 #
 # Default values
 #
-extractfilename = File.join(Msf::Config.data_directory, "/openssh-extract.sfx")
+extractfilename = Metasploit::Framework.pathnames.data.join("openssh-extract.sfx")
 manual = false
 username = "none"
 password = nil

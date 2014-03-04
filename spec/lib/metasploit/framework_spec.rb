@@ -131,6 +131,54 @@ describe Metasploit::Framework do
     it { should be_a ActiveSupport::StringInquirer }
   end
 
+  context 'pathnames' do
+    subject(:pathnames) do
+      described_class.pathnames
+    end
+
+    it { should be_a Metasploit::Framework::Configuration::Pathnames }
+
+    context '#data' do
+      subject(:data) do
+        pathnames.data
+      end
+
+      it { should == Metasploit::Framework.root.join('data') }
+    end
+
+    context '#modules' do
+      subject(:modules) do
+        pathnames.modules
+      end
+
+      it { should == Metasploit::Framework.root.join('modules') }
+    end
+
+    context '#plugins' do
+      subject(:plugins) do
+        pathnames.plugins
+      end
+
+      it { should == Metasploit::Framework.root.join('plugins') }
+    end
+
+    context '#root' do
+      subject(:root) do
+        pathnames.root
+      end
+
+      it { should == Metasploit::Framework.root }
+    end
+
+    context '#scripts' do
+      subject(:scripts) do
+        pathnames.scripts
+      end
+
+      it { should == Metasploit::Framework.root.join('scripts') }
+    end
+  end
+
   context 'locales' do
     subject('locales') do
       [

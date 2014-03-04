@@ -35,7 +35,7 @@ class Metasploit3 < Msf::Post
                 [
                     true,
                     "List of hostnames or subdomains to use.",
-                    Metasploit::Framework.root.join('data', 'wordlists', 'namelist.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('namelist.txt').to_path
                 ]
             )
 

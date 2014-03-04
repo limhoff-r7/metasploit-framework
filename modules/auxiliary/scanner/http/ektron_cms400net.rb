@@ -42,7 +42,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'File containing users and passwords',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'cms400net_default_userpass.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('cms400net_default_userpass.txt').to_path
                 ]
             )
         ],

@@ -57,7 +57,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     true,
                     'File containing users, one per line',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'unix_users.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('unix_users.txt').to_path
                 ]
             ),
         ],

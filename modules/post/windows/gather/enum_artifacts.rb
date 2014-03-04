@@ -37,7 +37,7 @@ class Metasploit3 < Msf::Post
           [
             true,
             'Full path to artifacts file.',
-            ::File.join(Msf::Config.data_directory, 'post', 'enum_artifacts_list.txt')
+            Metasploit::Framework.pathnames.data.join('post', 'enum_artifacts_list.txt')
           ])
       ], self.class)
   end

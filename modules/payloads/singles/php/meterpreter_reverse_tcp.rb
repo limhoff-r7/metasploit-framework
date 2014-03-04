@@ -30,10 +30,12 @@ module Metasploit3
   end
 
   def generate
-    file = File.join(Msf::Config.data_directory, "meterpreter", "meterpreter.php")
-    met = File.open(file, "rb") {|f|
+    pathname = Metasploit::Framework.pathnames.data.join('meterpreter', 'meterpreter.php')
+
+    met = pathname.open('rb') { |f|
       f.read(f.stat.size)
     }
+
     met.gsub!("127.0.0.1", datastore['LHOST']) if datastore['LHOST']
     met.gsub!("4444", datastore['LPORT'].to_s) if datastore['LPORT']
 

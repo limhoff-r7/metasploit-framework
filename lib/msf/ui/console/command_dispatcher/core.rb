@@ -242,12 +242,14 @@ class Core
       elsif
         # let's check to see if it's in the scripts/resource dir (like when tab completed)
         [
-          ::Msf::Config.script_directory + File::SEPARATOR + "resource",
-          ::Msf::Config.user_script_directory + File::SEPARATOR + "resource"
-        ].each do |dir|
-          res_path = dir + File::SEPARATOR + res
-          if (File.file?(res_path) and File.readable?(res_path))
-            good_res = res_path
+            Metasploit::Framework.pathnames.scripts,
+            Pathname.new(::Msf::Config.user_script_directory)
+        ].each do |scripts_pathname|
+          resource_pathname = scripts_pathname.join('resource', res)
+
+          if resource_pathname.file? && resource_pathname.readable?
+            good_res = resource_pathname.to_path
+
             break
           end
         end
@@ -278,15 +280,19 @@ class Core
       # then let's start tab completion in the scripts/resource directories
       begin
         [
-          ::Msf::Config.script_directory + File::SEPARATOR + "resource",
-          ::Msf::Config.user_script_directory + File::SEPARATOR + "resource",
-          "."
-        ].each do |dir|
-          next if not ::File.exist? dir
-          tabs += ::Dir.new(dir).find_all { |e|
-            path = dir + File::SEPARATOR + e
-            ::File.file?(path) and File.readable?(path)
-          }
+          Metasploit::Framework.pathnames.scripts,
+          Pathname.new(::Msf::Config.user_script_directory),
+          Pathname.new('.')
+        ].each do |scripts_pathname|
+          resources_pathname = scripts_pathname.join('resource')
+
+          unless resources_pathname.exists?
+            resources_pathname.children.each { |resource_pathname|
+              if resource_pathname.file? && resource_pathname.readable?
+                tabs << resource_pathname.to_path
+              end
+            }
+          end
         end
       rescue Exception
       end
@@ -855,7 +861,7 @@ class Core
     print_line
     print_line "Loads a plugin from the supplied path.  If path is not absolute, fist looks"
     print_line "in the user's plugin directory (#{Msf::Config.user_plugin_directory}) then"
-    print_line "in the framework root plugin directory (#{Msf::Config.plugin_directory})."
+    print_line "in the framework root plugin directory (#{Metasploit::Framework.pathanmes.plugins})."
     print_line "The optional var=val options are custom parameters that can be passed to plugins."
     print_line
   end
@@ -893,11 +899,11 @@ class Core
 
       # If the plugin isn't in the user directory (~/.msf3/plugins/), use the base
       path = Msf::Config.user_plugin_directory + File::SEPARATOR + plugin_file_name
-      if not File.exists?( path  + ".rb" )
-        # If the following "path" doesn't exist it will be caught when we attempt to load
-        path = Msf::Config.plugin_directory + File::SEPARATOR + plugin_file_name
-      end
 
+      unless File.exists?( path  + ".rb" )
+        # If the following "path" doesn't exist it will be caught when we attempt to load
+        path = Metasploit::Framework.pathnames.join(plugin_file_name).to_path
+      end
     end
 
     # Load that plugin!
@@ -925,14 +931,16 @@ class Core
       # then let's start tab completion in the scripts/resource directories
       begin
         [
-          Msf::Config.user_plugin_directory,
-          Msf::Config.plugin_directory
-        ].each do |dir|
-          next if not ::File.exist? dir
-          tabs += ::Dir.new(dir).find_all { |e|
-            path = dir + File::SEPARATOR + e
-            ::File.file?(path) and File.readable?(path)
-          }
+          Pathname.new(Msf::Config.user_plugin_directory),
+          Metasploit::Framework.pathnames.plugins
+        ].each do |plugins_pathname|
+          unless plugins_pathname.exist?
+            plugins_pathname.children.each do |plugin_pathname|
+              if plugin_pathname.file? && plugin_pathname.readable?
+                tabs << plugin_pathname.to_path
+              end
+            end
+          end
         end
       rescue Exception
       end

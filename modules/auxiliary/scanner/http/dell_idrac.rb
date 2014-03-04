@@ -36,7 +36,7 @@ class Metasploit3 < Msf::Auxiliary
         )
     )
 
-    wordlists_pathname = Metasploit::Framework.root.join('data', 'wordlists')
+    wordlists_pathname = Metasploit::Framework.pathnames.wordlists
 
     register_options(
         [

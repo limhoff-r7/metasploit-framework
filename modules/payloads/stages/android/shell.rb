@@ -39,8 +39,11 @@ module Metasploit3
   #
   def generate_stage
     clazz = 'androidpayload.stage.Shell'
-    file = File.join(Msf::Config.data_directory, "android", "shell.jar")
-    shell_jar = File.open(file, "rb") {|f| f.read(f.stat.size) }
+    shell_jar_pathname = Metasploit::Framework.pathnames.data.join('android', 'shell.jar')
+
+    shell_jar = shell_jar_pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
 
     # Name of the class to load from the stage, and then the actual jar
     # to load it from

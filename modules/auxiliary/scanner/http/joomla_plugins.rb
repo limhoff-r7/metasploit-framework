@@ -43,7 +43,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     true,
                     'Path to list of plugins to enumerate',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'joomla.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('joomla.txt').to_path
                 ]
             )
         ],

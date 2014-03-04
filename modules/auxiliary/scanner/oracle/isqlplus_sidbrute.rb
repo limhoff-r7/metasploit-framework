@@ -45,7 +45,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'A file containing a list of SIDs',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'sid.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('sid.txt').to_path
                 ]
             ),
             OptInt.new('TIMEOUT', [false, 'Time to wait for HTTP responses', 30]

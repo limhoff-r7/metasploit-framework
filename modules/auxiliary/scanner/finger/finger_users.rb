@@ -32,7 +32,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     true,
                     'The file that contains a list of default UNIX accounts.',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'unix_users.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('unix_users.txt').to_path
                 ]
             )
         ],

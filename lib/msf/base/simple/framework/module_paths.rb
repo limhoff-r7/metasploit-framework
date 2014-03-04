@@ -52,7 +52,7 @@ module Msf
         # @return [Hash{String => String, nil}]
         def module_path_value_by_name
           @module_path_value_by_name ||= {
-              'modules' => Msf::Config.module_directory,
+              'modules' => Metasploit::Framework.pathnames.modules.to_path,
               'user' => Msf::Config.user_module_directory
           }
         end

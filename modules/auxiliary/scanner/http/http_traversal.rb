@@ -67,7 +67,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     true,
                     'Wordlist file to brute force',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'sensitive_files.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('sensitive_files.txt').to_path
                 ]
             )
         ],

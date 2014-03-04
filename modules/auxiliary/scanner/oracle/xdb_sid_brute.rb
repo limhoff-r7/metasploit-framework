@@ -39,7 +39,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'The file that contains a list of default accounts.',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'oracle_default_passwords.csv').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('oracle_default_passwords.csv').to_path
                 ]
             ),
             Opt::RPORT(8080),

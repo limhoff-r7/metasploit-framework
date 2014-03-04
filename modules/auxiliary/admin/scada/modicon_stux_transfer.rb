@@ -51,7 +51,7 @@ class Metasploit3 < Msf::Auxiliary
           [
             true,
             "The file to send or receive",
-            File.join(Msf::Config.data_directory, "exploits", "modicon_ladder.apx")
+            Metasploit::Framework.pathnames.exploit_data.join("modicon_ladder.apx").to_path
           ]),
         OptEnum.new("MODE", [true, 'File transfer operation', "SEND",
           [

@@ -53,7 +53,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'File containing passwords, one per line',
-                    Metasploit::Framework.root.join('data', 'wordlists', 'http_default_pass.txt').to_path
+                    Metasploit::Framework.pathnames.wordlists.join('http_default_pass.txt').to_path
                 ]
             ),
         ],

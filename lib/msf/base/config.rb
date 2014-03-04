@@ -42,29 +42,8 @@ class Config < Hash
   #
   # Calls the instance method.
   #
-  def self.module_directory
-    self.new.module_directory
-  end
-
-  #
-  # Calls the instance method.
-  #
-  def self.script_directory
-    self.new.script_directory
-  end
-
-  #
-  # Calls the instance method.
-  #
   def self.log_directory
     self.new.log_directory
-  end
-
-  #
-  # Calls the instance method.
-  #
-  def self.plugin_directory
-    self.new.plugin_directory
   end
 
   #
@@ -107,13 +86,6 @@ class Config < Hash
   #
   def self.user_script_directory
     self.new.user_script_directory
-  end
-
-  #
-  # Calls the instance method.
-  #
-  def self.data_directory
-    self.new.data_directory
   end
 
   #
@@ -180,31 +152,10 @@ class Config < Hash
   end
 
   #
-  # Returns the global module directory.
-  #
-  def module_directory
-    Metasploit::Framework.root.join('modules').to_path
-  end
-
-  #
-  # Returns the path that scripts can be loaded from.
-  #
-  def script_directory
-    Metasploit::Framework.root.join('scripts').to_path
-  end
-
-  #
   # Returns the directory that log files should be stored in.
   #
   def log_directory
     config_directory + FileSep + 'logs'
-  end
-
-  #
-  # Returns the directory that plugins are stored in.
-  #
-  def plugin_directory
-    Metasploit::Framework.root.join('plugins').to_path
   end
 
   #
@@ -250,17 +201,9 @@ class Config < Hash
   end
 
   #
-  # Returns the data directory
-  #
-  def data_directory
-    Metasploit::Framework.root.join('data')
-  end
-
-  #
   # Initializes configuration, creating directories as necessary.
   #
   def init
-    FileUtils.mkdir_p(module_directory)
     FileUtils.mkdir_p(config_directory)
     FileUtils.mkdir_p(log_directory)
     FileUtils.mkdir_p(session_log_directory)
