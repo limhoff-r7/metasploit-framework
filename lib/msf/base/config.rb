@@ -14,7 +14,7 @@ class Config < Hash
   # Determines the base configuration directory.
   #
   def self.get_config_root
-    Metasploit::Framework::Framework::Configuration.root.to_path
+    Metasploit::Framework::Framework::Pathnames.root.to_path
   end
 
   #

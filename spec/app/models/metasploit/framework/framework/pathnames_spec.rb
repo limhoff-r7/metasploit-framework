@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Framework::Configuration do
-  subject(:configuration) do
+describe Metasploit::Framework::Framework::Pathnames do
+  subject(:pathnames) do
     described_class.new(attributes)
   end
 
@@ -9,7 +9,25 @@ describe Metasploit::Framework::Framework::Configuration do
     {}
   end
 
+  it { should be_frozen }
+
   context 'CONSTANTS' do
+    context 'DIRECTORIES' do
+      subject(:directories) do
+        described_class::DIRECTORIES
+      end
+
+      it { should include 'local' }
+      it { should include 'logs' }
+      it { should include 'loot' }
+      it { should include 'plugins' }
+      it { should include 'modules' }
+      it { should include 'root' }
+      it { should include 'scripts' }
+      it { should include 'script_logs' }
+      it { should include 'session_logs' }
+    end
+
     context 'FILE_BASE_NAME' do
       subject(:file_base_name) do
         described_class::FILE_BASE_NAME
@@ -25,45 +43,124 @@ describe Metasploit::Framework::Framework::Configuration do
 
       it { should == '.msf4' }
     end
+
+    context 'ROOT_PARENT_ENVIRONMENT_VARIABLES' do
+      subject(:root_parent_environment_variables) do
+        described_class::ROOT_PARENT_ENVIRONMENT_VARIABLES
+      end
+
+      it { should == ['HOME', 'LOCALAPPDATA', 'APPDATA', 'USERPROFILE'] }
+    end
+
+    context 'SUBDIRECTORIES' do
+      subject(:subdirectories) do
+        described_class::SUBDIRECTORIES
+      end
+
+      it { should include 'local' }
+      it { should include 'logs' }
+      it { should include 'loot' }
+      it { should include 'plugins' }
+      it { should include 'modules' }
+      it { should include 'scripts' }
+    end
   end
 
-  context '#file_pathname' do
-    subject(:file_pathname) do
-      configuration.file_pathname
+  context '#file' do
+    subject(:file) do
+      pathnames.file
     end
 
-    context 'with set' do
-      let(:attributes) do
-        {
-            file_pathname: expected_file_pathname
-        }
-      end
+    it 'is <root>/config' do
+      expect(file).to eq(pathnames.root.join('config'))
+    end
+  end
 
-      let(:expected_file_pathname) do
-        Metasploit::Model::Spec.temporary_pathname.join('file')
-      end
-
-      it 'should use set value' do
-        expect(file_pathname).to eq(expected_file_pathname)
-      end
+  context '#history' do
+    subject(:history) do
+      pathnames.history
     end
 
-    context 'without set' do
-      let(:attributes) do
-        {
+    it 'is <root>/history' do
+      expect(history).to eq(pathnames.root.join('history'))
+    end
+  end
 
-            # set #root to ensure #root is being used instead of ::root
-            root: root
-        }
-      end
+  context '#local' do
+    subject(:local) do
+      pathnames.local
+    end
 
-      let(:root) do
-        Metasploit::Model::Spec.temporary_pathname.join('root')
-      end
+    it 'is <root>/local' do
+      expect(local).to eq(pathnames.root.join('local'))
+    end
+  end
 
-      it 'should be FILE_BASE_NAME under #root' do
-        expect(file_pathname).to eq(root.join(described_class::FILE_BASE_NAME))
+  context '#logs' do
+    subject(:logs) do
+      pathnames.logs
+    end
+
+    it 'is <root>/logs' do
+      expect(logs).to eq(pathnames.root.join('logs'))
+    end
+  end
+
+  context '#loot' do
+    subject(:loot) do
+      pathnames.loot
+    end
+
+    it 'is <root>/loot' do
+      expect(loot).to eq(pathnames.root.join('loot'))
+    end
+  end
+
+  context '#make' do
+    subject(:make) do
+      pathnames.make
+    end
+
+    #
+    # lets
+    #
+
+    let(:attributes) do
+      {
+          root: root
+      }
+    end
+
+    let(:root) do
+      Metasploit::Model::Spec.temporary_pathname.join('root')
+    end
+
+    %w{local logs loot plugins modules root scripts script_logs session_logs}.each do |directory|
+      it "makes ##{directory}" do
+        expect {
+          make
+        }.to change(pathnames.local, :exist?).to(true)
       end
+    end
+  end
+
+  context '#modules' do
+    subject(:modules) do
+      pathnames.modules
+    end
+
+    it 'is <root>/modules' do
+      expect(modules).to eq(pathnames.root.join('modules'))
+    end
+  end
+
+  context '#plugins' do
+    subject(:plugins) do
+      pathnames.plugins
+    end
+
+    it 'is <root>/plugins' do
+      expect(plugins).to eq(pathnames.root.join('plugins'))
     end
   end
 
@@ -329,7 +426,7 @@ describe Metasploit::Framework::Framework::Configuration do
 
   context '#root' do
     subject(:root) do
-      configuration.root
+      pathnames.root
     end
 
     context 'with set' do
@@ -337,8 +434,14 @@ describe Metasploit::Framework::Framework::Configuration do
       # lets
       #
 
+      let(:attributes) do
+        {
+            root: expected_root
+        }
+      end
+
       let(:expected_root) do
-        Pathname.new('root')
+        Metasploit::Model::Spec.temporary_pathname.join('root')
       end
 
       #
@@ -346,7 +449,7 @@ describe Metasploit::Framework::Framework::Configuration do
       #
 
       before(:each) do
-        configuration.root = expected_root
+        expected_root.mkpath
       end
 
       it 'uses set value' do
@@ -356,10 +459,40 @@ describe Metasploit::Framework::Framework::Configuration do
 
     context 'without set' do
       it 'calls ::root' do
-        expected = double('root')
+        expected = described_class.root
         expect(described_class).to receive(:root).and_return(expected)
         expect(root).to eq(expected)
       end
+    end
+  end
+
+  context '#scripts' do
+    subject(:scripts) do
+      pathnames.scripts
+    end
+
+    it 'is <root>/scripts' do
+      expect(scripts).to eq(pathnames.root.join('scripts'))
+    end
+  end
+
+  context '#script_logs' do
+    subject(:script_logs) do
+      pathnames.script_logs
+    end
+
+    it 'is <logs>/scripts' do
+      expect(script_logs).to eq(pathnames.logs.join('scripts'))
+    end
+  end
+
+  context '#session_logs' do
+    subject(:session_logs) do
+      pathnames.session_logs
+    end
+
+    it 'is <logs>/sessions' do
+      expect(session_logs).to eq(pathnames.logs.join('sessions'))
     end
   end
 end
