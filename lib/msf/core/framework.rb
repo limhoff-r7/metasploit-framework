@@ -168,11 +168,12 @@ class Framework < Metasploit::Model::Base
   end
 
   # @param attributes [Hash{Symbol => Object}]
+  # @option attributes [Boolean] :database_disabled (false) Whether the {#db} should disable connections.
   # @option attributes [Array<String>] :module_types a subset of `Metasploit::Model::Module::Type::ALL`.
   # @option attributes [Metasploit::Framework::Framework::Pathnames] :pathnames
   #   (Metasploit::Framework::Framework::Pathnames.new) pathnames for this framework instances.
   def initialize(attributes={})
-    attributes.assert_valid_keys(:module_types, :pathnames)
+    attributes.assert_valid_keys(:database_disabled, :module_types, :pathnames)
 
     @pathnames = attributes[:pathnames] || Metasploit::Framework::Framework::Pathnames.new
 
