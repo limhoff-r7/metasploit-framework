@@ -9,7 +9,11 @@ describe Msf::Framework do
   end
 
   subject(:framework) do
-    FactoryGirl.create(:msf_framework)
+    FactoryGirl.create(:msf_framework, attributes)
+  end
+
+  let(:attributes) do
+    {}
   end
 
   it_should_behave_like 'Msf::Framework::Modules'
@@ -31,6 +35,24 @@ describe Msf::Framework do
 
         it 'should have all module types' do
           expect(module_types).to match_array(Metasploit::Model::Module::Type::ALL)
+        end
+      end
+
+      context '#pathnames' do
+        subject(:pathnames) do
+          msf_framework.pathnames
+        end
+
+        it { should be_a Metasploit::Framework::Framework::Pathnames }
+
+        context '#root' do
+          subject(:root) do
+            pathnames.root
+          end
+
+          it 'is unique' do
+            expect(root).not_to eq(Metasploit::Framework::Framework::Pathnames.root)
+          end
         end
       end
     end
@@ -246,6 +268,14 @@ describe Msf::Framework do
     end
 
     it { should be_a Rex::JobContainer }
+  end
+
+  context '#pathnames' do
+    subject(:pathnames) do
+      framework.pathnames
+    end
+
+    it { should be_a Metasploit::Framework::Framework::Pathnames }
   end
 
   context '#plugins' do

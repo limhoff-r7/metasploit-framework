@@ -11,6 +11,24 @@ describe Metasploit::Framework::Framework::Pathnames do
 
   it { should be_frozen }
 
+  context 'factories' do
+    context 'metasploit_framework_framework_pathnames' do
+      subject(:metasploit_framework_framework_pathnames) do
+        FactoryGirl.build(:metasploit_framework_framework_pathnames)
+      end
+
+      context '#root' do
+        subject(:root) do
+          metasploit_framework_framework_pathnames.root
+        end
+
+        it 'is unique' do
+          expect(root).not_to eq(described_class.root)
+        end
+      end
+    end
+  end
+
   context 'CONSTANTS' do
     context 'DIRECTORIES' do
       subject(:directories) do

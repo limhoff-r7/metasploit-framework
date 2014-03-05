@@ -89,6 +89,16 @@ class Framework < Metasploit::Model::Base
   #
   # Attributes
   #
+  
+  # @!attribute [r] pathnames
+  #   @note Pathnames is immutable and unchanging after {#initialize} returns, so it is safe to return a local copy
+  #     in other threads and not worry about mutation.
+  #
+  #   Framework-specific pathnames for {Metasploit::Framework::Framework::Pathnames#file configuration file},
+  #   {Metasploit::Framework::Framework::Pathnames#history msfconsole history}, etc.
+  #
+  #   @return [Metasploit::Framework::Framework::Pathnames]
+  attr_reader :pathnames
 
   # @!attribute [rw] database_disabled
   #   Whether {#db} should be {Msf::DBManager#disabled}.
@@ -159,9 +169,16 @@ class Framework < Metasploit::Model::Base
 
   # @param attributes [Hash{Symbol => Object}]
   # @option attributes [Array<String>] :module_types a subset of `Metasploit::Model::Module::Type::ALL`.
+  # @option attributes [Metasploit::Framework::Framework::Pathnames] :pathnames
+  #   (Metasploit::Framework::Framework::Pathnames.new) pathnames for this framework instances.
   def initialize(attributes={})
+    attributes.assert_valid_keys(:module_types, :pathnames)
+
+    @pathnames = attributes[:pathnames] || Metasploit::Framework::Framework::Pathnames.new
+
+    super_attributes = attributes.except(:pathnames)
     # call super to initialize MonitorMixin and set attributes with Metasploit::Model::Base
-    super
+    super(super_attributes)
 
     # Configure the thread factory
     # @todo https://www.pivotaltracker.com/story/show/57432206
