@@ -27,6 +27,12 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
   # Attributes
   #
 
+  # @!attribute [r] database_yaml
+  #   The path to the `database.yml` that includes connection information for this framework.
+  #
+  #   @return [Pathname]
+  attr_reader :database_yaml
+
   # @!attribute [r] file
   #   The file under {#root} where framework settings like its data store and module data stores are persisted.
   #
@@ -108,6 +114,14 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
 
     SUBDIRECTORIES.each do |subdirectory|
       instance_variable_set "@#{subdirectory}", root.join(subdirectory)
+    end
+
+    database_yaml_path = ENV['MSF_DATABASE_CONFIG']
+
+    if database_yaml_path
+      @database_yaml = Pathname.new(database_yaml_path)
+    else
+      @database_yaml = @root.join('database.yml')
     end
 
     @file = root.join(FILE_BASE_NAME)

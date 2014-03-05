@@ -11,6 +11,13 @@ FactoryGirl.define do
       # to new
       new(root: root)
     }
+
+    after(:build) { |pathnames|
+      # make parent directory of database_yaml
+      pathnames.make
+
+      FileUtils.copy(Metasploit::Framework::Database.configurations_pathname, pathnames.database_yaml)
+    }
   end
 
   sequence :metasploit_framework_framework_pathnames_root do |n|

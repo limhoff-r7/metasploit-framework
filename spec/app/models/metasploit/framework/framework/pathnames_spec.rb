@@ -84,6 +84,62 @@ describe Metasploit::Framework::Framework::Pathnames do
     end
   end
 
+  context '#database_yaml' do
+    subject(:database_yaml) do
+      pathnames.database_yaml
+    end
+
+    #
+    # lets
+    #
+
+    let(:environment_variable) do
+      'MSF_DATABASE_CONFIG'
+    end
+
+    #
+    # Callbacks
+    #
+
+    around(:each) do |example|
+      before = ENV.delete(environment_variable)
+
+      begin
+        example.run
+      ensure
+        ENV[environment_variable] = before
+      end
+    end
+
+    context 'with MSF_DATABASE_CONFIG environment variable' do
+      #
+      # lets
+      #
+
+      let(:expected_database_yaml) do
+        Metasploit::Model::Spec.temporary_pathname.join('database.yml')
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        ENV[environment_variable] = expected_database_yaml.to_path
+      end
+
+      it 'uses MSF_DATABASE_CONFIG' do
+        expect(database_yaml).to eq(expected_database_yaml)
+      end
+    end
+
+    context 'without MSF_DATABASE_CONFIG environment variable' do
+      it 'use <root>/database.yml' do
+        expect(database_yaml).to eq(pathnames.root.join('database.yml'))
+      end
+    end
+  end
+
   context '#file' do
     subject(:file) do
       pathnames.file

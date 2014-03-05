@@ -3,11 +3,13 @@ shared_context 'Msf::DBManager' do
 	include_context 'Msf::Simple::Framework'
 
 	let(:db_manager) do
-		framework.db.tap { |db_manager|
-      if skip_seeding
-        db_manager.stub(:seed)
-      end
-    }
+    if framework
+      framework.db.tap { |db_manager|
+        if skip_seeding
+          db_manager.stub(:seed)
+        end
+      }
+    end
   end
 
   # skipping seeding makes the tests much faster
@@ -16,11 +18,13 @@ shared_context 'Msf::DBManager' do
   end
 
 	before(:each) do
-		configurations = Metasploit::Framework::Database.configurations
-		spec = configurations[Metasploit::Framework.env]
+    if db_manager
+      configurations = Metasploit::Framework::Database.configurations
+      spec = configurations[Metasploit::Framework.env]
 
-		# Need to connect or ActiveRecord::Base.connection_pool will raise an
-		# error.
-		db_manager.connect(spec)
+      # Need to connect or ActiveRecord::Base.connection_pool will raise an
+      # error.
+      db_manager.connect(spec)
+    end
 	end
 end

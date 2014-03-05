@@ -7,15 +7,11 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
   # Attributes
   #
 
-  # @!attribute [rw] database_yaml_pathname
-  #   @return [Pathname] `Pathname` to `database.yml`
-  attr_writer :database_yaml_pathname
-
-  # @!attribute [rw] db_manager
-  #   Database manager to initiate connection.
+  # @!attribute [rw] framework
+  #   Framework instance that has {Msf::Framework#db} and {Msf::Framework#pathnames}.
   #
-  #   @return [Msf::DBManager]
-  attr_accessor :db_manager
+  #   @return [Msf::Framework]
+  attr_accessor :framework
 
   # @!attribute [rw] environment
   #   The environment whose {#configuration} to load from {#configuration_by_environment}.
@@ -46,7 +42,9 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
             inclusion: {
                 in: [true]
             }
-  validates :db_manager,
+  validates :database_yaml_pathname,
+            presence: true
+  validates :framework,
             presence: true
 
   #
@@ -58,15 +56,21 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
   end
 
   def configuration_by_environment
-    begin
-      erb_content = database_yaml_pathname.read
-    rescue Errno::EACCES, Errno::ENOENT
-      {}
-    else
-      erb = ERB.new(erb_content)
-      yaml_content = erb.result
-      YAML::load(yaml_content)
+    configuration_by_environment = {}
+
+    if database_yaml_pathname
+      begin
+        erb_content = database_yaml_pathname.read
+      rescue Errno::EACCES, Errno::ENOENT
+        # ignored, uses {}
+      else
+        erb = ERB.new(erb_content)
+        yaml_content = erb.result
+        configuration_by_environment = YAML::load(yaml_content)
+      end
     end
+
+    configuration_by_environment
   end
 
   # Whether the {#db_manager} is connected. Attempts to connect to the databse
@@ -84,14 +88,18 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
     end
   end
 
+  def db_manager
+    if framework
+      framework.db
+    end
+  end
+
   # Defaults to `ENV['MSF_DATABASE_CONFIG']` first and fails back to `config/database.yml`.
   #
   # @return [Pathname] `Pathname` to `database.yml`
   def database_yaml_pathname
-    unless @database_yaml_pathname
-      database_yaml_path = ENV['MSF_DATABASE_CONFIG']
-      database_yaml_path ||= File.join(Msf::Config.get_config_root, 'database.yml')
-      @database_yaml_pathname = Pathname.new(database_yaml_path)
+    if !instance_variable_defined?(:@database_yaml_pathname) && framework
+      @database_yaml_pathname = framework.pathnames.database_yaml
     end
 
     @database_yaml_pathname
@@ -121,7 +129,7 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
   #
   # @return [void]
   def database_yaml_pathname_exists
-    unless database_yaml_pathname.exist?
+    unless !database_yaml_pathname || database_yaml_pathname.exist?
       errors.add(:database_yaml_pathname, :non_existent)
     end
   end
@@ -130,7 +138,7 @@ class Metasploit::Framework::DatabaseConnection < Metasploit::Model::Base
   #
   # @return [void]
   def database_yaml_pathname_readable
-    unless database_yaml_pathname.readable?
+    unless !database_yaml_pathname || database_yaml_pathname.readable?
       errors.add(:database_yaml_pathname, :unreadable)
     end
   end

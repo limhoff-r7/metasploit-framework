@@ -5,14 +5,9 @@ describe Metasploit::Framework::DatabaseConnection do
 
   subject(:database_connection) do
     described_class.new(
-        database_yaml_pathname: database_yaml_pathname,
-        db_manager: db_manager,
-        environment: environment
+        environment: environment,
+        framework: framework
     )
-  end
-
-  let(:database_yaml_pathname) do
-    Metasploit::Framework::Database.configurations_pathname
   end
 
   let(:environment) do
@@ -90,7 +85,7 @@ describe Metasploit::Framework::DatabaseConnection do
       end
 
       let(:database_yaml_pathname) do
-        Metasploit::Model::Spec.temporary_pathname.join('database.yml')
+        database_connection.database_yaml_pathname
       end
 
       context '#database_yaml_pathname_exists' do
@@ -112,6 +107,8 @@ describe Metasploit::Framework::DatabaseConnection do
 
         context 'with non-existent file' do
           before(:each) do
+            database_yaml_pathname.delete
+
             database_connection.valid?
           end
 
@@ -159,8 +156,6 @@ describe Metasploit::Framework::DatabaseConnection do
     end
 
     context 'for #db_manager' do
-      it { should validate_presence_of :db_manager }
-
       context '#db_manager_valid' do
         subject(:db_manager_errors) do
           database_connection.errors[:db_manager]
@@ -188,7 +183,7 @@ describe Metasploit::Framework::DatabaseConnection do
 
         context 'without #db_manager' do
           before(:each) do
-            database_connection.db_manager = nil
+            database_connection.framework = nil
 
             database_connection.valid?
           end
@@ -197,6 +192,8 @@ describe Metasploit::Framework::DatabaseConnection do
         end
       end
     end
+
+    it { should validate_presence_of :framework }
   end
 
   context '#configuration' do
@@ -215,22 +212,19 @@ describe Metasploit::Framework::DatabaseConnection do
     end
 
     let(:database_yaml_pathname) do
-      Metasploit::Model::Spec.temporary_pathname.join('database.yml')
+      database_connection.database_yaml_pathname
     end
 
     context 'with non-existent path' do
+      before(:each) do
+        database_yaml_pathname.delete
+      end
+
       it { should == {} }
     end
 
     context 'with unreadable path' do
-      let(:database_yaml_pathname) do
-        Metasploit::Model::Spec.temporary_pathname.join('database.yml')
-      end
-
       before(:each) do
-        database_yaml_pathname.open('w') { |f|
-          f.puts
-        }
         # remove read permissions
         database_yaml_pathname.chmod(0222)
       end
@@ -325,7 +319,7 @@ describe Metasploit::Framework::DatabaseConnection do
 
     context 'without #db_manager' do
       before(:each) do
-        database_connection.db_manager = nil
+        database_connection.framework = nil
       end
 
       it { should be_false }
@@ -333,62 +327,22 @@ describe Metasploit::Framework::DatabaseConnection do
   end
 
   context '#database_yaml_pathname' do
-    subject(:actual_database_yaml_pathname) do
+    subject(:database_yaml_pathname) do
       database_connection.database_yaml_pathname
     end
 
-    context 'with :database_yaml_pathname' do
-      it 'uses attribute passed to new' do
-        expect(actual_database_yaml_pathname).to eq(database_yaml_pathname)
+    context 'with #framework' do
+      it 'is framework.pathanmes.database_yaml' do
+        expect(database_yaml_pathname).to eq(framework.pathnames.database_yaml)
       end
     end
 
-    context 'without :database_yaml_pathname' do
-      let(:database_yaml_pathname) do
+    context 'without #framework' do
+      let(:framework) do
         nil
       end
 
-      context "with ENV['MSF_DATABASE_CONFIG']" do
-        #
-        # lets
-        #
-
-        let(:expected_database_yaml_path) do
-          'msf_database_config.yml'
-        end
-
-        #
-        # Callbacks
-        #
-
-        around(:each) do |example|
-          msf_database_config_before = ENV.delete('MSF_DATABASE_CONFIG')
-
-          begin
-            example.run
-          ensure
-            ENV['MSF_DATABASE_CONFIG'] = msf_database_config_before
-          end
-        end
-
-        before(:each) do
-          ENV['MSF_DATABASE_CONFIG'] = expected_database_yaml_path
-        end
-
-        it "should be ENV['MSF_DATABASE_CONFIG']" do
-          expect(actual_database_yaml_pathname).to eq(Pathname.new(expected_database_yaml_path))
-        end
-      end
-
-      context "without ENV['MSF_DATABASE_CONFIG']" do
-        it 'uses config/database.yml' do
-          expect(actual_database_yaml_pathname).to eq(
-                                                       Pathname.new(
-                                                           File.join(Msf::Config.get_config_root, 'database.yml')
-                                                       )
-                                                   )
-        end
-      end
+      it { should be_nil }
     end
   end
 

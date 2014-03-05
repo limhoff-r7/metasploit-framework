@@ -9,15 +9,17 @@ FactoryGirl.define do
           ] do
     # dont' call a proc by default
     on_create_proc { nil }
-    config_directory { Msf::Config::Defaults['ConfigDirectory'] }
+    # don't load any module paths so we can just load the module under test and save time
     defer_module_loads { true }
 
     initialize_with {
       # anything besides new must be called explicitly on the Class
       klass.create(
-          'ConfigDirectory' => attributes[:config_directory],
-          'DeferModuleLoads' => attributes[:defer_module_loads],
-          'OnCreateProc' => attributes[:on_create_proc]
+          'DeferModuleLoads' => defer_module_loads,
+          database_disabled: database_disabled,
+          module_types: module_types,
+          pathnames: pathnames,
+          'OnCreateProc' => on_create_proc
       )
     }
   end
