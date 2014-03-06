@@ -35,7 +35,7 @@ class Metasploit::Framework::UI::Meterpreter::Console
     # Point the input/output handles elsewhere
     reset_ui
 
-    enstack_dispatcher(Console::CommandDispatcher::Core)
+    enstack_dispatcher(Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core)
 
     # Set up logging to whatever logsink 'core' is using
     if ! $dispatcher['meterpreter']

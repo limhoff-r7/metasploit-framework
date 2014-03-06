@@ -3,11 +3,17 @@ require 'spec_helper'
 require 'msf/base/sessions/meterpreter'
 
 describe Msf::Sessions::Meterpreter do
+  include_context 'Msf::Simple::Framework'
+
   subject(:meterpreter) do
     described_class.new(
         rstream,
         options
-    )
+    ).tap { |instance|
+      instance.framework = framework
+      instance.user_input = Rex::Ui::Text::Input::Stdio.new
+      instance.user_output = Rex::Ui::Text::Output::Stdio.new
+    }
   end
 
   let(:options) do
@@ -19,6 +25,16 @@ describe Msf::Sessions::Meterpreter do
 
   let(:rstream) do
     double('RStream')
+  end
+
+  it_should_behave_like 'Msf::Session::Scriptable' do
+    let(:base_class) do
+      described_class
+    end
+
+    let(:base_instance) do
+      meterpreter
+    end
   end
 
   context '#load_session_info' do

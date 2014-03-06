@@ -9,45 +9,87 @@ module Scriptable
   end
 
   module ClassMethods
+    # Pathnames that will be checked for a script, in order of precedence.  Scripts under {Msf::Framework#pathnames}
+    # {Metasploit::Framework::Framework::Pathnames#scripts} are favored over those under
+    # {Metasploit::Framework.pathnames}, so users can override the installed scripts.
     #
-    # If the +script+ exists, return its path. Otherwise return nil
-    #
-    def find_script_path(script)
-      # Find the full file path of the specified argument
-      check_paths =
-        [
-          script,
-          ::File.join(script_base, "#{script}"),
-          ::File.join(script_base, "#{script}.rb"),
-          ::File.join(user_script_base, "#{script}"),
-          ::File.join(user_script_base, "#{script}.rb")
-        ]
+    # @param options [Hash{Symbol => String,Msf::Framework}]
+    # @option options [String] :basename basename of the script with or without file extension.
+    # @option options :framework (see #scripts_pathnames)
+    # @yield [pathname] Block takes potential pathnames to search for the script.
+    # @yieldparam pathname A potential pathname for the script.  It should be checked with `Pathname#exist?`.
+    # @yieldreturn [void]
+    # @return [void]
+    # @raise [KeyError] unless :basename is given.
+    # @raise (see #scripts_pathnames)
+    def script_pathnames(options={})
+      options.assert_valid_keys(:basename, :framework)
 
-      full_path = nil
+      basename = options.fetch(:basename)
 
-      # Scan all of the path combinations
-      check_paths.each { |path|
-        if ::File.exists?(path)
-          full_path = path
-          break
+      unless block_given?
+        enum_for(__method__, options)
+      else
+        scripts_pathnames(framework: options[:framework]) do |scripts_pathname|
+          ['', '.rb'].each do |extension|
+            yield scripts_pathname.join("#{basename}#{extension}")
+          end
         end
-      }
-
-      full_path
-    end
-    def script_base
-      Metasploit::Framework.pathnames.scripts.join(type).to_path
-    end
-    def user_script_base
-      ::File.join(Msf::Config.user_script_directory, self.type)
+      end
     end
 
+    # The directories under {#script_pathnames} can be found.  {Metasploit::Framework::Framework::Pathnames#scripts} are
+    # favored over those under {Metasploit::Framework::Configuration::Pathnames#scripts}, so users can override the
+    # installed scripts.
+    #
+    # @param options [Hash{Symbol => Msf::Framework}]
+    # @option options [Msf::Framework, #pathnames] :framework Framework whose {Msf::Framework#pathnames} to use to look
+    #   for framework-specific implementations of scripts.  If `nil`, then only installation scripts pathname will be
+    #   returned.
+    # @yield [pathname]
+    # @yieldparam pathname [Pathname] directory under which a script could be found.
+    # @yieldreturn [void]
+    # @return [void]
+    def scripts_pathnames(options={})
+      options.assert_valid_keys(:framework)
+
+      pathnames_parents = []
+
+      framework = options[:framework]
+
+      if framework
+        pathnames_parents << framework
+      end
+
+      pathnames_parents << Metasploit::Framework
+
+      unless block_given?
+        enum_for(__method__, options)
+      else
+        pathnames_parents.each do |pathnames_parent|
+          yield pathnames_parent.pathnames.scripts.join(type)
+        end
+      end
+    end
+
+    # Finds path to the script.  Scripts under {Msf::Framework#pathnames}
+    # {Metasploit::Framework::Framework::Pathnames#scripts} are favored over those under
+    # {Metasploit::Framework.pathnames}, so users can override the installed scripts.
+    #
+    # @param (see #script_pathnames)
+    # @option (see #script_pathnames)
+    # @return [Pathname] if script is found.
+    # @return [nil] if script is not found.
+    # @raise (see #script_pathnames)
+    def find_script_pathname(options={})
+      script_pathnames(options).find(&:exist?)
+    end
   end
 
   #
   # Override
   #
-  def execute_file
+  def execute_file(path, args)
     raise NotImplementedError
   end
 
@@ -57,37 +99,45 @@ module Scriptable
   # Will search the script path.
   #
   def execute_script(script_name, *args)
-    mod = framework.modules.create(script_name)
-    if (mod and mod.type == "post")
-      # Don't report module run events here as it will be taken care of
-      # in +Post.run_simple+
-      opts = { 'SESSION' => self.sid }
-      args.each do |arg|
-        k,v = arg.split("=", 2)
-        opts[k] = v
-      end
-      mod.run_simple(
-        # Run with whatever the default stance is for now.  At some
-        # point in the future, we'll probably want a way to force a
-        # module to run in the background
-        #'RunAsJob' => true,
-        'LocalInput'  => self.user_input,
-        'LocalOutput' => self.user_output,
-        'Options'     => opts
-      )
-    else
-      full_path = self.class.find_script_path(script_name)
+    cache_module_class = Mdm::Module::Class.where(full_name: script_name, module_type: 'post').first
 
-      # No path found?  Weak.
-      if full_path.nil?
-        print_error("The specified script could not be found: #{script_name}")
-        return true
+    if cache_module_class
+      post_instance = framework.modules.create_from_module_class(cache_module_class)
+
+      if post_instance
+        opts = { 'SESSION' => self.sid }
+
+        args.each do |arg|
+          k,v = arg.split("=", 2)
+          opts[k] = v
+        end
+
+        post_instance.run_simple(
+            'LocalInput'  => self.user_input,
+            'LocalOutput' => self.user_output,
+            'Options'     => opts
+        )
+      else
+        print_error(
+            "#{script_name} is a post module full name, but it could not be instantiated.  " \
+            "Consult #{framework.pathnames.logs.join('framework.log')} for more details"
+        )
+
+        true
       end
-      framework.events.on_session_script_run(self, full_path)
-      execute_file(full_path, args)
+    else
+      pathname = self.class.find_script_pathname(basename: script_name, framework: framework)
+
+      unless pathname
+        print_error("The specified script could not be found: #{script_name}")
+
+        true
+      else
+        framework.events.on_session_script_run(self, pathname)
+        execute_file(pathname, args)
+      end
     end
   end
-
 end
 
 end

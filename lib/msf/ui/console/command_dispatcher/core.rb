@@ -10,6 +10,8 @@ require 'rex/ui/text/output/buffer/stdout'
 # Project
 #
 
+require 'msf/base/sessions/command_shell'
+require 'msf/base/sessions/meterpreter'
 require 'msf/ui/console/command_dispatcher/encoder'
 require 'msf/ui/console/command_dispatcher/exploit'
 require 'msf/ui/console/command_dispatcher/nop'
@@ -40,6 +42,15 @@ class Core
 
   require 'msf/ui/console/command_dispatcher/core/spool'
   include Msf::Ui::Console::CommandDispatcher::Core::Spool
+
+  #
+  # CONSTANTS
+  #
+
+  SESSION_MODULE_BY_SESSION_TYPE = {
+      'meterpreter' => Msf::Sessions::Meterpreter,
+      'shell' => Msf::Sessions::CommandShell
+  }
 
   #
   # Commands
@@ -1455,9 +1466,9 @@ class Core
           return false
         end
 
-        script_paths = {}
-        script_paths['meterpreter'] = Msf::Sessions::Meterpreter.find_script_path(script)
-        script_paths['shell'] = Msf::Sessions::CommandShell.find_script_path(script)
+        script_pathnames_by_session_type = SESSION_MODULE_BY_SESSION_TYPE.each_with_object({}) { |(session_type, session_module), hash|
+          hash[session_type] = session_module.find_script_pathname(basename: script, framework: framework)
+        }
 
         if sid
           print_status("Running script #{script} on session #{sid}...")
@@ -1469,10 +1480,10 @@ class Core
 
         sessions.each do |s|
           if ((session = framework.sessions.get(s)))
-            if (script_paths[session.type])
+            if (script_pathnames_by_session_type[session.type])
               print_status("Session #{s} (#{session.session_host}):")
               begin
-                session.execute_file(script_paths[session.type], extra)
+                session.execute_file(script_pathnames_by_session_type[session.type], extra)
               rescue ::Exception => e
                 log_error("Error executing script: #{e.class} #{e}")
               end

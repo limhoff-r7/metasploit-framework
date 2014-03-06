@@ -1,6 +1,8 @@
 # -*- coding: binary -*-
 require 'rex/parser/arguments'
 
+require 'msf/base/sessions/meterpreter'
+
 ###
 #
 # Core meterpreter client commands that provide only the required set of
@@ -524,27 +526,28 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core
     end
   end
 
-  def cmd_run_tabs(str, words)
+  def cmd_run_tabs(_partial, (_command_name, *words))
     tabs = []
-    if(not words[1] or not words[1].match(/^\//))
-      begin
-        if (msf_loaded?)
-          tabs += tab_complete_postmods
+    first_word = words.first
+
+    unless first_word && first_word.start_with?('/')
+      if (msf_loaded?)
+        tabs += tab_complete_postmods
+      end
+
+      Msf::Sessions::Meterpreter.scripts_pathnames(framework: client.framework) do |scripts_pathname|
+        if scripts_pathname.exist?
+          scripts_pathname.each_child do |child_pathname|
+            if child_pathname.file? && child_pathname.readable?
+              tabs << child_pathname.to_s
+            end
+          end
         end
-        [
-          ::Msf::Sessions::Meterpreter.script_base,
-          ::Msf::Sessions::Meterpreter.user_script_base
-        ].each do |dir|
-          next if not ::File.exist? dir
-          tabs += ::Dir.new(dir).find_all { |e|
-            path = dir + ::File::SEPARATOR + e
-            ::File.file?(path) and ::File.readable?(path)
-          }
-        end
-      rescue Exception
       end
     end
-    return tabs.map { |e| e.sub(/\.rb$/, '') }
+
+    # strip file extension from file names
+    tabs.map { |e| e.sub(/\.rb$/, '') }
   end
 
 
@@ -859,17 +862,18 @@ protected
   end
 
   def tab_complete_postmods
-    tabs = client.framework.modules.post.map { |name,klass|
-      mod = client.framework.modules.post.create(name)
-      if mod and mod.session_compatible?(client)
-        mod.fullname.dup
-      else
-        nil
+    cache_post_classes = Mdm::Module::Class.where(module_type: 'post')
+
+    post_instances = Metasploit::Framework::Module::Instance::Enumerator.new(
+        cache_module_classes: cache_post_classes,
+        module_manager: client.framework.modules
+    )
+
+    post_instances.each_with_object([]) { |post_instance, tabs|
+      if post_instance.session_compatible?(client)
+        tabs << post_instance.full_name
       end
     }
-
-    # nils confuse readline
-    tabs.compact
   end
 
   def tab_complete_channels
