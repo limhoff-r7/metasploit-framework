@@ -53,7 +53,7 @@ module Msf
         def module_path_value_by_name
           @module_path_value_by_name ||= {
               'modules' => Metasploit::Framework.pathnames.modules.to_path,
-              'user' => Msf::Config.user_module_directory
+              'user' => pathnames.modules.to_path
           }
         end
       end

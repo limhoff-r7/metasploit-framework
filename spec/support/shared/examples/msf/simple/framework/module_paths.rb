@@ -122,7 +122,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
     end
 
     it "should map 'user' to Msf::Config.user_module_directory" do
-      module_path_value_by_name['user'].should == Msf::Config.user_module_directory
+      module_path_value_by_name['user'].should == framework.pathnames.modules.to_path
     end
   end
 end
