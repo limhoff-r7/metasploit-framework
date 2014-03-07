@@ -3,7 +3,7 @@ shared_examples_for 'Msf::Auxiliary::Report.get' do |suffix|
 
   context method_name do
     subject(method_name) do
-      auxiliary_metasploit_instance.send(method_name, options)
+      auxiliary_instance.send(method_name, options)
     end
 
     let(:options) do
@@ -37,7 +37,7 @@ shared_examples_for 'Msf::Auxiliary::Report.get' do |suffix|
         end
 
         it 'should pass #myworkspace as :workspace' do
-          auxiliary_metasploit_instance.stub(myworkspace: workspace)
+          auxiliary_instance.stub(myworkspace: workspace)
 
           framework.db.should_receive(method_name).with(
               hash_including(

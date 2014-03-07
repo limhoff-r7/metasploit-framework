@@ -3,7 +3,7 @@ shared_examples_for 'Msf::Auxiliary::Report.report' do |suffix|
 
   context method_name do
     subject(method_name) do
-      auxiliary_metasploit_instance.send(method_name, options)
+      auxiliary_instance.send(method_name, options)
     end
 
     let(:options) do
@@ -14,7 +14,7 @@ shared_examples_for 'Msf::Auxiliary::Report.report' do |suffix|
 
     context 'connected' do
       before(:each) do
-        auxiliary_metasploit_instance.stub(
+        auxiliary_instance.stub(
             mytask: task,
             myworkspace: workspace
         )
@@ -28,13 +28,13 @@ shared_examples_for 'Msf::Auxiliary::Report.report' do |suffix|
         end
 
         it 'should not call #mytask' do
-          auxiliary_metasploit_instance.should_not_receive(:mytask)
+          auxiliary_instance.should_not_receive(:mytask)
 
           send(method_name)
         end
 
         it 'should not call #myworkspace' do
-          auxiliary_metasploit_instance.should_not_receive(:myworkspace)
+          auxiliary_instance.should_not_receive(:myworkspace)
 
           send(method_name)
         end

@@ -1,7 +1,7 @@
 shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
   context '#inside_workspace_boundary?' do
     subject(:inside_workspace_boundary?) do
-      auxiliary_metasploit_instance.inside_workspace_boundary?(ip)
+      auxiliary_instance.inside_workspace_boundary?(ip)
     end
 
     let(:ip) do
@@ -10,7 +10,7 @@ shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
 
     context 'connected' do
       before(:each) do
-        auxiliary_metasploit_instance.stub(myworkspace: workspace)
+        auxiliary_instance.stub(myworkspace: workspace)
 
         framework.db.stub(connected?: connected)
       end
@@ -40,12 +40,12 @@ shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
 
   context '#myworkspace' do
     subject(:myworkspace) do
-      auxiliary_metasploit_instance.myworkspace
+      auxiliary_instance.myworkspace
     end
 
     it 'is not be memoized' do
       memoized = double('Mdm::Workspace')
-      auxiliary_metasploit_instance.instance_variable_set :@myworkspace, memoized
+      auxiliary_instance.instance_variable_set :@myworkspace, memoized
 
       expect(myworkspace).not_to eq(memoized)
     end
@@ -54,7 +54,7 @@ shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
       expect {
         myworkspace
       }.to change {
-        auxiliary_metasploit_instance.instance_variable_defined? :@myworkspace
+        auxiliary_instance.instance_variable_defined? :@myworkspace
       }.to(true)
     end
 
@@ -78,7 +78,7 @@ shared_examples_for 'Msf::Auxiliary::Report::Workspace' do
 
         context '#workspace' do
           before(:each) do
-            auxiliary_metasploit_instance.datastore['WORKSPACE'] = workspace_name
+            auxiliary_instance.datastore['WORKSPACE'] = workspace_name
           end
 
           context 'with nil' do

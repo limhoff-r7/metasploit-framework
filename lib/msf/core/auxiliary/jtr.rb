@@ -32,13 +32,13 @@ module Auxiliary::JohnTheRipper
     )
 
     @run_path  = nil
-    @john_path = Metasploit::Framework.root.join("data", "john").to_path
+    @john_path = Metasploit::Framework.pathnames.data.join('john').to_path
 
     autodetect_platform
   end
 
   def autodetect_platform
-    cpuinfo_base = Metasploit::Framework.root.join("data", "cpuinfo").to_path
+    cpuinfo_base = Metasploit::Framework.pathnames.data.join("cpuinfo").to_path
     return @run_path if @run_path
 
     case ::RUBY_PLATFORM
@@ -82,20 +82,25 @@ module Auxiliary::JohnTheRipper
     @session_id ||= ::Rex::Text.rand_text_alphanumeric(8)
   end
 
-  def john_pot_file
-    ::File.join( ::Msf::Config.config_directory, "john.pot" )
-  end
-
   def john_cracked_passwords
-    ret = {}
-    return ret if not ::File.exist?(john_pot_file)
-    ::File.open(john_pot_file, "rb") do |fd|
-      fd.each_line do |line|
-        hash,clear = line.sub(/\r?\n$/, '').split(",", 2)
-        ret[hash] = clear
+    clear_text_by_hash = {}
+
+    unless john_pot_pathname.exist?
+      john_pot_pathname.open('rb') do |f|
+        f.each_line do |line|
+          stripped = line.strip
+
+          hash, clear_text = stripped.split(',', 2)
+          clear_text_by_hash[hash] = clear_text
+        end
       end
     end
-    ret
+
+    clear_text_by_hash
+  end
+
+  def john_pot_pathname
+    framework.pathnames.root.join('john.pot')
   end
 
   def john_show_passwords(hfile, format=nil)
@@ -108,10 +113,9 @@ module Auxiliary::JohnTheRipper
       return res
     end
 
-    pot  = john_pot_file
     conf = ::File.join(john_base_path, "confs", "john.conf")
 
-    cmd = [ john_command,  "--show", "--conf=#{conf}", "--pot=#{pot}", hfile]
+    cmd = [ john_command,  "--show", "--conf=#{conf}", "--pot=#{john_pot_pathname}", hfile]
 
     if format
       cmd << "--format=" + format
@@ -271,7 +275,7 @@ module Auxiliary::JohnTheRipper
     if opts[:pot]
       cmd << ( "--pot=" + opts[:pot] )
     else
-      cmd << ( "--pot=" + john_pot_file )
+      cmd << "--pot=#{john_pot_pathname}"
     end
 
     if opts[:format]
