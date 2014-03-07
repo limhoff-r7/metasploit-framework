@@ -170,9 +170,7 @@ module Msf::Auxiliary::Report
   # ignored if there is no database
   #
   def store_loot(ltype, ctype, host, data, filename=nil, info=nil, service=nil)
-    unless File.directory?(Msf::Config.loot_directory)
-      FileUtils.mkdir_p(Msf::Config.loot_directory)
-    end
+    framework.pathnames.loot.mkpath
 
     ext = 'bin'
     if filename
@@ -211,11 +209,11 @@ module Msf::Auxiliary::Report
     name = "#{basename}.#{ext}"
     name.gsub!(/[^a-z0-9\.\_]+/i, '')
 
-    path = File.join(Msf::Config.loot_directory, name)
-    full_path = ::File.expand_path(path)
+    pathname = framework.pathnames.loot.join(name)
+    path = pathname.to_path
 
-    File.open(full_path, "wb") do |fd|
-      fd.write(data)
+    pathname.open('wb') do |f|
+      f.write(data)
     end
 
     framework.db.with_connection do
@@ -225,7 +223,7 @@ module Msf::Auxiliary::Report
       conf[:host] = host if host
       conf[:type] = ltype
       conf[:content_type] = ctype
-      conf[:path] = full_path
+      conf[:path] = path
       conf[:workspace] = myworkspace
       conf[:name] = filename if filename
       conf[:info] = info if info
@@ -237,6 +235,6 @@ module Msf::Auxiliary::Report
       framework.db.report_loot(conf)
     end
 
-    full_path.dup
+    path
   end
 end
