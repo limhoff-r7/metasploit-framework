@@ -35,6 +35,7 @@ describe Metasploit::Framework::Framework::Pathnames do
         described_class::DIRECTORIES
       end
 
+      it { should include 'data' }
       it { should include 'local' }
       it { should include 'logs' }
       it { should include 'loot' }
@@ -75,12 +76,23 @@ describe Metasploit::Framework::Framework::Pathnames do
         described_class::SUBDIRECTORIES
       end
 
+      it { should include 'data' }
       it { should include 'local' }
       it { should include 'logs' }
       it { should include 'loot' }
       it { should include 'plugins' }
       it { should include 'modules' }
       it { should include 'scripts' }
+    end
+  end
+
+  context '#data' do
+    subject(:data) do
+      pathnames.data
+    end
+
+    it 'is <root>/data' do
+      expect(data).to eq(pathnames.root.join('data'))
     end
   end
 

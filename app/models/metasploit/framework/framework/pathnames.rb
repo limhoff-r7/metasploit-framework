@@ -19,7 +19,7 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
       'USERPROFILE'
   ]
   # Names of directory attributes that are children of {#root}
-  SUBDIRECTORIES = %w{local logs loot plugins modules scripts}
+  SUBDIRECTORIES = %w{data local logs loot plugins modules scripts}
   # Names of all directory attributes
   DIRECTORIES = SUBDIRECTORIES + %w{root script_logs session_logs}
 
@@ -45,6 +45,11 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
   #   @return [Pathname]
   attr_reader :history
 
+  # @!attribute [r] data
+  #   Directory where locally generated data is stored.
+  #
+  #   @return [Pathname]
+  #
   # @!attribute [r] local
   #   Directory to store locally generated data.
   #
