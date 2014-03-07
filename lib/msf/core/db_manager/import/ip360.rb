@@ -74,7 +74,7 @@ module Msf::DBManager::Import::IP360
   #
   # Import IP360's ASPL database
   #
-  def import_ip360_aspl_xml(args={}, &block)
+  def import_ip360_aspl_xml(args={})
     data = args[:data]
 
     if not data.index("<ontology")
