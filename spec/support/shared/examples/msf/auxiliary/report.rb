@@ -93,7 +93,51 @@ shared_examples_for 'Msf::Auxiliary::Report' do
   end
 
   context '#store_local' do
-    it 'should work'
+    subject(:store_local) do
+      auxiliary_instance.store_local(type_prefix, content_type, content, filename)
+    end
+
+    let(:filename) do
+      'local-file-name.txt'
+    end
+
+    let(:content) do
+      'Content'
+    end
+
+    let(:content_type) do
+      'application/metasploit-framework'
+    end
+
+    let(:type_prefix) do
+      'type.prefix'
+    end
+
+    it 'creates an Metasploit::Framework::LocalFile' do
+      expect(Metasploit::Framework::LocalFile).to receive(:new).with(
+                                                      hash_including(
+                                                          auxiliary_instance: auxiliary_instance,
+                                                          filename: filename,
+                                                          content: content,
+                                                          content_type: content_type,
+                                                          type_prefix: type_prefix
+                                                      )
+                                                  ).and_call_original
+
+      store_local
+    end
+
+    it 'writes content to file on disk' do
+      path = store_local
+
+      File.open(path) { |f|
+        expect(f.read).to eq(content)
+      }
+    end
+
+    it 'returns path to local file' do
+      expect(store_local).to eq(framework.pathnames.local.join(filename).to_path)
+    end
   end
 
   context '#store_loot' do

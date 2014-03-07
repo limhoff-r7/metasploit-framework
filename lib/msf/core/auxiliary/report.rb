@@ -139,54 +139,17 @@ module Msf::Auxiliary::Report
   # is connected.
   #
   def store_local(ltype=nil, ctype=nil, data=nil, filename=nil)
-    unless ::File.directory?(Msf::Config.local_directory)
-      FileUtils.mkdir_p(Msf::Config.local_directory)
-    end
-
-    # Split by fname an extension
-    if filename.present?
-      if filename =~ /(.*)\.(.*)/
-        ext = $2
-        fname = $1
-      else
-        fname = filename
-      end
-    else
-      fname = ctype || "local_#{Time.now.utc.to_i}"
-    end
-
-    # Split by path seperator
-    fname = ::File.split(fname).last
-
-    case ctype # Probably could use more cases
-      when "text/plain"
-        ext ||= "txt"
-      when "text/xml"
-        ext ||= "xml"
-      when "text/html"
-        ext ||= "html"
-      when "application/pdf"
-        ext ||= "pdf"
-      else
-        ext ||= "bin"
-    end
-
-    fname.gsub!(/[^a-z0-9\.\_\-]+/i, '')
-    fname << ".#{ext}"
-
-    ltype.gsub!(/[^a-z0-9\.\_\-]+/i, '')
-
-    path = File.join(Msf::Config.local_directory, fname)
-    full_path = ::File.expand_path(path)
-    File.open(full_path, "wb") { |fd| fd.write(data) }
-
-    # This will probably evolve into a new database table
-    report_note(
-        :data => full_path.dup,
-        :type => "#{ltype}.localpath"
+    local_file = Metasploit::Framework::LocalFile.new(
+        auxiliary_instance: self,
+        filename: filename,
+        content: data,
+        content_type: ctype,
+        type_prefix: ltype
     )
+    local_file.valid!
+    local_file.write
 
-    return full_path.dup
+    local_file.pathname.to_path
   end
 
   #
