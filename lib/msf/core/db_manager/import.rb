@@ -165,7 +165,7 @@ module Msf::DBManager::Import
       data = f.read(4)
     end
     if data.nil?
-      raise DBImportError.new("Zero-length file")
+      raise Msf::DBImportError.new("Zero-length file")
     end
 
     case data[0,4]
@@ -207,7 +207,7 @@ module Msf::DBManager::Import
   def import_filetype_detect(data)
 
     if data and data.kind_of? ::Zip::ZipFile
-      raise DBImportError.new("The zip file provided is empty.") if data.entries.empty?
+      raise Msf::DBImportError.new("The zip file provided is empty.") if data.entries.empty?
       @import_filedata ||= {}
       @import_filedata[:zip_filename] = File.split(data.to_s).last
       @import_filedata[:zip_basename] = @import_filedata[:zip_filename].gsub(/\.zip$/,"")
@@ -220,7 +220,7 @@ module Msf::DBManager::Import
       rescue ::Interrupt
         raise $!
       rescue ::Exception
-        raise DBImportError.new("The zip file provided is not a Metasploit ZIP report")
+        raise Msf::DBImportError.new("The zip file provided is not a Metasploit ZIP report")
       end
     end
 
@@ -228,7 +228,7 @@ module Msf::DBManager::Import
       # Don't check for emptiness here because unlike other formats, we
       # haven't read any actual data in yet, only magic bytes to discover
       # that this is indeed a pcap file.
-      #raise DBImportError.new("The pcap file provided is empty.") if data.body.empty?
+      #raise Msf::DBImportError.new("The pcap file provided is empty.") if data.body.empty?
       @import_filedata ||= {}
       @import_filedata[:type] = "Libpcap Packet Capture"
       return :libpcap
@@ -237,7 +237,7 @@ module Msf::DBManager::Import
     # This is a text string, lets make sure its treated as binary
     data = data.unpack("C*").pack("C*")
     if data and data.to_s.strip.length == 0
-      raise DBImportError.new("The data provided to the import function was empty")
+      raise Msf::DBImportError.new("The data provided to the import function was empty")
     end
 
     # Parse the first line or 4k of data from the file
@@ -366,14 +366,14 @@ module Msf::DBManager::Import
       return :msf_pwdump
     end
 
-    raise DBImportError.new("Could not automatically determine file type")
+    raise Msf::DBImportError.new("Could not automatically determine file type")
   end
 
   # Boils down the validate_import_file to a boolean
   def validate_import_file(data)
     begin
       import_filetype_detect(data)
-    rescue DBImportError
+    rescue Msf::DBImportError
       return false
     end
     return true
