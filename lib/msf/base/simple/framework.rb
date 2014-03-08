@@ -90,12 +90,8 @@ module Framework
   # Extends a framework object that may already exist.
   #
   def self.simplify(framework, opts)
-
-    # If the framework instance has not already been extended, do it now.
-    if (framework.kind_of?(Msf::Simple::Framework) == false)
-      framework.extend(Msf::Simple::Framework)
-      framework.plugins.extend(Msf::Simple::Framework::PluginManager)
-    end
+    framework.extend Msf::Simple::Framework
+    framework.plugins.extend Msf::Simple::Framework::PluginManager
 
     # Initialize the simplified framework
     framework.init_simplified()
