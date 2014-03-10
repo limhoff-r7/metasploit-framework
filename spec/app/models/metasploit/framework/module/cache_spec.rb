@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'file/find'
 
-describe Metasploit::Framework::Module::Cache do
+describe Metasploit::Framework::Module::Cache, :cache do
   subject(:module_cache) do
     described_class.new
   end
@@ -471,7 +471,7 @@ describe Metasploit::Framework::Module::Cache do
       end
     end
 
-    context 'with real module files' do
+    context 'with real module files', :content do
       include_context 'database cleaner', after: :all
       include_context 'Metasploit::Framework::Spec::Constants cleaner', after: :all
 

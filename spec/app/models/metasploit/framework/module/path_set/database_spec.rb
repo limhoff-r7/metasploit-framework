@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Module::PathSet::Database do
+describe Metasploit::Framework::Module::PathSet::Database, :cache do
 	include_context 'database cleaner'
 
 	subject(:path_set) do
