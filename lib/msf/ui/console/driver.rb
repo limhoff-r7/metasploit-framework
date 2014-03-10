@@ -222,21 +222,9 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
         end
       end
 
-      # Look for our database configuration in the following places, in order:
-      #	command line arguments
-      #	environment variable
-      #	configuration directory (usually ~/.msf3)
-      database_yaml_path = opts['DatabaseYAML']
-      database_yaml_pathname = nil
-
-      if database_yaml_path
-        database_yaml_pathname = Pathname.new(database_yaml_path)
-      end
-
       database_connection = Metasploit::Framework::DatabaseConnection.new(
-          database_yaml_pathname: database_yaml_pathname,
-          db_manager: framework.db,
-          environment: opts['DatabaseEnv']
+          environment: opts['DatabaseEnv'],
+          framework: framework
       )
 
       unless database_connection.valid?

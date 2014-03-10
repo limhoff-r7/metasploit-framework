@@ -91,10 +91,6 @@ class OptsConsole
 				options['Plugins'] << p
 			end
 
-			opts.on("-y", "--yaml <database.yml>", "Specify a YAML file containing database settings") do |m|
-				options['DatabaseYAML'] = m
-			end
-
 			opts.on("-M", "--migration-path <dir>", "Specify a directory containing additional DB migrations") do |m|
 				options['DatabaseMigrationPaths'] ||= []
 				options['DatabaseMigrationPaths'] << m
