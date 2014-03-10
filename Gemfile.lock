@@ -1,22 +1,22 @@
 GIT
   remote: git://github.com/rapid7/metasploit-model.git
-  revision: 5c602bbf0ce6c110b425e61f7e61c043086dea56
-  tag: v0.20.3.firefox-and-nodejs
+  revision: a01451110bd73e1e4bd3ba76c63d4aebb1396eb3
+  tag: v0.20.4.firefox-and-nodejs
   specs:
-    metasploit-model (0.20.3)
+    metasploit-model (0.20.4)
       activesupport
 
 GIT
   remote: git://github.com/rapid7/metasploit_data_models.git
-  revision: 76edef9018558d8f914f96d73dc0c9a957db1d0a
-  tag: v0.54.6.firefox-and-nodejs
+  revision: 969221d980dc7bae0394a5c1cf35b570d76f2325
+  tag: v0.54.7.firefox-and-nodejs
   specs:
-    metasploit_data_models (0.54.6)
+    metasploit_data_models (0.54.7)
       activerecord (>= 3.2.13)
       activesupport
       awesome_nested_set
       file-find
-      metasploit-model (~> 0.20.3)
+      metasploit-model (~> 0.20.4)
       pg
 
 GEM
@@ -85,7 +85,7 @@ GEM
       multi_json
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
-    sys-admin (1.6.2)
+    sys-admin (1.6.3)
       ffi (>= 1.1.0)
     table_print (1.5.1)
     timecop (0.6.1)
