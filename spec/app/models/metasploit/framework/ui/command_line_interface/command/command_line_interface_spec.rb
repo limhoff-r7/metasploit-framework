@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface do
+describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface, :ui do
   include_context 'Msf::Simple::Framework'
 
   subject(:command) do

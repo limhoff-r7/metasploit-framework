@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface::Help do
+describe Metasploit::Framework::UI::CommandLineInterface::Command::CommandLineInterface::Help, :ui do
   subject(:command) do
     described_class.new(
         parent: parent

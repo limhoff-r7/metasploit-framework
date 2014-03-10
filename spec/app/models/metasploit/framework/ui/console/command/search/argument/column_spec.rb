@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::UI::Console::Command::Search::Argument::Column do
+describe Metasploit::Framework::UI::Console::Command::Search::Argument::Column, :ui do
   column_names = [
       'description',
       'disclosed_on',

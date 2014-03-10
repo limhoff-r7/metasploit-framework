@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core do
+describe Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core, :ui do
   subject(:command_dispatcher) do
     described_class.new(shell)
   end

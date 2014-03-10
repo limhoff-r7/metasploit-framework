@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Rex::Ui::Output do
+describe Rex::Ui::Output, :rex, :ui do
   subject(:output) do
     described_class.new
   end

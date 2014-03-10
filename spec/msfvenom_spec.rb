@@ -50,7 +50,7 @@ shared_examples_for "payload dumper" do
 	end
 end
 
-describe MsfVenom do
+describe MsfVenom, :ui do
 
 	let(:stdin)  { StringIO.new("", "rb") }
 	let(:stdout) { StringIO.new("", "wb") }

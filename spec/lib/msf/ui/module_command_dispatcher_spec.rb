@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Msf::Ui::Console::ModuleCommandDispatcher do
+describe Msf::Ui::Console::ModuleCommandDispatcher, :ui do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command_dispatcher) do

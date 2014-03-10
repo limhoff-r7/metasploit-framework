@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::UI::Console::Command::Base do
+describe Metasploit::Framework::UI::Console::Command::Base, :ui do
   include_context 'Msf::Ui::Console::Driver'
 
   subject(:command) do

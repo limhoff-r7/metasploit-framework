@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Msf::Ui::Console::Driver do
+describe Msf::Ui::Console::Driver, :ui do
   include_context 'Msf::Simple::Framework'
 
   subject(:driver) do
