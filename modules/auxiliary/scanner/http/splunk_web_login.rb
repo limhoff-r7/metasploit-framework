@@ -40,9 +40,9 @@ class Metasploit3 < Msf::Auxiliary
         Opt::RPORT(8000),
         OptString.new('URI', [true, "URI for Splunk Web login. Default is /en-US/account/login", "/en-US/account/login"]),
         OptPath.new('USERPASS_FILE',  [ false, "File containing users and passwords separated by space, one pair per line",
-          wordlists.root.join("http_default_userpass.txt").to_path ]),
+          wordlists.join("http_default_userpass.txt").to_path ]),
         OptPath.new('USER_FILE',  [ false, "File containing users, one per line",
-          wordlists.root.join("http_default_users.txt").to_path ]),
+          wordlists.join("http_default_users.txt").to_path ]),
         OptPath.new('PASS_FILE',  [ false, "File containing passwords, one per line",
           wordlists.join("http_default_pass.txt").to_path ])
       ], self.class)
