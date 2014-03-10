@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Command::Check::Simple do
+describe Metasploit::Framework::Command::Check::Simple, :ui do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Command::Use::SetMetasploitInstance do
+describe Metasploit::Framework::Command::Use::SetMetasploitInstance, :ui do
   include_context 'Msf::Ui::Console::Driver'
   include_context 'output'
 

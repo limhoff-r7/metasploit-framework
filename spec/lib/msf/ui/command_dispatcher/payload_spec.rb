@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Msf::Ui::Console::CommandDispatcher::Payload do
+describe Msf::Ui::Console::CommandDispatcher::Payload, :ui do
   include_context 'metasploit_super_class_by_module_type'
   include_context 'Msf::DBManager'
   include_context 'Msf::Ui::Console::Driver'

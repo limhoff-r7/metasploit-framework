@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'msf/ui'
 require 'msf/ui/console/command_dispatcher/auxiliary'
 
-describe Msf::Ui::Console::CommandDispatcher::Auxiliary do
+describe Msf::Ui::Console::CommandDispatcher::Auxiliary, :ui do
   include_context 'metasploit_super_class_by_module_type'
   include_context 'Msf::DBManager'
   include_context 'Msf::Ui::Console::Driver'

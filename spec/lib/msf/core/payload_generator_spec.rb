@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'msf/core/payload_generator'
 
-describe Msf::PayloadGenerator do
+describe Msf::PayloadGenerator, :ui do
   include_context 'database cleaner'
   include_context 'Metasploit::Framework::Spec::Constants cleaner'
   include_context 'Msf::Simple::Framework'
