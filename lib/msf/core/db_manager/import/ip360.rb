@@ -101,30 +101,28 @@ module Msf::DBManager::Import::IP360
     wspace = args[:wspace] || workspace
     bl = validate_ips(args[:blacklist]) ? args[:blacklist].split : []
 
-    # @aspl = {'vulns' => {'name' => { }, 'cve' => { }, 'bid' => { } }
-    # 'oses' => {'name' } }
-
-    aspl_path  = nil
-    aspl_paths = [
-        ::File.join(Msf::Config.config_directory, "data", "ncircle", "ip360.aspl"),
-        Metasploit::Framework.pathnames.data.join("ncircle", "ip360.aspl").to_path
+    aspl_pathname  = nil
+    pathnames_parents = [
+        framework,
+        Metasploit::Framework
     ]
 
-    aspl_paths.each do |tpath|
-      next if not (::File.exist?(tpath) and ::File.readable?(tpath))
-      aspl_path = tpath
-      break
+    pathnames_parents.each do |pathnames_parent|
+      pathname = pathnames_parent.pathanmes.data.join('ncircle', 'ip360.aspl')
+
+      if pathname.readable?
+        aspl_pathname = pathname.to_path
+      end
     end
 
-    if not aspl_path
+    unless aspl_pathname
       raise Msf::DBImportError.new("The nCircle IP360 ASPL file is not present.\n    Download ASPL from nCircle VNE | Administer | Support | Resources, unzip it, and import it first")
     end
 
     # parse nCircle ASPL file
-    aspl = ""
-    ::File.open(aspl_path, "rb") do |f|
-      aspl = f.read(f.stat.size)
-    end
+    aspl = aspl_pathname.open('rb') { |f|
+      f.read(f.stat.size)
+    }
 
     @asplhash = nil
     parser = Rex::Parser::IP360ASPLXMLStreamParser.new
