@@ -1,5 +1,9 @@
-language: ruby
-env: MSF_SPOTCHECK_RECENT=1
+env:
+  global:
+    - MSF_SPOTCHECK_RECENT=1
+  matrix:
+    - SPEC_OPTS="--tag ui"
+    - SPEC_OPTS="--tag ~ui"
 before_install:
   - rake --version
   - sudo apt-get update -qq
@@ -14,14 +18,11 @@ before_script:
   - bundle exec rake parallel:create
   - bundle exec rake parallel:prepare > /dev/null 2>&1
 bundler_args: --without documentation profiling
-script: "bundle exec rake parallel:spec[8]"
-
-rvm:
-  #- '1.8.7'
-  - '1.9.3'
-
-notifications:
-  irc: "irc.freenode.org#msfnotify"
-
 git:
   depth: 5
+language: ruby
+notifications:
+  irc: "irc.freenode.org#msfnotify"
+rvm:
+  - '1.9.3'
+script: "bundle exec rake parallel:spec[8]"
