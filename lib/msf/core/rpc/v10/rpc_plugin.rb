@@ -15,25 +15,42 @@ class RPC_Plugin < RPC_Base
 
     if (path !~ /#{File::SEPARATOR}/)
       plugin_file_name = path
+      path = nil
 
-      # If the plugin isn't in the user direcotry (~/.msf3/plugins/), use the base
-      path = Msf::Config.user_plugin_directory + File::SEPARATOR + plugin_file_name
+      pathnames_parents = [
+          framework,
+          Metasploit::Framework
+      ]
 
-      unless File.exists?( path  + ".rb" )
-        # If the following "path" doesn't exist it will be caught when we attempt to load
-        path = Metasploit::Framework.pathnames.plugins.join(plugin_file_name).to_path
+      pathnames_parents.each do |pathnames_parent|
+        plugins = pathnames_parent.pathnames.plugins
+        pathname = plugins.join("#{plugin_file_name}.rb")
+
+        if pathname.exist?
+          # Msf::PluginManager#load take a path without a file extension
+          path = plugins.join(plugin_file_name).to_path
+        end
       end
     end
 
-    begin
-      if (inst = self.framework.plugins.load(path, opts))
-        return 	{ "result" => "success" }
+    result = 'failure'
+
+    if path
+      begin
+        plugin_instance = framework.plugins.load(path, opts)
+      rescue ::Exception => exception
+        src = 'core'
+        level = 0
+        elog("Error loading plugin #{path}: #{exception}\n\n#{exception.backtrace.join("\n")}", src, level, caller)
+      else
+        if plugin_instance
+          result = 'success'
+        end
       end
-    rescue ::Exception => e
-      elog("Error loading plugin #{path}: #{e}\n\n#{e.backtrace.join("\n")}", src = 'core', level = 0, from = caller)
-      return 	{ "result" => "failure" }
     end
 
+
+    { 'result' => result }
   end
 
   def rpc_unload(name)
