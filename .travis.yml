@@ -18,4 +18,4 @@ notifications:
   irc: "irc.freenode.org#msfnotify"
 rvm:
   - '1.9.3'
-script: "bundle exec rake parallel:spec"
+script: "bundle exec rake parallel:spec[8]"
