@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Module::Path do
+describe Metasploit::Framework::Module::Path, :cache do
 	it { should be_a ActiveModel::Dirty }
 
   it_should_behave_like 'Metasploit::Model::Module::Path',

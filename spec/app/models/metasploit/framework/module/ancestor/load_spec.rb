@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'file/find'
 
-describe Metasploit::Framework::Module::Ancestor::Load do
+describe Metasploit::Framework::Module::Ancestor::Load, :cache do
   include_context 'database cleaner'
   include_context 'Metasploit::Framework::Spec::Constants cleaner'
 
@@ -558,7 +558,7 @@ describe Metasploit::Framework::Module::Ancestor::Load do
     end
   end
 
-  context 'files' do
+  context 'files', :content do
     module_path_real_path = Metasploit::Framework.root.join('modules').to_path
 
     let(:module_path) do

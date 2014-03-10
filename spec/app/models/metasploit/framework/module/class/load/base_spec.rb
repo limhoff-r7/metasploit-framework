@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Module::Class::Load::Base do
+describe Metasploit::Framework::Module::Class::Load::Base, :cache do
   include_context 'database cleaner'
 
   subject(:module_class_load) do

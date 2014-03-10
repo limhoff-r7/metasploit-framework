@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Module::Path::Load do
+describe Metasploit::Framework::Module::Path::Load, :cache do
   subject(:module_path_load) do
     described_class.new
   end

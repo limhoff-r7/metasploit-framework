@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Metasploit::Framework::Module::PathSet::Memory do
+describe Metasploit::Framework::Module::PathSet::Memory, :cache do
 	subject(:path_set) do
 		described_class.new(
 				:cache => cache

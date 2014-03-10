@@ -10,8 +10,10 @@ before_script:
   - bundle exec rake parallel:prepare > /dev/null 2>&1
 bundler_args: --without documentation profiling
 env:
+  - SPEC_OPTS="--tag cache --tag ~content"
+  - SPEC_OPTS="--tag content"
   - SPEC_OPTS="--tag ui"
-  - SPEC_OPTS="--tag ~ui"
+  - SPEC_OPTS="--tag ~cache ~content ~ui"
 git:
   depth: 1
 notifications:
