@@ -38,23 +38,36 @@ module Msf::DBManager::Import::MetasploitFramework::Pwdump
     data.each_line do |line|
       case line
         when /^[\s]*#/ # Comment lines
-          if line[/^#[\s]*([0-9.]+):([0-9]+)(\x2f(tcp|udp))?[\s]*(\x28([^\x29]*)\x29)?/]
+          if line[/^#[\s]*([0-9.]+):([0-9]+)(\x2f(tcp|udp))?[\s]*(\x28([^\x29]*)\x29)?/n]
             addr = $1
             port = $2
             proto = $4
             sname = $6
           end
         when /^[\s]*Warning:/
-          next # Discard warning messages.
-        when /^[\s]*([^\s:]+):[0-9]+:([A-Fa-f0-9]+:[A-Fa-f0-9]+):[^\s]*$/ # SMB Hash
+          # Discard warning messages.
+          next
+
+        # SMB Hash
+        when /^[\s]*([^\s:]+):[0-9]+:([A-Fa-f0-9]+:[A-Fa-f0-9]+):[^\s]*$/
           user = ([nil, "<BLANK>"].include?($1)) ? "" : $1
           pass = ([nil, "<BLANK>"].include?($2)) ? "" : $2
           ptype = "smb_hash"
-        when /^[\s]*([^\s:]+):([0-9]+):NO PASSWORD\*+:NO PASSWORD\*+[^\s]*$/ # SMB Hash
+
+        # SMB Hash
+        when /^[\s]*([^\s:]+):([0-9]+):NO PASSWORD\*+:NO PASSWORD\*+[^\s]*$/
           user = ([nil, "<BLANK>"].include?($1)) ? "" : $1
           pass = ""
           ptype = "smb_hash"
-        when /^[\s]*([\x21-\x7f]+)[\s]+([\x21-\x7f]+)?/ # Must be a user pass
+
+        # SMB Hash with cracked plaintext, or just plain old plaintext
+        when /^[\s]*([^\s:]+):(.+):[A-Fa-f0-9]*:[A-Fa-f0-9]*:::$/
+          user = ([nil, "<BLANK>"].include?($1)) ? "" : $1
+          pass = ([nil, "<BLANK>"].include?($2)) ? "" : $2
+          ptype = "password"
+
+        # Must be a user pass
+        when /^[\s]*([\x21-\x7f]+)[\s]+([\x21-\x7f]+)?/n
           user = ([nil, "<BLANK>"].include?($1)) ? "" : dehex($1)
           pass = ([nil, "<BLANK>"].include?($2)) ? "" : dehex($2)
           ptype = "password"
@@ -94,7 +107,7 @@ module Msf::DBManager::Import::MetasploitFramework::Pwdump
 
   # If hex notation is present, turn them into a character.
   def dehex(str)
-    hexen = str.scan(/\x5cx[0-9a-fA-F]{2}/)
+    hexen = str.scan(/\x5cx[0-9a-fA-F]{2}/n)
     hexen.each { |h|
       str.gsub!(h,h[2,2].to_i(16).chr)
     }

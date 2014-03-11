@@ -53,6 +53,9 @@ module Msf::DBManager::Import
   require 'msf/core/db_manager/import/open_vas'
   include Msf::DBManager::Import::OpenVAS
 
+  require 'msf/core/db_manager/import/outpost24'
+  include Msf::DBManager::Import::Outpost24
+
   require 'msf/core/db_manager/import/qualys'
   include Msf::DBManager::Import::Qualys
 
@@ -138,7 +141,7 @@ module Msf::DBManager::Import
         return REXML::Document.new(data)
       rescue REXML::ParseException => e
         dlog("REXML error: Badly formatted XML, attempting to recover. Error was: #{e.inspect}")
-        return REXML::Document.new(data.gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xff])/){ |x| "\\x%.2x" % x.unpack("C*")[0] })
+        return REXML::Document.new(data.gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xff])/n){ |x| "\\x%.2x" % x.unpack("C*")[0] })
       end
     end
   end
@@ -202,7 +205,7 @@ module Msf::DBManager::Import
   # Returns one of: :nexpose_simplexml :nexpose_rawxml :nmap_xml :openvas_xml
   # :nessus_xml :nessus_xml_v2 :qualys_scan_xml, :qualys_asset_xml, :msf_xml :nessus_nbe :amap_mlog
   # :amap_log :ip_list, :msf_zip, :libpcap, :foundstone_xml, :acunetix_xml, :appscan_xml
-  # :burp_session, :ip360_xml_v3, :ip360_aspl_xml, :nikto_xml
+  # :burp_session, :ip360_xml_v3, :ip360_aspl_xml, :nikto_xml, :outpost24_xml
   # If there is no match, an error is raised instead.
   def import_filetype_detect(data)
 
@@ -331,10 +334,13 @@ module Msf::DBManager::Import
             @import_filedata[:type] = "Appscan"
             return :appscan_xml
           when "entities"
-            if  line =~ /creator.*\x43\x4f\x52\x45\x20\x49\x4d\x50\x41\x43\x54/i
+            if  line =~ /creator.*\x43\x4f\x52\x45\x20\x49\x4d\x50\x41\x43\x54/in
               @import_filedata[:type] = "CI"
               return :ci_xml
             end
+          when "main"
+            @import_filedata[:type] = "Outpost24 XML"
+            return :outpost24_xml
           else
             # Give up if we haven't hit the root tag in the first few lines
             break if line_count > 10

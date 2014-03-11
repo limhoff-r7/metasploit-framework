@@ -1,9 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
-#
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 
@@ -17,7 +14,7 @@ class Metasploit3 < Msf::Auxiliary
     super(
         update_info(
             info,
-            'Name'				=> 'John the Ripper Password Cracker (Fast Mode)',
+            'Name' => 'John the Ripper Password Cracker (Fast Mode)',
             'Description'       => %Q{
               This module uses John the Ripper to identify weak passwords that have been
               acquired as hashed files (loot) or raw LANMAN/NTLM hashes (hashdump). The goal
@@ -26,8 +23,8 @@ class Metasploit3 < Msf::Auxiliary
               used outside of Metasploit. This initial version just handles LM/NTLM credentials
               from hashdump and uses the standard wordlist and rules.
             },
-            'Author'			=> 'hdm',
-            'License'			=> MSF_LICENSE  # JtR itself is GPLv2, but this wrapper is MSF (BSD)
+            'Author' => 'hdm',
+            'License' => MSF_LICENSE  # JtR itself is GPLv2, but this wrapper is MSF (BSD)
         )
     )
   end
@@ -73,6 +70,9 @@ class Metasploit3 < Msf::Auxiliary
         cracked_ntlm = {}
         cracked_lm   = {}
         added        = []
+
+        john_crack(hashlist.path, :wordlist => datastore['Wordlist'], :format => 'lm')
+        john_crack(hashlist.path, :wordlist => datastore['Wordlist'], :format => 'nt')
 
         # Crack this in LANMAN format using wordlist mode with tweaked rules
         john_crack(hashlist.path, :wordlist => wordlist.path, :rules => 'single', :format => 'lm')

@@ -4,11 +4,11 @@ require 'msf/ui'
 require 'msf/ui/console/command_dispatcher/core'
 
 describe Msf::Ui::Console::CommandDispatcher::Core do
-	include_context 'Msf::DBManager'
-	include_context 'Msf::Ui::Console::Driver'
+  include_context 'Msf::DBManager'
+  include_context 'Msf::Ui::Console::Driver'
 
-	subject(:command_dispatcher) do
-		described_class.new(msf_ui_console_driver)
+  subject(:command_dispatcher) do
+    described_class.new(msf_ui_console_driver)
   end
 
   it_should_behave_like 'Msf::Ui::Console::CommandDispatcher'

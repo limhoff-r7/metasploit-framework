@@ -694,6 +694,7 @@ class Db
       delete_count = 0
       search_term = nil
 
+      cred_table_columns = [ 'host', 'port', 'user', 'pass', 'type', 'proof', 'active?' ]
       user = nil
 
       # Short-circuit help
@@ -752,6 +753,19 @@ class Db
               print_error("Argument required for -u")
               return
             end
+          when '-c','--columns'
+            columns = args.shift
+            unless columns
+              print_error("Argument required for -c, you may use any of #{cred_table_columns.join(',')}")
+              return
+            end
+            cred_table_columns = columns.split(/[\s]*,[\s]*/).select do |col|
+              cred_table_columns.include?(col)
+            end
+            if cred_table_columns.empty?
+              print_error("Argument -c requires valid columns")
+              return
+            end
           when "all"
             # The user wants inactive passwords, too
             inactive_ok = true
@@ -794,17 +808,29 @@ class Db
       # normalize
       ports = port_ranges.flatten.uniq
       svcs.flatten!
+      tbl_opts = {
+          'Header'  => "Credentials",
+          'Columns' => cred_table_columns
+      }
 
-      tbl = Rex::Ui::Text::Table.new({
-                                         'Header' => "Credentials",
-                                         'Columns' => ['host', 'port', 'user', 'pass', 'type', 'active?'],
-                                     })
+      tbl_opts.merge!(
+          'ColProps' => {
+              'pass'  => { 'MaxChar' => 64 },
+              'proof' => { 'MaxChar' => 56 }
+          }
+      ) if search_term.nil?
+      tbl = Rex::Ui::Text::Table.new(tbl_opts)
 
       creds_returned = 0
+      inactive_count = 0
       # Now do the actual search
       framework.db.each_cred(framework.db.workspace) do |cred|
         # skip if it's inactive and user didn't ask for all
-        next unless (cred.active or inactive_ok)
+        if !cred.active && !inactive_ok
+          inactive_count += 1
+          next
+        end
+
         if search_term
           next unless cred.attribute_names.any? { |a| cred[a.intern].to_s.match(search_term) }
         end
@@ -826,11 +852,20 @@ class Db
         if user_regex
           next unless user_regex.match(cred.user)
         end
-        row = [
-            cred.service.host.address, cred.service.port,
-            cred.user, cred.pass, cred.ptype,
-            (cred.active ? "true" : "false")
-        ]
+
+        row = cred_table_columns.map do |col|
+          case col
+            when 'host'
+              cred.service.host.address
+            when 'port'
+              cred.service.port
+            when 'type'
+              cred.ptype
+            else
+              cred.send(col.intern)
+          end
+        end
+
         tbl << row
         if mode == :delete
           cred.destroy
@@ -844,8 +879,16 @@ class Db
       end
 
       print_line
-      if (output_file == nil)
+      if output_file.nil?
         print_line(tbl.to_s)
+
+        if !inactive_ok && inactive_count > 0
+          # Then we're not printing the inactive ones. Let the user know
+          # that there are some they are not seeing and how to get at
+          # them.
+          print_line "Also found #{inactive_count} inactive creds (`creds all` to list them)"
+          print_line
+        end
       else
         # create the output file
         ::File.open(output_file, "wb") { |f| f.write(tbl.to_csv) }
@@ -868,6 +911,7 @@ class Db
     print_line "  -h,--help                 Show this help information"
     print_line "  -R,--rhosts               Set RHOSTS from the results of the search"
     print_line "  -S,--search               Regular expression to match for search"
+    print_line "  -c,--columns              Columns of interest"
     print_line "  --sort <field1,field2>    Fields to sort by (case sensitive)"
     print_line
     print_line "Examples:"
@@ -1541,7 +1585,8 @@ class Db
       end
 
       file = args[1] || ::File.join(Msf::Config.get_config_root, "database.yml")
-      if (::File.exists? ::File.expand_path(file))
+      file = ::File.expand_path(file)
+      if (::File.exists? file)
         db = YAML.load(::File.read(file))['production']
         framework.db.connect(db)
 
@@ -1742,24 +1787,34 @@ class Db
   # Miscellaneous option helpers
   #
 
+  # @note This modifies `host_ranges` in place.
   #
-  # Parse +arg+ into a RangeWalker and append the result into +host_ranges+
+  # Parse `arg` into a RangeWalker and append the result into `host_ranges`.
   #
-  # Returns true if parsing was successful or nil otherwise.
-  #
-  # NOTE: This modifies +host_ranges+
-  #
+  # @param arg [String] The thing to turn into a RangeWalker
+  # @param host_ranges [Array] The array of ranges to append
+  # @param required [Boolean] Whether an empty +arg+ should be an error
+  # @return [Boolean] true if parsing was successful or false otherwise
   def arg_host_range(arg, host_ranges, required=false)
     if (!arg and required)
       print_error("Missing required host argument")
-      return
+      return false
     end
+
     begin
-      host_ranges << Rex::Socket::RangeWalker.new(arg)
+      rw = Rex::Socket::RangeWalker.new(arg)
     rescue
       print_error("Invalid host parameter, #{arg}.")
-      return
+      return false
     end
+
+    if rw.valid?
+      host_ranges << rw
+    else
+      print_error("Invalid host parameter, #{arg}.")
+      return false
+    end
+
     return true
   end
 

@@ -236,6 +236,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
         output.should match /-S,--search\s+Search string to filter by/
       end
 
+      it 'should include columns option' do
+        expect(output).to match /-c,--columns\s+Columns of interest/
+      end
+
       it 'should include available columns' do
         output.should include "Available columns: address, comm, comments, created_at, cred_count, exploit_attempt_count, host_detail_count, info, mac, name, note_count, os_flavor, os_lang, os_name, os_sp, purpose, scope, service_count, state, updated_at, virtual_host, vuln_count"
       end

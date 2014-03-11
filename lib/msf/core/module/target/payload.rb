@@ -22,6 +22,13 @@ module Msf::Module::Target::Payload
   end
 
   #
+  # Payload append encoder information for this target.
+  #
+  def payload_append_encoder
+    opts['Payload'] ? opts['Payload']['AppendEncoder'] : nil
+  end
+
+  #
   # Payload prepend encoder information for this target.
   #
   def payload_prepend_encoder

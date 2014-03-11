@@ -12,6 +12,7 @@ module Msf
 #
 ###
 class Module < Metasploit::Model::Base
+  require 'msf/core/module/deprecated'
   require 'msf/core/module/reference'
   require 'msf/core/module/target'
   require 'msf/core/module/auxiliary_action'
@@ -376,6 +377,9 @@ class Module < Metasploit::Model::Base
       ch = self.compat['Nop']
     elsif (mod.type == Metasploit::Model::Module::Type::PAYLOAD)
       ch = self.compat['Payload']
+      if self.respond_to?("target") and self.target and self.target['Payload'] and self.target['Payload']['Compat']
+        ch = ch.merge(self.target['Payload']['Compat'])
+      end
     else
       return true
     end

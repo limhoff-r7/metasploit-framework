@@ -10,99 +10,99 @@ module Msf
 # This plugin reloads and re-executes a file-format exploit module once it has changed.
 #
 ###
-class Plugin::FFAutoRegen < Msf::Plugin
+  class Plugin::FFAutoRegen < Msf::Plugin
 
-	###
-	#
-	# This class implements a single edit command.
-	#
-	###
-	class FFAutoRegenCommandDispatcher
-		include Msf::Ui::Console::CommandDispatcher
+    ###
+    #
+    # This class implements a single edit command.
+    #
+    ###
+    class FFAutoRegenCommandDispatcher
+      include Msf::Ui::Console::CommandDispatcher
 
-		#
-		# The dispatcher's name.
-		#
-		def name
-			"FFAutoRegen"
-		end
+      #
+      # The dispatcher's name.
+      #
+      def name
+        "FFAutoRegen"
+      end
 
-		#
-		# Returns the hash of commands supported by this dispatcher.
-		#
-		def commands
-			{
-				"ffautoregen" => "Automatically regenerate the document when the exploti source changes"
-			}
-		end
+      #
+      # Returns the hash of commands supported by this dispatcher.
+      #
+      def commands
+        {
+            "ffautoregen" => "Automatically regenerate the document when the exploti source changes"
+        }
+      end
 
-		#
-		# This method handles the command.
-		#
-		def cmd_ffautoregen(*args)
-			if (not metasploit_instance) or (not (path = metasploit_instance.file_path))
-				print_line("Error: No active module selected")
-				return nil
-			end
+      #
+      # This method handles the command.
+      #
+      def cmd_ffautoregen(*args)
+        if (not metasploit_instance) or (not (path = metasploit_instance.file_path))
+          print_line("Error: No active module selected")
+          return nil
+        end
 
-			last = mt = File.stat(path).mtime
+        last = mt = File.stat(path).mtime
 
-			loop {
-				sleep(1)
-				mt = File.stat(path).mtime
+        loop {
+          sleep(1)
+          mt = File.stat(path).mtime
 
-				if (mt != last)
-					last = mt
+          if (mt != last)
+            last = mt
 
-					omod = metasploit_instance
-					nmod = framework.modules.reload_module(metasploit_instance)
-					if not nmod
-						print_line("Error: Failed to reload module, trying again on next change...")
-						next
-					end
+            omod = metasploit_instance
+            nmod = framework.modules.reload_module(metasploit_instance)
+            if not nmod
+              print_line("Error: Failed to reload module, trying again on next change...")
+              next
+            end
 
-					metasploit_instance = nmod
+            metasploit_instance = nmod
 
-					jobify  = false
-					payload = nmod.datastore['PAYLOAD']
-					encoder = nmod.datastore['ENCODER']
-					target  = nmod.datastore['TARGET']
-					nop     = nmod.datastore['NOP']
+            jobify  = false
+            payload = nmod.datastore['PAYLOAD']
+            encoder = nmod.datastore['ENCODER']
+            target  = nmod.datastore['TARGET']
+            nop     = nmod.datastore['NOP']
 
-					nmod.exploit_simple(
-						'Encoder'        => encoder,
-						'Payload'        => payload,
-						'Target'         => target,
-						'Nop'            => nop,
-#						'OptionStr'      => opt_str,
-						'LocalInput'     => driver.input,
-						'LocalOutput'    => driver.output,
-						'RunAsJob'       => jobify)
-				end
-			}
-		end
-	end
+            nmod.exploit_simple(
+                'Encoder'        => encoder,
+                'Payload'        => payload,
+                'Target'         => target,
+                'Nop'            => nop,
+                #						'OptionStr'      => opt_str,
+                'LocalInput'     => driver.input,
+                'LocalOutput'    => driver.output,
+                'RunAsJob'       => jobify)
+          end
+        }
+      end
+    end
 
-	def initialize(framework, opts)
-		super
+    def initialize(framework, opts)
+      super
 
-		# console dispatcher commands.
-		add_console_dispatcher(FFAutoRegenCommandDispatcher)
-	end
+      # console dispatcher commands.
+      add_console_dispatcher(FFAutoRegenCommandDispatcher)
+    end
 
-	def cleanup
-		remove_console_dispatcher('FFAutoRegen')
-	end
+    def cleanup
+      remove_console_dispatcher('FFAutoRegen')
+    end
 
-	def name
-		"ffautoregen"
-	end
+    def name
+      "ffautoregen"
+    end
 
-	def desc
-		"FileFormat AutoRegen Plugin"
-	end
+    def desc
+      "FileFormat AutoRegen Plugin"
+    end
 
-protected
-end
+    protected
+  end
 
 end

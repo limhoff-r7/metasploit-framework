@@ -10,20 +10,19 @@ shared_context 'Msf::Simple::Framework' do
     end
   end
 
-	let(:framework) do
-		Msf::Simple::Framework.create(
-				'ConfigDirectory' => framework_config_pathname.to_path,
-				# don't load any module paths so we can just load the module under test and save time
-				'DeferModuleLoads' => true
-		)
-	end
+  let(:framework) do
+    Msf::Simple::Framework.create(
+        'ConfigDirectory' => framework_config_pathname.to_path,
+        # don't load any module paths so we can just load the module under test and save time
+        'DeferModuleLoads' => true
+    )
+  end
 
-	let(:framework_config_pathname) do
+  let(:framework_config_pathname) do
     Metasploit::Model::Spec.temporary_pathname.join('framework', 'config')
-	end
+  end
 
-	before(:each) do
-		framework_config_pathname.mkpath
-	end
-
+  before(:each) do
+    framework_config_pathname.mkpath
+  end
 end
