@@ -13,27 +13,30 @@ class Metasploit4 < Msf::Auxiliary
   include Msf::Auxiliary::Scanner
 
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name' => 'SAP Host Agent Information Disclosure',
-      'Description' => %q{
-        This module attempts to retrieve Computer and OS info from Host Agent
-        through the SAP HostControl service.
-        },
-      'References' =>
-        [
-          # General
-          ['CVE', '2013-3319'],
-          ['OSVDB', '95616'],
-          ['BID', '61402'],
-          ['URL', 'https://service.sap.com/sap/support/notes/1816536'],
-          ['URL', 'http://labs.integrity.pt/advisories/cve-2013-3319/']
-        ],
-      'Author' =>
-        [
-          'Bruno Morisson <bm[at]integrity.pt>' # Discovery and msf module
-        ],
-      'License' => MSF_LICENSE
+        update_info(
+            info,
+            'Name' => 'SAP Host Agent Information Disclosure',
+            'Description' => %q{
+              This module attempts to retrieve Computer and OS info from Host Agent
+              through the SAP HostControl service.
+            },
+            'References' =>
+                [
+                    # General
+                    ['CVE', '2013-3319'],
+                    ['OSVDB', '95616'],
+                    ['BID', '61402'],
+                    ['URL', 'https://service.sap.com/sap/support/notes/1816536'],
+                    ['URL', 'http://labs.integrity.pt/advisories/cve-2013-3319/']
+                ],
+            'Author' =>
+                [
+                    'Bruno Morisson <bm[at]integrity.pt>' # Discovery and msf module
+                ],
+            'License' => MSF_LICENSE
+        )
     )
 
     register_options(

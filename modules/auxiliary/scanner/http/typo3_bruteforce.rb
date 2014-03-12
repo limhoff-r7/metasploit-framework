@@ -12,12 +12,15 @@ class Metasploit3 < Msf::Auxiliary
   include Msf::Auxiliary::AuthBrute
   include Msf::Auxiliary::Scanner
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'        => 'Typo3 Login Bruteforcer',
-      'Description' => 'This module attempts to bruteforce Typo3 logins.',
-      'Author'      => [ 'Christian Mehlmauer <FireFart[at]gmail.com>' ],
-      'License'     => MSF_LICENSE
+        update_info(
+            info,
+            'Name'        => 'Typo3 Login Bruteforcer',
+            'Description' => 'This module attempts to bruteforce Typo3 logins.',
+            'Author'      => [ 'Christian Mehlmauer <FireFart[at]gmail.com>' ],
+            'License'     => MSF_LICENSE
+        )
     )
   end
 

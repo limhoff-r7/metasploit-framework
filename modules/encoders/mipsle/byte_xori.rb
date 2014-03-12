@@ -12,27 +12,31 @@ class Metasploit3 < Msf::Encoder::Xor
 
   Rank = NormalRanking
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'             => 'Byte XORi Encoder',
-      'Description'      => %q{
-        Mips Web server exploit friendly xor encoder. This encoder has been found useful on
-        situations where '&' (0x26) is a badchar. Since 0x26 is the xor's opcode on MIPS
-        architectures, this one is based on the xori instruction.
-      },
-      'Author'           =>
-        [
-          'Julien Tinnes <julien at cr0.org>', # original longxor encoder, which this one is based on
-          'juan vazquez' # byte_xori encoder
-        ],
-      'Arch'             => ARCH_MIPSLE,
-      'License'          => MSF_LICENSE,
-      'Decoder'          =>
-        {
-          'KeySize'   => 1,
-          'BlockSize' => 1,
-          'KeyPack'   => 'C',
-        })
+        update_info(
+            info,
+            'Name'             => 'Byte XORi Encoder',
+            'Description'      => %q{
+              Mips Web server exploit friendly xor encoder. This encoder has been found useful on
+              situations where '&' (0x26) is a badchar. Since 0x26 is the xor's opcode on MIPS
+              architectures, this one is based on the xori instruction.
+            },
+            'Author'           =>
+                [
+                    'Julien Tinnes <julien at cr0.org>', # original longxor encoder, which this one is based on
+                    'juan vazquez' # byte_xori encoder
+                ],
+            'Arch'             => ARCH_MIPSLE,
+            'License'          => MSF_LICENSE,
+            'Decoder'          =>
+                {
+                    'KeySize'   => 1,
+                    'BlockSize' => 1,
+                    'KeyPack'   => 'C',
+                }
+        )
+    )
   end
 
   #

@@ -12,18 +12,21 @@ class Metasploit3 < Msf::Auxiliary
   include Msf::Auxiliary::Report
   include Msf::Auxiliary::Scanner
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'        => 'Poison Ivy Command and Control Scanner',
-      'Description' => %q{
-        Enumerate Poison Ivy Command and Control (C&C) on ports 3460, 80, 8080 and 443. Adaptation of iTrust Python script.
-      },
-      'References'  =>
-        [
-          ['URL', 'www.malware.lu/Pro/RAP002_APT1_Technical_backstage.1.0.pdf'],
-        ],
-      'Author'      => ['SeawolfRN'],
-      'License'     => MSF_LICENSE
+        update_info(
+            info,
+            'Name'        => 'Poison Ivy Command and Control Scanner',
+            'Description' => %q{
+              Enumerate Poison Ivy Command and Control (C&C) on ports 3460, 80, 8080 and 443. Adaptation of iTrust Python script.
+            },
+            'References'  =>
+                [
+                    ['URL', 'www.malware.lu/Pro/RAP002_APT1_Technical_backstage.1.0.pdf'],
+                ],
+            'Author'      => ['SeawolfRN'],
+            'License'     => MSF_LICENSE
+        )
     )
 
     register_options(

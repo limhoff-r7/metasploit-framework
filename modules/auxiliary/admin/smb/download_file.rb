@@ -18,19 +18,22 @@ class Metasploit3 < Msf::Auxiliary
   CONST  = Rex::Proto::SMB::Constants
 
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'        => 'SMB File Download Utility',
-      'Description' => %Q{
-        This module deletes a file from a target share and path. The usual reason
-      to use this module is to work around limitations in an existing SMB client that may not
-      be able to take advantage of pass-the-hash style authentication.
-      },
-      'Author'      =>
-        [
-          'mubix' # copied from hdm upload_file module
-        ],
-      'License'     => MSF_LICENSE
+        update_info(
+            info,
+            'Name'        => 'SMB File Download Utility',
+            'Description' => %Q{
+              This module deletes a file from a target share and path. The usual reason
+              to use this module is to work around limitations in an existing SMB client that may not
+              be able to take advantage of pass-the-hash style authentication.
+            },
+            'Author'      =>
+                [
+                    'mubix' # copied from hdm upload_file module
+                ],
+            'License'     => MSF_LICENSE
+        )
     )
 
     register_options([

@@ -10,19 +10,22 @@ class Metasploit3 < Msf::Auxiliary
   include Msf::Auxiliary::Scanner
   include Msf::Auxiliary::Report
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'        => 'Host Information Enumeration via NTLM Authentication',
-      'Description' => %q{
-          This module makes requests to resources on the target server in
-        an attempt to find resources which permit NTLM authentication. For
-        resources which permit NTLM authentication, a blank NTLM type 1 message
-        is sent to enumerate a a type 2 message from the target server. The type
-        2 message is then parsed for information such as the Active Directory
-        domain and NetBIOS name.
-      },
-      'Author'      => 'Brandon Knight',
-      'License'     => MSF_LICENSE
+        update_info(
+            info,
+            'Name'        => 'Host Information Enumeration via NTLM Authentication',
+            'Description' => %q{
+              This module makes requests to resources on the target server in
+              an attempt to find resources which permit NTLM authentication. For
+              resources which permit NTLM authentication, a blank NTLM type 1 message
+              is sent to enumerate a a type 2 message from the target server. The type
+              2 message is then parsed for information such as the Active Directory
+              domain and NetBIOS name.
+            },
+            'Author'      => 'Brandon Knight',
+            'License'     => MSF_LICENSE
+        )
     )
     register_options(
       [

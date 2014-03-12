@@ -13,30 +13,32 @@ class Metasploit3 < Msf::Auxiliary
   include Msf::Auxiliary::Scanner
   include Msf::Auxiliary::Report
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'           => 'DLink User-Agent Backdoor Scanner',
-      'Description'    => %q{
-        This module attempts to find DLink devices running Alphanetworks web interfaces affected
-        by the backdoor found on the User-Agent header. This module has been tested successfully
-        on a DIR-100 device with firmware version v1.13.
-      },
-      'Author'         =>
-        [
-          'Craig Heffner', # vulnerability discovery
-          'Michael Messner <devnull[at]s3cur1ty.de>', # Metasploit module
-          'juan vazquez' # minor help with msf module
-        ],
-      'License'        => MSF_LICENSE,
-      'References'     =>
-        [
-          [ 'URL', 'http://www.devttys0.com/2013/10/reverse-engineering-a-d-link-backdoor/' ]
-        ],
-      # First documented in detail by Craig, but looks like it's been known
-      # (at least to the Russians :-) ) since 2010 - see post at forum.codenet.ru
-      'DisclosureDate' => "Oct 12 2013"
+        update_info(
+            info,
+            'Name'           => 'DLink User-Agent Backdoor Scanner',
+            'Description'    => %q{
+              This module attempts to find DLink devices running Alphanetworks web interfaces affected
+              by the backdoor found on the User-Agent header. This module has been tested successfully
+              on a DIR-100 device with firmware version v1.13.
+            },
+            'Author'         =>
+                [
+                    'Craig Heffner', # vulnerability discovery
+                    'Michael Messner <devnull[at]s3cur1ty.de>', # Metasploit module
+                    'juan vazquez' # minor help with msf module
+                ],
+            'License'        => MSF_LICENSE,
+            'References'     =>
+                [
+                    [ 'URL', 'http://www.devttys0.com/2013/10/reverse-engineering-a-d-link-backdoor/' ]
+                ],
+            # First documented in detail by Craig, but looks like it's been known
+            # (at least to the Russians :-) ) since 2010 - see post at forum.codenet.ru
+            'DisclosureDate' => "Oct 12 2013"
+        )
     )
-
   end
 
   def is_alpha_web_server?

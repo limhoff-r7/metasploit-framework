@@ -12,28 +12,31 @@ class Metasploit4 < Msf::Auxiliary
 
   include Msf::Exploit::Remote::HttpClient
 
-  def initialize
+  def initialize(info={})
     super(
-      'Name'           => 'Red Hat CloudForms Management Engine 5.1 miq_policy/explorer SQL Injection',
-      'Description'    => %q{
-          This module exploits a SQL injection vulnerability in the "explorer"
-        action of "miq_policy" controller of the Red Hat CloudForms Management
-        Engine 5.1 (ManageIQ Enterprise Virtualization Manager 5.0 and earlier) by
-        changing the password of the target account to the specified password.
-      },
-      'Author'         => 'Ramon de C Valle',
-      'License'        => MSF_LICENSE,
-      'References'     =>
-        [
-          ['CVE', '2013-2050'],
-          ['CWE', '89'],
-          ['URL', 'https://bugzilla.redhat.com/show_bug.cgi?id=959062']
-        ],
-      'DefaultOptions' =>
-        {
-          'SSL' => true
-        },
-      'DisclosureDate' => 'Nov 12 2013'
+        update_info(
+            info,
+            'Name'           => 'Red Hat CloudForms Management Engine 5.1 miq_policy/explorer SQL Injection',
+            'Description'    => %q{
+              This module exploits a SQL injection vulnerability in the "explorer"
+              action of "miq_policy" controller of the Red Hat CloudForms Management
+              Engine 5.1 (ManageIQ Enterprise Virtualization Manager 5.0 and earlier) by
+              changing the password of the target account to the specified password.
+            },
+            'Author'         => 'Ramon de C Valle',
+            'License'        => MSF_LICENSE,
+            'References'     =>
+                [
+                    ['CVE', '2013-2050'],
+                    ['CWE', '89'],
+                    ['URL', 'https://bugzilla.redhat.com/show_bug.cgi?id=959062']
+                ],
+            'DefaultOptions' =>
+                {
+                    'SSL' => true
+                },
+            'DisclosureDate' => 'Nov 12 2013'
+        )
     )
 
     register_options(
