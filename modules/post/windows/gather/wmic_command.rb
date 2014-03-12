@@ -4,6 +4,8 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/wmic'
 require 'rex'
 
 class Metasploit3 < Msf::Post

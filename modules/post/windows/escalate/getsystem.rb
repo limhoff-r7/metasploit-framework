@@ -4,9 +4,9 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/priv'
 require 'rex'
-require 'metasm'
-
 
 class Metasploit3 < Msf::Post
 

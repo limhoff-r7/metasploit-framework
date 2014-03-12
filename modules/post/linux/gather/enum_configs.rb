@@ -4,9 +4,10 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/linux/system'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Post::Linux::System
 
   def initialize(info={})

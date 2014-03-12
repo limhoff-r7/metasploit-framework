@@ -6,9 +6,10 @@
 require 'rex'
 require 'msf/core'
 require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/windows/ldap'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Auxiliary::Report
   include Msf::Post::Windows::LDAP
 

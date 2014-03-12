@@ -3,8 +3,12 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'rex'
 require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/windows/ldap'
+require 'rex'
+
 
 class Metasploit3 < Msf::Post
 

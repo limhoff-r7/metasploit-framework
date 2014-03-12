@@ -4,10 +4,11 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/services'
 require 'rex'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Post::Windows::Services
 
   def initialize(info={})

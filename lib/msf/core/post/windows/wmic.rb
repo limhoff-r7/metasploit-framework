@@ -1,11 +1,15 @@
 # -*- coding: binary -*-
 
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/windows'
+require 'msf/core/post/windows/extapi'
+
 module Msf
 class Post
 module Windows
 
 module WMIC
-
   include Msf::Post::File
   include Msf::Post::Windows::ExtAPI
 

@@ -3,10 +3,20 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
+#
+# Standard Library
+#
+
+require 'rexml/document'
+
+#
+# Project
+#
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/user_profiles'
 require 'rex'
-require 'rexml/document'
 
 class Metasploit3 < Msf::Post
   include Msf::Post::Windows::UserProfiles

@@ -5,10 +5,12 @@
 
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/priv'
+require 'msf/core/post/windows/shadowcopy'
 require 'rex'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Post::Windows::Priv
   include Msf::Post::Windows::ShadowCopy
 

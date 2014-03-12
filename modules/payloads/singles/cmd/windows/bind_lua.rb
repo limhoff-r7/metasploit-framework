@@ -9,9 +9,12 @@ require 'msf/base/sessions/command_shell'
 require 'msf/base/sessions/command_shell_options'
 
 module Metasploit4
+  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Sessions::CommandShellOptions
+
+  handler module_name: 'Msf::Handler::BindTcp'
 
   def initialize(info = {})
     super(merge_info(info,
@@ -24,7 +27,6 @@ module Metasploit4
       'License'       => MSF_LICENSE,
       'Platform'      => 'win',
       'Arch'          => ARCH_CMD,
-      'Handler'       => Msf::Handler::BindTcp,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'cmd',
       'RequiredCmd'   => 'lua',

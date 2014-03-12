@@ -3,8 +3,20 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
+#
+# Standard Library
+#
+
 require 'shellwords'
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/osx/ruby_dl'
 
 class Metasploit3 < Msf::Post
   include Msf::Post::File

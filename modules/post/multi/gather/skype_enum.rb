@@ -3,22 +3,27 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex'
+#
+# Standard Library
+#
+
 require 'csv'
 
+#
+# Project
+#
 
-
-
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/osx/system'
+require 'msf/core/post/windows/user_profiles'
+require 'rex'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Post::File
   include Msf::Post::Windows::UserProfiles
-
   include Msf::Post::OSX::System
-
-
 
   def initialize(info={})
     super( update_info( info,

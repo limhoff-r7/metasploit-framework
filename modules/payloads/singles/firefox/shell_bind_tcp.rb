@@ -8,10 +8,13 @@ require 'msf/core/handler/bind_tcp'
 require 'msf/base/sessions/command_shell'
 
 module Metasploit3
+  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Payload::Firefox
   include Msf::Sessions::CommandShellOptions
+
+  handler module_name: 'Msf::Handler::BindTcp'
 
   def initialize(info = {})
     super(merge_info(info,
@@ -21,7 +24,6 @@ module Metasploit3
       'License'       => BSD_LICENSE,
       'Platform'      => 'firefox',
       'Arch'          => ARCH_FIREFOX,
-      'Handler'       => Msf::Handler::BindTcp,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'firefox',
       'Payload'       => { 'Offsets' => {}, 'Payload' => '' }

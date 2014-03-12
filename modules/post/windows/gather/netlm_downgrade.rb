@@ -4,12 +4,16 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/priv'
+require 'msf/core/post/windows/registry'
+require 'msf/core/post/windows/services'
 require 'rex'
 
 class Metasploit3 < Msf::Post
 
   include Msf::Post::Windows::Registry
-  include Msf::Post::Windows::WindowsServices
+  include Msf::Post::Windows::Services
   include Msf::Post::Windows::Priv
 
   def initialize(info={})

@@ -6,15 +6,18 @@
 require 'msf/core'
 
 module Metasploit3
+  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Payload::Firefox
+
+  handler module_name: 'Msf::Handler::None'
 
   def initialize(info={})
     super(merge_info(info,
       'Name'          => 'Firefox XPCOM Execute Command',
       'Description'   => %Q|
-        This module runs a shell command on the target OS withough touching the disk.
+        This module runs a shell command on the target OS without touching the disk.
         On Windows, this command will flash the command prompt momentarily.
         This can be avoided by setting WSCRIPT to true, which drops a jscript
         "launcher" to disk that hides the prompt.

@@ -1,5 +1,11 @@
 # -*- coding: binary -*-
 
+require 'msf/core/post'
+require 'msf/core/post/windows'
+require 'msf/core/post/windows/accounts'
+require 'msf/core/post/windows/error'
+require 'msf/core/post/windows/extapi'
+
 module Msf
 class Post
 module Windows
@@ -9,7 +15,6 @@ module Windows
 #   http://msdn.microsoft.com/en-us/library/windows/desktop/aa366961(v=vs.85).aspx
 #   MSDN: Lightweight Directory Access Protocol
 module LDAP
-
   include Msf::Post::Windows::Error
   include Msf::Post::Windows::ExtAPI
   include Msf::Post::Windows::Accounts

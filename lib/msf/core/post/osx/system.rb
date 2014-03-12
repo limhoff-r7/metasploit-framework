@@ -1,5 +1,9 @@
 # -*- coding: binary -*-
 
+require 'msf/core/post/common'
+require 'msf/core/post/file'
+require 'msf/core/post/osx'
+
 module Msf::Post::OSX::System
   include ::Msf::Post::Common
   include ::Msf::Post::File

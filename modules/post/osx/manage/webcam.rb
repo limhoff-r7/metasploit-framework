@@ -4,7 +4,11 @@
 ##
 
 require 'msf/core'
-require 'shellwords'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/osx/ruby_dl'
+require 'rex'
 
 class Metasploit3 < Msf::Post
   include Msf::Post::File

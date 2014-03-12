@@ -1,6 +1,8 @@
 # -*- coding: binary -*-
+require 'msf/core/post'
+require 'msf/core/post/windows'
 require 'msf/core/post/windows/services'
-
+require 'msf/core/post/windows/wmic'
 
 module Msf
 class Post

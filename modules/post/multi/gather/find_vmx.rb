@@ -4,13 +4,12 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
 require 'rex'
-require 'yaml'
 
 class Metasploit3 < Msf::Post
-
   include Msf::Post::File
-
 
   def initialize(info={})
     super( update_info(info,

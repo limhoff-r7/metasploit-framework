@@ -3,12 +3,22 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex'
+#
+# Standard Library
+#
+
 require 'rexml/document'
 
-class Metasploit3 < Msf::Post
+#
+# Project
+#
 
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'rex'
+
+class Metasploit3 < Msf::Post
   include Msf::Post::File
 
   def initialize(info={})

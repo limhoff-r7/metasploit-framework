@@ -4,6 +4,10 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/unix'
+require 'msf/core/post/windows/user_profiles'
 
 class Metasploit3 < Msf::Post
 

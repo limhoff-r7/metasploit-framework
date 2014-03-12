@@ -4,9 +4,12 @@
 ##
 
 require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/windows/registry'
+require 'msf/core/post/windows/user_profiles'
 require 'rex'
 require 'rex/parser/ini'
-require 'msf/core/auxiliary/report'
 
 class Metasploit3 < Msf::Post
 

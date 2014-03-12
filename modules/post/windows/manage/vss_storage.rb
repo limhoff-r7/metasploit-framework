@@ -3,8 +3,10 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/windows/priv'
+require 'msf/core/post/windows/shadowcopy'
 require 'rex'
 
 class Metasploit3 < Msf::Post

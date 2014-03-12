@@ -1,3 +1,4 @@
+require 'msf/core/post/windows'
 
 module Msf::Post::Windows::Error
   SUCCESS = 0x0000

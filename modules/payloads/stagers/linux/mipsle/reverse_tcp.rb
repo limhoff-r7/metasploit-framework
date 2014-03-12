@@ -9,9 +9,12 @@ require 'msf/core/handler/reverse_tcp'
 
 
 module Metasploit3
+  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Stager
   include Msf::Payload::Linux
+
+  handler module_name: 'Msf::Handler::ReverseTcp'
 
   def initialize(info = {})
     super(merge_info(info,
@@ -24,7 +27,6 @@ module Metasploit3
       'License'       => MSF_LICENSE,
       'Platform'      => 'linux',
       'Arch'          => ARCH_MIPSLE,
-      'Handler'       => Msf::Handler::ReverseTcp,
       'Stager'        =>
         {
           'Offsets' =>

@@ -13,10 +13,13 @@ require 'msf/core/handler/reverse_tcp'
 require 'msf/base/sessions/command_shell'
 
 module Metasploit3
+  extend  Metasploit::Framework::Module::Ancestor::Handler
 
   include Msf::Payload::Single
   include Msf::Payload::NodeJS
   include Msf::Sessions::CommandShellOptions
+
+  handler module_name: 'Msf::Handler::ReverseTcp'
 
   def initialize(info = {})
     super(merge_info(info,
@@ -26,7 +29,6 @@ module Metasploit3
       'License'       => BSD_LICENSE,
       'Platform'      => 'nodejs',
       'Arch'          => ARCH_NODEJS,
-      'Handler'       => Msf::Handler::ReverseTcp,
       'Session'       => Msf::Sessions::CommandShell,
       'PayloadType'   => 'nodejs',
       'Payload'       => { 'Offsets' => {}, 'Payload' => '' }
