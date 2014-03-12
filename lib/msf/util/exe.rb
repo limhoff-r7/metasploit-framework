@@ -1712,7 +1712,7 @@ require 'msf/core/exe/segment_injector'
     when 'exe-small'
       output = case arch
         when ARCH_X86,nil then to_win32pe_old(framework, code, exeopts)
-        when ARCH_X86_64,ARCH_X64 then to_win64pe(framework, code, exeopts)
+        when ARCH_X86_64 then to_win64pe(framework, code, exeopts)
         end
 
     when 'exe-only'
@@ -1725,7 +1725,7 @@ require 'msf/core/exe/segment_injector'
       case arch
         when ARCH_X86,nil
           exe = to_win32pe(framework, code, exeopts)
-        when ARCH_X86_64,ARCH_X64
+        when ARCH_X86_64
           exe = to_win64pe(framework, code, exeopts)
       end
       output = Msf::Util::EXE.to_exe_msi(framework, exe, exeopts)
@@ -1734,7 +1734,7 @@ require 'msf/core/exe/segment_injector'
       case arch
         when ARCH_X86,nil
           exe = to_win32pe(framework, code, exeopts)
-        when ARCH_X86_64,ARCH_X64
+        when ARCH_X86_64
           exe = to_win64pe(framework, code, exeopts)
       end
       exeopts[:uac] = true
