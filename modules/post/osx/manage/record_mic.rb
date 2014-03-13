@@ -16,6 +16,7 @@ require 'shellwords'
 require 'msf/core'
 require 'msf/core/auxiliary/report'
 require 'msf/core/post'
+require 'msf/core/post/file'
 require 'msf/core/post/osx/ruby_dl'
 
 class Metasploit3 < Msf::Post

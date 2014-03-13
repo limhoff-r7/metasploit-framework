@@ -3,8 +3,19 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
+#
+# Standard Library
+#
+
 require 'rexml/document'
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
 
 class Metasploit3 < Msf::Post
 

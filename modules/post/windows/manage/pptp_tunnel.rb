@@ -3,6 +3,11 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/windows/priv'
+require 'msf/core/post/windows/registry'
+
 class Metasploit3 < Msf::Post
 
   include Msf::Post::File

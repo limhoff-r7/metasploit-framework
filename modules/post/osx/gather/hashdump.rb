@@ -3,10 +3,21 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex'
-require 'msf/core/auxiliary/report'
+#
+# Standard Library
+#
+
 require 'rexml/document'
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'rex'
 
 class Metasploit3 < Msf::Post
   # set of accounts to ignore while pilfering data

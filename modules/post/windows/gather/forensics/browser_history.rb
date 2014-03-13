@@ -3,11 +3,22 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex'
+#
+# Standard Library
+#
+
 require 'csv'
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
 require 'msf/core/post/windows/user_profiles'
 require 'msf/core/post/windows/registry'
+require 'rex'
 
 
 class Metasploit3 < Msf::Post

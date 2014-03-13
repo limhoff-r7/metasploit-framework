@@ -3,9 +3,20 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex/parser/unattend'
+#
+# Standard Library
+#
+
 require 'rexml/document'
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'rex/parser/unattend'
 
 class Metasploit3 < Msf::Post
 

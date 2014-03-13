@@ -3,8 +3,20 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
+#
+# 3rd-party
+#
+
 require 'zip/zip' #for extracting files
+
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/windows/priv'
 require 'rex/zip' #for creating files
 
 class Metasploit3 < Msf::Post

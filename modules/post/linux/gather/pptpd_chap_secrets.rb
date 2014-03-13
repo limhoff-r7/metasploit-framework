@@ -4,6 +4,9 @@
 ##
 
 require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
+require 'msf/core/post/file'
 
 class Metasploit3 < Msf::Post
 

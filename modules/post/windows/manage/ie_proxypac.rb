@@ -4,6 +4,10 @@
 ##
 
 require 'msf/core'
+require 'msf/core/post'
+require 'msf/core/post/file'
+require 'msf/core/post/windows/priv'
+require 'msf/core/post/windows/registry'
 require 'rex'
 
 class Metasploit3 < Msf::Post
