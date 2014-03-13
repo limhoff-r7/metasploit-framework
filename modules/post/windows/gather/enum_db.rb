@@ -5,7 +5,7 @@
 
 require 'msf/core'
 require 'msf/core/auxiliary/report'
-require 'msf/core/file'
+require 'msf/core/post/file'
 require 'msf/core/post/windows/registry'
 require 'rex'
 
