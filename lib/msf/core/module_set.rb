@@ -77,6 +77,15 @@ class Msf::ModuleSet < Metasploit::Model::Base
     )
   end
 
+  # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
+  # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
+  #
+  # @param reference_name [String] An `Mdm::Module::Class#reference_name`.
+  # @return (see Msf::ModuleManager#create)
+  def create(reference_name)
+    module_manager.create("#{module_type}/#{reference_name}")
+  end
+
   # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
   # "can't add a new key into hash during iteration"
   #
@@ -115,21 +124,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   # @return [true] if the module should be filtered; it should not be yielded by {#each_module_list}.
   def each_module_filter(opts, name, entry)
     return false
-  end
-
-  # Enumerates each module class in the set based on their relative ranking to one another.  Modules that are ranked
-  # higher are shown first.
-  #
-  # @param opts (see #each_module_list)
-  # @yield (see #each_module_list)
-  # @yieldparam (see #each_module_list)
-  # @return (see #each_module_list)
-  def each_module_ranked(opts = {}, &block)
-    demand_load_modules
-
-    self.mod_ranked = rank_modules
-
-    each_module_list(mod_ranked, opts, &block)
   end
 
   # Forces all modules in this set to be loaded.
@@ -192,26 +186,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   end
 
   protected
-
-  # Load all modules that are marked as being symbolic.
-  #
-  # @return [void]
-  def demand_load_modules
-    found_symbolics = false
-    # Pre-scan the module list for any symbolic modules
-    self.each_pair { |name, mod|
-      if (mod == Msf::SymbolicModule)
-        found_symbolics = true
-        mod = create(name)
-        next if (mod.nil?)
-      end
-    }
-
-    # If we found any symbolic modules, then recalculate.
-    if (found_symbolics)
-      recalculate
-    end
-  end
 
   # Enumerates the modules in the supplied array with possible limiting factors.
   #

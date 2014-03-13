@@ -2,12 +2,36 @@ require 'spec_helper'
 require 'msf/core/payload_generator'
 
 describe Msf::PayloadGenerator do
+  include_context 'database cleaner'
+  include_context 'Metasploit::Framework::Spec::Constants cleaner'
+  include_context 'Msf::Simple::Framework'
 
-  PAYLOAD_FRAMEWORK = Msf::Simple::Framework.create(
-      :module_types => [  ::Msf::MODULE_PAYLOAD, ::Msf::MODULE_ENCODER, ::Msf::MODULE_NOP],
-      'DisableDatabase' => true,
-      'DisableLogging' => true
-  )
+  shared_context 'java' do
+    let(:arch) do
+      'java'
+    end
+
+    let(:payload_ancestor_pathnames) do
+      [
+          Metasploit::Framework.root.join('modules', 'payloads', 'stagers', 'java', 'reverse_tcp.rb'),
+          Metasploit::Framework.root.join('modules', 'payloads', 'stages', 'java', 'meterpreter.rb')
+      ]
+    end
+
+    let(:payload) do
+      'stages/java/meterpreter/reverse_tcp'
+    end
+
+    let(:platform) do
+      'Java'
+    end
+  end
+
+  subject(:payload_generator) { described_class.new(generator_opts) }
+
+  #
+  # lets
+  #
 
   let(:lhost) { "192.168.172.1"}
   let(:lport) { "8443" }
@@ -17,11 +41,10 @@ describe Msf::PayloadGenerator do
   let(:badchars) { "\x20\x0D\x0A" }
   let(:encoder)  { 'x86/shikata_ga_nai' }
   let(:format) { "raw" }
-  let(:framework) { PAYLOAD_FRAMEWORK }
   let(:iterations) { 1 }
   let(:keep) { false }
   let(:nops) { 0 }
-  let(:payload) { "windows/meterpreter/reverse_tcp"}
+  let(:payload) { "stages/windows/meterpreter/reverse_tcp" }
   let(:platform) { "Windows" }
   let(:space) { 1073741824 }
   let(:stdin) { nil }
@@ -45,11 +68,70 @@ describe Msf::PayloadGenerator do
         template: template
     }
   }
-  let(:payload_module) { framework.payloads.create(payload)}
+  let(:payload_module) {
+    framework.payloads.create(payload).tap { |payload_instance|
+      # ensure proper test setup
+      expect(payload_instance).not_to be_nil
+    }
+  }
   let(:shellcode) { "\x50\x51\x58\x59" }
-  let(:encoder_module) { framework.encoders.create('x86/shikata_ga_nai') }
+  let(:encoder_module) {
+    framework.encoders.create('x86/shikata_ga_nai').tap { |encoder_instance|
+      # ensure proper test setup
+      expect(encoder_instance).not_to be_nil
+    }
+  }
 
-  subject(:payload_generator) { described_class.new(generator_opts) }
+  let(:encoder_ancestor_pathnames) do
+    [
+        Metasploit::Framework.root.join('modules', 'encoders', 'x86', 'shikata_ga_nai.rb'),
+    ]
+  end
+
+  let(:module_ancestors) do
+    module_ancestor_pathnames.collect do |pathname|
+      module_path.module_ancestors.new(real_path: pathname.to_path)
+    end
+  end
+
+  let(:module_ancestor_loads) do
+    module_ancestors.collect { |module_ancestor|
+      Metasploit::Framework::Module::Ancestor::Load.new(
+          module_ancestor: module_ancestor
+      )
+    }
+  end
+
+  let(:module_ancestor_pathnames) do
+    encoder_ancestor_pathnames + payload_ancestor_pathnames
+  end
+
+  let(:module_path) do
+    FactoryGirl.create(
+        :mdm_module_path,
+        real_path: Metasploit::Framework.root.join('modules').to_path
+    )
+  end
+
+  let(:payload_ancestor_pathnames) do
+    [
+        Metasploit::Framework.root.join('modules', 'payloads', 'stagers', 'windows', 'reverse_tcp.rb'),
+        Metasploit::Framework.root.join('modules', 'payloads', 'stages', 'windows', 'meterpreter.rb')
+    ]
+  end
+
+  #
+  # Callbacks
+  #
+
+  before(:each) do
+    module_ancestor_loads.each do |module_ancestor_load|
+      # protect specs from loading errors
+      expect(
+          framework.modules.cache.write_module_ancestor_load(module_ancestor_load)
+      ).to be_true
+    end
+  end
 
   it { should respond_to :add_code }
   it { should respond_to :arch }
@@ -141,14 +223,18 @@ describe Msf::PayloadGenerator do
     end
 
     context '#choose_platform' do
+      subject(:choose_platform) do
+        payload_generator.choose_platform(payload_module)
+      end
+
       it 'chooses the platform list for the module' do
-        expect(payload_generator.choose_platform(payload_module).platforms).to eq [Msf::Module::Platform::Windows]
+        expect(choose_platform.platforms.map(&:fully_qualified_name)).to eq ['Windows']
       end
 
       it 'sets the platform attr to the first platform of the module' do
-        my_generator = payload_generator
-        my_generator.choose_platform(payload_module)
-        expect(my_generator.platform).to eq "Windows"
+        choose_platform
+
+        expect(payload_generator.platform).to eq "Windows"
       end
     end
 
@@ -158,14 +244,22 @@ describe Msf::PayloadGenerator do
     let(:platform) { 'foobar' }
 
     context '#platform_list' do
+      subject(:platform_list) do
+        payload_generator.platform_list
+      end
+
       it 'returns an empty PlatformList' do
-        expect(payload_generator.platform_list.platforms).to be_empty
+        expect(platform_list.platforms).to be_empty
       end
     end
 
     context '#choose_platform' do
+      subject(:choose_platform) do
+        payload_generator.choose_platform(payload_module)
+      end
+
       it 'chooses the platform list for the module' do
-        expect(payload_generator.choose_platform(payload_module).platforms).to eq [Msf::Module::Platform::Windows]
+        expect(choose_platform.platforms.map(&:fully_qualified_name)).to eq ['Windows']
       end
     end
 
@@ -174,8 +268,12 @@ describe Msf::PayloadGenerator do
   context 'when given a valid platform' do
 
     context '#platform_list' do
-      it 'returns a PlatformList containing the Platform class' do
-        expect(payload_generator.platform_list.platforms.first).to eq Msf::Module::Platform::Windows
+      subject(:platform_list) do
+        payload_generator.platform_list
+      end
+
+      it 'returns a PlatformList containing the Platform' do
+        expect(platform_list.platforms.map(&:fully_qualified_name)).to include('Windows')
       end
     end
 
@@ -336,7 +434,7 @@ describe Msf::PayloadGenerator do
       end
     end
 
-    context 'when nops are set to more than 0' do
+    context 'when nops are set to more than 0', pending: 'Requires Mdm::Module::Instance.intersecting_architecture_abbreviations, Mdm::Module::Class.with_module_instances, and Mdm::Module::Class.ranked' do
       let(:nops) { 20 }
 
       it 'returns shellcode of the correct size' do
@@ -350,6 +448,12 @@ describe Msf::PayloadGenerator do
   end
 
   context '#get_encoders' do
+    let(:encoder_ancestor_pathnames) do
+      super() + [
+          Metasploit::Framework.root.join('modules', 'encoders', 'x86', 'alpha_mixed.rb'),
+      ]
+    end
+
     let(:encoder_names) { ["Polymorphic XOR Additive Feedback Encoder", "Alpha2 Alphanumeric Mixedcase Encoder" ] }
 
     context 'when an encoder is selected' do
@@ -380,7 +484,7 @@ describe Msf::PayloadGenerator do
       end
 
       it 'returns the encoders in order of rank high to low' do
-        expect(payload_generator.get_encoders[0].rank).to be > payload_generator.get_encoders[1].rank
+        expect(payload_generator.get_encoders[0].rank_number).to be > payload_generator.get_encoders[1].rank_number
       end
     end
 
@@ -450,17 +554,23 @@ describe Msf::PayloadGenerator do
   end
 
   context '#generate_java_payload' do
+    subject(:generate_java_payload) do
+      payload_generator.generate_java_payload
+    end
+
     context 'when format is war' do
       let(:format) { 'war' }
 
       context 'if the payload is a valid java payload' do
-        let(:payload) { "java/meterpreter/reverse_tcp"}
+        include_context 'java'
+
         it 'calls the generate_war on the payload' do
-          java_payload = framework.payloads.create("java/meterpreter/reverse_tcp")
-          framework.stub_chain(:payloads, :keys).and_return ["java/meterpreter/reverse_tcp"]
-          framework.stub_chain(:payloads, :create).and_return(java_payload)
-          java_payload.should_receive(:generate_war).and_call_original
-          payload_generator.generate_java_payload
+          java_payload = framework.payloads.create(payload)
+          expect(framework.payloads).to receive(:create).with(payload).and_return(java_payload)
+
+          expect(java_payload).to receive(:generate_war).and_call_original
+
+          generate_java_payload
         end
       end
 
@@ -473,13 +583,15 @@ describe Msf::PayloadGenerator do
       let(:format) { 'raw' }
 
       context 'if the payload is a valid java payload' do
-        let(:payload) { "java/meterpreter/reverse_tcp"}
+        include_context 'java'
+
         it 'calls the generate_jar on the payload' do
-          java_payload = framework.payloads.create("java/meterpreter/reverse_tcp")
-          framework.stub_chain(:payloads, :keys).and_return ["java/meterpreter/reverse_tcp"]
-          framework.stub_chain(:payloads, :create).and_return(java_payload)
-          java_payload.should_receive(:generate_jar).and_call_original
-          payload_generator.generate_java_payload
+          java_payload = framework.payloads.create(payload)
+          expect(framework.payloads).to receive(:create).with(payload).and_return(java_payload)
+
+          expect(java_payload).to receive(:generate_jar).and_call_original
+
+          generate_java_payload
         end
       end
 
@@ -510,7 +622,7 @@ describe Msf::PayloadGenerator do
     end
 
     context 'when the payload is java' do
-      let(:payload) { "java/meterpreter/reverse_tcp" }
+      include_context 'java'
 
       it 'calls generate_java_payload' do
         my_generator = payload_generator

@@ -117,7 +117,7 @@ module Msf
     # @param shellcode [String] The shellcode to add to
     # @return [String] the combined shellcode which executes the added code in a seperate thread
     def add_shellcode(shellcode)
-      if add_code.present? and platform_list.platforms.include? Msf::Module::Platform::Windows and arch == "x86"
+      if add_code.present? and platform_list.platforms.map(&:fully_qualified_name).include? 'Windows' and arch == "x86"
         cli_print "Adding shellcode from #{add_code} to the payload"
         shellcode_file = File.open(add_code)
         shellcode_file.binmode
@@ -156,7 +156,7 @@ module Msf
       if chosen_platform.platforms.empty?
         chosen_platform = mod.platform
         cli_print "No platform was selected, choosing #{chosen_platform.platforms.first} from the payload"
-        @platform = mod.platform.platforms.first.to_s.split("::").last
+        @platform = mod.platform_list.platforms.first.fully_qualified_name
       elsif (chosen_platform & mod.platform).empty?
         chosen_platform = Msf::Module::PlatformList.new
       end
@@ -303,20 +303,27 @@ module Msf
     # @return [Array<Msf::Encoder>] An array of potential encoders to use
     def get_encoders
       encoders = []
+
       if encoder.present?
         # Allow comma seperated list of encoders so users can choose several
         encoder.split(',').each do |chosen_encoder|
-          encoders << framework.encoders.create(chosen_encoder)
+          encoder_instance  = framework.encoders.create(chosen_encoder)
+
+          if encoder_instance
+            encoders << encoder_instance
+          end
         end
-        encoders.sort_by { |my_encoder| my_encoder.rank }.reverse
       elsif badchars.present?
         framework.encoders.each_module_ranked('Arch' => [arch]) do |name, mod|
-          encoders << framework.encoders.create(name)
+          encoder_instance = framework.encoders.create(name)
+
+          if encoder_instance
+            encoders << encoder_instance
+          end
         end
-        encoders.sort_by { |my_encoder| my_encoder.rank }.reverse
-      else
-        encoders
       end
+
+      encoders.sort_by { |my_encoder| my_encoder.rank_number }.reverse
     end
 
     # Returns a PlatformList object based on the platform string given at creation.
@@ -340,6 +347,7 @@ module Msf
     # @return [String] the shellcode with the appropriate nopsled affixed
     def prepend_nops(shellcode)
       if nops > 0
+        # @todo Replace with Mdm::Module::Instance.intersecting_architecture_abbreviations, Mdm::Module::Class.with_module_instances, and Mdm::Module::Class.ranked
         framework.nops.each_module_ranked('Arch' => [arch]) do |name, mod|
           nop = framework.nops.create(name)
           raw = nop.generate_sled(nops, {'BadChars' => badchars, 'SaveRegisters' => [ 'esp', 'ebp', 'esi', 'edi' ] })
@@ -387,7 +395,7 @@ module Msf
     # @return [True] if the payload is a valid Metasploit Payload
     # @return [False] if the payload is not a valid Metasploit Payload
     def payload_is_valid?
-      (framework.payloads.keys + ['stdin']).include? payload
+      payload == 'stdin' || Mdm::Module::Class.where(module_type: 'payload', reference_name: payload).exists?
     end
 
   end
