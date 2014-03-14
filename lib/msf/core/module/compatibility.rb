@@ -61,6 +61,10 @@ module Msf::Module::Compatibility
         ch = self.compat['Nop']
       when Metasploit::Model::Module::Type::PAYLOAD
         ch = self.compat['Payload']
+
+        if self.respond_to?("target") and self.target and self.target['Payload'] and self.target['Payload']['Compat']
+          ch = ch.merge(self.target['Payload']['Compat'])
+        end
       else
         return true
     end

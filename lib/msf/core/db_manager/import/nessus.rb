@@ -174,7 +174,7 @@ module Msf::DBManager::Import::Nessus
       # HostName
       host.elements.each('ReportItem') do |item|
         next unless item.elements['pluginID'].text == "12053"
-        addr = item.elements['data'].text.match(/([0-9\x2e]+) resolves as/)[1]
+        addr = item.elements['data'].text.match(/([0-9\x2e]+) resolves as/n)[1]
         hname = host.elements['HostName'].text
       end
       addr ||= host.elements['HostName'].text
@@ -349,7 +349,7 @@ module Msf::DBManager::Import::Nessus
       next if r[0] != 'results'
       next if r[4] != "12053"
       data = r[6]
-      addr,hname = data.match(/([0-9\x2e]+) resolves as (.+)\x2e\\n/)[1,2]
+      addr,hname = data.match(/([0-9\x2e]+) resolves as (.+)\x2e\\n/n)[1,2]
       addr_map[hname] = addr
     end
 

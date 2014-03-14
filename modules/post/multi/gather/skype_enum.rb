@@ -1,31 +1,29 @@
 ##
-# ## This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# Framework web site for more information on licensing and terms of use.
-#   http://metasploit.com/framework/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'rex'
+#
+# Standard Library
+#
+
 require 'csv'
 
-require 'msf/core/post/common'
+#
+# Project
+#
+
+require 'msf/core'
+require 'msf/core/post'
 require 'msf/core/post/file'
-require 'msf/core/post/windows/user_profiles'
-
 require 'msf/core/post/osx/system'
-
-
+require 'msf/core/post/windows/user_profiles'
+require 'rex'
 
 class Metasploit3 < Msf::Post
-
-  include Msf::Post::Common
   include Msf::Post::File
   include Msf::Post::Windows::UserProfiles
-
   include Msf::Post::OSX::System
-
-
 
   def initialize(info={})
     super( update_info( info,
@@ -36,7 +34,7 @@ class Metasploit3 < Msf::Post
         },
         'License'       => MSF_LICENSE,
         'Author'        => [ 'Carlos Perez <carlos_perez[at]darkoperator.com>'],
-        'Platform'      => [ 'win', 'osx' ],
+        'Platform'      => %w{ osx win },
         'SessionTypes'  => [ 'meterpreter', 'shell' ]
       ))
     register_advanced_options(

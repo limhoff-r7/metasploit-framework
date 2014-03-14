@@ -9,7 +9,7 @@
 
 msfbase = __FILE__
 while File.symlink?(msfbase)
-	msfbase = File.expand_path(File.readlink(msfbase), File.dirname(msfbase))
+  msfbase = File.expand_path(File.readlink(msfbase), File.dirname(msfbase))
 end
 
 $:.unshift(File.expand_path(File.join(File.dirname(msfbase), '..', 'lib')))
@@ -25,10 +25,13 @@ require 'msf/base'
 $framework = Msf::Simple::Framework.create('DisableDatabase' => true)
 
 $framework.exploits.each_module { |name, mod|
-	x = mod.new
+  x = mod.new
 
-	x.compatible_payload_instances.map{|n, m|
-		puts "#{x.refname.ljust 40} - #{n}"
-	}
+  x.compatible_payload_instances.map{|n, m|
+    puts "#{x.refname.ljust 40} - #{n}"
+  }
+  x.compatible_payloads.map{|n, m|
+    puts "#{x.refname.ljust 40} - #{n}"
+  }
 }
 

@@ -24,7 +24,7 @@ module Msf::DBManager::Import::Amap
 
     data.each_line do |line|
       next if line =~ /^#/
-      next if line !~ /^Protocol on ([^:]+):([^\x5c\x2f]+)[\x5c\x2f](tcp|udp) matches (.*)$/
+      next if line !~ /^Protocol on ([^:]+):([^\x5c\x2f]+)[\x5c\x2f](tcp|udp) matches (.*)$/n
       addr   = $1
       next if bl.include? addr
       port   = $2.to_i

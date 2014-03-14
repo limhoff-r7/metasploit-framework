@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'msf/core'
@@ -142,7 +140,7 @@ module Metasploit3
     register_options(
       [
         OptPath.new('PEXEC', [ true, "Full path to the file to execute",
-          Metasploit::Framework.root.join("data", "ipwn", "ipwn").to_path])
+          Metasploit::Framework.pathnames.data.join("data", "ipwn", "ipwn").to_path])
       ], self.class)
   end
 

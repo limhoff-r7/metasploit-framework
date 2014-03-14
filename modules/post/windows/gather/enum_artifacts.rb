@@ -1,16 +1,24 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'rex'
+#
+# Standard Library
+#
+
+require 'yaml'
+
+#
+# Project
+#
+
 require 'msf/core'
+require 'msf/core/auxiliary/report'
+require 'msf/core/post'
 require 'msf/core/post/file'
 require 'msf/core/post/windows/registry'
-require 'yaml'
-require 'msf/core/auxiliary/report'
+require 'rex'
 
 class Metasploit3 < Msf::Post
 

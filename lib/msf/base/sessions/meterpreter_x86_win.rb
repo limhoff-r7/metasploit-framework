@@ -15,7 +15,7 @@ class Meterpreter_x86_Win < Msf::Sessions::Meterpreter
   def initialize(rstream,opts={})
     super
 
-    self.binary_suffix = 'dll'
+    self.binary_suffix = 'x86.dll'
     self.architecture_abbreviation = 'x86'
     self.platform = 'x86/win32'
     self.platform_fully_qualified_name = 'Windows'

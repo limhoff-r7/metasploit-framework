@@ -35,6 +35,7 @@ class Payload < Msf::Module
   require 'msf/core/payload/netware'
   require 'msf/core/payload/java'
   require 'msf/core/payload/dalvik'
+  require 'msf/core/payload/firefox'
 
   include Msf::Module::SaveRegisters
 
@@ -292,9 +293,9 @@ class Payload < Msf::Module
           # Check to see if the value is a hex string.  If so, convert
           # it.
           if val.kind_of?(String)
-            if val =~ /^\\x/
-              val = [ val.gsub(/\\x/, '') ].pack("H*").unpack(pack)[0]
-            elsif val =~ /^0x/
+            if val =~ /^\\x/n
+              val = [ val.gsub(/\\x/n, '') ].pack("H*").unpack(pack)[0]
+            elsif val =~ /^0x/n
               val = val.hex
             end
           end

@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# Framework web site for more information on licensing and terms of use.
-#   http://metasploit.com/framework/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'msf/core'
@@ -75,7 +73,7 @@ class Metasploit3 < Msf::Auxiliary
         'cookie' => sid
       })
     rescue ::Rex::ConnectionError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
-      vprint_error("#{@peer} - Service failed to respond")
+      vprint_error("#{peer} - Service failed to respond")
       return :abort
     end
 
@@ -90,9 +88,9 @@ class Metasploit3 < Msf::Auxiliary
       when /User name already confirmed/
         return :skip_user
       when /Invalid password/
-        vprint_status("#{@peer} - Username found: #{user}")
+        vprint_status("#{peer} - Username found: #{user}")
       else /\<a href="process\.php\?logout=1"\>/
-        print_good("#{@peer} - Successful login: \"#{user}:#{pass}\"")
+        print_good("#{peer} - Successful login: \"#{user}:#{pass}\"")
         report_auth_info({
           :host        => rhost,
           :port        => rport,
@@ -112,10 +110,9 @@ class Metasploit3 < Msf::Auxiliary
   def run
     @uri = normalize_uri(target_uri.path)
     @uri.path << "/" if @uri.path[-1, 1] != "/"
-    @peer = "#{rhost}:#{rport}"
 
     each_user_pass { |user, pass|
-      vprint_status("#{@peer} - Trying \"#{user}:#{pass}\"")
+      vprint_status("#{peer} - Trying \"#{user}:#{pass}\"")
       do_login(user, pass)
     }
   end

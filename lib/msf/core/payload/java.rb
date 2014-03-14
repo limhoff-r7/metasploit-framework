@@ -48,6 +48,8 @@ module Msf::Payload::Java
   #
   # @option opts :main_class [String] the name of the Main-Class
   #   attribute in the manifest.  Defaults to "metasploit.Payload"
+  # @option opts :random [Boolean] Set to `true` to randomize the
+  #   "metasploit" package name.
   # @return [Rex::Zip::Jar]
   def generate_jar(opts={})
     raise if not respond_to? :config
@@ -60,6 +62,7 @@ module Msf::Payload::Java
     ] + @class_files
 
     jar = Rex::Zip::Jar.new
+    jar.add_sub("metasploit") if opts[:random]
     jar.add_file("metasploit.dat", config)
     jar.add_files(paths, Metasploit::Framework.pathnames.java_classes.to_path)
     jar.build_manifest(:main_class => main_class)

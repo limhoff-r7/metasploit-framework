@@ -1,8 +1,8 @@
 shared_context 'Msf::DBManager' do
-	include_context 'database cleaner'
-	include_context 'Msf::Simple::Framework'
+  include_context 'database cleaner'
+  include_context 'Msf::Simple::Framework'
 
-	let(:db_manager) do
+  let(:db_manager) do
     if framework
       framework.db.tap { |db_manager|
         if skip_seeding
@@ -17,7 +17,7 @@ shared_context 'Msf::DBManager' do
     true
   end
 
-	before(:each) do
+  before(:each) do
     if db_manager
       configurations = Metasploit::Framework::Database.configurations
       spec = configurations[Metasploit::Framework.env]
@@ -26,5 +26,5 @@ shared_context 'Msf::DBManager' do
       # error.
       db_manager.connect(spec)
     end
-	end
+  end
 end

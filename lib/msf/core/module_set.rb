@@ -126,21 +126,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     return false
   end
 
-  # Enumerates each module class in the set based on their relative ranking to one another.  Modules that are ranked
-  # higher are shown first.
-  #
-  # @param opts (see #each_module_list)
-  # @yield (see #each_module_list)
-  # @yieldparam (see #each_module_list)
-  # @return (see #each_module_list)
-  def each_module_ranked(opts = {}, &block)
-    demand_load_modules
-
-    self.mod_ranked = rank_modules
-
-    each_module_list(mod_ranked, opts, &block)
-  end
-
   # Forces all modules in this set to be loaded.
   #
   # @return [void]
@@ -201,26 +186,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   end
 
   protected
-
-  # Load all modules that are marked as being symbolic.
-  #
-  # @return [void]
-  def demand_load_modules
-    found_symbolics = false
-    # Pre-scan the module list for any symbolic modules
-    self.each_pair { |name, mod|
-      if (mod == Msf::SymbolicModule)
-        found_symbolics = true
-        mod = create(name)
-        next if (mod.nil?)
-      end
-    }
-
-    # If we found any symbolic modules, then recalculate.
-    if (found_symbolics)
-      recalculate
-    end
-  end
 
   # Enumerates the modules in the supplied array with possible limiting factors.
   #

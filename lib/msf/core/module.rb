@@ -19,6 +19,7 @@ require 'msf/core'
 class Msf::Module < Metasploit::Model::Base
 
   require 'msf/core/module/auxiliary_action'
+  require 'msf/core/module/deprecated'
   require 'msf/core/module/has_actions'
   require 'msf/core/module/reference'
   require 'msf/core/module/site_reference'

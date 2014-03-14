@@ -55,6 +55,7 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Stdapi
       "portfwd"  => "Forward a local port to a remote service",
       "arp"      => "Display the host ARP cache",
       "netstat"  => "Display the network connections",
+      "getproxy" => "Display the current proxy configuration",
     }
     reqs = {
       "ipconfig" => [ "stdapi_net_config_get_interfaces" ],
@@ -71,6 +72,7 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Stdapi
       "portfwd"  => [ ],
       "arp"      => [ "stdapi_net_config_get_arp_table" ],
       "netstat"  => [ "stdapi_net_config_get_netstat" ],
+      "getproxy" => [ "stdapi_net_config_get_proxy" ],
     }
 
     all.delete_if do |cmd, desc|
@@ -405,6 +407,14 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Stdapi
     print_line "Usage: portfwd [-h] [add | delete | list | flush] [args]"
     print_line
     print @@portfwd_opts.usage
+  end
+
+  def cmd_getproxy
+    p = client.net.config.get_proxy_config()
+    print_line( "Auto-detect     : #{p[:autodetect] ? "Yes" : "No"}" )
+    print_line( "Auto config URL : #{p[:autoconfigurl]}" )
+    print_line( "Proxy URL       : #{p[:proxy]}" )
+    print_line( "Proxy Bypass    : #{p[:proxybypass]}" )
   end
 
 protected

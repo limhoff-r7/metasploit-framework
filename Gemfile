@@ -1,7 +1,9 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Need 3+ for ActiveSupport::Concern
 gem 'activesupport', '>= 3.0.0'
+# Needed for some admin modules (cfme_manageiq_evm_pass_reset.rb)
+gem 'bcrypt-ruby'
 # terminal info that works cross-platform including Windows and JRuby
 gem 'highline'
 # Deep freeze objects to prevent down stream consumers from modifying arguments passed to them
@@ -20,7 +22,7 @@ gem 'msgpack'
 # Needed by anemone crawler
 gem 'nokogiri'
 # Needed by db.rb and Msf::Exploit::Capture
-gem 'packetfu', '1.1.8'
+gem 'packetfu', '1.1.9'
 # Needed by anemone crawler
 gem 'robots'
 # Progress bar for cmd_reload_all

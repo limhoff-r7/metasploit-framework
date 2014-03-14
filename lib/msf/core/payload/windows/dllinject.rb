@@ -18,7 +18,6 @@ module Payload::Windows::DllInject
         Msf::Module::ModuleInfo.update!(
             info,
             'Name'          => 'Windows Inject DLL',
-            'Version'       => '$Revision$',
             'Description'   => 'Inject a custom DLL into the exploited process',
             'Author'        =>
                 [

@@ -195,7 +195,7 @@ class Msf::Encoder < Msf::Module
     # Last but not least, do one last badchar pass to see if the stub +
     # encoded payload leads to any bad char issues...
     if ((badchar_idx = has_badchars?(state.encoded, state.badchars)) != nil)
-      raise BadcharError.new(state.encoded, badchar_idx, stub.length, state.encoded[badchar_idx]),
+      raise Msf::BadcharError.new(state.encoded, badchar_idx, stub.length, state.encoded[badchar_idx]),
           "The #{self.name} encoder failed to encode without bad characters.",
           caller
     end

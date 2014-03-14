@@ -2,12 +2,10 @@
 require 'msf/core'
 require 'msf/core/module'
 
-module Msf
-
 #
 # A mixin used for providing Modules with post-exploitation options and helper methods
 #
-module PostMixin
+module Msf::PostMixin
 
   include Msf::Auxiliary::Report
 
@@ -15,7 +13,7 @@ module PostMixin
     super
 
     register_options( [
-      OptInt.new('SESSION', [ true, "The session to run this module on." ])
+      Msf::OptInt.new('SESSION', [ true, "The session to run this module on." ])
     ] , Msf::Post)
 
     # Default stance is active
@@ -73,7 +71,7 @@ module PostMixin
     return @session if @session and not session_changed?
 
     if datastore["SESSION"]
-      @session = framework.sessions[datastore["SESSION"].to_i]
+      @session = framework.sessions.get(datastore["SESSION"].to_i)
     else
       @session = nil
     end
@@ -207,6 +205,4 @@ protected
       return false
     end
   end
-end
-
 end

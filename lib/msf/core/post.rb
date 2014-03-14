@@ -2,13 +2,11 @@
 
 require 'msf/core/post_mixin'
 
-module Msf
-
 #
 # A Post-exploitation module
 #
 #
-class Post < Msf::Module
+class Msf::Post < Msf::Module
   include Msf::Module::HasActions
   include Msf::PostMixin
 
@@ -34,6 +32,3 @@ class Post < Msf::Module
     mod
   end
 end
-
-end
-

@@ -70,19 +70,19 @@ module Msf::DBManager::Cred
       if (token[0])
         # convert the token to US-ASCII from UTF-8 to prevent an error
         token[0] = token[0].unpack("C*").pack("C*")
-        token[0] = token[0].gsub(/[\x00-\x1f\x7f-\xff]/){|m| "\\x%.2x" % m.unpack("C")[0] }
+        token[0] = token[0].gsub(/[\x00-\x1f\x7f-\xff]/n){|m| "\\x%.2x" % m.unpack("C")[0] }
       end
 
       if (token[1])
         token[1] = token[1].unpack("C*").pack("C*")
-        token[1] = token[1].gsub(/[\x00-\x1f\x7f-\xff]/){|m| "\\x%.2x" % m.unpack("C")[0] }
+        token[1] = token[1].gsub(/[\x00-\x1f\x7f-\xff]/n){|m| "\\x%.2x" % m.unpack("C")[0] }
       end
 
       ret = {}
 
-      #Check to see if the creds already exist. We look also for a downcased username with the
-      #same password because we can fairly safely assume they are not in fact two seperate creds.
-      #this allows us to hedge against duplication of creds in the DB.
+      # Check to see if the creds already exist. We look also for a downcased username with the
+      # same password because we can fairly safely assume they are not in fact two seperate creds.
+      # this allows us to hedge against duplication of creds in the DB.
 
       if duplicate_ok
         # If duplicate usernames are okay, find by both user and password (allows

@@ -253,9 +253,10 @@ class EncodedPayload
 
           # Check to see if we have enough room for the minimum requirements
           required_space = reqs['Space']
+          eout_length = eout.length
 
-          if required_space && required_space < (eout.length + min)
-            wlog("#{err_start}: Encoded payload version is too large with encoder #{encoder.reference_name}",
+          if required_space && required_space < (eout_length + min)
+            wlog("#{err_start}: Encoded payload version is too large (#{eout_length}) with encoder #{encoder.reference_name}",
               'core', LEV_1)
             next_encoder = true
 
@@ -264,7 +265,7 @@ class EncodedPayload
           end
 
           ilog(
-              "#{err_start}: Successfully encoded with encoder #{encoder.reference_name} (size is #{eout.length})",
+              "#{err_start}: Successfully encoded with encoder #{encoder.reference_name} (size is #{eout_length})",
               'core',
               LEV_0
           )
@@ -292,6 +293,7 @@ class EncodedPayload
 
     # Prefix the prepend encoder value
     self.encoded = (reqs['PrependEncoder'] || '') + self.encoded
+    self.encoded << (reqs['AppendEncoder'] || '')
   end
 
   #

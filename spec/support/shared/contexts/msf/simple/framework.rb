@@ -10,7 +10,7 @@ shared_context 'Msf::Simple::Framework' do
     end
   end
 
-	let(:framework) do
+  let(:framework) do
     FactoryGirl.create(:msf_simple_framework)
-	end
+  end
 end

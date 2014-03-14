@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#	http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'msf/core'
@@ -53,7 +51,7 @@ module Metasploit3
       [ "resources.arsc" ]
     ]
 
-    jar.add_files(files, Metasploit::Framework.root.join("data", "android", "apk").to_path)
+    jar.add_files(files, Metasploit::Framework.pathnames.data.join("android", "apk").to_path)
     jar.build_manifest
 
     x509_name = OpenSSL::X509::Name.parse(
@@ -79,7 +77,8 @@ module Metasploit3
     # requirement. You can not upload an application if it is signed
     # with a key whose validity expires before that date.
     # """
-    cert.not_after = cert.not_before + 3600*24*365*20 # 20 years
+    # The timestamp 0x78045d81 equates to 2033-10-22 00:00:01 UTC
+    cert.not_after = Time.at( 0x78045d81  + rand( 0x7fffffff - 0x78045d81 ))
 
     jar.sign(key, cert, [cert])
 

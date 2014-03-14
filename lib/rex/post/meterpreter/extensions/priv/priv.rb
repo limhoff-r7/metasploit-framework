@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # -*- coding: binary -*-
 
 require 'rex/post/meterpreter/extensions/priv/tlv'
@@ -45,13 +44,8 @@ class Priv < Extension
     request = Packet.create_request( 'priv_elevate_getsystem' )
 
     elevator_name = Rex::Text.rand_text_alpha_lower( 6 )
-    affix = ''
 
-    if client.platform == 'x64/win64'
-      affix = '.x64'
-    end
-
-    elevator_pathname = Metasploit::Framework.root.join('data', 'meterpreter', "elevator#{affix}.dll").expand_path
+    elevator_pathname = Metasploit::Framework.root.join('data', 'meterpreter', "elevator#{client.binary_suffix}.dll").expand_path
 
     elevator_data = ""
 

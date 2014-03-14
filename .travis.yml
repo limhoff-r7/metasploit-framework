@@ -1,23 +1,27 @@
-language: ruby
+env:
+  global:
+    - MSF_SPOTCHECK_RECENT=1
+  matrix:
+    - SPEC_OPTS="--tag cache --tag ~content"
+    - SPEC_OPTS="--tag content"
+    - SPEC_OPTS="--tag ui"
+    - SPEC_OPTS="--tag ~cache ~content ~ui"
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libpcap-dev
   # don't generate docs for installed gems since no one will read them
   - 'echo ''gem --no-ri --no-rdoc'' > ~/.gemrc'
 before_script:
+  - ./tools/msftidy.rb
   - cp config/database.yml.travis config/database.yml
   - bundle exec rake db:create
   - bundle exec rake db:migrate
   - bundle exec rake parallel:create
   - bundle exec rake parallel:prepare > /dev/null 2>&1
 bundler_args: --without documentation profiling
-env:
-  - SPEC_OPTS="--tag cache --tag ~content"
-  - SPEC_OPTS="--tag content"
-  - SPEC_OPTS="--tag ui"
-  - SPEC_OPTS="--tag ~cache ~content ~ui"
 git:
-  depth: 1
+  depth: 5
+language: ruby
 notifications:
   irc: "irc.freenode.org#msfnotify"
 rvm:

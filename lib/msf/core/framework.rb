@@ -42,7 +42,7 @@ class Framework < Metasploit::Model::Base
   #
 
   Major    = 4
-  Minor    = 8
+  Minor    = 9
   Point    = 0
   Release  = "-dev"
 

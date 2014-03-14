@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'rex/proto/http'
@@ -42,7 +40,7 @@ class Metasploit3 < Msf::Auxiliary
                 [
                     false,
                     'Path of word dictionary to use',
-                    Metasploit::Framework.root.join('data', 'wmap', 'wmap_dirs.txt').to_path
+                    Metasploit::Framework.pathnames.data.join('wmap', 'wmap_dirs.txt').to_path
                 ]
             )
         ],

@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'msf/core'
@@ -48,7 +46,7 @@ class Metasploit3 < Msf::Auxiliary
     register_options(
       [
         OptPath.new('SITELIST',	  [ false, "YAML file of URL/Replacement pairs for GET replacement",
-            Metasploit::Framework.root.join("data", "exploits", "wifi", "airpwn", "sitelist.yml").to_path
+            Metasploit::Framework.pathnames.exploit_data.join("wifi", "airpwn", "sitelist.yml").to_path
           ]),
         OptBool.new('USESITEFILE', [ true, "Use site list file for match/response", "false"]),
         OptString.new('FILTER',	  [ true, "Default BPF filter", "port 80"]),

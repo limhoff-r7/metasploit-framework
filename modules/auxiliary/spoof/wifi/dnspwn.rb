@@ -1,8 +1,6 @@
 ##
-# This file is part of the Metasploit Framework and may be subject to
-# redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# This module requires Metasploit: http//metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'msf/core'
@@ -31,7 +29,7 @@ class Metasploit3 < Msf::Auxiliary
     register_options(
       [
         OptPath.new('DNSLIST',	  [ false, "YAML file of DNS entries for replacement",
-            Metasploit::Framework.root.join("data", "exploits", "wifi", "dnspwn", "dnslist.yml").to_path
+            Metasploit::Framework.pathnames.exploit_data.join("wifi", "dnspwn", "dnslist.yml").to_path
           ]),
         OptBool.new('USEDNSFILE', [ true, "Use dns list file for response", "false"]),
         OptString.new('FILTER',	  [ true, "Default BPF filter", "port 53"]),
