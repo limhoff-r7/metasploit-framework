@@ -1,0 +1,57 @@
+digraph brainstorm {
+  jruby [label="JRuby"]
+  rubinius [label="Rubinius"]
+
+  thread_safe_autoload [label="Thread-safe autoload"]
+  parallel_ruby_threads [label="Parallel Ruby Threads"]
+  
+  jruby -> thread_safe_autoload
+  jruby -> parallel_ruby_threads
+
+  "MRI Ruby 2.0" -> thread_safe_autoload
+
+  rubinius -> thread_safe_autoload
+  rubinius -> parallel_ruby_threads
+
+  thread_safe_autoload -> metasploit_data_models_autoload
+  thread_safe_autoload -> metasploit_framework_autoload
+  thread_safe_autoload -> metasploit_model_autoload
+  thread_safe_autoload -> raptor_io_autoload
+
+  subgraph cluster_metasploit_data_models {
+    label = "MetasploitDataModels / Mdm"
+
+    metasploit_data_models_autoload [label="Add ActiveSupport::Autoload"]
+    metasploit_data_models_dependencies [label="Remove ActiveSupport::Dependencies"]
+
+    metasploit_data_models_autoload -> metasploit_data_models_dependencies
+  }
+
+  subgraph cluster_metasploit_framework {
+    label = "Metasploit::Framework"
+
+    metasploit_framework_autoload [label="Merge https://github.com/jduck/metasploit-framework/tree/autoload to https://github.com/rapid7/metasploit-framework/tree/master"]
+    metasploit_framework_dependencies [label="Remove ActiveSupport::Dependencies"]
+    metasploit_framework_requires [label="Remove requires"]
+    metasploit_framework_eager_load [label="Remove eager_load!"]
+
+    metasploit_framework_autoload -> metasploit_framework_dependencies
+    metasploit_framework_autoload -> metasploit_framework_requires
+    metasploit_framework_autoload -> metasploit_framework_eager_load
+  }
+
+  subgraph cluster_metasploit_model {
+    label = "Metasploit::Model"
+
+    metasploit_model_autoload [label="Add ActiveSupport::Autoload"]
+    metasploit_model_dependencies [label="Remove ActiveSupport::Dependencies"]
+
+    metasploit_model_autoload -> metasploit_model_dependencies
+  }
+
+  subgraph cluster_raptor_io {
+    label = "Raptor::IO"
+
+    raptor_io_autoload [label="Use ActiveSupport::Autoload"]
+  }
+}
