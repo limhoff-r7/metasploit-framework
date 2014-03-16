@@ -4,6 +4,8 @@ digraph brainstorm {
 
   thread_safe_autoload [label="Thread-safe autoload"]
   parallel_ruby_threads [label="Parallel Ruby Threads"]
+
+  great_one_ga [label = "Great Refactor, Extension, And Test #1 General Availability"]
   
   jruby -> thread_safe_autoload
   jruby -> parallel_ruby_threads
@@ -27,6 +29,7 @@ digraph brainstorm {
     metasploit_cache_integration [label="Merge Metasploit::Model::* to Mdm::*"]
     metasploit_cache_rename [label = "Rename to namespace to Metasploit::Cache"]
     metasploit_cache_gem [label = "metasploit-cache gem"]
+    metasploit_cache_sqlite [label = "SQLite3 support"]
 
     metasploit_cache_fork -> metasploit_cache_prune
     metasploit_cache_metasploit_model_merge -> metasploit_cache_prune
@@ -36,6 +39,8 @@ digraph brainstorm {
 
     metasploit_cache_integration -> metasploit_cache_rename
     metasploit_cache_prune -> metasploit_cache_rename
+
+    metasploit_cache_prune -> metasploit_cache_sqlite
 
     metasploit_cache_rename -> metasploit_cache_gem
   }
@@ -62,14 +67,19 @@ digraph brainstorm {
     metasploit_framework_requires [label="Remove requires"]
     metasploit_framework_eager_load [label="Remove eager_load!"]
     metasploit_framework_metasploit_cache_gem [label = "Use metasploit-cache gem"]
+    metasploit_framework_sqlite [label="SQLite3 for cache"]
+    metasploit_framework_databaseless_cache_removal [label = "Remove databaseless cache support"]
 
     metasploit_framework_autoload -> metasploit_framework_dependencies
     metasploit_framework_autoload -> metasploit_framework_requires
     metasploit_framework_autoload -> metasploit_framework_eager_load
+    metasploit_framework_sqlite -> metasploit_framework_databaseless_cache_removal
   }
 
   metasploit_cache_gem -> metasploit_framework_metasploit_cache_gem
   metasploit_data_models_metasploit_cache_removal -> metasploit_framework_metasploit_cache_gem
+  metasploit_cache_sqlite -> metasploit_framework_sqlite
+  metasploit_framework_databaseless_cache_removal -> great_one_ga
 
   subgraph cluster_metasploit_model {
     label = "Metasploit::Model"
