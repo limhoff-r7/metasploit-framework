@@ -18,14 +18,41 @@ digraph brainstorm {
   thread_safe_autoload -> metasploit_model_autoload
   thread_safe_autoload -> raptor_io_autoload
 
+  subgraph cluster_metasploit_cache {
+    label = "Metasploit::Cache"
+
+    metasploit_cache_fork [label = "Fork metasploit_data_models"]
+    metasploit_cache_metasploit_model_merge [label="Merge Metasploit::Model"]
+    metasploit_cache_prune [label="Remove non-cache models"]
+    metasploit_cache_integration [label="Merge Metasploit::Model::* to Mdm::*"]
+    metasploit_cache_rename [label = "Rename to namespace to Metasploit::Cache"]
+    metasploit_cache_gem [label = "metasploit-cache gem"]
+
+    metasploit_cache_fork -> metasploit_cache_prune
+    metasploit_cache_metasploit_model_merge -> metasploit_cache_prune
+
+    metasploit_cache_fork -> metasploit_cache_integration
+    metasploit_cache_metasploit_model_merge -> metasploit_cache_integration
+
+    metasploit_cache_integration -> metasploit_cache_rename
+    metasploit_cache_prune -> metasploit_cache_rename
+
+    metasploit_cache_rename -> metasploit_cache_gem
+  }
+
   subgraph cluster_metasploit_data_models {
     label = "MetasploitDataModels / Mdm"
 
     metasploit_data_models_autoload [label="Add ActiveSupport::Autoload"]
     metasploit_data_models_dependencies [label="Remove ActiveSupport::Dependencies"]
+    metasploit_data_models_metasploit_cache_gem [label="Use metasploit-cache gem"]
+    metasploit_data_models_metasploit_cache_removal [label="Remove cache models"]
 
     metasploit_data_models_autoload -> metasploit_data_models_dependencies
+    metasploit_data_models_metasploit_cache_gem -> metasploit_data_models_metasploit_cache_removal
   }
+
+  metasploit_cache_gem ->  metasploit_data_models_metasploit_cache_gem
 
   subgraph cluster_metasploit_framework {
     label = "Metasploit::Framework"
@@ -34,24 +61,35 @@ digraph brainstorm {
     metasploit_framework_dependencies [label="Remove ActiveSupport::Dependencies"]
     metasploit_framework_requires [label="Remove requires"]
     metasploit_framework_eager_load [label="Remove eager_load!"]
+    metasploit_framework_metasploit_cache_gem [label = "Use metasploit-cache gem"]
 
     metasploit_framework_autoload -> metasploit_framework_dependencies
     metasploit_framework_autoload -> metasploit_framework_requires
     metasploit_framework_autoload -> metasploit_framework_eager_load
   }
 
+  metasploit_cache_gem -> metasploit_framework_metasploit_cache_gem
+  metasploit_data_models_metasploit_cache_removal -> metasploit_framework_metasploit_cache_gem
+
   subgraph cluster_metasploit_model {
     label = "Metasploit::Model"
 
     metasploit_model_autoload [label="Add ActiveSupport::Autoload"]
     metasploit_model_dependencies [label="Remove ActiveSupport::Dependencies"]
+    metasploit_model_metasploit_cache_removal [label="Remove cache models"]
 
     metasploit_model_autoload -> metasploit_model_dependencies
   }
+
+  metasploit_data_models_metasploit_cache_removal -> metasploit_model_metasploit_cache_removal
 
   subgraph cluster_raptor_io {
     label = "Raptor::IO"
 
     raptor_io_autoload [label="Use ActiveSupport::Autoload"]
+  }
+
+  subgraph cluster_metasploit_record {
+
   }
 }
