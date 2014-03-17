@@ -88,7 +88,7 @@ module Msf::Payload::Windows
 
     register_options(
       [
-        Msf::OptEnum.new('EXITFUNC', [true, 'Exit technique', 'process', @@exit_types.keys])
+        Msf::OptEnum.new('EXITFUNC', [true, 'Exit technique', 'process', EXIT_FUNCTION_ADDRESS_BY_TECHNIQUE.keys])
       ], Msf::Payload::Windows )
     ret
   end
