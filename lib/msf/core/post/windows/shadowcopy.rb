@@ -1,16 +1,11 @@
 # -*- coding: binary -*-
-require 'msf/core/post'
 require 'msf/core/post/windows'
 require 'msf/core/post/windows/services'
 require 'msf/core/post/windows/wmic'
 
-module Msf
-class Post
-module Windows
-
 # Based on the research from Tim Tomes and Mark Baggett, at
 # http://pauldotcom.com/2011/11/safely-dumping-hashes-from-liv.html
-module ShadowCopy
+module Msf::Post::Windows::ShadowCopy
 
   include Msf::Post::Windows::Services
   include Msf::Post::Windows::WMIC
@@ -204,7 +199,3 @@ module ShadowCopy
   end
 
 end
-end
-end
-end
-

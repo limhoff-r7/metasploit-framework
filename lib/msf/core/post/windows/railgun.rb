@@ -1,10 +1,9 @@
 # -*- coding: binary -*-
+
+require 'msf/core/post/windows'
 require 'rex/post/meterpreter/extensions/stdapi/railgun/railgun'
 
-module Msf
-class Post
-module Windows
-module Railgun
+module Msf::Post::Windows::Railgun
 
   # Go through each dll and add a corresponding convenience method of the same name
   Rex::Post::Meterpreter::Extensions::Stdapi::Railgun::Railgun::BUILTIN_DLLS.each do |api|
@@ -64,7 +63,4 @@ module Railgun
   def pointer_size
     railgun.util.pointer_size
   end
-end
-end
-end
 end

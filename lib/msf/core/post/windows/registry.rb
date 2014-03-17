@@ -1,12 +1,9 @@
 # -*- coding: binary -*-
 
+require 'msf/core/post/windows'
 require 'msf/core/post/windows/cli_parse'
 
-module Msf
-class Post
-module Windows
-
-module Registry
+module Msf::Post::Windows::Registry
 
   include Msf::Post::Windows::CliParse
 
@@ -614,7 +611,4 @@ protected
     end
   end
 
-end
-end
-end
 end

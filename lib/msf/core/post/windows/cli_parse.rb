@@ -1,10 +1,8 @@
 # -*- coding: binary -*-
 
-module Msf
-class Post
-module Windows
+require 'msf/core/post/windows'
 
-module CliParse
+module Msf::Post::Windows::CliParse
 
   require 'msf/windows_error'
   require 'rex/logging'
@@ -161,8 +159,4 @@ module CliParse
     return hashish
   end
 
-end
-
-end
-end
 end

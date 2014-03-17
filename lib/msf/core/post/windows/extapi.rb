@@ -1,10 +1,8 @@
 # -*- coding: binary -*-
 
-module Msf
-class Post
-module Windows
+require 'msf/core/post/windows'
 
-module ExtAPI
+module Msf::Post::Windows::ExtAPI
 
   def load_extapi
     if session.extapi
@@ -19,7 +17,4 @@ module ExtAPI
     end
   end
 
-end # ExtAPI
-end # Windows
-end # Post
-end # Msf
+end

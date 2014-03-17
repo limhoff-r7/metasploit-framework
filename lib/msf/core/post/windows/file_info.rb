@@ -1,9 +1,8 @@
 # -*- coding: binary -*-
-module Msf
-class Post
-module Windows
 
-module FileInfo
+require 'msf/core/post/windows'
+
+module Msf::Post::Windows::FileInfo
 
   def hiword(num)
     (num >> 16) & 0xffff
@@ -51,7 +50,4 @@ module FileInfo
 
     return major, minor, build, revision, branch
   end
-end # FileInfo
-end # Windows
-end # Post
-end # Msf
+end

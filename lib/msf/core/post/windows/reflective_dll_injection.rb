@@ -1,5 +1,6 @@
 # -*- coding: binary -*-
 
+require 'msf/core/post/windows'
 require 'msf/core/reflective_dll_loader'
 
 ###

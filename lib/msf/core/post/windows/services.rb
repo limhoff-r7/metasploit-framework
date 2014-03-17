@@ -1,13 +1,10 @@
 # -*- coding: binary -*-
+
+require 'msf/core/post/windows'
 require 'msf/core/post/windows/registry'
 
-module Msf
-class Post
-module Windows
-
-
 # @deprecated Use {Services} instead
-module WindowsServices
+module Msf::Post::Windows::WindowsServices
   def self.included(base)
     include Services
   end
@@ -21,7 +18,7 @@ end
 #
 # Post module mixin for dealing with Windows services
 #
-module Services
+module Msf::Post::Windows::Services
 
   include ::Msf::Post::Windows::Registry
 
@@ -350,8 +347,4 @@ module Services
   
     return ret
   end
-end
-
-end
-end
 end

@@ -1,9 +1,9 @@
 # -*- coding: binary -*-
-module Msf
-class Post
-module Windows
 
-module Accounts
+require 'msf/core/post'
+require 'msf/core/post/windows'
+
+module Msf::Post::Windows::Accounts
 
   GUID = [
     ['Data1',:DWORD],
@@ -300,7 +300,4 @@ module Accounts
     if w["GrantedAccess"] > 0 then result << "W" end
   end
 
-end # Accounts
-end # Windows
-end # Post
-end # Msf
+end

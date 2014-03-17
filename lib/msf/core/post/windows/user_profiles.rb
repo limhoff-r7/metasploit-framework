@@ -1,12 +1,9 @@
 # -*- coding: binary -*-
+require 'msf/core/post/windows'
 require 'msf/core/post/windows/registry'
 require 'msf/core/post/windows/accounts'
 
-module Msf
-class Post
-module Windows
-
-module UserProfiles
+module Msf::Post::Windows::UserProfiles
   include Msf::Post::Windows::Registry
   include Msf::Post::Windows::Accounts
 
@@ -122,7 +119,3 @@ module UserProfiles
   end
 
 end
-end
-end
-end
-

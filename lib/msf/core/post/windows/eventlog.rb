@@ -1,9 +1,7 @@
 # -*- coding: binary -*-
-module Msf
-class Post
-module Windows
+require 'msf/core/post/windows'
 
-module Eventlog
+module Msf::Post::Windows::Eventlog
 
   #
   # Enumerate eventlogs
@@ -38,7 +36,4 @@ module Eventlog
   end
 
 
-end
-end
-end
 end

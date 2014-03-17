@@ -1,10 +1,8 @@
 # -*- coding: binary -*-
 
-module Msf
-class Post
-module Windows
+require 'msf/core/post/windows'
 
-module Process
+module Msf::Post::Windows::Process
 
   #
   # Injects shellcode to a process, and executes it.
@@ -41,7 +39,4 @@ module Process
     true
   end
 
-end # Process
-end # Windows
-end # Post
-end # Msf
+end

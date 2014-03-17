@@ -1,12 +1,19 @@
 # -*- coding: binary -*-
+
+#
+# Standard Library
+#
+
 require 'zlib'
+
+#
+# Project
+#
+
 require 'msf/core/post/common'
+require 'msf/core/post/windows'
 
-module Msf
-class Post
-module Windows
-
-module Powershell
+module Msf::Post::Windows::Powershell
   include ::Msf::Post::Common
 
 
@@ -237,7 +244,3 @@ module Powershell
   end
 
 end
-end
-end
-end
-
