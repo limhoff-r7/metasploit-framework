@@ -328,10 +328,17 @@ describe Msf::Module::PlatformList do
         Array.new
       end
 
-      it 'should collect all Metasploit::Framework::Platforms using collect_concat' do
-        raw_platforms.should_receive(:collect_concat)
+      context '#platforms' do
+        subject(:platforms) do
+          platform_list.platforms
+        end
 
-        write_platforms
+        it { should be_an Array }
+
+        it 'is a different Array' do
+          expect(platforms).not_to equal(raw_platforms)
+        end
+
       end
     end
 
@@ -345,6 +352,30 @@ describe Msf::Module::PlatformList do
 
         platform_list.platforms.should include(raw_platforms)
       end
+
+      context 'with duplicate Metasploit::Framework::Platforms' do
+        let(:metasploit_framework_platform) do
+          Metasploit::Framework::Platform.all.sample
+        end
+
+        let(:raw_platforms) do
+          Array.new(2) { metasploit_framework_platform }
+        end
+
+        context '#platforms' do
+          subject(:platforms) do
+            platform_list.platforms
+          end
+
+          before(:each) do
+            write_platforms
+          end
+
+          it 'does not contain duplicates' do
+            expect(platforms).to eq([metasploit_framework_platform])
+          end
+        end
+      end
     end
 
     context 'with Set' do
@@ -352,10 +383,16 @@ describe Msf::Module::PlatformList do
         Set.new
       end
 
-      it 'should collect all Metasploit::Framework::Platforms using collect_concat' do
-        raw_platforms.should_receive(:collect_concat)
-
+      before(:each) do
         write_platforms
+      end
+
+      context '#platforms' do
+        subject(:platforms) do
+          platform_list.platforms
+        end
+
+        it { should be_an Array }
       end
     end
 
@@ -393,7 +430,7 @@ describe Msf::Module::PlatformList do
               hash_including(
                   module_class_full_names: module_class_full_names
               )
-          )
+          ).and_return(Metasploit::Framework::Platform.all.sample)
 
           write_platforms
         end
@@ -409,8 +446,54 @@ describe Msf::Module::PlatformList do
 
           expect(platform_list.platforms).to match_array(Metasploit::Framework::Platform.all)
         end
+
+        context "with '' twice" do
+          it 'should be Metasploit::Framework::Platform.all' do
+            write_platforms
+
+            expect(platform_list.platforms).to match_array(Metasploit::Framework::Platform.all)
+          end
+        end
       end
 
+      context 'with duplicate Metasploit::Framework::Platforms' do
+        let(:raw_platforms) do
+          [
+              'Windows',
+              'win'
+          ]
+        end
+
+        context '#platforms' do
+          before(:each) do
+            write_platforms
+          end
+
+          subject(:platforms) do
+            platform_list.platforms
+          end
+
+          it 'does not contain duplicates' do
+            expect(platform_list.platforms).to eq([Metasploit::Framework::Platform.closest('Windows')])
+          end
+        end
+      end
+    end
+
+    context 'with duplicate Metasploit::Framework::Platforms' do
+      let(:raw_platforms) do
+        [
+            Metasploit::Framework::Platform.closest('Windows'),
+            'win',
+            ''
+        ]
+      end
+
+      it 'does not contain duplicates' do
+        write_platforms
+
+        expect(platform_list.platforms).to match_array(Metasploit::Framework::Platform.all)
+      end
     end
 
     context 'with nil' do

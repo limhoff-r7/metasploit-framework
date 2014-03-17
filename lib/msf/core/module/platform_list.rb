@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: binary -*-
 
+require 'set'
+
 #
 # This is a helper to a easy way to specify support platforms.  It will take a
 # list of strings or Msf::Module::Platform objects and build them into a list
@@ -115,24 +117,29 @@ class Msf::Module::PlatformList
       enumerable_platforms = Array.wrap(platforms)
     end
 
-    @platforms = enumerable_platforms.collect_concat { |platform|
+    # Use a Set to eliminate duplicates
+    @platforms = enumerable_platforms.each_with_object(Set.new) { |platform, set|
       case platform
         when Metasploit::Framework::Platform
-          platform
+          set.add platform
         # empty string is used to indicate all platforms and must be before the more general String
         when ''
-          Metasploit::Framework::Platform.all
+          set.merge Metasploit::Framework::Platform.all
         # must be after the more specific empty String, ''.
         when String
-          Metasploit::Framework::Platform.closest(
+          closest = Metasploit::Framework::Platform.closest(
               platform,
               module_class_full_names: module_class_full_names
           )
+          set.add closest
         when Range
           raise ArgumentError, "Platform ranges no longer supported"
         else
           raise ArgumentError, "Don't know how to convert #{platform.inspect} to a Metasploit::Framework::Platform"
       end
+    }.sort_by { |platform|
+      # transform back into an Array so semantics of platform_list.platform does not change
+      platform.fully_qualified_name
     }
 
     # reset caches derived from platforms
