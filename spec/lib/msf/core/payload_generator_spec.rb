@@ -103,7 +103,7 @@ describe Msf::PayloadGenerator, :ui do
   end
 
   let(:module_ancestor_pathnames) do
-    encoder_ancestor_pathnames + payload_ancestor_pathnames
+    encoder_ancestor_pathnames + nop_ancestor_pathnames + payload_ancestor_pathnames
   end
 
   let(:module_path) do
@@ -111,6 +111,12 @@ describe Msf::PayloadGenerator, :ui do
         :mdm_module_path,
         real_path: Metasploit::Framework.root.join('modules').to_path
     )
+  end
+
+  let(:nop_ancestor_pathnames) do
+    [
+        Metasploit::Framework.root.join('modules', 'nops', 'x86', 'opty2.rb')
+    ]
   end
 
   let(:payload_ancestor_pathnames) do
@@ -434,7 +440,7 @@ describe Msf::PayloadGenerator, :ui do
       end
     end
 
-    context 'when nops are set to more than 0', pending: 'Requires Mdm::Module::Instance.intersecting_architecture_abbreviations, Mdm::Module::Class.with_module_instances, and Mdm::Module::Class.ranked' do
+    context 'when nops are set to more than 0' do
       let(:nops) { 20 }
 
       it 'returns shellcode of the correct size' do

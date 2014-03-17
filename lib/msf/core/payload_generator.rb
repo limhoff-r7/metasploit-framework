@@ -346,19 +346,40 @@ module Msf
     # @param shellcode [String] The shellcode to prepend the NOPs to
     # @return [String] the shellcode with the appropriate nopsled affixed
     def prepend_nops(shellcode)
+      shellcode_with_nops = shellcode
+
       if nops > 0
-        # @todo Replace with Mdm::Module::Instance.intersecting_architecture_abbreviations, Mdm::Module::Class.with_module_instances, and Mdm::Module::Class.ranked
-        framework.nops.each_module_ranked('Arch' => [arch]) do |name, mod|
-          nop = framework.nops.create(name)
-          raw = nop.generate_sled(nops, {'BadChars' => badchars, 'SaveRegisters' => [ 'esp', 'ebp', 'esi', 'edi' ] })
-          if raw
-            cli_print "Successfully added NOP sled from #{name}"
-            return raw + shellcode
+        cache_nop_instances = Mdm::Module::Instance.with_module_type(
+            'nop'
+        ).intersecting_architecture_abbreviations(
+            [arch]
+        )
+        cache_nop_classes = Mdm::Module::Class.with_module_instances(cache_nop_instances).ranked
+        nop_instances = Metasploit::Framework::Module::Instance::Enumerator.new(
+            cache_module_classes: cache_nop_classes,
+            module_manager: framework.modules
+        )
+        nop_instances.valid!
+
+        nop_instances.each do |nop_instance|
+          nop_sled = nop_instance.generate_sled(
+              nops,
+              {
+                  'BadChars' => badchars,
+                  'SaveRegisters' => %w{ebp edi esi esp}
+              }
+          )
+
+          if nop_sled
+            cli_print "Successfully added NOP sled from #{nop_instance.reference_name}"
+            shellcode_with_nops = nop_sled + shellcode
+
+            break
           end
         end
-      else
-        shellcode
       end
+
+      shellcode_with_nops
     end
 
     # This method runs a specified encoder, for a number of defined iterations against the shellcode.
