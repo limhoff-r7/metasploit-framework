@@ -19,7 +19,7 @@ describe Msf::PayloadGenerator, :ui do
     end
 
     let(:payload) do
-      'stages/java/meterpreter/reverse_tcp'
+      'java/meterpreter/reverse_tcp'
     end
 
     let(:platform) do
@@ -44,7 +44,7 @@ describe Msf::PayloadGenerator, :ui do
   let(:iterations) { 1 }
   let(:keep) { false }
   let(:nops) { 0 }
-  let(:payload) { "stages/windows/meterpreter/reverse_tcp" }
+  let(:payload) { "windows/meterpreter/reverse_tcp" }
   let(:platform) { "Windows" }
   let(:space) { 1073741824 }
   let(:stdin) { nil }
