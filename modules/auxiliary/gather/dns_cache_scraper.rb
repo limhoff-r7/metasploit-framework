@@ -29,7 +29,7 @@ class Metasploit3 < Msf::Auxiliary
 
     register_options([
         OptString.new('DOMAIN', [ false, "Domain name to query for"]),
-        OptPath.new('WORDLIST', [ false, "Wordlist for domain name queries", ::File.join(Msf::Config.data_directory, "wordlists", "av-update-urls.txt")]),
+        OptPath.new('WORDLIST', [ false, "Wordlist for domain name queries", Metasploit::Framework.pathnames.wordlists.join("av-update-urls.txt").to_path]),
         OptAddress.new('NS', [ true, "Specify the nameserver to use for queries" ]),
       ], self.class)
 
