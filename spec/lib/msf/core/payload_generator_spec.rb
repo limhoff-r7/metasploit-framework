@@ -48,7 +48,7 @@ describe Msf::PayloadGenerator, :ui do
   let(:platform) { "Windows" }
   let(:space) { 1073741824 }
   let(:stdin) { nil }
-  let(:template) { File.join(Msf::Config.data_directory, "templates", "template_x86_windows.exe") }
+  let(:template) { Metasploit::Framework.pathnames.data.join("templates", "template_x86_windows.exe").to_path }
   let(:generator_opts) {
     {
         add_code: add_code,
