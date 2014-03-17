@@ -88,8 +88,8 @@ module Msf::Post::Windows::LDAP
       super
       register_options(
       [
-        OptString.new('DOMAIN', [false, 'The domain to query or distinguished name (e.g. DC=test,DC=com)', nil]),
-        OptInt.new('MAX_SEARCH', [true, 'Maximum values to retrieve, 0 for all.', 500]),
+        Msf::OptString.new('DOMAIN', [false, 'The domain to query or distinguished name (e.g. DC=test,DC=com)', nil]),
+        Msf::OptInt.new('MAX_SEARCH', [true, 'Maximum values to retrieve, 0 for all.', 500]),
       ], self.class)
     end
 

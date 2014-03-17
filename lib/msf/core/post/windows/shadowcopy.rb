@@ -14,7 +14,7 @@ module Msf::Post::Windows::ShadowCopy
     super
 
     register_options([
-      OptInt.new("TIMEOUT", [ true, "Timeout for WMI command in seconds", 60 ])
+      Msf::OptInt.new("TIMEOUT", [ true, "Timeout for WMI command in seconds", 60 ])
     ], self.class)
   end
 

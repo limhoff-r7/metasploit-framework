@@ -12,11 +12,11 @@ module Msf::Post::Windows::WMIC
     super
 
     register_options([
-                         OptString.new('SMBUser', [ false, 'The username to authenticate as' ]),
-                         OptString.new('SMBPass', [ false, 'The password for the specified username' ]),
-                         OptString.new('SMBDomain',  [ false, 'The Windows domain to use for authentication' ]),
-                         OptAddress.new("RHOST", [ true, "Target address range", "localhost" ]),
-                         OptInt.new("TIMEOUT", [ true, "Timeout for WMI command in seconds", 10 ])
+                         Msf::OptString.new('SMBUser', [ false, 'The username to authenticate as' ]),
+                         Msf::OptString.new('SMBPass', [ false, 'The password for the specified username' ]),
+                         Msf::OptString.new('SMBDomain',  [ false, 'The Windows domain to use for authentication' ]),
+                         Msf::OptAddress.new("RHOST", [ true, "Target address range", "localhost" ]),
+                         Msf::OptInt.new("TIMEOUT", [ true, "Timeout for WMI command in seconds", 10 ])
                      ], self.class)
   end
 
