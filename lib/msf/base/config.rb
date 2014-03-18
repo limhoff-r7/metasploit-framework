@@ -104,13 +104,6 @@ class Config < Hash
     self.new.history_file
   end
 
-  # Initializes configuration, creating directories as necessary.
-  #
-  # @return [void]
-  def self.init
-    self.new.init
-  end
-
   # Loads configuration from the supplied file path, or the default one if
   # none is specified.
   #
@@ -215,20 +208,6 @@ class Config < Hash
   # @return [String] path to user-specific script directory.
   def user_script_directory
     config_directory + FileSep + "scripts"
-  end
-
-  #
-  # Initializes configuration, creating directories as necessary.
-  #
-  # @return [void]
-  def init
-    FileUtils.mkdir_p(config_directory)
-    FileUtils.mkdir_p(log_directory)
-    FileUtils.mkdir_p(session_log_directory)
-    FileUtils.mkdir_p(loot_directory)
-    FileUtils.mkdir_p(local_directory)
-    FileUtils.mkdir_p(user_module_directory)
-    FileUtils.mkdir_p(user_plugin_directory)
   end
 
   # Loads configuration from the supplied file path, or the default one if

@@ -46,14 +46,10 @@ class Driver < Metasploit::Framework::UI::Driver
     if(opts[:framework])
       self.framework = opts[:framework]
     else
-      # Initialize configuration
-      Msf::Config.init
-
-      # Initialize logging
-      initialize_logging
-
-      # Initialize attributes
       self.framework = Msf::Simple::Framework.create
+      framework.pathnames.make
+
+      initialize_logging
     end
 
     # Initialize the console count
