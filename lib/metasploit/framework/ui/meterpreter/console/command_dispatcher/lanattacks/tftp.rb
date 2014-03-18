@@ -1,21 +1,15 @@
 # -*- coding: binary -*-
-require 'rex/post/meterpreter'
-
-module Rex
-module Post
-module Meterpreter
-module Ui
 
 ###
 #
 # The TFTP portion of the lanattacks extension.
 #
 ###
-class Console::CommandDispatcher::Lanattacks::Tftp
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks::Tftp
 
-  Klass = Console::CommandDispatcher::Lanattacks::Tftp
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks::Tftp
 
-  include Console::CommandDispatcher
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
   #
   # List of supported commands.
@@ -151,9 +145,3 @@ class Console::CommandDispatcher::Lanattacks::Tftp
   end
 
 end
-
-end
-end
-end
-end
-

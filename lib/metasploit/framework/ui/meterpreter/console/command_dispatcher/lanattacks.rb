@@ -1,22 +1,17 @@
 # -*- coding: binary -*-
 require 'rex/post/meterpreter'
 
-module Rex
-module Post
-module Meterpreter
-module Ui
-
 ###
 #
 # Lanattacks extension.
 #
 ###
-class Console::CommandDispatcher::Lanattacks
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks
 
-  require 'rex/post/meterpreter/ui/console/command_dispatcher/lanattacks/dhcp'
-  require 'rex/post/meterpreter/ui/console/command_dispatcher/lanattacks/tftp'
+  require 'metasploit/framework/ui/meterpreter/console/command_dispatcher/lanattacks/dhcp'
+  require 'metasploit/framework/ui/meterpreter/console/command_dispatcher/lanattacks/tftp'
 
-  Klass = Console::CommandDispatcher::Lanattacks
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks
 
   Dispatchers =
     [
@@ -24,7 +19,7 @@ class Console::CommandDispatcher::Lanattacks
       Klass::Tftp
     ]
 
-  include Console::CommandDispatcher
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
   #
   # Initializes an instance of the lanattacks command interaction.
@@ -52,9 +47,4 @@ class Console::CommandDispatcher::Lanattacks
     "Lanattacks extension"
   end
 
-end
-
-end
-end
-end
 end

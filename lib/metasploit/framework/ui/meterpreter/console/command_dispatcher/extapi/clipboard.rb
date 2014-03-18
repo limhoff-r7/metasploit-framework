@@ -1,20 +1,15 @@
 # -*- coding: binary -*-
-require 'rex/post/meterpreter'
 
-module Rex
-module Post
-module Meterpreter
-module Ui
 ###
 #
 # Extended API window management user interface.
 #
 ###
-class Console::CommandDispatcher::Extapi::Clipboard
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Extapi::Clipboard
 
-  Klass = Console::CommandDispatcher::Extapi::Clipboard
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Extapi::Clipboard
 
-  include Console::CommandDispatcher
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
   #
   # List of supported commands.
@@ -436,9 +431,3 @@ private
   end
 
 end
-
-end
-end
-end
-end
-

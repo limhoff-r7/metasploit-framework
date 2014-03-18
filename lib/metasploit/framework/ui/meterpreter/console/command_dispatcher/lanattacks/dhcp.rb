@@ -1,21 +1,16 @@
 # -*- coding: binary -*-
 require 'rex/post/meterpreter'
 
-module Rex
-module Post
-module Meterpreter
-module Ui
-
 ###
 #
 # The DHCP portion of the lanattacks extension.
 #
 ###
-class Console::CommandDispatcher::Lanattacks::Dhcp
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks::Dhcp
 
-  Klass = Console::CommandDispatcher::Lanattacks::Dhcp
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Lanattacks::Dhcp
 
-  include Console::CommandDispatcher
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
   #
   # List of supported commands.
@@ -246,9 +241,3 @@ class Console::CommandDispatcher::Lanattacks::Dhcp
   end
 
 end
-
-end
-end
-end
-end
-

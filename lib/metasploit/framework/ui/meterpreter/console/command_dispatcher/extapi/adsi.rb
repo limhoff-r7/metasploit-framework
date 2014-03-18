@@ -1,21 +1,15 @@
 # -*- coding: binary -*-
-require 'rex/post/meterpreter'
-
-module Rex
-module Post
-module Meterpreter
-module Ui
 
 ###
 #
 # Extended API ADSI management user interface.
 #
 ###
-class Console::CommandDispatcher::Extapi::Adsi
+class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Extapi::Adsi
 
-  Klass = Console::CommandDispatcher::Extapi::Adsi
+  Klass = Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Extapi::Adsi
 
-  include Console::CommandDispatcher
+  include Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher
 
   # Zero indicates "no limit"
   DEFAULT_MAX_RESULTS = 0
@@ -188,11 +182,4 @@ class Console::CommandDispatcher::Extapi::Adsi
 
     return true
   end
-
 end
-
-end
-end
-end
-end
-
