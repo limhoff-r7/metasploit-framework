@@ -8,6 +8,8 @@ describe Msf::Auxiliary::AuthBrute do
     end
   end
 
+  include_context 'Msf::Logging'
+
   subject(:auxiliary_metasploit_instance) do
     auxiliary_metasploit_class.new(framework: framework)
   end

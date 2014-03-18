@@ -10,6 +10,8 @@ describe Msf::RPC::RPC_Core do
     end
   end
 
+  include_context 'Msf::Logging'
+
   subject(:rpc_core) do
     described_class.new(service)
   end

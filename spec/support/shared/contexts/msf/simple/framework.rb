@@ -10,6 +10,8 @@ shared_context 'Msf::Simple::Framework' do
     end
   end
 
+  include_context 'Msf::Logging'
+
   let(:framework) do
     FactoryGirl.create(:msf_simple_framework)
   end

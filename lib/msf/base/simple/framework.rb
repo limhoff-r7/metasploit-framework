@@ -161,14 +161,14 @@ module Framework
   # Loads configuration, populates the root data store, etc.
   #
   def load_config
-    data_store.from_file(Msf::Config.config_file, 'framework/core')
+    data_store.from_file(pathnames.file, 'framework/core')
   end
 
   #
   # Saves the module's data_store to the file
   #
   def save_config
-    data_store.to_file(Msf::Config.config_file, 'framework/core')
+    data_store.to_file(pathnames.file, 'framework/core')
   end
 
   #

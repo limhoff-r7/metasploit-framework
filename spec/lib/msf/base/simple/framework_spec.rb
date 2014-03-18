@@ -25,6 +25,8 @@ describe Msf::Simple::Framework do
   end
 
   context 'create' do
+    include_context 'Msf::Logging'
+
     context 'with options' do
       subject(:create) do
         described_class.create(options)
@@ -136,8 +138,11 @@ describe Msf::Simple::Framework do
             create
           end
 
-          it 'should simplify Msf::Framework using options' do
-            described_class.should_receive(:simplify).with(an_instance_of(Msf::Framework), options)
+          it 'should simplify Msf::Framework using options containing only DeferModuleLoads, DisableLogging, and OnCreateProc' do
+            described_class.should_receive(:simplify).with(
+                an_instance_of(Msf::Framework),
+                options.slice('DeferModuleLoads', 'DisableLogging', 'OnCreateProc')
+            )
 
             create
           end
@@ -181,6 +186,77 @@ describe Msf::Simple::Framework do
       it 'should be_a Msf::Simple::Framework' do
         create.should be_a Msf::Simple::Framework
       end
+    end
+  end
+
+  context 'load_config' do
+    include_context 'Msf::Simple::Framework'
+
+    subject(:load_config) do
+      framework.load_config
+    end
+
+    #
+    # lets
+    #
+
+    let(:key) do
+      'KEY'
+    end
+
+    let(:value) do
+      'value'
+    end
+
+    #
+    # Callbacks
+    #
+
+    before(:each) do
+      framework.pathnames.file.open('wb') { |f|
+        f.puts "[framework/core]"
+        f.puts "#{key}=#{value}"
+      }
+    end
+
+    it "loads 'framework/core' group from framework.pathnames.file" do
+      load_config
+
+      expect(framework.data_store[key]).to eq(value)
+    end
+  end
+
+  context 'save_config' do
+    include_context 'Msf::Simple::Framework'
+
+    subject(:save_config) do
+      framework.save_config
+    end
+
+    #
+    # lets
+    #
+
+    let(:key) do
+      'KEY'
+    end
+
+    let(:value) do
+      'value'
+    end
+
+    #
+    # Callbacks
+    #
+
+    before(:each) do
+      framework.data_store[key] = value
+    end
+
+    it "saves 'framework/core' to framework.pathnames.file" do
+      save_config
+
+      expect(framework.pathnames.file.read).to eq("[framework/core]\n#{key}=#{value}\n\n")
     end
   end
 end
