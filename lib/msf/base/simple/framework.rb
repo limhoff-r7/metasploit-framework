@@ -89,7 +89,9 @@ module Framework
   #
   # Extends a framework object that may already exist.
   #
-  def self.simplify(framework, opts)
+  def self.simplify(framework, options={})
+    options.assert_valid_keys('ConfigDirectory', 'DeferModuleLoads', 'DisableLogging', 'OnCreateProc',)
+
     framework.extend Msf::Simple::Framework
     framework.plugins.extend Msf::Simple::Framework::PluginManager
 
@@ -97,18 +99,18 @@ module Framework
     framework.init_simplified()
 
     # Call the creation procedure if one was supplied
-    if (opts['OnCreateProc'])
-      opts['OnCreateProc'].call(framework)
+    if (options['OnCreateProc'])
+      options['OnCreateProc'].call(framework)
     end
 
     # Change to a different configuration path if requested
-    if opts['ConfigDirectory']
-      Msf::Config::Defaults['ConfigDirectory'] = opts['ConfigDirectory']
+    if options['ConfigDirectory']
+      Msf::Config::Defaults['ConfigDirectory'] = options['ConfigDirectory']
     end
 
     # Initialize configuration and logging
     Msf::Config.init
-    Msf::Logging.init unless opts['DisableLogging']
+    Msf::Logging.init unless options['DisableLogging']
 
     # Load the configuration
     framework.load_config
@@ -117,7 +119,7 @@ module Framework
     # instance
     framework.events.add_general_subscriber(framework)
 
-    unless opts['DeferModuleLoads']
+    unless options['DeferModuleLoads']
       framework.add_module_paths
     end
 
