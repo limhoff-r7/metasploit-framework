@@ -108,7 +108,12 @@ module Framework
 
     # Initialize configuration and logging
     framework.pathnames.make
-    Msf::Logging.init unless options['DisableLogging']
+
+    unless options['DisableLogging']
+      Msf::Logging.setup!(
+          logs_pathname: framework.pathnames.logs
+      )
+    end
 
     # Load the configuration
     framework.load_config
