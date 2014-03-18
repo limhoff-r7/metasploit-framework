@@ -72,6 +72,8 @@ module Framework
   # @raise [Metasploit::Model::Invalid] unless :module_types is a subset of `Metasploit::Model::Module::Type::ALL`.
   # @raise [Metasploit::Model::Invalid] unless :module_types has at least one module type in it.
   def self.create(options = {})
+    options.assert_valid_keys('DeferModuleLoads', 'DisableDatabase', 'DisableLogging', 'OnCreateProc', :database_disabled, :module_types, :pathnames)
+
     # force to Boolean
     database_disabled = !!options.fetch('DisableDatabase', false)
     database_disabled = options.fetch(:database_disabled, database_disabled)
@@ -83,7 +85,7 @@ module Framework
     )
     framework.valid!
 
-    simplify_options = options.slice('ConfigDirectory', 'DeferModuleLoads', 'DisableLogging', 'OnCreateProc')
+    simplify_options = options.slice('DeferModuleLoads', 'DisableLogging', 'OnCreateProc')
     simplify(framework, simplify_options)
   end
 
