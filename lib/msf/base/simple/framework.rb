@@ -83,14 +83,15 @@ module Framework
     )
     framework.valid!
 
-    simplify(framework, options)
+    simplify_options = options.slice('ConfigDirectory', 'DeferModuleLoads', 'DisableLogging', 'OnCreateProc')
+    simplify(framework, simplify_options)
   end
 
   #
   # Extends a framework object that may already exist.
   #
   def self.simplify(framework, options={})
-    options.assert_valid_keys('ConfigDirectory', 'DeferModuleLoads', 'DisableLogging', 'OnCreateProc',)
+    options.assert_valid_keys('ConfigDirectory', 'DeferModuleLoads', 'DisableLogging', 'OnCreateProc')
 
     framework.extend Msf::Simple::Framework
     framework.plugins.extend Msf::Simple::Framework::PluginManager
