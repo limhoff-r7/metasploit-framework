@@ -3,10 +3,11 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core'
-require 'msf/core/handler/find_port'
 require 'msf/base/sessions/command_shell'
 require 'msf/base/sessions/command_shell_options'
+require 'msf/core/handler/find_port'
+require 'msf/core/payload/bsd'
+require 'msf/core/payload/single'
 
 module Metasploit3
   extend  Metasploit::Framework::Module::Ancestor::Handler
