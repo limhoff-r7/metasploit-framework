@@ -85,10 +85,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # The list of stages that have been loaded.
-  #
-  attr_reader :stages
-  #
   # The list of singles that have been loaded.
   #
   attr_reader :singles
@@ -106,15 +102,8 @@ protected
     return info_by_payload_name_by_payload_type[Payload::Type::Single] || {}
   end
 
-  #
-  # Return the hash of stage payloads
-  #
-  def _stages
-    return info_by_payload_name_by_payload_type[Payload::Type::Stage] || {}
-  end
-
   attr_accessor :info_by_payload_name_by_payload_type # :nodoc:
-  attr_writer   :stages, :singles, :sizes # :nodoc:
+  attr_writer   :singles, :sizes # :nodoc:
   attr_accessor :_instances # :nodoc:
 
 end
