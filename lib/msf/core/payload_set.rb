@@ -73,13 +73,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # Returns the hash of payload stagers that have been loaded.
-  #
-  def stagers
-    _stagers
-  end
-
-  #
   # When a payload module is reloaded, the blob cache entry associated with
   # it must be removed (if one exists)
   #
@@ -111,13 +104,6 @@ protected
   #
   def _singles
     return info_by_payload_name_by_payload_type[Payload::Type::Single] || {}
-  end
-
-  #
-  # Return the hash of stager payloads
-  #
-  def _stagers
-    return info_by_payload_name_by_payload_type[Payload::Type::Stager] || {}
   end
 
   #
