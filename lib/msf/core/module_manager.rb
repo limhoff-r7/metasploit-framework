@@ -31,9 +31,6 @@ class Msf::ModuleManager < Metasploit::Model::Base
   require 'msf/core/module_manager/module_sets'
   include Msf::ModuleManager::ModuleSets
 
-  require 'msf/core/module_manager/reloading'
-  include Msf::ModuleManager::Reloading
-
   #
   # Attributes
   #
