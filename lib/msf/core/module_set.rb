@@ -115,17 +115,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     each_module_list(mod_sorted, opts, &block)
   end
 
-  # Custom each_module filtering if an advanced set supports doing extended filtering.
-  #
-  # @param opts (see #each_module_list)
-  # @param [String] name the module reference name
-  # @param [Array<String, Class>] entry pair of the module reference name and the module class.
-  # @return [false] if the module should not be filtered; it should be yielded by {#each_module_list}.
-  # @return [true] if the module should be filtered; it should not be yielded by {#each_module_list}.
-  def each_module_filter(opts, name, entry)
-    return false
-  end
-
   # Forces all modules in this set to be loaded.
   #
   # @return [void]
@@ -196,9 +185,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
         next if ((platforms_by_module[mod] & opts['Platform']).empty? == true)
       end
-
-      # Custom filtering
-      next if (each_module_filter(opts, name, entry) == true)
 
       block.call(name, mod)
     }

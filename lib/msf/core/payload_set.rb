@@ -73,14 +73,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # Performs custom filtering during each_module enumeration.  This allows us
-  # to filter out certain stagers as necessary.
-  #
-  def each_module_filter(opts, name, mod)
-    return false
-  end
-
-  #
   # This method builds the hash of alias names based on all the permutations
   # of singles, stagers, and stages.
   #
