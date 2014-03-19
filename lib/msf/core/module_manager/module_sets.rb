@@ -57,14 +57,4 @@ module Msf::ModuleManager::ModuleSets
   def module_names(set)
     module_set_by_module_type[set] ? module_set_by_module_type[set].keys.dup : []
   end
-
-  # Whether the given `module_type` is enabled and being managed by this module
-  # manager.
-  #
-  # @param module_type [String] a module type
-  # @return [Boolean]
-  # @see Metasploit::Model::Module::Type
-  def module_type_enabled?(module_type)
-    module_set_by_module_type[module_type].nil?
-  end
 end
