@@ -141,23 +141,6 @@ protected
     return info_by_payload_name_by_payload_type[Payload::Type::Stage] || {}
   end
 
-  #
-  # Builds a duplicate, extended version of the Payload base
-  # class using the supplied modules.
-  #
-  def build_payload(*modules)
-    klass = Class.new(Payload)
-
-    # Remove nil modules
-    modules.compact!
-
-    # Include the modules supplied to us with the mad skillz
-    # spoonfu style
-    klass.include(*modules.reverse)
-
-    return klass
-  end
-
   attr_accessor :info_by_payload_name_by_payload_type # :nodoc:
   attr_writer   :stages, :singles, :sizes # :nodoc:
   attr_accessor :_instances # :nodoc:
