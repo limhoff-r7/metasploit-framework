@@ -100,41 +100,4 @@ class Msf::ModuleManager < Metasploit::Model::Base
       end
     end
   end
-
-  protected
-
-  # This method automatically subscribes a module to whatever event
-  # providers it wishes to monitor.  This can be used to allow modules
-  # to automatically execute or perform other tasks when certain
-  # events occur.  For instance, when a new host is detected, other
-  # aux modules may wish to run such that they can collect more
-  # information about the host that was detected.
-  #
-  # @param klass [Class<Msf::Module>] The module class
-  # @return [void]
-  def auto_subscribe_module(klass)
-    # If auto-subscribe has been disabled
-    if (framework.datastore['DisableAutoSubscribe'] and
-        framework.datastore['DisableAutoSubscribe'] =~ /^(y|1|t)/)
-      return
-    end
-
-    # If auto-subscription is enabled (which it is by default), figure out
-    # if it subscribes to any particular interfaces.
-    inst = nil
-
-    #
-    # Exploit event subscriber check
-    #
-    if (klass.include?(Msf::ExploitEvent) == true)
-      framework.events.add_exploit_subscriber((inst) ? inst : (inst = klass.new))
-    end
-
-    #
-    # Session event subscriber check
-    #
-    if (klass.include?(Msf::SessionEvent) == true)
-      framework.events.add_session_subscriber((inst) ? inst : (inst = klass.new))
-    end
-  end
 end
