@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Metasploit::Framework::Thread::Manager do
+  include_context 'Msf::Logging'
+
   subject(:manager) do
     FactoryGirl.create(:metasploit_framework_thread_manager)
   end
