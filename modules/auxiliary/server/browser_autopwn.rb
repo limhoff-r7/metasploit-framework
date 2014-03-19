@@ -286,7 +286,8 @@ class Metasploit3 < Msf::Auxiliary
     else
       @exploits[name] = mod.new
     end
-    @exploits[name] = framework.modules.reload_module(@exploits[name])
+
+    raise NotImplementedError, "Determine why module was being created and then immediately reloaded"
 
     # Reloading failed
     unless @exploits[name]

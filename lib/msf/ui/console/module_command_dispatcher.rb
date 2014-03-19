@@ -67,21 +67,7 @@ module Msf::Ui::Console::ModuleCommandDispatcher
     print_status('Reloading module...')
 
     original_metasploit_instance = driver.metasploit_instance
-    reloaded_metasploit_instance = framework.modules.reload_module(original_metasploit_instance)
-
-    unless reloaded_metasploit_instance
-      error = framework.modules.module_load_error_by_path[original_metasploit_instance.file_path]
-
-      print_error("Failed to reload module: #{error}")
-
-      driver.metasploit_instance = original_metasploit_instance
-    else
-      driver.metasploit_instance = reloaded_metasploit_instance
-
-      driver.metasploit_instance.init_ui(driver.input, driver.output)
-    end
-
-    reloaded_metasploit_instance
+    raise NotImplementedError, "Use module cache to reload driver.metasploit_instance"
   end
 
 end

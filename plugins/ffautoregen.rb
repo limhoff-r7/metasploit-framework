@@ -55,6 +55,7 @@ module Msf
             last = mt
 
             omod = metasploit_instance
+            raise NotImplementedError, "Reload module using module cache"
             nmod = framework.modules.reload_module(metasploit_instance)
             if not nmod
               print_line("Error: Failed to reload module, trying again on next change...")

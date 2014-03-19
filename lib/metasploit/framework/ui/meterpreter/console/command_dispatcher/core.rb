@@ -536,23 +536,7 @@ class Metasploit::Framework::UI::Meterpreter::Console::CommandDispatcher::Core
       # Framework instance.  If we don't, or if no such module exists,
       # fall back to using the scripting interface.
       if (msf_loaded? and mod = client.framework.modules.create(script_name))
-        original_mod = mod
-        reloaded_mod = client.framework.modules.reload_module(original_mod)
-
-        unless reloaded_mod
-          error = client.framework.modules.module_load_error_by_path[original_mod.file_path]
-          print_error("Failed to reload module: #{error}")
-
-          return
-        end
-
-        opts = (args + [ "SESSION=#{client.sid}" ]).join(',')
-        reloaded_mod.run_simple(
-          #'RunAsJob' => true,
-          'LocalInput'  => shell.input,
-          'LocalOutput' => shell.output,
-          'OptionStr'   => opts
-        )
+        raise NotImplementedError, "Reload module using module cache"
       else
         # the rest of the arguments get passed in through the binding
         client.execute_script(script_name, args)
