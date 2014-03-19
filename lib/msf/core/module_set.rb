@@ -158,33 +158,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   def on_module_reload(mod)
   end
 
-  # @note Caller is should ensure that `module_ancestor_load` is valid calling {#derive_module_class}.
-  #
-  # Derives `Metasploit::Model::Module::Class` from the {Metasploit::Framework::Module::Ancestor::Load#module_ancestor}
-  # and {Metasploit::Framework::Module::Ancestor::Load#metasploit_module}.
-  #
-  # @param module_ancestor_load [Metasploit::Framework::Module::Ancestor::Load]
-  # @return [Metasploit::Model::Module::Class]
-  def derive_module_class(module_ancestor_load)
-    # TODO generalize to work with or with ActiveRecord for in-memory models
-    ActiveRecord::Base.connection_pool.with_connection do
-      ActiveRecord::Base.transaction do
-        metasploit_class = module_ancestor_load.metasploit_class
-
-        if metasploit_class
-          module_ancestor = module_ancestor_load.module_ancestor
-
-          # TODO figure out update and collisiion logic for Mdm::Module::Class.  I think the logic for Mdm::Module::Ancestor will make it just work.
-          module_class = module_ancestor.descendants.first_or_initialize { |module_class|
-            module_class.ancestors << module_ancestor
-          }
-
-          metasploit_class.cache_module_class(module_class)
-        end
-      end
-    end
-  end
-
   protected
 
   # Enumerates the modules in the supplied array with possible limiting factors.
