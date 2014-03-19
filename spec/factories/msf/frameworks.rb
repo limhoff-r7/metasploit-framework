@@ -18,6 +18,5 @@ FactoryGirl.define do
     end
 
     database_disabled { false }
-    module_types { Metasploit::Model::Module::Type::ALL }
   end
 end

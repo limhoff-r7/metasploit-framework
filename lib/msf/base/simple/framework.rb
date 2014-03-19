@@ -80,8 +80,7 @@ module Framework
 
     framework = Msf::Framework.new(
         database_disabled: database_disabled,
-        pathnames: options[:pathnames],
-        module_types: options[:module_types]
+        pathnames: options[:pathnames]
     )
     framework.valid!
 

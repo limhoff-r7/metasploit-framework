@@ -1,22 +1,6 @@
 shared_examples_for 'Msf::Framework::Modules' do
   it { should be_a Msf::Framework::Modules }
 
-  context '#module_types' do
-    subject(:module_types) do
-      framework.module_types
-    end
-
-    it 'should default to Metasploit::Model::Module::Type::ALL' do
-      module_types.should == Metasploit::Model::Module::Type::ALL
-    end
-
-    it 'should be memoized' do
-      memoized = double('')
-      framework.instance_variable_set :@module_types, memoized
-      module_types.should == memoized
-    end
-  end
-
   context '#modules' do
     subject(:modules) do
       framework.modules

@@ -128,16 +128,6 @@ describe Msf::Simple::Framework do
             Metasploit::Model::Module::Type::ALL.sample(number)
           end
 
-          it 'should pass module_types option to Msf::Framework.new' do
-            Msf::Framework.should_receive(:new).with(
-                hash_including(
-                    module_types: module_types
-                )
-            ).and_call_original
-
-            create
-          end
-
           it 'should simplify Msf::Framework using options containing only DeferModuleLoads, DisableLogging, and OnCreateProc' do
             described_class.should_receive(:simplify).with(
                 an_instance_of(Msf::Framework),
@@ -145,18 +135,6 @@ describe Msf::Simple::Framework do
             )
 
             create
-          end
-        end
-
-        context 'without valid module types' do
-          let(:module_types) do
-            ['not_a_module_type']
-          end
-
-          it 'should raise Metasploit::Model::Invalid' do
-            expect {
-              create
-            }.to raise_error(Metasploit::Model::Invalid)
           end
         end
       end

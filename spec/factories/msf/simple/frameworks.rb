@@ -17,7 +17,6 @@ FactoryGirl.define do
       klass.create(
           'DeferModuleLoads' => defer_module_loads,
           database_disabled: database_disabled,
-          module_types: module_types,
           pathnames: pathnames,
           'OnCreateProc' => on_create_proc
       )

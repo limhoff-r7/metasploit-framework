@@ -28,16 +28,6 @@ describe Msf::Framework do
 
       it { should be_valid }
 
-      context '#module_types' do
-        subject(:module_types) do
-          msf_framework.module_types
-        end
-
-        it 'should have all module types' do
-          expect(module_types).to match_array(Metasploit::Model::Module::Type::ALL)
-        end
-      end
-
       context '#pathnames' do
         subject(:pathnames) do
           msf_framework.pathnames
