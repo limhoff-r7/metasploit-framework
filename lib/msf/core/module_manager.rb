@@ -18,8 +18,6 @@ require 'msf/core/module_set'
 #
 # @todo add unload support
 class Msf::ModuleManager < Metasploit::Model::Base
-  include Enumerable
-
   require 'msf/core/payload_set'
 
   require 'msf/core/module_manager/cache'
@@ -87,17 +85,5 @@ class Msf::ModuleManager < Metasploit::Model::Base
     end
 
     metasploit_instance
-  end
-
-  # Iterate over all modules in all sets
-  #
-  # @yieldparam full_name [String] The module's reference full_name
-  # @yieldparam mod_class [Msf::Module] A module class
-  def each
-    module_set_by_module_type.each do |type, set|
-      set.each do |name, mod_class|
-        yield name, mod_class
-      end
-    end
   end
 end
