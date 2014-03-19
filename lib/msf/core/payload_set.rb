@@ -73,20 +73,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # Returns a single read-only instance of the supplied payload name such
-  # that specific attributes, like compatibility, can be evaluated.  The
-  # payload instance returned should NOT be used for anything other than
-  # reading.
-  #
-  def instance(name)
-    if (self._instances[name] == nil)
-      self._instances[name] = create(name)
-    end
-
-    self._instances[name]
-  end
-
-  #
   # Returns the hash of payload stagers that have been loaded.
   #
   def stagers
