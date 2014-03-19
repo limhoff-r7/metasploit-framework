@@ -232,36 +232,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # Looks for a payload that matches the specified requirements and
-  # returns an instance of that payload.
-  #
-  def find_payload(platform, arch, handler, session, payload_type)
-    # Pre-filter based on platform and architecture.
-    each_module(
-      'Platform' => platform,
-      'Arch'     => arch) { |name, mod|
-
-      p = mod.new
-
-      # We can't substitute one generic with another one.
-      next if (p.kind_of?(Msf::Payload::Generic))
-
-      # Check to see if the handler classes match.
-      next if (handler and not p.handler_klass.ancestors.include?(handler))
-
-      # Check to see if the session classes match.
-      next if (session and not p.session.ancestors.include?(session))
-
-      # Check for matching payload types
-      next if (payload_type and p.payload_type != payload_type)
-
-      return p
-    }
-
-    return nil
-  end
-
-  #
   # Looks for a payload from a given set that matches the specified requirements and
   # returns an instance of that payload.
   #
