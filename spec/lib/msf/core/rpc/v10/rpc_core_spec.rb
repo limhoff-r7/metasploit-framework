@@ -3,21 +3,10 @@ require 'spec_helper'
 require 'msf/core/rpc/v10/rpc_core'
 
 describe Msf::RPC::RPC_Core do
-  include_context 'Metasploit::Framework::Thread::Manager cleaner' do
-    let(:thread_manager) do
-      # don't initialize threads if the example hasn't
-      framework.instance_variable_get :@threads
-    end
-  end
-
-  include_context 'Msf::Logging'
+  include_context 'Msf::Simple::Framework'
 
   subject(:rpc_core) do
     described_class.new(service)
-  end
-
-  let(:framework) do
-    FactoryGirl.create(:msf_simple_framework)
   end
 
   let(:service) do
