@@ -4,7 +4,8 @@ module Metasploit::Framework::Spec
       'Profile',
       'DatabaseCleaner',
       'FactoryGirl',
-      'Constants'
+      'Constants',
+      'Logging'
   ]
 
   # In order that allows later paths to modify early path's factories
