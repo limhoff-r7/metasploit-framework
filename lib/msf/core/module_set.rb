@@ -140,13 +140,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     self.mod_extensions    = []
   end
 
-  # Gives the module set an opportunity to handle a module reload event
-  #
-  # @param [Class] mod the module class: a subclass of Msf::Module
-  # @return [void]
-  def on_module_reload(mod)
-  end
-
   protected
 
   # Enumerates the modules in the supplied array with possible limiting factors.

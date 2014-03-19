@@ -67,21 +67,6 @@ class PayloadSet < ModuleSet
     # Single instance cache of modules for use with doing quick referencing
     # of attributes that would require an instance.
     self._instances = {}
-
-    # Initializes an empty blob cache
-    @blob_cache = {}
-  end
-
-  #
-  # When a payload module is reloaded, the blob cache entry associated with
-  # it must be removed (if one exists)
-  #
-  def on_module_reload(mod)
-    @blob_cache.each_key do |key|
-      if key.start_with? mod.refname
-        @blob_cache.delete(key)
-      end
-    end
   end
 
   #
