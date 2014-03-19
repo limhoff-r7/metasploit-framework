@@ -72,54 +72,6 @@ class PayloadSet < ModuleSet
     @blob_cache = {}
   end
 
-  # This method is called when a new payload module class is loaded up.  For
-  # the payload set we simply create an instance of the class and do some
-  # magic to figure out if it's a single, stager, or stage.  Depending on
-  # which it is, we add it to the appropriate list.
-  #
-  # @param payload_module [::Module] The module name.
-  # @param reference_name [String] The module reference name.
-  # @param modinfo [Hash{String => Array}] additional information about the
-  #   module.
-  # @option modinfo [Array<String>] 'files' List of paths to the ruby source
-  #   files where +class_or_module+ is defined.
-  # @option modinfo [Array<String>] 'paths' List of module reference names.
-  # @option modinfo [String] 'type' The module type, should match positional
-  #   +type+ argument.
-  # @return [void]
-  def add_module(payload_module, reference_name, modinfo={})
-
-    if (md = reference_name.match(/^(singles|stagers|stages)#{File::SEPARATOR}(.*)$/))
-      payload_type_directory = md[1]
-      payload_name  = md[2]
-    end
-
-    # Duplicate the Payload base class and extend it with the module
-    # class that is passed in.  This allows us to inspect the actual
-    # module to see what type it is, and to grab other information for
-    # our own evil purposes.
-    instance = build_payload(payload_module).new
-
-    # Create an array of information about this payload module
-    pinfo =
-      [
-        payload_module,
-        instance.handler_klass,
-        instance.platform,
-        instance.arch,
-        instance,
-        modinfo
-      ]
-
-    # Use the module's preferred alias if it has one
-    payload_name = instance.alias if (instance.alias)
-
-    # Store the module and alias name for this payload.  We
-    # also convey other information about the module, such as
-    # the platforms and architectures it supports
-    info_by_payload_name_by_payload_type[instance.payload_type][payload_name] = pinfo
-  end
-
   #
   # This method adds a single payload to the set and adds it to the singles
   # hash.
