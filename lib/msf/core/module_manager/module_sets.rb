@@ -20,8 +20,6 @@ module Msf::ModuleManager::ModuleSets
         @module_set_class_by_module_type ||= Hash.new { |hash, module_type|
           hash[module_type] = Msf::ModuleSet
         }
-
-        @module_set_class_by_module_type[Metasploit::Model::Module::Type::PAYLOAD] = Msf::PayloadSet
       end
 
       @module_set_class_by_module_type

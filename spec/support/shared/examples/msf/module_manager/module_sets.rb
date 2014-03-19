@@ -40,7 +40,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
       module_manager.payloads
     end
 
-    it { should be_a Msf::PayloadSet }
+    it { should be_a Msf::ModuleSet }
     its(:module_type) { should == 'payload' }
   end
 

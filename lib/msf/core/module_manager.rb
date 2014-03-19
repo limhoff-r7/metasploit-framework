@@ -18,8 +18,6 @@ require 'msf/core/module_set'
 #
 # @todo add unload support
 class Msf::ModuleManager < Metasploit::Model::Base
-  require 'msf/core/payload_set'
-
   require 'msf/core/module_manager/cache'
   include Msf::ModuleManager::Cache
 

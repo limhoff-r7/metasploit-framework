@@ -473,9 +473,6 @@ protected
   #
   # If the payload has assembly that needs to be compiled, do so now.
   #
-  # Blobs will be cached in the framework's PayloadSet
-  #
-  # @see PayloadSet#check_blob_cache
   # @param assembly [String] Assembly code to be assembled into a raw payload
   # @param offset_relative_address_and_type_by_name [Hash{String => Array<(Integer, String)>}]
   # @return (see Metasploit::Framework::Payload::Assemble)
