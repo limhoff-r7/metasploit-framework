@@ -26,19 +26,6 @@ require 'simplecov'
 require 'metasploit/framework'
 require 'rspec/core'
 
-# Requires supporting ruby files with custom matchers and macros, etc,
-# in spec/support/ and its subdirectories.
-
-support_globs = Metasploit::Framework::Spec::ROOTED_MODULES.collect { |rooted|
-	rooted.root.join('spec', 'support', '**', '*.rb')
-}
-
-support_globs.each do |support_glob|
-	Dir.glob(support_glob) do |path|
-		require path
-	end
-end
-
 # Use a strict sanitizer to prevent wasting time trying to figure out why associations are nil after being built.  This
 # would normally be set in Rails in development.rb and test.rb environment files using
 # `config.active_record.mass_assignment_santizer = :strict`
@@ -59,3 +46,16 @@ end
 
 # Adds to RSpec configuration for different subsystems
 Metasploit::Framework::Spec.configure!
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+
+support_globs = Metasploit::Framework::Spec::ROOTED_MODULES.collect { |rooted|
+  rooted.root.join('spec', 'support', '**', '*.rb')
+}
+
+support_globs.each do |support_glob|
+  Dir.glob(support_glob) do |path|
+    require path
+  end
+end
