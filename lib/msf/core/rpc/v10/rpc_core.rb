@@ -38,7 +38,7 @@ class RPC_Core < RPC_Base
   end
 
   def rpc_reload_modules
-    framework.modules.reload_modules
+    raise NotImplementedError, "Reload modules using cache prefetching similar to msfconsole reload_all"
     rpc_module_stats()
   end
 

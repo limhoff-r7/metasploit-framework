@@ -16,29 +16,4 @@ module Msf::ModuleManager::Reloading
     loader = namespace_module.loader
     loader.reload_module(mod)
   end
-
-  # Reloads modules from all module paths
-  #
-  # @return (see Msf::ModuleManager::Loading#load_modules)
-  def reload_modules
-    module_set_by_module_type.each_value do |module_set|
-      module_set.clear
-    end
-
-    # default the count to zero the first time a type is accessed
-    count_by_type = Hash.new(0)
-
-    module_paths.each do |path|
-      path_count_by_type = load_modules(path, :force => true)
-
-      # merge count with count from other paths
-      path_count_by_type.each do |type, count|
-        count_by_type[type] += count
-      end
-    end
-
-    refresh_cache_from_module_files
-
-    count_by_type
-  end
 end
