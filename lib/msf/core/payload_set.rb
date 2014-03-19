@@ -73,28 +73,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # This method adds a stage payload to the set and adds it to the stages
-  # hash using the supplied handler type.
-  #
-  def add_stage(p, full_name, stage_name, handler_type, modinfo)
-    p.framework = framework
-    p.refname = full_name
-    p.file_path = modinfo['files'][0]
-
-    # Associate this stage's full name with the payload class in the set
-    self[full_name] = p
-
-    # Create the hash entry for this stage and then create
-    # the associated entry for the handler type
-    stages[stage_name] = {} if (!stages[stage_name])
-
-    # Add it to this stage's stager hash
-    stages[stage_name][handler_type] = p
-
-    dlog("Built staged payload #{full_name}.", 'core', LEV_2)
-  end
-
-  #
   # Returns a single read-only instance of the supplied payload name such
   # that specific attributes, like compatibility, can be evaluated.  The
   # payload instance returned should NOT be used for anything other than
