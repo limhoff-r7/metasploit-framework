@@ -39,7 +39,7 @@ module Msf::ModuleManager::ModuleSets
   end
 
   def module_set_by_module_type
-    @module_set_by_module_type ||= module_types.each_with_object({}) do |module_type, module_set_by_module_type|
+    @module_set_by_module_type ||= Metasploit::Model::Module::Type::ALL.each_with_object({}) do |module_type, module_set_by_module_type|
       module_set_class = self.class.module_set_class_by_module_type[module_type]
       module_set = module_set_class.new(
           module_manager: self,

@@ -44,12 +44,6 @@ class Msf::ModuleManager < Metasploit::Model::Base
   #   @return [Msf::Simple::Framework]
   attr_accessor :framework
 
-  # @!attribute [rw] module_types
-  #   The `Metasploit::Model::Module::Class#module_types` supported by this module manager.
-  #
-  #   @return [Array<String>] subset of `Metasploit::Model::Module::Type::ALL`.
-  attr_writer :module_types
-
   #
   # Methods
   #
@@ -118,21 +112,6 @@ class Msf::ModuleManager < Metasploit::Model::Base
         yield name, mod_class
       end
     end
-  end
-
-  def module_types
-    unless instance_variable_defined? :@module_types
-      if framework
-        @module_types = framework.module_types
-      end
-
-      # handles framework being nil and framework.module_types being nil
-      unless @module_types
-        @module_types = Metasploit::Model::Module::Type::ALL
-      end
-    end
-
-    @module_types
   end
 
   protected
