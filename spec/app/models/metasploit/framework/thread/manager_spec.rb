@@ -339,6 +339,7 @@ describe Metasploit::Framework::Thread::Manager do
 
             manager.should_not be_registered
           }
+          thread.join
         end
       end
     end
