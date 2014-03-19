@@ -100,6 +100,8 @@ describe Metasploit::Framework::Module::Cache, :cache do
 
   context 'factories' do
     context 'metasploit_framework_module_cache' do
+      include_context 'Msf::Logging'
+
       subject(:metasploit_framework_module_cache) do
         FactoryGirl.build(:metasploit_framework_module_cache)
       end
@@ -245,6 +247,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
   context '#prefetch' do
     context 'with factories' do
       include_context 'database cleaner'
+      include_context 'Msf::Logging'
 
       #
       # lets
@@ -474,6 +477,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
     context 'with real module files', :content do
       include_context 'database cleaner', after: :all
       include_context 'Metasploit::Framework::Spec::Constants cleaner', after: :all
+      include_context 'Msf::Logging'
 
       module_path_real_pathname = Metasploit::Framework.root.join('modules')
 
@@ -531,6 +535,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
   context '#write_module_ancestor_load' do
     include_context 'database cleaner'
     include_context 'Metasploit::Framework::Spec::Constants cleaner'
+    include_context 'Msf::Logging'
 
     subject(:write_module_ancestor_load) do
       module_cache.write_module_ancestor_load(module_ancestor_load)

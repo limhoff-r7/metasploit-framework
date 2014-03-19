@@ -8,6 +8,7 @@ describe Metasploit::Framework::Module::Path::Load, :cache do
   context 'factories' do
     context 'metasploit_framework_module_path_load' do
       include_context 'database cleaner'
+      include_context 'Msf::Logging'
 
       subject(:metasploit_framework_module_path_load) do
         FactoryGirl.build(:metasploit_framework_module_path_load)
@@ -41,6 +42,7 @@ describe Metasploit::Framework::Module::Path::Load, :cache do
 
   context '#each_module_ancestor_load' do
     include_context 'database cleaner'
+    include_context 'Msf::Logging'
 
     subject(:each_module_ancestor_load) do
       module_path_load.each_module_ancestor_load

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Metasploit::Framework::Module::Class::Load::Payload::Single, :cache do
   include_context 'database cleaner'
+  include_context 'Msf::Logging'
 
   subject(:module_class_load) do
     FactoryGirl.build(
