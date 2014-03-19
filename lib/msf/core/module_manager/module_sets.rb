@@ -50,11 +50,4 @@ module Msf::ModuleManager::ModuleSets
       module_set_by_module_type[module_type] = module_set
     end
   end
-
-  #
-  # Provide a list of module names of a specific type
-  #
-  def module_names(set)
-    module_set_by_module_type[set] ? module_set_by_module_type[set].keys.dup : []
-  end
 end

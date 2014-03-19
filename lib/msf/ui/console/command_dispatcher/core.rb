@@ -2315,17 +2315,8 @@ class Core
   # Tab complete module names
   #
   def tab_complete_module(str, words)
-    res = []
-    framework.modules.module_types.each do |mtyp|
-      mset = framework.modules.module_names(mtyp)
-      mset.each do |mref|
-        res << mtyp + '/' + mref
-      end
-    end
-
-    return res.sort
+    raise NotImplementedError, "Use Mdm::Module::Class queries to implement this"
   end
-
 
   #
   # Provide tab completion for option values
