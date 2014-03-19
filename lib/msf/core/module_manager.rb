@@ -45,16 +45,6 @@ class Msf::ModuleManager < Metasploit::Model::Base
   # Methods
   #
 
-  def [](key)
-    names = key.split("/")
-    type = names.shift
-
-    module_set = module_set_by_module_type[type]
-
-    module_reference_name = names.join("/")
-    module_set[module_reference_name]
-  end
-
   # @note If you already have an `Mdm::Module::Class`, use {#create_from_module_class} as it will eliminate the need
   #   to query the database for an `Mdm::Module::Class` using `Mdm::Module::Class#full_name`.
   #
