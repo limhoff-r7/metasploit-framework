@@ -27,6 +27,23 @@ describe Msf::ModuleManager do
     framework.modules
   end
 
+  context 'factories' do
+    context 'msf_module_manager' do
+      include_context 'Msf::Simple::Framework'
+
+      subject(:msf_module_manager) do
+        FactoryGirl.build(:msf_module_manager)
+      end
+
+      # framework for Msf::Simple::Framework clean up
+      let(:framework) do
+        msf_module_manager.framework
+      end
+
+      it { should be_valid }
+    end
+  end
+
   it_should_behave_like 'Msf::ModuleManager::Cache'
   it_should_behave_like 'Msf::ModuleManager::ModulePaths'
 	it_should_behave_like 'Msf::ModuleManager::ModuleSets'

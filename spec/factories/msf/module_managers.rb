@@ -9,11 +9,5 @@ FactoryGirl.define do
     #
 
     association :framework, factory: :msf_simple_framework
-
-    #
-    # Attributes
-    #
-
-    module_types { Metasploit::Model::Module::Type::ALL }
   end
 end
