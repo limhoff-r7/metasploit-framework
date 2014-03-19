@@ -73,24 +73,6 @@ class PayloadSet < ModuleSet
   end
 
   #
-  # This method adds a single payload to the set and adds it to the singles
-  # hash.
-  #
-  def add_single(p, name, modinfo)
-    p.framework = framework
-    p.refname = name
-    p.file_path = modinfo['files'][0]
-
-    # Associate this class with the single payload's name
-    self[name] = p
-
-    # Add the singles hash
-    singles[name] = p
-
-    dlog("Built single payload #{name}.", 'core', LEV_2)
-  end
-
-  #
   # This method adds a stage payload to the set and adds it to the stages
   # hash using the supplied handler type.
   #
