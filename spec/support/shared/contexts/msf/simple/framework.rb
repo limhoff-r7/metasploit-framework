@@ -5,8 +5,13 @@ require 'metasploit/framework'
 shared_context 'Msf::Simple::Framework' do
   include_context 'Metasploit::Framework::Thread::Manager cleaner' do
     let(:thread_manager) do
-      # don't create thread manager if example didn't create it
-      framework.instance_variable_get :@threads
+      # don't create a framework if example didn't create it
+      framework = __memoized[:framework]
+
+      if framework
+        # don't create thread manager if example didn't create it
+        framework.instance_variable_get :@threads
+      end
     end
   end
 
