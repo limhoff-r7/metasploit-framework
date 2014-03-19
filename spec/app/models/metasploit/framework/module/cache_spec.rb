@@ -477,7 +477,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
     context 'with real module files', :content do
       include_context 'database cleaner', after: :all
       include_context 'Metasploit::Framework::Spec::Constants cleaner', after: :all
-      include_context 'Msf::Logging'
+      include_context 'Msf::Logging', after: :all
 
       module_path_real_pathname = Metasploit::Framework.root.join('modules')
 
