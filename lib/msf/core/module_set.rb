@@ -87,18 +87,12 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
     # Hashes that convey the supported architectures and platforms for a
     # given module
-    self.platforms_by_module = {}
     self.mod_sorted        = nil
     self.mod_ranked        = nil
   end
 
   protected
 
-  # @!attribute [rw] platforms_by_module
-  #   Maps a module to the list of platforms it supports.
-  #
-  #   @return [Hash{Class => Array<String>}] Maps module class to Array of platform Strings.
-  attr_accessor :platforms_by_module
   # @!attribute [rw] mod_ranked
   #   Array of module names and module classes ordered by their Rank with the higher Ranks first.
   #
