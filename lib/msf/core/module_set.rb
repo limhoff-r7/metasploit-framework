@@ -86,21 +86,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     module_manager.create("#{module_type}/#{reference_name}")
   end
 
-  # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
-  # "can't add a new key into hash during iteration"
-  #
-  # @yield [module_reference_name, module]
-  # @yieldparam [String] module_reference_name the reference_name of the module.
-  # @yieldparam [Class] module The module class: a subclass of Msf::Module.
-  # @return [void]
-  def each(&block)
-    list = []
-    self.keys.sort.each do |sidx|
-      list << [sidx, self[sidx]]
-    end
-    list.each(&block)
-  end
-
   # Enumerates each module class in the set.
   #
   # @param opts (see #each_module_list)
