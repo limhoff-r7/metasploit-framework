@@ -90,12 +90,10 @@ class Msf::ModuleSet < Metasploit::Model::Base
     self.platforms_by_module = {}
     self.mod_sorted        = nil
     self.mod_ranked        = nil
-    self.mod_extensions    = []
   end
 
   protected
 
-  attr_accessor :mod_extensions
   # @!attribute [rw] platforms_by_module
   #   Maps a module to the list of platforms it supports.
   #
