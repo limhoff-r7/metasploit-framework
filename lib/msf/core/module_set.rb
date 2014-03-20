@@ -68,13 +68,4 @@ class Msf::ModuleSet < Metasploit::Model::Base
   def create(reference_name)
     module_manager.create("#{module_type}/#{reference_name}")
   end
-
-  private
-
-  # Base scope for `Mdm::Module::Class` with `Mdm::Module::Class#module_type` equal to {#module_type}.
-  #
-  # @return [ActiveRecord::Relation]
-  def scope
-    Mdm::Module::Class.where(module_type: module_type)
-  end
 end
