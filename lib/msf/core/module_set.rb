@@ -61,14 +61,7 @@ class Msf::ModuleSet < Metasploit::Model::Base
            to: :module_manager
 
   def count
-    db.connection(
-        with: ->{
-          scope.count
-        },
-        without: ->{
-          raise NotImplementedError
-        }
-    )
+    scope.count
   end
 
   # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
@@ -86,8 +79,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   #
   # @return [ActiveRecord::Relation]
   def scope
-    db.with_connection do
-      Mdm::Module::Class.where(module_type: module_type)
-    end
+    Mdm::Module::Class.where(module_type: module_type)
   end
 end
