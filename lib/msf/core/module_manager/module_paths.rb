@@ -1,12 +1,5 @@
-#
-# Gems
-#
-require 'active_support/concern'
-
 # Deals with module paths in the {Msf::ModuleManager}
 module Msf::ModuleManager::ModulePaths
-  extend ActiveSupport::Concern
-
   # Adds a path to {#cache} and then searches the path for modules.
   #
   # @param path [String] a `Metasploit::Model::Module::Path#real_path`.
