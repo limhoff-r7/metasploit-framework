@@ -18,46 +18,10 @@ class Statistics
     self.framework = framework
   end
 
-  #
-  # Returns the number of encoders in the framework.
-  #
-  def num_encoders
-    framework.encoders.count
-  end
-
-  #
-  # Returns the number of exploits in the framework.
-  #
-  def num_exploits
-    framework.exploits.count
-  end
-
-  #
-  # Returns the number of NOP generators in the framework.
-  #
-  def num_nops
-    framework.nops.count
-  end
-
-  #
-  # Returns the number of payloads in the framework.
-  #
-  def num_payloads
-    framework.payloads.count
-  end
-
-  #
-  # Returns the number of auxiliary modules in the framework.
-  #
-  def num_auxiliary
-    framework.auxiliary.count
-  end
-
-  #
-  # Returns the number of post modules in the framework.
-  #
-  def num_post
-    framework.post.count
+  Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE.each do |module_type, directory|
+    define_method("num_#{directory}") do
+      Mdm::Module::Class.where(module_type: module_type).count
+    end
   end
 end
 
