@@ -5,8 +5,9 @@
 
 
 require 'msf/core'
+require 'msf/core/payload/linux'
+require 'msf/core/payload/stager'
 require 'msf/core/handler/reverse_tcp'
-
 
 module Metasploit3
   extend  Metasploit::Framework::Module::Ancestor::Handler

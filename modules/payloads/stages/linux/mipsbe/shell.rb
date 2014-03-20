@@ -4,8 +4,9 @@
 ##
 
 require 'msf/core'
-require 'msf/base/sessions/command_shell'
+require 'msf/core/payload/linux'
 require 'msf/base/sessions/command_shell_options'
+require 'msf/base/sessions/command_shell_unix'
 
 module Metasploit3
   include Msf::Payload::Linux
