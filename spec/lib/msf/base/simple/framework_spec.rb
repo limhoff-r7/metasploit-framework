@@ -237,4 +237,14 @@ describe Msf::Simple::Framework do
       expect(framework.pathnames.file.read).to eq("[framework/core]\n#{key}=#{value}\n\n")
     end
   end
+
+  context '#stats' do
+    include_context 'Msf::Simple::Framework'
+
+    subject(:stats) do
+      framework.stats
+    end
+
+    it { should equal Metasploit::Framework::Statistics }
+  end
 end

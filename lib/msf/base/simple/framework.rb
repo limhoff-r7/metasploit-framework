@@ -97,9 +97,6 @@ module Framework
     framework.extend Msf::Simple::Framework
     framework.plugins.extend Msf::Simple::Framework::PluginManager
 
-    # Initialize the simplified framework
-    framework.init_simplified()
-
     # Call the creation procedure if one was supplied
     if (options['OnCreateProc'])
       options['OnCreateProc'].call(framework)
@@ -149,11 +146,8 @@ module Framework
   #
   ##
 
-  #
-  # Initializes the simplified interface.
-  #
-  def init_simplified
-    self.stats = Statistics.new
+  def stats
+    Metasploit::Framework::Statistics
   end
 
   #
@@ -171,11 +165,6 @@ module Framework
   end
 
   #
-  # Statistics.
-  #
-  attr_reader :stats
-
-  #
   # Boolean indicating whether the cache is initialized yet
   #
   attr_reader :cache_initialized
@@ -186,11 +175,6 @@ module Framework
   attr_reader :cache_thread
   attr_writer :cache_initialized # :nodoc:
   attr_writer :cache_thread # :nodoc:
-
-
-protected
-
-  attr_writer :stats # :nodoc:
 
 end
 

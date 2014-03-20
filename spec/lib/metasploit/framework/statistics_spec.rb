@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe Msf::Simple::Statistics do
-  include_context 'Msf::Simple::Framework'
-
+describe Metasploit::Framework::Statistics do
   shared_context 'Mdm::Module::Classes' do
     include_context 'database cleaner'
 
@@ -24,15 +22,11 @@ describe Msf::Simple::Statistics do
     end
   end
 
-  subject(:statistics) do
-    framework.stats
-  end
-
   context '#num_auxiliary' do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_auxiliary) do
-      statistics.num_auxiliary
+      described_class.num_auxiliary
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'auxiliary'" do
@@ -44,7 +38,7 @@ describe Msf::Simple::Statistics do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_encoders) do
-      statistics.num_encoders
+      described_class.num_encoders
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'encoder'" do
@@ -56,7 +50,7 @@ describe Msf::Simple::Statistics do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_exploits) do
-      statistics.num_exploits
+      described_class.num_exploits
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'exploit'" do
@@ -68,7 +62,7 @@ describe Msf::Simple::Statistics do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_nops) do
-      statistics.num_nops
+      described_class.num_nops
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'nop'" do
@@ -80,7 +74,7 @@ describe Msf::Simple::Statistics do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_payloads) do
-      statistics.num_payloads
+      described_class.num_payloads
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'payload'" do
@@ -92,7 +86,7 @@ describe Msf::Simple::Statistics do
     include_context 'Mdm::Module::Classes'
 
     subject(:num_post) do
-      statistics.num_post
+      described_class.num_post
     end
 
     it "counts number of Mdm::Module::Classes with Mdm::Module::Class#module_type of 'post'" do

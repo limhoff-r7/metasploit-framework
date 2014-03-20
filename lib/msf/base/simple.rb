@@ -1,7 +1,6 @@
 # -*- coding: binary -*-
 # Buffer management
 require 'msf/base/simple/buffer'
-require 'msf/base/simple/statistics'
 
 # Simplified module interfaces
 require 'msf/base/simple/module'
