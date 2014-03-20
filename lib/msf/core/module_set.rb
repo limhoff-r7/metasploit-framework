@@ -135,30 +135,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   #     name and the module class.
   attr_accessor :mod_sorted
 
-  # Ranks modules based on their constant rank value, if they have one.  Modules without a Rank are treated as if they
-  # had {Msf::NormalRanking} for Rank.
-  #
-  # @return [Array<Array<String, Class>>] Array of arrays where the inner array is a pair of the module reference name
-  #   and the module class.
-  def rank_modules
-    self.mod_ranked = self.sort { |a, b|
-      a_name, a_mod = a
-      b_name, b_mod = b
-
-      # Dynamically loads the module if needed
-      a_mod = create(a_name) if a_mod == Msf::SymbolicModule
-      b_mod = create(b_name) if b_mod == Msf::SymbolicModule
-
-      # Extract the ranking between the two modules
-      a_rank = a_mod.const_defined?('Rank') ? a_mod.const_get('Rank') : Msf::NormalRanking
-      b_rank = b_mod.const_defined?('Rank') ? b_mod.const_get('Rank') : Msf::NormalRanking
-
-      # Compare their relevant rankings.  Since we want highest to lowest,
-      # we compare b_rank to a_rank in terms of higher/lower precedence
-      b_rank <=> a_rank
-    }
-  end
-
   private
 
   # Base scope for `Mdm::Module::Class` with `Mdm::Module::Class#module_type` equal to {#module_type}.
