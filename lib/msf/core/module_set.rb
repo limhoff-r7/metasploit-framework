@@ -39,26 +39,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   # Methods
   #
 
-  # @!method db
-  #   Used to check whether the database is connected.
-  #
-  #   @return (see Msf::Framework#db)
-  delegate :db,
-           to: :framework
-
-  # @!method cache
-  #   The module cache that loads metasploit classes.
-  #
-  #   @return (see Msf::ModuleManager::Cache#cache)
-  #
-  # @!method framework
-  #   Framework that should be notified of events and passed to {#create created instance}.
-  #
-  #   @return (see Msf::ModuleManager#framework)
-  delegate :cache,
-           :framework,
-           to: :module_manager
-
   # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
   # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
   #
