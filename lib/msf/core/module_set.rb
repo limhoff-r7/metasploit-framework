@@ -2,12 +2,6 @@
 require 'msf/core'
 require 'pathname'
 
-#
-# Define used for a place-holder module that is used to indicate that the
-# module has not yet been demand-loaded. Soon to go away.
-#
-Msf::SymbolicModule = '__SYMBOLIC__'
-
 ###
 #
 # A module set contains zero or more named module classes of an arbitrary
