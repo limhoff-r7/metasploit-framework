@@ -86,13 +86,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     module_manager.create("#{module_type}/#{reference_name}")
   end
 
-  # Forces all modules in this set to be loaded.
-  #
-  # @return [void]
-  def force_load_set
-    each_module { |name, mod| }
-  end
-
   # @param attributes [Hash{Symbol => String}]
   # @option attributes [String] :module_type An element from `Metasploit::Model::Module::Type::ALL`.
   def initialize(attributes={})
