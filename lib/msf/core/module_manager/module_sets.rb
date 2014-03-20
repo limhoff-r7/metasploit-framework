@@ -12,20 +12,20 @@ module Msf::ModuleManager::ModuleSets
   #
 
   Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE.each do |module_type, directory|
+    instance_variable = "@#{directory}"
+
     define_method(directory) do
-      module_set_by_module_type[module_type]
-    end
-  end
+      unless instance_variable_defined? instance_variable
+        module_set = Msf::ModuleSet.new(
+            module_manager: self,
+            module_type: module_type
+        )
+        module_set.valid!
 
-  def module_set_by_module_type
-    @module_set_by_module_type ||= Metasploit::Model::Module::Type::ALL.each_with_object({}) do |module_type, module_set_by_module_type|
-      module_set = Msf::ModuleSet.new(
-          module_manager: self,
-          module_type: module_type
-      )
-      module_set.valid!
+        instance_variable_set instance_variable, module_set
+      end
 
-      module_set_by_module_type[module_type] = module_set
+      instance_variable_get instance_variable
     end
   end
 end
