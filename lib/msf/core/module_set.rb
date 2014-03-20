@@ -60,10 +60,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
            :framework,
            to: :module_manager
 
-  def count
-    scope.count
-  end
-
   # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
   # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
   #
