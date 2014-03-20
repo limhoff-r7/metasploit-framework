@@ -14,18 +14,6 @@ require 'msf/core/constants'
 module Msf::ModuleManager::ModuleSets
   extend ActiveSupport::Concern
 
-  module ClassMethods
-    def module_set_class_by_module_type
-      unless instance_variable_defined? :@module_set_class_by_module_type
-        @module_set_class_by_module_type ||= Hash.new { |hash, module_type|
-          hash[module_type] = Msf::ModuleSet
-        }
-      end
-
-      @module_set_class_by_module_type
-    end
-  end
-
   #
   # Instance Methods
   #
@@ -38,8 +26,7 @@ module Msf::ModuleManager::ModuleSets
 
   def module_set_by_module_type
     @module_set_by_module_type ||= Metasploit::Model::Module::Type::ALL.each_with_object({}) do |module_type, module_set_by_module_type|
-      module_set_class = self.class.module_set_class_by_module_type[module_type]
-      module_set = module_set_class.new(
+      module_set = Msf::ModuleSet.new(
           module_manager: self,
           module_type: module_type
       )
