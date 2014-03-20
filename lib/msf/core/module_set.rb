@@ -106,47 +106,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
   protected
 
-  # Enumerates the modules in the supplied array with possible limiting factors.
-  #
-  # @param [Array<Array<String, Class>>] ary Array of module reference name and module class pairs
-  # @param [Hash{String => Object}] opts
-  # @option opts [Array<String>] 'Arch' List of 1 or more architectures that the module must support.  The module need
-  #   only support one of the architectures in the array to be included, not all architectures.
-  # @option opts [Array<String>] 'Platform' List of 1 or more platforms that the module must support.  The module need
-  #   only support one of the platforms in the array to be include, not all platforms.
-  # @yield [module_reference_name, module]
-  # @yieldparam [String] module_reference_name the name of module
-  # @yieldparam [Class] module The module class: a subclass of {Msf::Module}.
-  # @return [void]
-  def each_module_list(ary, opts, &block)
-    ary.each { |entry|
-      name, mod = entry
-
-      # Skip any lingering symbolic modules.
-      next if (mod == Msf::SymbolicModule)
-
-      # Filter out incompatible architectures
-      if (opts['Arch'])
-        if (!architectures_by_module[mod])
-          architectures_by_module[mod] = mod.new.arch
-        end
-
-        next if ((architectures_by_module[mod] & opts['Arch']).empty? == true)
-      end
-
-      # Filter out incompatible platforms
-      if (opts['Platform'])
-        if (!platforms_by_module[mod])
-          platforms_by_module[mod] = mod.new.platform
-        end
-
-        next if ((platforms_by_module[mod] & opts['Platform']).empty? == true)
-      end
-
-      block.call(name, mod)
-    }
-  end
-
   # @!attribute [rw] ambiguous_module_reference_name_set
   #   Set of module reference names that are ambiguous because two or more paths have modules with the same reference
   #   name
