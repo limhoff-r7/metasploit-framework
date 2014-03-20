@@ -1,10 +1,3 @@
-#
-# Project
-#
-
-# Defines the MODULE_* constants
-require 'msf/core/constants'
-
 # Concerns the various type-specific module sets in a {Msf::ModuleManager}
 module Msf::ModuleManager::ModuleSets
   #
