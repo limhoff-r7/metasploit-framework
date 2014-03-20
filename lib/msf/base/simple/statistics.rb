@@ -59,27 +59,6 @@ class Statistics
   def num_post
     framework.post.count
   end
-
-  #
-  # Returns the number of stages in the framework.
-  #
-  def num_payload_stages
-    framework.payloads.stages.count
-  end
-
-  #
-  # Returns the number of stagers in the framework.
-  #
-  def num_payload_stagers
-    framework.payloads.stagers.count
-  end
-
-  #
-  # Returns the number of singles in the framework.
-  #
-  def num_payload_singles
-    framework.payloads.singles.count
-  end
 end
 
 end
