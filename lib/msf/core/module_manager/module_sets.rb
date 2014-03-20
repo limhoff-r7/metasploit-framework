@@ -1,9 +1,4 @@
 #
-# Gems
-#
-require 'active_support/concern'
-
-#
 # Project
 #
 
@@ -12,8 +7,6 @@ require 'msf/core/constants'
 
 # Concerns the various type-specific module sets in a {Msf::ModuleManager}
 module Msf::ModuleManager::ModuleSets
-  extend ActiveSupport::Concern
-
   #
   # Instance Methods
   #
