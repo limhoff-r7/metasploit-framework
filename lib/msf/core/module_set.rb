@@ -86,20 +86,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     module_manager.create("#{module_type}/#{reference_name}")
   end
 
-  # Enumerates each module class in the set.
-  #
-  # @param opts (see #each_module_list)
-  # @yield (see #each_module_list)
-  # @yieldparam (see #each_module_list)
-  # @return (see #each_module_list)
-  def each_module(opts = {}, &block)
-    demand_load_modules
-
-    self.mod_sorted = self.sort
-
-    each_module_list(mod_sorted, opts, &block)
-  end
-
   # Forces all modules in this set to be loaded.
   #
   # @return [void]
