@@ -87,7 +87,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
     # Hashes that convey the supported architectures and platforms for a
     # given module
-    self.architectures_by_module     = {}
     self.platforms_by_module = {}
     self.mod_sorted        = nil
     self.mod_ranked        = nil
@@ -96,11 +95,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
   protected
 
-  # @!attribute [rw] architectures_by_module
-  #   Maps a module to the list of architectures it supports.
-  #
-  #   @return [Hash{Class => Array<String>}] Maps module class to Array of architecture Strings.
-  attr_accessor :architectures_by_module
   attr_accessor :mod_extensions
   # @!attribute [rw] platforms_by_module
   #   Maps a module to the list of platforms it supports.
