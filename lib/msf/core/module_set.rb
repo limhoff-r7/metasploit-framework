@@ -85,10 +85,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   def initialize(attributes={})
     super
 
-    #
-    # Defaults
-    #
-    self.ambiguous_module_reference_name_set = Set.new
     # Hashes that convey the supported architectures and platforms for a
     # given module
     self.architectures_by_module     = {}
@@ -100,12 +96,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
   protected
 
-  # @!attribute [rw] ambiguous_module_reference_name_set
-  #   Set of module reference names that are ambiguous because two or more paths have modules with the same reference
-  #   name
-  #
-  #   @return [Set<String>] set of module reference names loaded from multiple paths.
-  attr_accessor :ambiguous_module_reference_name_set
   # @!attribute [rw] architectures_by_module
   #   Maps a module to the list of architectures it supports.
   #
