@@ -80,24 +80,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
     module_manager.create("#{module_type}/#{reference_name}")
   end
 
-  # @param attributes [Hash{Symbol => String}]
-  # @option attributes [String] :module_type An element from `Metasploit::Model::Module::Type::ALL`.
-  def initialize(attributes={})
-    super
-
-    # Hashes that convey the supported architectures and platforms for a
-    # given module
-    self.mod_ranked        = nil
-  end
-
-  protected
-
-  # @!attribute [rw] mod_ranked
-  #   Array of module names and module classes ordered by their Rank with the higher Ranks first.
-  #
-  #   @return (see #rank_modules)
-  attr_accessor :mod_ranked
-
   private
 
   # Base scope for `Mdm::Module::Class` with `Mdm::Module::Class#module_type` equal to {#module_type}.
