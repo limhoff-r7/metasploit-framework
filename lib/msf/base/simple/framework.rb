@@ -153,7 +153,7 @@ module Framework
   # Initializes the simplified interface.
   #
   def init_simplified
-    self.stats = Statistics.new(self)
+    self.stats = Statistics.new
   end
 
   #
