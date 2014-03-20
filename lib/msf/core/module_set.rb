@@ -87,7 +87,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
 
     # Hashes that convey the supported architectures and platforms for a
     # given module
-    self.mod_sorted        = nil
     self.mod_ranked        = nil
   end
 
@@ -98,12 +97,6 @@ class Msf::ModuleSet < Metasploit::Model::Base
   #
   #   @return (see #rank_modules)
   attr_accessor :mod_ranked
-  # @!attribute [rw] mod_sorted
-  #   Array of module names and module classes ordered by their names.
-  #
-  #   @return [Array<Array<String, Class>>] Array of arrays where the inner array is a pair of the module reference
-  #     name and the module class.
-  attr_accessor :mod_sorted
 
   private
 
