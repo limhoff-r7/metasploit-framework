@@ -1,13 +1,12 @@
 # -*- coding: binary -*-
 require 'msf/core'
 
-###
+# @note If you have a `Mdm::Module::Class`, use
+#   {Metasploit::Framework::Module::Instance::Creator::Universal#create_from_module_class} as that will save looking up
+#   the `Mdm::Module::Class` again.
 #
-# A module set contains zero or more named module classes of an arbitrary
-# type.
-#
-###
-class Msf::ModuleSet < Metasploit::Model::Base
+# Creates {Msf::Module} instances of a specific {#module_type} using `Mdm::Module::Class#reference_name` for {#create}.
+class Metasploit::Framework::Module::Instance::Creator::Type < Metasploit::Model::Base
   #
   # Attributes
   #
@@ -39,6 +38,10 @@ class Msf::ModuleSet < Metasploit::Model::Base
   # Methods
   #
 
+  # @note If you have a full `Mdm::Module::Class`, use
+  #   {Metasploit::Framework::Module::Instance::Creator::Universal#create_from_module_calss} as that will save looking
+  #   up the `Mdm::Module::Class` again.
+  #
   # Creates an {Msf::Module} instance using the supplied `Mdm::Module::Class#reference_name`.
   # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
   #

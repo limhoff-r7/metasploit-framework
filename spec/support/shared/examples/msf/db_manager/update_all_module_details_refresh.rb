@@ -6,7 +6,7 @@ shared_examples_for 'Msf::DBManager#update_all_module_details refresh' do
     }.to change(Mdm::Module::Detail, :count).by(-1)
   end
 
-  context 'with cached module in Msf::ModuleSet' do
+  context 'with cached module in Metasploit::Framework::Module::Instance::Creator::Type' do
     let(:module_set) do
       framework.exploits
     end
@@ -50,7 +50,7 @@ shared_examples_for 'Msf::DBManager#update_all_module_details refresh' do
     end
   end
 
-  context 'without cached module in Msf::ModuleSet' do
+  context 'without cached module in Metasploit::Framework::Module::Instance::Creator::Type' do
     it 'should not call update_module_details' do
       db_manager.should_not_receive(:update_module_details)
 

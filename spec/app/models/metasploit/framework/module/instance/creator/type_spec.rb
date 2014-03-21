@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Msf::ModuleSet do
-  subject(:module_set) do
+describe Metasploit::Framework::Module::Instance::Creator::Type do
+  subject(:module_instance_creator) do
     described_class.new(
         module_type: module_type,
         universal_module_instance_creator: universal_module_instance_creator
@@ -23,7 +23,7 @@ describe Msf::ModuleSet do
 
   context '#create' do
     subject(:create) do
-      module_set.create(reference_name)
+      module_instance_creator.create(reference_name)
     end
 
     let(:reference_name) do

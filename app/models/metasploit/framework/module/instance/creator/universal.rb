@@ -6,7 +6,7 @@
 class Metasploit::Framework::Module::Instance::Creator::Universal < Metasploit::Model::Base
   include Metasploit::Framework::Module::Instance::Creator::Universal::Cache
   include Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths
-  include Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets
+  include Metasploit::Framework::Module::Instance::Creator::Universal::Types
 
   #
   # Attributes

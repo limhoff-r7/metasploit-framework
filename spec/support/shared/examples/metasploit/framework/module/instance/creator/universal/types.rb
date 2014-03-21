@@ -1,10 +1,10 @@
-shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets' do
+shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal::Types' do
   context '#auxiliary' do
     subject(:auxiliary) do
       module_instance_creator.auxiliary
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'auxiliary' }
   end
 
@@ -13,7 +13,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
       module_instance_creator.encoders
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'encoder' }
   end
 
@@ -22,7 +22,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
       module_instance_creator.exploits
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'exploit' }
   end
 
@@ -31,7 +31,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
       module_instance_creator.nops
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'nop' }
   end
 
@@ -40,7 +40,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
       module_instance_creator.payloads
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'payload' }
   end
 
@@ -49,7 +49,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
       module_instance_creator.post
     end
 
-    it { should be_a Msf::ModuleSet }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Type }
     its(:module_type) { should == 'post' }
   end
 end

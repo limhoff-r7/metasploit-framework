@@ -46,7 +46,7 @@ describe Metasploit::Framework::Module::Instance::Creator::Universal do
 
   it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Cache'
   it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths'
-	it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets'
+  it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Types'
 
   context '#create' do
     subject(:create) do

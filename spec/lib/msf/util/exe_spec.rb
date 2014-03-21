@@ -16,7 +16,7 @@ describe Msf::Util::EXE do
     end
   end
 
-  pending 'Msf::Util::EXE.to_executable_fmt compatibility with new ModuleSet API' do
+  pending 'Msf::Util::EXE.to_executable_fmt compatibility with new Metasploit::Framework::Module::Instance::Creator::Type API' do
     describe '.to_executable_fmt' do
       it "should output nil when given a bogus format" do
         bin = exe.to_executable_fmt(framework, "", "", "", "does not exist", {})
