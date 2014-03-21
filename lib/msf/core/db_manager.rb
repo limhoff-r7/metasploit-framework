@@ -110,9 +110,6 @@ class Msf::DBManager < Metasploit::Model::Base
   require 'msf/core/db_manager/report'
   include Msf::DBManager::Report
 
-  require 'msf/core/db_manager/search'
-  include Msf::DBManager::Search
-
   require 'msf/core/db_manager/service'
   include Msf::DBManager::Service
 
