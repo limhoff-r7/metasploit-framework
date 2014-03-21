@@ -16,41 +16,41 @@ require 'tmpdir'
 
 require 'msf/core'
 
-describe Msf::ModuleManager do
+describe Metasploit::Framework::Module::Instance::Creator::Universal do
   include_context 'Msf::Simple::Framework'
 
   let(:basename_prefix) do
     'rspec'
   end
 
-  subject(:module_manager) do
+  subject(:module_instance_creator) do
     framework.modules
   end
 
   context 'factories' do
-    context 'msf_module_manager' do
+    context 'metasploit_framework_module_instance_creator_universal' do
       include_context 'Msf::Simple::Framework'
 
-      subject(:msf_module_manager) do
-        FactoryGirl.build(:msf_module_manager)
+      subject(:metasploit_framework_module_instance_creator_universal) do
+        FactoryGirl.build(:metasploit_framework_module_instance_creator_universal)
       end
 
       # framework for Msf::Simple::Framework clean up
       let(:framework) do
-        msf_module_manager.framework
+        metasploit_framework_module_instance_creator_universal.framework
       end
 
       it { should be_valid }
     end
   end
 
-  it_should_behave_like 'Msf::ModuleManager::Cache'
-  it_should_behave_like 'Msf::ModuleManager::ModulePaths'
-	it_should_behave_like 'Msf::ModuleManager::ModuleSets'
+  it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Cache'
+  it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths'
+	it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets'
 
   context '#create' do
     subject(:create) do
-      module_manager.create(full_name)
+      module_instance_creator.create(full_name)
     end
 
     context 'with Mdm::Module::Class' do
@@ -91,7 +91,7 @@ describe Msf::ModuleManager do
       end
 
       it 'uses Metasploit::Framework::Module::Cache#metasploit_class to get the metasploit_class' do
-        expect(module_manager.cache).to receive(:metasploit_class).with(an_instance_of(Mdm::Module::Class))
+        expect(module_instance_creator.cache).to receive(:metasploit_class).with(an_instance_of(Mdm::Module::Class))
 
         create
       end
@@ -107,7 +107,7 @@ describe Msf::ModuleManager do
           create.framework
         end
 
-        it 'is the Msf::ModuleManager#framework' do
+        it 'is the Metasploit::Framework::Framework::Modules#framework' do
           expect(instance_framework).to eq(framework)
         end
       end

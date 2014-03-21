@@ -111,7 +111,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
   end
 
   context 'validations' do
-    it { should validate_presence_of :module_manager }
+    it { should validate_presence_of :universal_module_instance_creator }
   end
 
   context '#framework' do
@@ -123,16 +123,16 @@ describe Metasploit::Framework::Module::Cache, :cache do
       double('Msf::Framework')
     end
 
-    let(:module_manager) do
-      double('Msf::ModuleManager', framework: expected_framework)
+    let(:universal_module_instance_creator) do
+      double('Metasploit::Framework::Module::Instance::Creator::Universal', framework: expected_framework)
     end
 
     before(:each) do
-      module_cache.stub(module_manager: module_manager)
+      module_cache.stub(universal_module_instance_creator: universal_module_instance_creator)
     end
 
-    it 'should delegate to #module_manager' do
-      framework.should == module_manager.framework
+    it 'delegates to #universal_module_instance_creator' do
+      expect(framework).to equal(universal_module_instance_creator.framework)
     end
   end
 
@@ -257,8 +257,8 @@ describe Metasploit::Framework::Module::Cache, :cache do
         FactoryGirl.create(:metasploit_framework_module_cache)
       end
 
-      let(:module_manager) do
-        module_cache.module_manager
+      let(:universal_module_instance_creator) do
+        module_cache.universal_module_cache_creator
       end
 
       let(:path_set) do
@@ -484,10 +484,10 @@ describe Metasploit::Framework::Module::Cache, :cache do
       before(:all) do
         module_cache = FactoryGirl.create(:metasploit_framework_module_cache)
 
-        module_manager = module_cache.module_manager
-        module_manager.should_not be_nil
+        universal_module_instance_creator = module_cache.universal_module_instance_creator
+        universal_module_instance_creator.should_not be_nil
 
-        framework = module_manager.framework
+        framework = universal_module_instance_creator.framework
         framework.should_not be_nil
 
         @module_path = FactoryGirl.create(

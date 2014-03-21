@@ -147,7 +147,7 @@ describe Metasploit::Framework do
     end
 
     context '#modules' do
-      subject(:modules) do
+      subject(:universal) do
         pathnames.modules
       end
 

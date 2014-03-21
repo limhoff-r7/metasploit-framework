@@ -182,13 +182,13 @@ describe Msf::Payload do
         end
       end
 
-      context '#module_manager' do
-        subject(:module_manager) do
-          enumerator.module_manager
+      context '#universal_module_instance_creator' do
+        subject(:universal_module_instance_creator) do
+          enumerator.universal_module_instance_creator
         end
 
         it 'is the Msf::Framework#modules' do
-          expect(module_manager).to eq(payload.framework.modules)
+          expect(universal_module_instance_creator).to eq(payload.framework.modules)
         end
       end
     end

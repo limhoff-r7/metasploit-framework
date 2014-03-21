@@ -1,5 +1,5 @@
-# Deals with module paths in the {Msf::ModuleManager}
-module Msf::ModuleManager::ModulePaths
+# Deals with module paths in the {Metasploit::Framework::Module::Instance::Creator::Universal}
+module Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths
   # Adds a path to {#cache} and then searches the path for modules.
   #
   # @param path [String] a `Metasploit::Model::Module::Path#real_path`.

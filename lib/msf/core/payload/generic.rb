@@ -235,8 +235,8 @@ module Msf::Payload::Generic
       actual_compatibility = Metasploit::Framework::Module::Instance::Payload::Actual::Compatibility::Payload.new(
           architecture_abbreviations: actual_architecture_abbreviations,
           exploit_instance: exploit_instance,
-          module_manager: framework.modules,
-          platform_fully_qualified_names: platform_fully_qualified_names
+          platform_fully_qualified_names: platform_fully_qualified_names,
+          universal_module_instance_creator: framework.modules
       )
       actual_compatibility.valid!
 

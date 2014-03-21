@@ -6,7 +6,7 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
   subject(:enumerator) do
     described_class.new(
         cache_module_classes: cache_module_classes,
-        module_manager: module_manager
+        universal_module_instance_creator: universal_module_instance_creator
     )
   end
 
@@ -18,7 +18,7 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
     cache_module_instances.map(&:module_class)
   end
 
-  let(:module_manager) do
+  let(:universal_module_instance_creator) do
     framework.modules
   end
 
@@ -35,7 +35,7 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
   it { should be_a Enumerable }
 
   context 'validations' do
-    it { should validate_presence_of :module_manager }
+    it { should validate_presence_of :universal_module_instance_creator }
 
     context 'cache_module_class' do
       subject(:cache_module_class_errors) do
@@ -116,9 +116,9 @@ describe Metasploit::Framework::Module::Instance::Enumerator do
         each
       end
 
-      it 'creates each Msf::Module with module_manager.create_from_module_class' do
+      it 'creates each Msf::Module with universal_module_instance_creator.create_from_module_class' do
         cache_module_classes.each do |cache_module_class|
-          expect(module_manager).to receive(:create_from_module_class).with(cache_module_class)
+          expect(universal_module_instance_creator).to receive(:create_from_module_class).with(cache_module_class)
         end
 
         each

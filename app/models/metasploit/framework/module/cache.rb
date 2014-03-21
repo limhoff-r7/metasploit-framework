@@ -32,18 +32,18 @@ class Metasploit::Framework::Module::Cache < Metasploit::Model::Base
   # Attributes
   #
 
-  # @!attribute [rw] module_manager
-  #   The module manager using this cache.
+  # @!attribute [rw] universal_module_instance_creator
+  #   The {Msf::Module} creator using this cache.
   #
-  #   @return [Msf::ModuleManager]
-  attr_accessor :module_manager
+  #   @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  attr_accessor :universal_module_instance_creator
 
   #
   # Validations
   #
 
-  validates :module_manager,
-            :presence => true
+  validates :universal_module_instance_creator,
+            presence: true
 
   #
   # Methods
@@ -54,7 +54,7 @@ class Metasploit::Framework::Module::Cache < Metasploit::Model::Base
   #
   #   @return [Msf::Simple::Framework]
   delegate :framework,
-           to: :module_manager
+           to: :universal_module_instance_creator
 
   # Either finds in-memory or loads into memory ruby `Class` described by `module_class`.
   #

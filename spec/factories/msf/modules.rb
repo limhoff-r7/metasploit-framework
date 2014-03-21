@@ -4,6 +4,6 @@ FactoryGirl.define do
           traits: [
               :metasploit_model_base
           ] do
-    association :framework, factory: :msf_simple_factory
+    association :framework, factory: :msf_simple_framework
   end
 end

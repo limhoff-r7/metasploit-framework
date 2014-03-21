@@ -13,14 +13,14 @@ shared_examples_for 'Msf::Framework::Modules' do
     end
 
     it 'should be memoized' do
-      memoized = double('Msf::ModuleManager')
+      memoized = double('Metasploit::Framework::Module::Instance::Creator::Universal')
       framework.instance_variable_set :@modules, memoized
 
       modules.should == memoized
     end
 
-    it 'should pass framework to Msf::ModuleManager' do
-      Msf::ModuleManager.should_receive(:new).with(
+    it 'should pass framework to Metasploit::Framework::Module::Instance::Creator::Universal' do
+      Metasploit::Framework::Module::Instance::Creator::Universal.should_receive(:new).with(
           hash_including(
               framework: framework
           )
@@ -29,13 +29,13 @@ shared_examples_for 'Msf::Framework::Modules' do
       modules
     end
 
-    it 'should validate Msf::ModuleManager' do
-      Msf::ModuleManager.any_instance.should_receive(:valid!)
+    it 'should validate Metasploit::Framework::Module::Instance::Creator::Universal' do
+      Metasploit::Framework::Module::Instance::Creator::Universal.any_instance.should_receive(:valid!)
 
       modules
     end
 
-    it { should be_a Msf::ModuleManager }
+    it { should be_a Metasploit::Framework::Module::Instance::Creator::Universal }
   end
 
   context '#auxiliary' do

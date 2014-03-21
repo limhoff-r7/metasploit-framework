@@ -10,7 +10,7 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
   #   The instance of {Msf::Exploit} that {#each_compatible_each} will be
   #   {Msf::Payload#exploit_instance associated with}.
   #
-  #   @return [Msf::Payload]
+  #   @return [Msf::Exploit]
   attr_accessor :exploit_instance
 
   #
@@ -48,7 +48,7 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
   def each_compatible_instance(options={})
     enumerator = Metasploit::Framework::Module::Instance::Enumerator.new(
         cache_module_classes: each_compatible_cache_class(options),
-        module_manager: module_manager
+        universal_module_instance_creator: universal_module_instance_creator
     )
 
     enumerator.each do |payload_instance|
@@ -58,7 +58,11 @@ class Metasploit::Framework::Compatibility::Payload < Metasploit::Model::Base
     end
   end
 
-  def module_manager
+  # Used in {#each_compatible_instance} for
+  # {Metasploit::Framework::Module::Instance::Enumerator#universal_module_instance_creator}.
+  #
+  # @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  def universal_module_instance_creator
     raise NotImplementedError
   end
 

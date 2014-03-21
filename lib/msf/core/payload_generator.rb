@@ -357,7 +357,7 @@ module Msf
         cache_nop_classes = Mdm::Module::Class.with_module_instances(cache_nop_instances).ranked
         nop_instances = Metasploit::Framework::Module::Instance::Enumerator.new(
             cache_module_classes: cache_nop_classes,
-            module_manager: framework.modules
+            universal_module_instance_creator: framework.modules
         )
         nop_instances.valid!
 

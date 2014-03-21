@@ -888,7 +888,7 @@ protected
 
     post_instances = Metasploit::Framework::Module::Instance::Enumerator.new(
         cache_module_classes: cache_post_classes,
-        module_manager: client.framework.modules
+        universal_module_instance_creator: client.framework.modules
     )
 
     post_instances.each_with_object([]) { |post_instance, tabs|

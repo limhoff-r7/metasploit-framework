@@ -120,7 +120,7 @@ class Metasploit::Framework::Module::Target::Compatibility::Payload < Metasploit
            allow_nil: true,
            to: :target_model
 
-  def module_manager
+  def universal_module_instance_creator
     if framework
       framework.modules
     else

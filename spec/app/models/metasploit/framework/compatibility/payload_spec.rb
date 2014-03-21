@@ -95,6 +95,16 @@ describe Metasploit::Framework::Compatibility::Payload do
     }
   end
 
+  context 'factories' do
+    context 'metasploit_framework_compatibility_payload' do
+      subject(:metasploit_framework_compatibility_payload) do
+        FactoryGirl.build(:metasploit_framework_compatibility_payload)
+      end
+
+      it { should be_valid }
+    end
+  end
+
   context 'validations' do
     it { should validate_presence_of :exploit_instance }
   end
@@ -200,7 +210,7 @@ describe Metasploit::Framework::Compatibility::Payload do
 
     before(:each) do
       allow(payload_compatibility).to receive(:each_compatible_cache_class).and_return([compatible_payload_class])
-      allow(payload_compatibility).to receive(:module_manager).and_return(framework.modules)
+      allow(payload_compatibility).to receive(:universal_module_instance_creator).and_return(framework.modules)
     end
 
     it 'uses Metasploit::Framework::Module::Instance::Enumerator' do
@@ -224,14 +234,14 @@ describe Metasploit::Framework::Compatibility::Payload do
     end
   end
 
-  context '#module_manager' do
-    subject(:module_manager) do
-      payload_compatibility.module_manager
+  context '#universal_module_instance_creator' do
+    subject(:universal_module_instance_creator) do
+      payload_compatibility.universal_module_instance_creator
     end
 
     it 'is abstract' do
       expect {
-        module_manager
+        universal_module_instance_creator
       }.to raise_error(NotImplementedError)
     end
   end

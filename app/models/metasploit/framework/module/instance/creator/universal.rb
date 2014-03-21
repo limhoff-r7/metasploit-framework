@@ -1,31 +1,12 @@
 # -*- coding: binary -*-
-#
-# Core
-#
-require 'pathname'
 
-#
-# Project
-#
-require 'metasploit/framework'
-require 'msf/core'
-require 'msf/core/module_set'
-
-# Upper management decided to throw in some middle management
-# because the modules were getting out of hand.  This bad boy takes
-# care of the work of managing the interaction with modules in terms
-# of loading and instantiation.
-#
-# @todo add unload support
-class Msf::ModuleManager < Metasploit::Model::Base
-  require 'msf/core/module_manager/cache'
-  include Msf::ModuleManager::Cache
-
-  require 'msf/core/module_manager/module_paths'
-  include Msf::ModuleManager::ModulePaths
-
-  require 'msf/core/module_manager/module_sets'
-  include Msf::ModuleManager::ModuleSets
+# Instantiates {Msf::Module module classes} and associates them with {#framework}.  {Msf::Module} instances can be
+# created from a {Mdm::Module::Class#reference_name} using {#create} or from a {Mdm::Module::Class} using
+# {#create_from_module_class}.
+class Metasploit::Framework::Module::Instance::Creator::Universal < Metasploit::Model::Base
+  include Metasploit::Framework::Module::Instance::Creator::Universal::Cache
+  include Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths
+  include Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets
 
   #
   # Attributes
@@ -36,6 +17,13 @@ class Msf::ModuleManager < Metasploit::Model::Base
   #
   #   @return [Msf::Simple::Framework]
   attr_accessor :framework
+
+  #
+  # Validations
+  #
+
+  validates :framework,
+            presence: true
 
   #
   # Methods

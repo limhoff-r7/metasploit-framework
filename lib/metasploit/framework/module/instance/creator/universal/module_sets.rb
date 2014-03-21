@@ -1,5 +1,5 @@
-# Concerns the various type-specific module sets in a {Msf::ModuleManager}
-module Msf::ModuleManager::ModuleSets
+# Concerns the various type-specific module sets in a {Metasploit::Framework::Module::Instance::Creator::Universal}
+module Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets
   #
   # Instance Methods
   #
@@ -10,8 +10,8 @@ module Msf::ModuleManager::ModuleSets
     define_method(directory) do
       unless instance_variable_defined? instance_variable
         module_set = Msf::ModuleSet.new(
-            module_manager: self,
-            module_type: module_type
+            module_type: module_type,
+            universal_module_instance_creator: self
         )
         module_set.valid!
 

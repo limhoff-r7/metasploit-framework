@@ -12,39 +12,39 @@ class Msf::ModuleSet < Metasploit::Model::Base
   # Attributes
   #
 
-  # @!attribute [rw] module_manager
-  #   Collection of {Msf::ModuleSet module set}, one for each module type.
-  #
-  #   @return [Msf::ModuleManager]
-  attr_accessor :module_manager
-
   # @!attribute [rw] module_type
   #   The `Metasploit::Model::Module::Class#module_type` for the metasploit Classes in this set.
   #
   #   @return [String] An element of `Metasploit::Model::Module::Type::ALL`.
   attr_accessor :module_type
 
+  # @!attribute [rw] universal_module_instance_creator
+  #   Creator that can create modules of any module type.
+  #
+  #   @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  attr_accessor :universal_module_instance_creator
+
   #
   # Validations
   #
 
-  validates :module_manager,
-            presence: true
   validates :module_type,
             inclusion: {
                 in: Metasploit::Model::Module::Type::ALL
             }
+  validates :universal_module_instance_creator,
+            presence: true
 
   #
   # Methods
   #
 
-  # Creates a metasploit instanc using the supplied `Mdm::Module::Class#reference_name`.
+  # Creates an {Msf::Module} instance using the supplied `Mdm::Module::Class#reference_name`.
   # `Mdm::Module::Class#module_type` is assumed to be equal to {#module_type}.
   #
   # @param reference_name [String] An `Mdm::Module::Class#reference_name`.
-  # @return (see Msf::ModuleManager#create)
+  # @return (see Metasploit::Framework::Module::Instance::Creator::Universal#create)
   def create(reference_name)
-    module_manager.create("#{module_type}/#{reference_name}")
+    universal_module_instance_creator.create("#{module_type}/#{reference_name}")
   end
 end

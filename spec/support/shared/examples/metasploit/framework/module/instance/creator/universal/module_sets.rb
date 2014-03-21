@@ -1,7 +1,7 @@
-shared_examples_for 'Msf::ModuleManager::ModuleSets' do
+shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal::ModuleSets' do
   context '#auxiliary' do
     subject(:auxiliary) do
-      module_manager.auxiliary
+      module_instance_creator.auxiliary
     end
 
     it { should be_a Msf::ModuleSet }
@@ -10,7 +10,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
 
   context '#encoders' do
     subject(:encoders) do
-      module_manager.encoders
+      module_instance_creator.encoders
     end
 
     it { should be_a Msf::ModuleSet }
@@ -19,7 +19,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
 
   context '#exploits' do
     subject(:exploits) do
-      module_manager.exploits
+      module_instance_creator.exploits
     end
 
     it { should be_a Msf::ModuleSet }
@@ -28,7 +28,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
 
   context '#nops' do
     subject(:nops) do
-      module_manager.nops
+      module_instance_creator.nops
     end
 
     it { should be_a Msf::ModuleSet }
@@ -37,7 +37,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
 
   context '#payloads' do
     subject(:payloads) do
-      module_manager.payloads
+      module_instance_creator.payloads
     end
 
     it { should be_a Msf::ModuleSet }
@@ -46,7 +46,7 @@ shared_examples_for 'Msf::ModuleManager::ModuleSets' do
 
   context '#post' do
     subject(:post) do
-      module_manager.post
+      module_instance_creator.post
     end
 
     it { should be_a Msf::ModuleSet }

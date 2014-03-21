@@ -1,13 +1,13 @@
-shared_examples_for 'Msf::ModuleManager::ModulePaths' do
+shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths' do
   context '#add_path' do
     include_context 'database cleaner'
 
     subject(:add_path) do
-      module_manager.add_path(path, options)
+      module_instance_creator.add_path(path, options)
     end
 
     let(:cache) do
-      module_manager.cache
+      module_instance_creator.cache
     end
 
     let(:path) do
@@ -143,7 +143,7 @@ shared_examples_for 'Msf::ModuleManager::ModulePaths' do
 
     context 'without options' do
       subject(:add_path) do
-        module_manager.add_path(path)
+        module_instance_creator.add_path(path)
       end
 
       it 'should not pass :prefetch option to Metasploit::Framework::Module::PathSet::Base#add' do

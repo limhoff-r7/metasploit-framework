@@ -13,11 +13,11 @@ class Metasploit::Framework::Module::Instance::Enumerator < Metasploit::Model::B
   #   @return [ActiveRecord::Relation<Mdm::Module::Class>]
   attr_accessor :cache_module_classes
 
-  # @!attribute [rw] module_manager
-  #   The module manager that can create {Msf::Module module instances} from `Mdm::Module::Class`.
+  # @!attribute [rw] universal_module_instance_creator
+  #   The module instance creator can create {Msf::Module module instances} from `Mdm::Module::Class`.
   #
-  #   @return [Msf::ModuleManager]
-  attr_accessor :module_manager
+  #   @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  attr_accessor :universal_module_instance_creator
 
   #
   #
@@ -35,14 +35,14 @@ class Metasploit::Framework::Module::Instance::Enumerator < Metasploit::Model::B
   # Attribute Validations
   #
 
-  validates :module_manager,
+  validates :universal_module_instance_creator,
             presence: true
 
   # Yields each successively created {Msf::Module} from {#cache_module_classes}.  If an {Msf::Module} cannot be created
   # from a given `Mdm::Module::Class`, then the {#module_class_location} is logged as an error.
   #
   # @yield [module_instance]
-  # @yieldparam module_instance [Msf::Module] Module created by {Msf::ModuleManager#create_from_module_class}
+  # @yieldparam module_instance [Msf::Module] Module created by {Msf::Universal#create_from_module_class}
   # @yieldreturn [void]
   # @return [void]
   def each
@@ -50,7 +50,7 @@ class Metasploit::Framework::Module::Instance::Enumerator < Metasploit::Model::B
       to_enum(__method__)
     else
       cache_module_classes.each do |cache_module_class|
-        module_instance = module_manager.create_from_module_class(cache_module_class)
+        module_instance = universal_module_instance_creator.create_from_module_class(cache_module_class)
 
         if module_instance
           yield module_instance

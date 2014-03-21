@@ -386,7 +386,7 @@ class Payload < Msf::Module
     ).ranked
     enumerator = Metasploit::Framework::Module::Instance::Enumerator.new(
         cache_module_classes: cache_module_classes,
-        module_manager: framework.modules
+        universal_module_instance_creator: framework.modules
 
     )
     enumerator.valid!

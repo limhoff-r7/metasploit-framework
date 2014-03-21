@@ -16,7 +16,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths#add_named_module_paths'
       end
 
       it "should add gem: 'metasploit-framework', name: '#{name}'" do
-        module_manager.should_not_receive(:add_path).with(
+        universal_module_instance_creator.should_not_receive(:add_path).with(
             hash_including(
                 send(config_method),
                 gem: 'metasploit-framework',
@@ -35,7 +35,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths#add_named_module_paths'
       end
 
       it "should not add gem: 'metasploit-framework', name: '#{name}'" do
-        module_manager.should_not_receive(:add_path).with(
+        universal_module_instance_creator.should_not_receive(:add_path).with(
             hash_including(
                 anything,
                 gem: 'metasploit-framework',

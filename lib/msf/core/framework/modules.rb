@@ -1,17 +1,15 @@
-require 'msf/core/module_manager'
-
 module Msf::Framework::Modules
   # Modules that are or can be be loaded by this framework.
   #
-  # @return [Msf::ModuleManager]
-  # @raise [Metasploit::Model::Invalid] if module manager is invalid
+  # @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  # @raise [Metasploit::Model::Invalid] if module instance creator is invalid
   def modules
     synchronize {
       unless instance_variable_defined? :@modules
-        module_manager = Msf::ModuleManager.new(framework: self)
-        module_manager.valid!
+        module_instance_creator = Metasploit::Framework::Module::Instance::Creator::Universal.new(framework: self)
+        module_instance_creator.valid!
 
-        @modules = module_manager
+        @modules = module_instance_creator
       end
 
       @modules

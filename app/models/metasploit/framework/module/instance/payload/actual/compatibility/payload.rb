@@ -7,16 +7,17 @@ class Metasploit::Framework::Module::Instance::Payload::Actual::Compatibility::P
   #   @return [Array<String>] `Mdm::Architecture#abbreviations`
   attr_accessor :architecture_abbreviations
 
-  # @!attribute [rw] module_manager
-  #   The {Msf::ModuleManager} that will be used to {Msf::ModuleManager#create}
-  #   {Metasploit::Framework::Compatibility::Payload#each_compatible_instance}.
-  #
-  #   @return [Msf::ModuleManager]
-  attr_accessor :module_manager
-
   # @!attribute [rw] platform_fully_qualified_names
   #   @return [Array<String>] `Mdm::Platform#fully_qualified_names`
   attr_accessor :platform_fully_qualified_names
+
+  # @!attribute [rw] universal_module_instance_creator
+  #   The {Metasploit::Framework::Module::Instance::Creator::Universal} that will be used to
+  #   {Metasploit::Framework::Module::Instance::Creator::Universal#create}
+  #   {Metasploit::Framework::Compatibility::Payload#each_compatible_instance}.
+  #
+  #   @return [Metasploit::Framework::Module::Instance::Creator::Universal]
+  attr_accessor :universal_module_instance_creator
 
   #
   # Validations
@@ -24,9 +25,9 @@ class Metasploit::Framework::Module::Instance::Payload::Actual::Compatibility::P
 
   validates :architecture_abbreviations,
             presence: true
-  validates :module_manager,
-            presence: true
   validates :platform_fully_qualified_names,
+            presence: true
+  validates :universal_module_instance_creator,
             presence: true
 
   #
@@ -47,13 +48,9 @@ class Metasploit::Framework::Module::Instance::Payload::Actual::Compatibility::P
         architecture_abbreviations
     ).intersecting_platform_fully_qualified_names(
         platform_fully_qualified_names
-    ).includes(
-        :module_class
     )
 
-    compatible_cache_classes = Mdm::Module::Class.non_generic_payloads.where(
-        id: compatible_cache_instances.select(:module_class_id)
-    )
+    compatible_cache_classes = Mdm::Module::Class.non_generic_payloads.with_module_instances(compatible_cache_instances)
 
     compatible_cache_classes.each(&block)
   end
