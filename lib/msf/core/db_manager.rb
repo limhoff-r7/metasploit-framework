@@ -57,7 +57,6 @@ require 'rex/parser/retina_xml'
 # Project
 #
 
-require 'msf/base/config'
 require 'msf/core'
 require 'msf/core/database_event'
 require 'msf/core/db_import_error'

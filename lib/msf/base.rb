@@ -17,7 +17,6 @@
 require 'msf/core'
 
 # Configuration
-require 'msf/base/config'
 require 'msf/base/logging'
 
 # Simple wrapper
