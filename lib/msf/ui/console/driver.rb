@@ -121,7 +121,7 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
     require 'readline_compatible' if(not rl)
 
     # Initialize attributes
-    self.framework = opts['Framework'] || Msf::Simple::Framework.create(opts)
+    self.framework = opts['Framework'] || Msf::Simple::Framework.create(opts.except('DatabaseEnv'))
     histfile = opts['HistFile'] || framework.pathnames.history
 
     framework_data_store_prompt = self.framework.data_store['Prompt']
