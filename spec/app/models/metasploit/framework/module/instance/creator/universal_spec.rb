@@ -44,7 +44,6 @@ describe Metasploit::Framework::Module::Instance::Creator::Universal do
     end
   end
 
-  it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths'
   it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Types'
 
   context '#create' do

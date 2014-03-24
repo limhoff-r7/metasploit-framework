@@ -43,7 +43,7 @@ class RPC_Core < RPC_Base
   end
 
   def rpc_add_module_path(path, options={})
-    framework.modules.add_path(path, options)
+    framework.cache.path_set.add(path, options)
     rpc_module_stats()
   end
 

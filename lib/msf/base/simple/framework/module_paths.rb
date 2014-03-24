@@ -7,7 +7,7 @@ module Msf
         # @return [void]
         def add_data_store_module_paths
           data_store_module_paths.each do |data_store_module_path|
-            modules.add_path(data_store_module_path, prefetch: false)
+            cache.path_set.add(data_store_module_path)
           end
         end
 
@@ -26,7 +26,7 @@ module Msf
         def add_named_module_paths
           module_path_value_by_name.each do |name, value|
             if value
-              modules.add_path(value, gem: 'metasploit-framework', name: name, prefetch: false)
+              cache.path_set.add(value, gem: 'metasploit-framework', name: name)
             end
           end
         end

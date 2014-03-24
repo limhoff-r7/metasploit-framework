@@ -39,6 +39,43 @@ describe Msf::RPC::RPC_Core do
     end
   end
 
+  context '#rpc_add_module_path' do
+    subject(:rpc_add_module_path) do
+      rpc_core.rpc_add_module_path(path, options)
+    end
+
+    let(:options) do
+      {
+          gem: gem,
+          name: name
+      }
+    end
+
+    let(:gem) do
+      FactoryGirl.generate :metasploit_model_module_path_gem
+    end
+
+    let(:name) do
+      FactoryGirl.generate :metasploit_model_module_path_name
+    end
+
+    let(:path) do
+      FactoryGirl.generate :metasploit_model_module_path_real_path
+    end
+
+    it 'adds path to cache path set with options' do
+      expect(framework.cache.path_set).to receive(:add).with(
+                                              path,
+                                              hash_including(
+                                                  gem: gem,
+                                                  name: name
+                                              )
+                                          )
+
+      rpc_add_module_path
+    end
+  end
+
   context '#rpc_thread_kill' do
     subject(:rpc_thread_kill) do
       rpc_core.rpc_thread_kill(name)

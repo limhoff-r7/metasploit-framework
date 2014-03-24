@@ -256,7 +256,7 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
 
       if module_path.present?
         # ensure that prefetching only occurs in 'ModuleCacheRebuild' thread
-        self.framework.modules.add_path(module_path, prefetch: false)
+        self.framework.cache.path_set.add(module_path)
       end
 
       # Rebuild the module cache in a background thread

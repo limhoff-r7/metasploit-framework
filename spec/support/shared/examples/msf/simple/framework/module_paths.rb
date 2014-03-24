@@ -1,9 +1,9 @@
 shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
-  let(:universal_module_instance_creator) do
-    framework.modules
+  let(:path_set) do
+    framework.cache.path_set
   end
 
-	it { should be_a Msf::Simple::Framework::ModulePaths }
+  it { should be_a Msf::Simple::Framework::ModulePaths }
 
   context '#add_datastore_module_paths' do
     subject(:add_data_store_module_paths) do
@@ -27,11 +27,8 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
 
       it 'should add each path in datastore' do
         data_store_module_paths.each do |datastore_module_path|
-          universal_module_instance_creator.should_receive(:add_path).with(
-              datastore_module_path,
-              hash_including(
-                  prefetch: false
-              )
+          expect(path_set).to receive(:add).with(
+              datastore_module_path
           )
         end
 
@@ -41,7 +38,7 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths' do
 
     context "without datastore['MsfModulePaths']" do
       it 'should not add any module paths' do
-        universal_module_instance_creator.should_not_receive(:add_path)
+        expect(path_set).not_to receive(:add)
 
         add_data_store_module_paths
       end
