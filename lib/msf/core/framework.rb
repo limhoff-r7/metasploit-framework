@@ -10,6 +10,7 @@ require 'monitor.rb'
 # Project
 #
 
+require 'metasploit/framework'
 require 'msf/core'
 require 'msf/core/session_event'
 require 'msf/util'
