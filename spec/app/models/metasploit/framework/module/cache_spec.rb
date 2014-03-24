@@ -111,29 +111,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
   end
 
   context 'validations' do
-    it { should validate_presence_of :universal_module_instance_creator }
-  end
-
-  context '#framework' do
-    subject(:framework) do
-      module_cache.framework
-    end
-
-    let(:expected_framework) do
-      double('Msf::Framework')
-    end
-
-    let(:universal_module_instance_creator) do
-      double('Metasploit::Framework::Module::Instance::Creator::Universal', framework: expected_framework)
-    end
-
-    before(:each) do
-      module_cache.stub(universal_module_instance_creator: universal_module_instance_creator)
-    end
-
-    it 'delegates to #universal_module_instance_creator' do
-      expect(framework).to equal(universal_module_instance_creator.framework)
-    end
+    it { should validate_presence_of :framework }
   end
 
   context '#metasploit_class' do

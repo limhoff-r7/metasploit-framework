@@ -109,6 +109,19 @@ class Framework < Metasploit::Model::Base
   # Methods
   #
 
+  def cache
+    synchronize {
+      unless instance_variable_defined? :@cache
+        cache = Metasploit::Framework::Module::Cache.new(framework: self)
+        cache.valid!
+
+        @cache = cache
+      end
+
+      @cache
+    }
+  end
+
   def database_disabled
     @database_disabled ||= false
   end

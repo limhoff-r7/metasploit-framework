@@ -44,7 +44,6 @@ describe Metasploit::Framework::Module::Instance::Creator::Universal do
     end
   end
 
-  it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Cache'
   it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths'
   it_should_behave_like 'Metasploit::Framework::Module::Instance::Creator::Universal::Types'
 
@@ -91,7 +90,9 @@ describe Metasploit::Framework::Module::Instance::Creator::Universal do
       end
 
       it 'uses Metasploit::Framework::Module::Cache#metasploit_class to get the metasploit_class' do
-        expect(module_instance_creator.cache).to receive(:metasploit_class).with(an_instance_of(Mdm::Module::Class))
+        expect(module_instance_creator.framework.cache).to receive(:metasploit_class).with(
+                                                               an_instance_of(Mdm::Module::Class)
+                                                           )
 
         create
       end

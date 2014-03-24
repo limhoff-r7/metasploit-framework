@@ -48,6 +48,33 @@ describe Msf::Framework do
     end
   end
 
+  context '#cache' do
+    subject(:cache) do
+      framework.cache
+    end
+
+    it 'should use lazy initialization' do
+      expect(Metasploit::Framework::Module::Cache).not_to receive(:new)
+
+      framework
+    end
+
+    it 'should be synchronized' do
+      expect(framework).to receive(:synchronize)
+
+      cache
+    end
+
+    it 'should be memoized' do
+      memoized = double('Metasploit::Framework::Module::Cache')
+      framework.instance_variable_set :@cache, memoized
+
+      expect(cache).to equal(memoized)
+    end
+
+    it { should be_a Metasploit::Framework::Module::Cache }
+  end
+
   context '#database_disabled' do
     subject(:database_disabled) do
       framework.database_disabled

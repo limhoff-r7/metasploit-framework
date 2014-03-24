@@ -4,7 +4,6 @@
 # created from a {Mdm::Module::Class#reference_name} using {#create} or from a {Mdm::Module::Class} using
 # {#create_from_module_class}.
 class Metasploit::Framework::Module::Instance::Creator::Universal < Metasploit::Model::Base
-  include Metasploit::Framework::Module::Instance::Creator::Universal::Cache
   include Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths
   include Metasploit::Framework::Module::Instance::Creator::Universal::Types
 
@@ -63,7 +62,7 @@ class Metasploit::Framework::Module::Instance::Creator::Universal < Metasploit::
   # @see #create
   def create_from_module_class(module_class)
     metasploit_instance = nil
-    metasploit_class = cache.metasploit_class(module_class)
+    metasploit_class = framework.cache.metasploit_class(module_class)
 
     if metasploit_class
       metasploit_instance = metasploit_class.new(framework: framework)

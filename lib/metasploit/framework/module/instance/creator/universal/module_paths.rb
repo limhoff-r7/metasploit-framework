@@ -12,12 +12,12 @@ module Metasploit::Framework::Module::Instance::Creator::Universal::ModulePaths
   def add_path(path, options={})
     options.assert_valid_keys(:gem, :name, :prefetch)
 
-    module_path = cache.path_set.add(path, gem: options[:gem], name: options[:name])
+    module_path = framework.cache.path_set.add(path, gem: options[:gem], name: options[:name])
 
     prefetch = options.fetch(:prefetch, true)
 
     if prefetch
-      cache.prefetch(only: module_path)
+      framework.cache.prefetch(only: module_path)
     end
   end
 end

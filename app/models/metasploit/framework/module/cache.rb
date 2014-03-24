@@ -32,29 +32,22 @@ class Metasploit::Framework::Module::Cache < Metasploit::Model::Base
   # Attributes
   #
 
-  # @!attribute [rw] universal_module_instance_creator
-  #   The {Msf::Module} creator using this cache.
+  # @!attribute [rw] framework
+  #   Framework to pass to metasploit instances in {#write_module_ancestor_load}.
   #
-  #   @return [Metasploit::Framework::Module::Instance::Creator::Universal]
-  attr_accessor :universal_module_instance_creator
+  #   @return [Msf::Simple::Framework]
+  attr_accessor :framework
 
   #
   # Validations
   #
 
-  validates :universal_module_instance_creator,
+  validates :framework,
             presence: true
 
   #
   # Methods
   #
-
-  # @!method framework
-  #   Framework to pass to metasploit instances in {#write_module_ancestor_load}.
-  #
-  #   @return [Msf::Simple::Framework]
-  delegate :framework,
-           to: :universal_module_instance_creator
 
   # Either finds in-memory or loads into memory ruby `Class` described by `module_class`.
   #

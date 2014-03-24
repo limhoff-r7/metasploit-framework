@@ -7,7 +7,7 @@ shared_examples_for 'Metasploit::Framework::Module::Instance::Creator::Universal
     end
 
     let(:cache) do
-      module_instance_creator.cache
+      module_instance_creator.framework.cache
     end
 
     let(:path) do
