@@ -79,8 +79,7 @@ class EXE
   ##
 
   def self.set_template_default(opts, exe = nil, path = nil)
-    # If no path specified, use the default one.
-    path ||= framework.pathnames.data.join("templates").to_path
+    path ||= Metasploit::Framework.pathnames.data.join("templates").to_path
 
     # If there's no default name, we must blow it up.
     if not exe
