@@ -134,7 +134,7 @@ describe Msf::PayloadGenerator, :ui do
     module_ancestor_loads.each do |module_ancestor_load|
       # protect specs from loading errors
       expect(
-          framework.modules.cache.write_module_ancestor_load(module_ancestor_load)
+          framework.cache.write_module_ancestor_load(module_ancestor_load)
       ).to be_true
     end
   end

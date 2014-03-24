@@ -261,7 +261,7 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
 
       # Rebuild the module cache in a background thread
       self.framework.threads.spawn("ModuleCacheRebuild", true) do
-        self.framework.modules.cache.prefetch
+        self.framework.cache.prefetch
       end
     end
 

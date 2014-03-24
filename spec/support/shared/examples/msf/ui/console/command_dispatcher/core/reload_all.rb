@@ -46,7 +46,7 @@ shared_examples_for 'Msf::Ui::Console::CommandDispatcher::Core::ReloadAll' do
       end
 
       it 'should prefetch the cache with changed: true and a ruby ProgressBar factory' do
-        framework.modules.cache.should_receive(:prefetch) do |options|
+        framework.cache.should_receive(:prefetch) do |options|
           options[:changed].should be_true
           progress_bar_factory = options[:progress_bar_factory]
           progress_bar_factory.should respond_to(:call)
@@ -62,7 +62,7 @@ shared_examples_for 'Msf::Ui::Console::CommandDispatcher::Core::ReloadAll' do
       end
 
       it 'should show cmd_banner to display the module counts after the prefetch completes' do
-        framework.modules.cache.should_receive(:prefetch).ordered
+        framework.cache.should_receive(:prefetch).ordered
         command_dispatcher.should_receive(:cmd_banner).ordered
 
         quietly

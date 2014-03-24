@@ -20,7 +20,7 @@ module Msf::Ui::Console::CommandDispatcher::Core::ReloadAll
       cmd_reload_all_help
     else
       print_status("Reloading modules from all module paths...")
-      self.framework.modules.cache.prefetch(
+      self.framework.cache.prefetch(
           changed: true,
           progress_bar_factory: method(:cmd_reload_all_progress_bar_factory)
       )

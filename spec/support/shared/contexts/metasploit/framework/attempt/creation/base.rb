@@ -71,6 +71,6 @@ shared_context 'Metasploit::Framework::Attempt::Creation::Base' do
   #
 
   before(:each) do
-    framework.modules.cache.write_module_ancestor_load(module_ancestor_load)
+    framework.cache.write_module_ancestor_load(module_ancestor_load)
   end
 end
