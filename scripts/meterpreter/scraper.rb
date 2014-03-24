@@ -10,11 +10,13 @@ opts = Rex::Parser::Arguments.new(
   "-h" => [ false,"Help menu." ]
 )
 
+script_logs_pathname = framework.pathnames.script_logs('scraper')
+
 opts.parse(args) { |opt, idx, val|
   case opt
   when "-h"
     print_line("Scraper -- harvest system info including network shares, registry hives and password hashes")
-    print_line("Info is stored in " + ::File.join(Msf::Config.log_directory,"scripts", "scraper"))
+    print_line("Info is stored in #{script_logs_pathname}")
     print_line("USAGE: run scraper")
     print_line(opts.usage)
     raise Rex::Script::Completed
@@ -65,7 +67,9 @@ host,port = client.session_host, client.session_port
 print_status("New session on #{host}:#{port}...")
 
 # Create a directory for the logs
-logs = ::File.join(Msf::Config.log_directory, 'scripts','scraper', host + "_" + Time.now.strftime("%Y%m%d.%M%S")+sprintf("%.5d",rand(100000)) )
+logs = script_logs_pathname.join(
+    "#{host}_#{Time.now.strftime("%Y%m%d.%M%S")}#{sprintf("%.5d",rand(100000))}"
+).to_path
 
 # Create the log directory
 ::FileUtils.mkdir_p(logs)

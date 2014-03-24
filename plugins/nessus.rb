@@ -11,8 +11,6 @@ module Msf
     def create_xindex
       start = Time.now
       print_status("Creating Exploit Search Index - (#{@xindex}) - this wont take long.")
-      count = 0
-      # use Msf::Config.get_config_root as the location.
       File.open("#{@xindex}", "w+") do |f|
         #need to add version line.
         f.puts(Msf::Framework::RepoRevision)
@@ -113,7 +111,8 @@ module Msf
 
       def cmd_nessus_save(*args)
         #if we are logged in, save session details to nessus.yaml
-        @nessus_yaml = "#{Msf::Config.get_config_root}/nessus.yaml"
+        @nessus_yaml = framework.pathnames.root.join("nessus.yaml").to_path
+
         if args[0] == "-h"
           print_status("Usage: ")
           print_status("       nessus_save")
@@ -324,7 +323,8 @@ module Msf
 
       def cmd_nessus_connect(*args)
         # Check if config file exists and load it
-        @nessus_yaml = "#{Msf::Config.get_config_root}/nessus.yaml"
+        @nessus_yaml = framework.pathnames.root.join("nessus.yaml").to_path
+
         if ! args[0]
           if File.exist?("#{@nessus_yaml}")
             lconfig = YAML.load_file("#{@nessus_yaml}")
@@ -1660,8 +1660,8 @@ module Msf
 
       add_console_dispatcher(ConsoleCommandDispatcher)
       @nbver = "1.1" # Nessus Plugin Version.  Increments each time we commit to msf
-      @xindex = "#{Msf::Config.get_config_root}/nessus_index" # location of the exploit index file used to speed up searching for valid exploits.
-      @nessus_yaml = "#{Msf::Config.get_config_root}/nessus.yaml" #location of the nessus.yml containing saved nessus creds
+      @xindex = framework.pathnames.root.join("nessus_index") # location of the exploit index file used to speed up searching for valid exploits.
+      @nessus_yaml = framwork.pathnames.root.join("#nessus.yaml") #location of the nessus.yml containing saved nessus creds
       print_status("Nessus Bridge for Metasploit #{@nbver}")
       print_good("Type %bldnessus_help%clr for a command listing")
       #nessus_index

@@ -38,7 +38,7 @@ class Metasploit3 < Msf::Auxiliary
           [
             true,
             "The local filename to store the dumped memory",
-            ::File.join(Msf::Config.log_directory, "vxworks_memory.dmp")
+            framework.pathnames.logs.join('vxworks_memory.dmp').to_path
           ]
         ),
         OptInt.new('OFFSET', [ true, "The starting offset to read the memory dump (hex allowed)", 0 ])

@@ -121,20 +121,13 @@ end
 #--------------------------------------------------------
 # Function for creating log file
 def logme(target)
+  logs_pathname = framework.pathnames.logs.join('scripts', 'winbf')
+  logs_pathname.mkpath
 
   # Create Filename info to be appended to  files
   filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
-  # Create a directory for the logs
-  logs = ::File.join(Msf::Config.log_directory,'scripts', 'winbf')
-
-  # Create the log directory
-  ::FileUtils.mkdir_p(logs)
-
-  #logfile name
-  dest = logs + "/" + target + filenameinfo
-
-  dest
+  logs_pathname.join("#{target}#{filenameinfo}")
 end
 #--------------------------------------------------------
 #

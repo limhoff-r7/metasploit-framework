@@ -14,22 +14,20 @@ module Msf::Ui::Console::Driver::Configuration
   # Loads configuration for the console.
   #
   # @return [void]
-  def load_config(path=nil)
+  def load_config
     begin
-      conf = Msf::Config.load(path)
+      conf = Rex::Parser::Ini.new(framework.pathnames.file)
     rescue
       wlog("Failed to load configuration: #{$!}")
-      return
-    end
-
-    # If we have configuration, process it
-    if (conf.group?(CONFIG_GROUP))
-      conf[CONFIG_GROUP].each_pair { |k, v|
-        case k.downcase
-          when "activemodule"
-            run_single("use #{v}")
-        end
-      }
+    else
+      if (conf.group?(CONFIG_GROUP))
+        conf[CONFIG_GROUP].each_pair { |k, v|
+          case k.downcase
+            when "activemodule"
+              run_single("use #{v}")
+          end
+        }
+      end
     end
   end
 
@@ -38,16 +36,15 @@ module Msf::Ui::Console::Driver::Configuration
   # @return [void]
   def load_preconfig
     begin
-      conf = Msf::Config.load
+      conf = Rex::Parser::Ini.new(framework.pathnames.file)
     rescue
       wlog("Failed to load configuration: #{$!}")
-      return
-    end
-
-    if (conf.group?(CONFIG_CORE))
-      conf[CONFIG_CORE].each_pair { |k, v|
-        on_variable_set(true, k, v)
-      }
+    else
+      if conf.group?(CONFIG_CORE)
+        conf[CONFIG_CORE].each_pair { |k, v|
+          on_variable_set(true, k, v)
+        }
+      end
     end
   end
 
@@ -62,9 +59,13 @@ module Msf::Ui::Console::Driver::Configuration
       group['ActiveModule'] = metasploit_instance.full_name
     end
 
+    path = opts['ConfigFile'] || framework.pathnames.file
+    ini = Rex::Parser::Ini.new(path)
+    ini.update(opts.except('ConfigFile'))
+
     # Save it
     begin
-      Msf::Config.save(CONFIG_GROUP => group)
+      ini.to_file
     rescue ::Exception
       print_error("Failed to save console config: #{$!}")
     end

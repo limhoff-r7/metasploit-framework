@@ -72,17 +72,17 @@ module Metasploit3
     host = session.session_host
 
     # Create a directory for the images
-    base = File.join(Msf::Config.config_directory, 'logs', 'isight')
-    dest = File.join(base,
-      host + "_" + Time.now.strftime("%Y%m%d.%M%S")+sprintf("%.5d",rand(100000))+".jpg"
+    base_pathname = framework.pathnames.logs.join('isight')
+    dest_pathname  base_pathname.join(
+      "#{host}_#{Time.now.strftime("%Y%m%d.%M%S")}#{sprintf("%.5d",rand(100000))}.jpg"
     )
 
     # Create the log directory
-    FileUtils.mkdir_p(base)
-    File.open(dest, 'wb') do |f|
+    base_pathname.mkpath
+    dest_patname.open('wb') { |f|
       f.write(photo)
       f.flush
-    end
+    }
 
     print_status("Photo saved as #{dest}")
 

@@ -6,10 +6,6 @@ shared_examples_for 'Msf::Simple::Framework::ModulePaths#add_named_module_paths'
   config_method = "#{config_directory_name}_directory".to_sym
 
   context config_directory_name.to_s do
-    before(:each) do
-      Msf::Config.stub(config_method: config_method)
-    end
-
     context 'with present' do
       let(config_method) do
         FactoryGirl.generate :metasploit_model_module_path_real_path

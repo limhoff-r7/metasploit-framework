@@ -101,7 +101,7 @@ class Metasploit3 < Msf::Post
     if log_path
       logs = ::File.join(log_path, 'logs', "enum_osx", host + filenameinfo )
     else
-      logs = ::File.join(Msf::Config.log_directory, "post", "enum_osx", host + filenameinfo )
+      logs = framework.pathnames.logs.join("post", "enum_osx", host + filenameinfo).to_path
     end
 
     # Create the log directory

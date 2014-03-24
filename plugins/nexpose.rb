@@ -10,8 +10,6 @@
 require 'rapid7/nexpose'
 
 module Msf
-  Nexpose_yaml = "#{Msf::Config.get_config_root}/nexpose.yaml" #location of the nexpose.yml containing saved nexpose creds
-
   class Plugin::Nexpose < Msf::Plugin
     class NexposeCommandDispatcher
       include Msf::Ui::Console::CommandDispatcher
@@ -83,8 +81,12 @@ module Msf
 
         if ((@user and @user.length > 0) and (@host and @host.length > 0) and (@port and @port.length > 0 and @port.to_i > 0) and (@pass and @pass.length > 0))
           config = {"#{group}" => {'username' => @user, 'password' => @pass, 'server' => @host, 'port' => @port}}
-          ::File.open("#{Nexpose_yaml}", "wb") { |f| f.puts YAML.dump(config) }
-          print_good("#{Nexpose_yaml} created.")
+          nexpose_yaml_pathname = framework.pathnames.root.join("nexpose.yaml")
+
+          nexpose_yaml_pathname.open('wb') { |f|
+            f.puts YAML.dump(config)
+          }
+          print_good("#{nexpose_yaml_pathname} created.")
         else
           print_error("Missing username/password/server/port - relogin and then try again.")
           return
@@ -95,8 +97,10 @@ module Msf
         return if not nexpose_verify_db
 
         if ! args[0]
-          if ::File.readable?("#{Nexpose_yaml}")
-            lconfig = YAML.load_file("#{Nexpose_yaml}")
+          nexpose_yaml_pathname = framework.pathnames.root.join("nexpose.yaml")
+
+          if nexpose_yaml_pathname.readable?
+            lconfig = YAML.load_file(nexpose_yaml_pathname)
             @user = lconfig['default']['username']
             @pass = lconfig['default']['password']
             @host = lconfig['default']['server']

@@ -7,13 +7,14 @@ opts = Rex::Parser::Arguments.new(
   "-w" => [ false, "Redirect output to file."]
 )
 
+default_output_dir = framework.pathnames.script_logs.join('dumplinks').to_path
 @everything, @output_dir, @data_out = nil
 opts.parse(args) { |opt, idx, val|
   case opt
   when '-e'
     @everything = true
   when '-w'
-    @output_dir = ::File.join(Msf::Config.log_directory,'scripts', 'dumplinks')
+    @output_dir = default_output_dir
   when "-h"
     print_line "dumplinks -- parse .lnk files from user's Recent Documents"
     print_line
@@ -22,7 +23,7 @@ opts.parse(args) { |opt, idx, val|
     print_line "Microsoft Office's Recent documents folder, if present. Windows creates"
     print_line "these link files automatically for many common file types."
     print_line
-    print_line "\tResults are saved to #{::File.join(Msf::Config.log_directory, 'dumplinks')} if -w is used."
+    print_line "\tResults are saved to #{default_output_dir} if -w is used."
     print_line
     print_line "The .lnk files contain time stamps, file locations, including share"
     print_line "names, volume serial #s and more. This info may help you target"

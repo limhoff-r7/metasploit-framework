@@ -147,12 +147,11 @@ class Metasploit3 < Msf::Post
 
   def run
     # Log file variables
-    host,port = session.session_host, session.session_port
+    host = session.session_host
     filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")					# Create Filename info to be appended to downloaded files
-    logs = ::File.join(Msf::Config.log_directory, 'scripts', 'smartlocker')		# Create a directory for the logs
-    ::FileUtils.mkdir_p(logs)											# Create the log directory
-    logfile = logs + ::File::Separator + host + filenameinfo + ".txt"			# Logfile name
-
+    logs_pathname = framework.pathnames.script_logs.join('smartlocker').to_path
+    logs_pathname.mkpath
+    logfile = logs_pathname.join("#{host}#{filenameinfo}.txt")
 
     #Make sure we are on a Windows host
     if client.platform !~ /win32|win64/

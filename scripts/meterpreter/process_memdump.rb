@@ -83,7 +83,7 @@ def dump_mem(pid,name, toggle)
   # Create Filename info to be appended to created files
   filenameinfo = "_#{name}_#{pid}_" + ::Time.now.strftime("%Y%m%d.%M%S")
   # Create a directory for the logs
-  logs = ::File.join(Msf::Config.log_directory, 'scripts', 'proc_memdump')
+  logs = framework.pathnames.script_logs.join('proc_memdump').to_path
   # Create the log directory
   ::FileUtils.mkdir_p(logs)
   #Dump file name

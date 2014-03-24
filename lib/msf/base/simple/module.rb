@@ -41,14 +41,14 @@ module Module
   # Populates the datastore from the config file.
   #
   def load_config
-    data_store.from_file(Msf::Config.config_file, reference_name)
+    data_store.from_file(framework.pathnames.file, reference_name)
   end
 
   #
   # Saves the module's datastore to the file.
   #
   def save_config
-    data_store.to_file(Msf::Config.config_file, reference_name)
+    data_store.to_file(framework.pathnames.file, reference_name)
   end
 
 end

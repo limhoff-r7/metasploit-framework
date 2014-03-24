@@ -192,7 +192,7 @@ if @migrate
 end
 
 host = session.session_host
-@log_dir = File.join(Msf::Config.log_directory, "scripts", "enum_chrome", Rex::FileUtils.clean_path(@host_info['Computer']), Time.now.strftime("%Y%m%d.%H%M"))
+@log_dir = framework.pathnames.script_logs.join("enum_chrome", Rex::FileUtils.clean_path(@host_info['Computer']), Time.now.strftime("%Y%m%d.%H%M")).to_path
 ::FileUtils.mkdir_p(@log_dir)
 
 sysdrive = client.fs.file.expand_path("%SYSTEMDRIVE%")

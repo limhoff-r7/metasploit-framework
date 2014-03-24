@@ -26,7 +26,7 @@ host,port = session.session_host, session.session_port
 filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
 # Create a directory for the logs
-logs = ::File.join(Msf::Config.log_directory, 'scripts', 'keylogrecorder')
+logs = framework.script_logs.join('keylogrecorder').to_path
 
 # Create the log directory
 ::FileUtils.mkdir_p(logs)

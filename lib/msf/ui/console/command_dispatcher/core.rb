@@ -255,7 +255,7 @@ class Core
         # let's check to see if it's in the scripts/resource dir (like when tab completed)
         [
             Metasploit::Framework.pathnames.scripts,
-            Pathname.new(::Msf::Config.user_script_directory)
+            framework.pathnames.scripts
         ].each do |scripts_pathname|
           resource_pathname = scripts_pathname.join('resource', res)
 
@@ -293,7 +293,7 @@ class Core
       begin
         [
           Metasploit::Framework.pathnames.scripts,
-          Pathname.new(::Msf::Config.user_script_directory),
+          framework.pathnames.scripts,
           Pathname.new('.')
         ].each do |scripts_pathname|
           resources_pathname = scripts_pathname.join('resource')
@@ -912,7 +912,7 @@ class Core
     print_line "Usage: load <path> [var=val var=val ...]"
     print_line
     print_line "Loads a plugin from the supplied path.  If path is not absolute, first looks"
-    print_line "in the user's plugin directory (#{Msf::Config.user_plugin_directory}) then"
+    print_line "in the user's plugin directory (#{framework.pathnames.plugins}) then"
     print_line "in the framework root plugin directory (#{Metasploit::Framework.pathanmes.plugins})."
     print_line "The optional var=val options are custom parameters that can be passed to plugins."
     print_line
@@ -950,7 +950,7 @@ class Core
       plugin_file_name = path
 
       # If the plugin isn't in the user directory (~/.msf3/plugins/), use the base
-      path = Msf::Config.user_plugin_directory + File::SEPARATOR + plugin_file_name
+      path = framework.pathnames.plugins.join(plugin_file_name).to_path
 
       unless File.exists?( path  + ".rb" )
         # If the following "path" doesn't exist it will be caught when we attempt to load
@@ -983,7 +983,7 @@ class Core
       # then let's start tab completion in the scripts/resource directories
       begin
         [
-          Pathname.new(Msf::Config.user_plugin_directory),
+          framework.pathnames.plugins,
           Metasploit::Framework.pathnames.plugins
         ].each do |plugins_pathname|
           unless plugins_pathname.exist?
@@ -1182,7 +1182,7 @@ class Core
     print_line
     print_line "Save the active data_store contents to disk for automatic use across restarts of the console"
     print_line
-    print_line "The configuration is stored in #{Msf::Config.config_file}"
+    print_line "The configuration is stored in #{framework.pathnames.file}"
     print_line
   end
 
@@ -1208,7 +1208,7 @@ class Core
       return false
     end
 
-    print_line("Saved configuration to: #{Msf::Config.config_file}")
+    print_line("Saved configuration to: #{framework.pathnames.file}")
   end
 
   def cmd_loadpath_help

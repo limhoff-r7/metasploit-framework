@@ -268,7 +268,7 @@ def nmap_hosts(&block)
   end
 end
 
-#Saves the data from the nmap scan to a file in the MSF::Config.local_directory
+#Saves the data from the nmap scan to a file in the framework.pathnames.local directory
 def nmap_save()
   print_status "Nmap: saving nmap log file"
   fh = self.nmap_log[0]

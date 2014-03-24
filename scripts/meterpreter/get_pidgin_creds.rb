@@ -42,7 +42,7 @@ host = @client.sys.config.sysinfo['Computer']
 # Create Filename info to be appended to downloaded files
 filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 # Create a directory for the logs
-logs = ::File.join(Msf::Config.log_directory,'scripts', 'pidgin_creds')
+logs = framework.pathnames.script_logs.join('pidgin_creds').to_path
 # Create the log directory
 ::FileUtils.mkdir_p(logs)
 #logfile name

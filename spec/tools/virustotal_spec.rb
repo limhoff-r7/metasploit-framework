@@ -30,7 +30,7 @@ describe VirusTotalUtility do
 
         context ".Initializer" do
           it "should init the config file path as Metasploit's default config path" do
-            tool_config.instance_variable_get(:@config_file).should eq(Msf::Config.config_file)
+            tool_config.instance_variable_get(:@config_file).should eq(framework.pathnames.file)
           end
 
           it "should init the group name as 'VirusTotal'" do

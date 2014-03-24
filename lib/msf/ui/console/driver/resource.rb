@@ -18,7 +18,7 @@ module Msf::Ui::Console::Driver::Resource
   #   of `msfconsole.rc` under the configuration directory.
   # @return [void]
   def load_resource(path=nil)
-    path ||= File.join(Msf::Config.config_directory, 'msfconsole.rc')
+    path ||= framework.pathnames.root.join('msfconsole.rc').to_path
     return if not ::File.readable?(path)
     resource_file = ::File.read(path)
 
@@ -81,13 +81,14 @@ module Msf::Ui::Console::Driver::Resource
   # @param path [String, nil] The path on-disk to save the resource script.  If `nil`, defaults to `msfconsole.rc` under
   #   the configuration directory.
   def save_resource(data, path=nil)
-    path ||= File.join(Msf::Config.config_directory, 'msfconsole.rc')
+    if path
+      pathname = Pathname.new(path)
+    else
+      pathname = framework.pathnames.root.join('msfconsole.rc')
+    end
 
-    begin
-      rcfd = File.open(path, 'w')
-      rcfd.write(data)
-      rcfd.close
-    rescue ::Exception
+    pathname.open('w') do |f|
+      f.write(data)
     end
   end
 end

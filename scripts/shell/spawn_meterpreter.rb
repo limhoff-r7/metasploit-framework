@@ -107,8 +107,7 @@ begin
   end
   opts = {
     :linemax => linemax,
-    :decoder => File.join(Msf::Config.data_directory, "exploits", "cmdstager", "vbs_b64"),
-    #:nodelete => true # keep temp files (for debugging)
+    :decoder => framework.pathnames.exploit_data.join("cmdstager", "vbs_b64").to_path
   }
   exe = Msf::Util::EXE.to_executable(
       architecture_abbreviations: larch,

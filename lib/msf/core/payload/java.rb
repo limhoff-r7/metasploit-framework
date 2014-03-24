@@ -43,7 +43,7 @@ module Msf::Payload::Java
   #
   # Used by stagers to create a jar file as a {Rex::Zip::Jar}.  Stagers
   # define a list of class files in @class_files which are pulled from
-  # {Msf::Config.data_directory}.  The configuration file is created by
+  # {Metasploit::Framework::Configuration::Pathnames#java_classes}.  The configuration file is created by
   # the payload's #config method.
   #
   # @option opts :main_class [String] the name of the Main-Class

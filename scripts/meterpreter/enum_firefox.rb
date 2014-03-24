@@ -10,7 +10,7 @@ host,port = session.session_host, session.session_port
 filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
 # Create a directory for the logs
-@logs = ::File.join(Msf::Config.config_directory, 'logs',"scripts", 'enum_firefox', host + filenameinfo )
+@logs = framework.pathnames.script_logs.join('enum_firefox', host + filenameinfo).to_path
 
 # logfile name
 logfile = @logs + "/" + host + filenameinfo + ".txt"

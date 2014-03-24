@@ -214,10 +214,12 @@ filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
 # Create a directory for any local logging if the user desires
 if local_log
+  basename = Rex::FileUtils.clean_path(host + filenameinfo)
+
   if local_log_path
-    logs = ::File.join(local_log_path, Rex::FileUtils.clean_path(host + filenameinfo) )
+    logs = ::File.join(local_log_path, basename)
   else
-    logs = ::File.join(Msf::Config.log_directory, "scripts", 'event_manager', Rex::FileUtils.clean_path(host + filenameinfo) )
+    logs = framework.pathnames.script_logs.join('event_manager', basename).to_path
   end
 
   ::FileUtils.mkdir_p(logs)

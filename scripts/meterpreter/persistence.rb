@@ -84,12 +84,13 @@ def log_file(log_path = nil)
 
   # Create Filename info to be appended to downloaded files
   filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
+  clean_path = Rex::FileUtils.clean_path(host + filenameinfo)
 
   # Create a directory for the logs
   if log_path
-    logs = ::File.join(log_path, 'logs', 'persistence', Rex::FileUtils.clean_path(host + filenameinfo) )
+    logs = ::File.join(log_path, 'logs', 'persistence', clean_path)
   else
-    logs = ::File.join(Msf::Config.log_directory, 'persistence', Rex::FileUtils.clean_path(host + filenameinfo) )
+    logs = framework.pathnames.logs.join('persistence', clean_path).to_path
   end
 
   # Create the log directory

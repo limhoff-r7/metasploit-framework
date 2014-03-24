@@ -120,10 +120,9 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
     # Default to the RbReadline wrapper
     require 'readline_compatible' if(not rl)
 
-    histfile = opts['HistFile'] || Msf::Config.history_file
-
     # Initialize attributes
     self.framework = opts['Framework'] || Msf::Simple::Framework.create(opts)
+    histfile = opts['HistFile'] || framework.pathnames.history
 
     framework_data_store_prompt = self.framework.data_store['Prompt']
 
@@ -266,7 +265,7 @@ class Msf::Ui::Console::Driver < Metasploit::Framework::UI::Driver
     end
 
     # Load console-specific configuration (after module paths are added)
-    load_config(opts['Config'])
+    load_config
 
     # Process things before we actually display the prompt and get rocking
     on_startup(opts)

@@ -85,14 +85,14 @@ class Metasploit3 < Msf::Post
     computer_name = session.sys.config.sysinfo['Computer']
 
     # Create unique log directory
-    log_dir = ::File.join(Msf::Config.log_directory,'scripts', computer_name)
-    ::FileUtils.mkdir_p(log_dir)
+    logs_pathname = framework.pathnames.script_logs.join(computer_name)
+    logs_pathname.mkpath
 
     # Define log filename
     script_ext  = ::File.extname(datastore['SCRIPT'])
     script_base = ::File.basename(datastore['SCRIPT'], script_ext)
     time_stamp  = ::Time.now.strftime('%Y%m%d:%H%M%S')
-    log_file    = ::File.join(log_dir,"#{script_base}-#{time_stamp}.txt")
+    log_file    = logs_pathname.join("#{script_base}-#{time_stamp}.txt").to_path
 
     # Compress
     print_status('Compressing script contents.')

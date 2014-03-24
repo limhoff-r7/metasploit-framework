@@ -45,7 +45,7 @@ def log_folder_create(log_path = nil)
   if log_path
     logs = ::File.join(log_path, 'logs', "sound_recorder", host + filenameinfo )
   else
-    logs = ::File.join(Msf::Config.log_directory, "scripts", "sound_recorder", host + filenameinfo )
+    logs = framework.pathnames.script_logs.join("sound_recorder", host + filenameinfo ).to_path
   end
 
   # Create the log directory

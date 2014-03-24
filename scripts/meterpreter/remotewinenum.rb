@@ -19,7 +19,7 @@ trg = ""
 filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
 # Create a directory for the logs
-logs = ::File.join(Msf::Config.log_directory, 'scripts', 'remotewinenum')
+logs = framework.pathnames.script_logs.join('remotewinenum').to_path
 
 # Create the log directory
 ::FileUtils.mkdir_p(logs)

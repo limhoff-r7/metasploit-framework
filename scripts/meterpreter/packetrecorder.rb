@@ -50,12 +50,13 @@ def log_file(log_path = nil)
 
   # Create Filename info to be appended to downloaded files
   filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
+  basename = host + filenameinfo
 
   # Create a directory for the logs
   if log_path
-    logs = ::File.join(log_path, 'logs', 'packetrecorder', host + filenameinfo )
+    logs = ::File.join(log_path, 'logs', 'packetrecorder', basename)
   else
-    logs = ::File.join(Msf::Config.log_directory, "scripts", 'packetrecorder', host + filenameinfo )
+    logs = framework.pathnames.script_logs.join('packetrecorder', basename).to_path
   end
 
   # Create the log directory

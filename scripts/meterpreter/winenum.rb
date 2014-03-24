@@ -9,6 +9,8 @@ opts = Rex::Parser::Arguments.new(
   "-c" => [ false, "Change Access, Modified and Created times of executables that were run on the target machine and clear the EventLog" ]
 )
 
+logs_pathname = framework.pathnames.script_logs.join('winenum')
+
 rd = nil
 mg = nil
 cm = nil
@@ -26,7 +28,7 @@ opts.parse(args) { |opt, idx, val|
     print_line "Retrieves all kinds of information about the system"
     print_line "including environment variables, network interfaces,"
     print_line "routing, user accounts, and much more.  Results are"
-    print_line "stored in #{::File.join(Msf::Config.log_directory,'scripts', 'winenum')}"
+    print_line "stored in #{logs_pathname}"
     print_line(opts.usage)
     raise Rex::Script::Completed
   end
@@ -40,7 +42,7 @@ info = @client.sys.config.sysinfo
 filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
 # Create a directory for the logs
-logs = ::File.join(Msf::Config.log_directory,'scripts', 'winenum',Rex::FileUtils.clean_path(info['Computer'] + filenameinfo))
+logs = logs_pathname.join(Rex::FileUtils.clean_path(info['Computer'] + filenameinfo)).to_path
 @logfol = logs
 # Create the log directory
 ::FileUtils.mkdir_p(logs)

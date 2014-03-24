@@ -63,7 +63,7 @@ module VirusTotalUtility
 class ToolConfig
 
   def initialize
-    @config_file ||= Msf::Config.config_file
+    @config_file ||= framework.pathnames.file
     @group_name  ||= 'VirusTotal'
   end
 

@@ -67,7 +67,7 @@ def save_found(found_ip)
   filenameinfo = "_" + ::Time.now.strftime("%Y%m%d.%M%S")
 
   # Create a directory for the logs
-  logs = ::File.join(Msf::Config.log_directory,'scripts', 'arp_scanner',Rex::FileUtils.clean_path(info['Computer'] + filenameinfo))
+  logs = framework.pathnams.script_logs.join('arp_scanner', Rex::FileUtils.clean_path(info['Computer'] + filenameinfo)).to_path
   # Create the log directory
   ::FileUtils.mkdir_p(logs)
 

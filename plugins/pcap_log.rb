@@ -160,7 +160,7 @@ class Plugin::PcapLog < Msf::Plugin
 
     def initialize(*args)
       super
-      @dir = File.join(Msf::Config.config_directory, 'logs')
+      @dir = framework.pathnames.logs.to_path
       @prefix = "msf3-session"
       @filter = nil
       @pcaprub_loaded = false

@@ -181,9 +181,6 @@ class Metasploit3 < Msf::Post
 
     #store the original file because we need to unzip from disk because there is no memory unzip
     if datastore['BACKUP']
-      #logs_dir = ::File.join(Msf::Config.local_directory, 'unc_injector_backup')
-      #FileUtils.mkdir_p(logs_dir)
-      #@org_file =  logs_dir + File::Separator + datastore['FILE'].split('\\').last
       @org_file = store_loot(
         "host.word_unc_injector.changedfiles",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

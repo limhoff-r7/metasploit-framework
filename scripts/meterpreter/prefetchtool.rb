@@ -93,7 +93,7 @@ def prefetch_dump(options, logging=false)
     @session.sys.process.execute("cmd.exe /c del %windir%\\prefetch\\#{rexe.gsub('.exe','')}*.pf", nil, {'Hidden' => 'true'})
 
     if(logging)
-      logfile = ::File.join(Msf::Config.config_directory, 'logs', 'prefetch', @host + "-" + ::Time.now.strftime("%Y%m%d.%M%S") + ".log")
+      logfile = framework.pathnames.logs.join('prefetch', "#{@host}-#{::Time.now.strftime("%Y%m%d.%M%S")}.log").to_path
       print_status("[*] Saving prefetch logs to #{logfile}...")
       @session.fs.file.download_file(logfile, "#{@tempdir}\\#{rlog}")
       print_status("[*] Deleting log file from target...")

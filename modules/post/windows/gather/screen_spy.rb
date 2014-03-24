@@ -43,7 +43,7 @@ class Metasploit3 < Msf::Post
 
   def run
     host = session.session_host
-    screenshot = Msf::Config.get_config_root + "/logs/" + host + ".jpg"
+    screenshot = framework.pathnames.logs.join("#{host}.jpg").to_path
 
     migrate_explorer
     if session.platform !~ /win32|win64/i

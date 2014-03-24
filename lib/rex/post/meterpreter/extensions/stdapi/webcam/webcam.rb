@@ -236,10 +236,9 @@ class Webcam
   # @return [String] The HTML interface code
   #
   def load_interface(html_name)
-    interface_path = ::File.join(Msf::Config.data_directory, 'webcam', html_name)
-    interface_code = ''
-    ::File.open(interface_path) { |f| interface_code = f.read }
-    interface_code
+    interface_pathname = webcam_pathname.join(html_name)
+
+    interface_pathname.read
   end
 
 
@@ -249,12 +248,14 @@ class Webcam
   # @return [String] The WebRTC lib code
   #
   def load_api_code
-    js_api_path = ::File.join(Msf::Config.data_directory, 'webcam', 'api.js')
-    api = ''
-    ::File.open(js_api_path) { |f| api = f.read }
-    api
+    js_api_pathname = webcam_pathname.join('api.js')
+
+    js_api_pathname.read
   end
 
+  def webcam_pathname
+    @webcam_pathname ||= Metasploit::Framework.pathnames.data.join('webcam')
+  end
 end
 
 end; end; end; end; end; end

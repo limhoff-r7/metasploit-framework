@@ -27,7 +27,8 @@ class Metasploit3 < Msf::Auxiliary
               If "Download" is selected, at least one of FILENAME or REMOTE_FILENAME
               must be set. If "Upload" is selected, either FILENAME must be set to a valid path to
               a source file, or FILEDATA must be populated. FILENAME may be a fully qualified path,
-              or the name of a file in the Msf::Config.local_directory or Msf::Config.data_directory.
+              or the name of a file in the framework.pathnames.local directory or
+              Metasploit::Framework.pathnames.data directory.
             },
             'Author'      => [ 'todb' ],
             'References'  =>
@@ -92,7 +93,7 @@ class Metasploit3 < Msf::Auxiliary
       elsif ::File.readable? fname
         fname
       else
-        fname_local = ::File.join(Msf::Config.local_directory,fname)
+        fname_local = framework.pathnames.local.join(fname).to_path
         fname_data  = Metasploit::Framework.pathnames.data.join(fname).to_path
         return fname_local if ::File.file?(fname_local) and ::File.readable?(fname_local)
         return fname_data  if ::File.file?(fname_data)  and ::File.readable?(fname_data)

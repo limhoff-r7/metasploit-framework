@@ -80,7 +80,7 @@ class EXE
 
   def self.set_template_default(opts, exe = nil, path = nil)
     # If no path specified, use the default one.
-    path ||= File.join(Msf::Config.data_directory, "templates")
+    path ||= framework.pathnames.data.join("templates").to_path
 
     # If there's no default name, we must blow it up.
     if not exe
@@ -564,7 +564,7 @@ class EXE
   end
 
   def self.replace_msi_buffer(pe, opts)
-    opts[:msi_template_path] ||= File.join(Msf::Config.data_directory, "templates")
+    opts[:msi_template_path] ||= framework.pathnames.data.join("templates").to_path
 
     if opts[:msi_template].include?(File::SEPARATOR)
       template = opts[:msi_template]
