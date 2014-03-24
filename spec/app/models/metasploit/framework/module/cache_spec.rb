@@ -462,10 +462,7 @@ describe Metasploit::Framework::Module::Cache, :cache do
       before(:all) do
         module_cache = FactoryGirl.create(:metasploit_framework_module_cache)
 
-        universal_module_instance_creator = module_cache.universal_module_instance_creator
-        universal_module_instance_creator.should_not be_nil
-
-        framework = universal_module_instance_creator.framework
+        framework = module_cache.framework
         framework.should_not be_nil
 
         @module_path = FactoryGirl.create(
