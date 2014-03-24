@@ -59,9 +59,8 @@ module Msf::Ui::Console::Driver::Configuration
       group['ActiveModule'] = metasploit_instance.full_name
     end
 
-    path = opts['ConfigFile'] || framework.pathnames.file
-    ini = Rex::Parser::Ini.new(path)
-    ini.update(opts.except('ConfigFile'))
+    ini = Rex::Parser::Ini.new(framework.pathnames.file)
+    ini.update(CONFIG_GROUP => group)
 
     # Save it
     begin
