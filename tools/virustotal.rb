@@ -61,10 +61,25 @@ end
 module VirusTotalUtility
 
 class ToolConfig
+  #
+  # Attributes
+  #
 
-  def initialize
-    @config_file ||= framework.pathnames.file
-    @group_name  ||= 'VirusTotal'
+  # @!attribute [r] framework
+  #   Framework whose config file to read.
+  #
+  #   @return [Msf::Simple::Framework]
+  attr_reader :framework
+
+
+  # @param options [Hash{Symbol => }]
+  def initialize(options={})
+    options.assert_valid_keys(:framework)
+
+    @framework = options.fetch(:framework)
+
+    @config_file = framework.pathnames.file
+    @group_name  = 'VirusTotal'
   end
 
   #

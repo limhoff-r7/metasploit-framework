@@ -23,9 +23,10 @@ describe VirusTotalUtility do
 
     describe VirusTotalUtility::ToolConfig do
       context "Class methods" do
+        include_context 'Msf::Simple::Framework'
 
         let(:tool_config) do
-          VirusTotalUtility::ToolConfig.new
+          VirusTotalUtility::ToolConfig.new(framework: framework)
         end
 
         context ".Initializer" do
