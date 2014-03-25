@@ -78,7 +78,7 @@ def frfxdmp(usrnm)
     else
       print_status("\tIt appears that there are no bookmarks for this account")
     end
-  rescue::Exception => e
+  rescue ::Exception => e
     print_status("The following Error was encountered: #{e.class} #{e}")
   end
   #--------------------------------------------------------------------------
@@ -97,7 +97,7 @@ def frfxdmp(usrnm)
     else
       print_status("\tIt appears that downloads where cleared for this account")
     end
-  rescue::Exception => e
+  rescue ::Exception => e
     print_status("The following Error was encountered: #{e.class} #{e}")
   end
   #--------------------------------------------------------------------------
@@ -117,7 +117,7 @@ def frfxdmp(usrnm)
       print_status("\tIt appears that Browser History has been cleared")
     end
     db.close
-  rescue::Exception => e
+  rescue ::Exception => e
     print_status("The following Error was encountered: #{e.class} #{e}")
   end
   #--------------------------------------------------------------------------
@@ -135,7 +135,7 @@ def frfxdmp(usrnm)
       print_status("\tIt appears that Form History has been cleared")
     end
     db.close
-  rescue::Exception => e
+  rescue ::Exception => e
     print_status("The following Error was encountered: #{e.class} #{e}")
   end
 
@@ -153,7 +153,7 @@ def frfxdmp(usrnm)
       print_status("\tIt appears that Search History has been cleared")
     end
     db.close
-  rescue::Exception => e
+  rescue ::Exception => e
     print_status("The following Error was encountered: #{e.class} #{e}")
   end
   # Create Directory for dumping Firefox cookies
