@@ -58,7 +58,7 @@ module Msf::Payload::Stager
   # These will be used for substitutions during stager generation.
   #
   # @return [Hash]
-  def offsets
+  def offset_relative_address_and_type_by_name
     stager_module_info['Offsets']
   end
 
@@ -224,7 +224,7 @@ module Msf::Payload::Stager
 
   # Aliases
   alias stager_payload payload
-  alias stager_offsets offsets
+  alias stager_offset_relative_address_and_type_by_name offset_relative_address_and_type_by_name
 
   #
   # A value that should be prefixed to a stage, such as a tag.

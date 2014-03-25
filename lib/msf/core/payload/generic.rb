@@ -174,7 +174,7 @@ module Msf::Payload::Generic
            :stage_prefix,
            :stage_prefix=,
            :stage_payload,
-           :stager_offsets,
+           :stager_offset_relative_address_and_type_by_name,
            :stager_payload,
            :substitute_vars,
            to: :actual_payload_instance

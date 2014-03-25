@@ -12,13 +12,22 @@ describe Msf::Payload::Stager do
         'Arch' => ARCH_X86,
         'Stage' => {
             'Offsets' => stage_offset_relative_address_and_type_by_name
+        },
+        'Stager' => {
+            'Offsets' => stager_offset_relative_address_and_type_by_name
         }
     }
   end
 
   let(:stage_offset_relative_address_and_type_by_name) do
     {
-        'STAGE' => [0xADD, 'TYPE']
+        'STAGE' => [0xDEAD, 'TYPE']
+    }
+  end
+
+  let(:stager_offset_relative_address_and_type_by_name) do
+    {
+        'STAGER' => [0xBEEF, 'TYPE']
     }
   end
 
@@ -164,6 +173,46 @@ describe Msf::Payload::Stager do
         end
 
         generate_stage
+      end
+    end
+  end
+
+  context '#internal_generate' do
+    subject(:internal_generate) do
+      stager.send(:internal_generate)
+    end
+
+    context 'with #assembly' do
+
+    end
+
+    context 'without #assembly' do
+      it 'creates a Metasploit::Framework::Payload::Assembled' do
+        expect(Metasploit::Framework::Payload::Assembled).to receive(:new).and_call_original
+
+        internal_generate
+      end
+
+      context 'Metasploit::Framework::Payload::Assembled.new' do
+        it "takes module_info['Stager']['Payload'] as :data" do
+          expect(Metasploit::Framework::Payload::Assembled).to receive(:new).with(
+                                                                   hash_including(
+                                                                       data: stager.module_info['Stager']['Payload']
+                                                                   )
+                                                               ).and_call_original
+
+          internal_generate
+        end
+
+        it "takes module_info['Stager']['Offsets'] as :offset_relative_address_and_type_by_name" do
+          expect(Metasploit::Framework::Payload::Assembled).to receive(:new).with(
+                                                                   hash_including(
+                                                                       offset_relative_address_and_type_by_name: stager.module_info['Stager']['Offsets']
+                                                                   )
+                                                               ).and_call_original
+
+          internal_generate
+        end
       end
     end
   end
