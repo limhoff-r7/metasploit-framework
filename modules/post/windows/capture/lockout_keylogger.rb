@@ -134,7 +134,7 @@ class Metasploit3 < Msf::Post
         end
         select(nil,nil,nil,keytime.to_i)
       end
-    rescue::Exception => e
+    rescue ::Exception => e
       if e.message != 'win'
         print_line()
         print_status("#{e.class} #{e}")
