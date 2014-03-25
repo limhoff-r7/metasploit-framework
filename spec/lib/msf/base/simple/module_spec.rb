@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe Msf::Simple::Module do
+  shared_context 'framework' do
+    include_context 'Msf::Simple::Framework'
+
+    before(:each) do
+      simple_module.framework = framework
+    end
+  end
+
   subject(:simple_module) do
     Msf::Module.new.tap { |metasploit_instance|
       metasploit_instance.extend Msf::Simple::Module
@@ -47,6 +55,8 @@ describe Msf::Simple::Module do
   end
 
   context '#load_config' do
+    include_context 'framework'
+
     subject(:load_config) do
       simple_module.load_config
     end
@@ -61,6 +71,8 @@ describe Msf::Simple::Module do
   end
 
   context '#save_config' do
+    include_context 'framework'
+
     subject(:save_config) do
       simple_module.save_config
     end
