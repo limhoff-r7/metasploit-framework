@@ -36,6 +36,7 @@ describe Metasploit::Framework::Framework::Pathnames do
       end
 
       it { should include 'data' }
+      it { should include 'exploit_data' }
       it { should include 'local' }
       it { should include 'logs' }
       it { should include 'loot' }
@@ -149,6 +150,16 @@ describe Metasploit::Framework::Framework::Pathnames do
       it 'use <root>/database.yml' do
         expect(database_yaml).to eq(pathnames.root.join('database.yml'))
       end
+    end
+  end
+
+  context '#exploit_data' do
+    subject(:exploit_data) do
+      pathnames.exploit_data
+    end
+
+    it 'is <data>/exploits' do
+      expect(exploit_data).to eq(pathnames.data.join('exploits'))
     end
   end
 

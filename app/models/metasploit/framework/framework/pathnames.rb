@@ -21,7 +21,7 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
   # Names of directory attributes that are children of {#root}
   SUBDIRECTORIES = %w{data local logs loot plugins modules scripts}
   # Names of all directory attributes
-  DIRECTORIES = SUBDIRECTORIES + %w{root script_logs session_logs}
+  DIRECTORIES = SUBDIRECTORIES + %w{root exploit_data script_logs session_logs}
 
   #
   # Attributes
@@ -47,6 +47,11 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
 
   # @!attribute [r] data
   #   Directory where locally generated data is stored.
+  #
+  #   @return [Pathname]
+  #
+  # @!attribute [r] exploit_data
+  #   Directory for output of exploits.
   #
   #   @return [Pathname]
   #
@@ -129,6 +134,7 @@ class Metasploit::Framework::Framework::Pathnames < Metasploit::Model::Base
       @database_yaml = @root.join('database.yml')
     end
 
+    @exploit_data = @data.join('exploits')
     @file = root.join(FILE_BASE_NAME)
     @history = root.join('history')
 
