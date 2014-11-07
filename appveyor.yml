@@ -1,12 +1,12 @@
 build_script:
-  - gem install bundler
-  - bundle install --without pcap
+  - ps: gem install bundler
+  - ps: bundle install --without pcap
 
 before_test:
-  - cp config/database.yml.appveyor config/database.yml
-  - bundle exec rake --version
-  - bundle exec db:create
-  - bundle exec db:migrate
+  - ps: cp config/database.yml.appveyor config/database.yml
+  - ps: bundle exec rake --version
+  - ps: bundle exec db:create
+  - ps: bundle exec db:migrate
 
 environment:
   matrix:
@@ -21,4 +21,4 @@ services:
   - postgresql
 
 test_script:
-  - bundle exec rake $RAKE_TASK
+  - ps: bundle exec rake $RAKE_TASK
