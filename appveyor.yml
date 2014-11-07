@@ -20,5 +20,7 @@ environment:
 services:
   - postgresql
 
+shallow_clone: true
+
 test_script:
   - ps: bundle exec rake $RAKE_TASK
