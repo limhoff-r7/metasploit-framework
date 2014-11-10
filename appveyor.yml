@@ -19,6 +19,6 @@ shallow_clone: true
 test_script:
   - ps: cp config/database.yml.appveyor config/database.yml
   - ps: bundle exec rake --version
-  - ps: bundle exec db:create
-  - ps: bundle exec db:migrate
+  - ps: bundle exec rake db:create
+  - ps: bundle exec rkae db:migrate
   - ps: bundle exec rake $RAKE_TASK
