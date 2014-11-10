@@ -23,11 +23,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://www.metasploit.com'
   spec.license       = 'BSD-3-clause'
 
-  spec.files         = `git ls-files`.split($/).reject { |file|
-    file =~ /^config/
-  }
-  spec.bindir = '.'
-  spec.executables   = [
+  # not using %w because it won't auto-indent
+  executables =  [
       'msfbinscan',
       'msfcli',
       'msfconsole',
@@ -43,7 +40,38 @@ Gem::Specification.new do |spec|
       'msfupdate',
       'msfvenom'
   ]
-  spec.test_files    = spec.files.grep(%r{^spec/})
+  individual_files = [
+      '.rspec',
+      '.rubocop.yml',
+      '.simplecov',
+      '.yardopts',
+      'CONTRIBUTING.md',
+      'COPYING',
+      'Gemfile',
+      'Gemfile.local.example',
+      'Gemfile.lock',
+      'HACKING',
+      'LICENSE',
+      'README.md',
+      'Rakefile',
+      'config/application.rb',
+      'config/boot.rb',
+      'config/cucumber.yml',
+      'config/database.yml.appveyor',
+      'config/database.yml.example',
+      'config/database.yml.travis',
+      'config/environment.rb',
+      'db/schema.rb',
+      'script/cucumber',
+      'script/rails'
+  ]
+  test_files = Dir.glob('{features,spec,test}/**/*')
+  directory_files = Dir.glob('{app,data,documentation,external,lib,modules,plugins,scripts}/**/*')
+
+  spec.files         = directory_files + executables + individual_files + test_files
+  spec.bindir = '.'
+  spec.executables   = executables
+  spec.test_files    = test_files
   spec.require_paths = ["lib"]
 
   # The Metasploit ecosystem is not ready for Rails 4 as it uses features of Rails 3.X that are removed in Rails 4.
