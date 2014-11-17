@@ -44,8 +44,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_notes_help }
   it { is_expected.to respond_to :cmd_services_help }
   it { is_expected.to respond_to :cmd_vulns_help }
-  it { is_expected.to respond_to :cmd_workspace_help }
-  it { is_expected.to respond_to :cmd_workspace_tabs }
   it { is_expected.to respond_to :commands }
   it { is_expected.to respond_to :creds_add }
   it { is_expected.to respond_to :creds_add_non_replayable_hash }
@@ -307,6 +305,8 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
     end
 
   end
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command', :workspace
 
   describe "#cmd_workspace" do
     describe "-h" do
