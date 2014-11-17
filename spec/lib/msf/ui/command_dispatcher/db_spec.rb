@@ -60,7 +60,9 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :report_store_local }
   it { is_expected.to respond_to :set_rhosts_from_addrs }
 
-  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command', :creds
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :creds,
+                        tab_completion: true
 
   describe "#cmd_creds" do
     describe "add-password" do
@@ -306,7 +308,9 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   end
 
-  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command', :workspace
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :workspace,
+                        tab_completion: true
 
   describe "#cmd_workspace" do
     describe "-h" do
