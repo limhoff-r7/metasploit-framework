@@ -14,8 +14,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :active? }
   it { is_expected.to respond_to :arg_host_range }
   it { is_expected.to respond_to :arg_port_range }
-  it { is_expected.to respond_to :cmd_creds_help }
-  it { is_expected.to respond_to :cmd_creds_tabs }
   it { is_expected.to respond_to :cmd_db_autopwn }
   it { is_expected.to respond_to :cmd_db_autopwn_help }
   it { is_expected.to respond_to :cmd_db_connect }
@@ -61,6 +59,8 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :name }
   it { is_expected.to respond_to :report_store_local }
   it { is_expected.to respond_to :set_rhosts_from_addrs }
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command', :creds
 
   describe "#cmd_creds" do
     describe "add-password" do
