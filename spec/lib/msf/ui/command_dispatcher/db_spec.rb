@@ -17,18 +17,22 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_autopwn,
+                        help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_connect,
+                        help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_disconnect,
+                        help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_driver,
+                        help: true,
                         tab_completion: false
 
   it { is_expected.to respond_to :cmd_db_export_help }
@@ -39,6 +43,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_rebuild_cache,
+                        help: true,
                         tab_completion: false
 
   it { is_expected.to respond_to :cmd_db_services }
@@ -56,6 +61,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :creds,
+                        help: true,
                         tab_completion: true
 
   describe "#cmd_creds" do
@@ -91,6 +97,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_export,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_db_export" do
@@ -108,6 +115,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_import,
+                        help: true,
                         tab_completion: true
 
   describe "#cmd_db_import" do
@@ -157,6 +165,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :hosts,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_hosts" do
@@ -182,6 +191,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :loot,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_loot" do
@@ -208,6 +218,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :notes,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_notes" do
@@ -237,6 +248,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :services,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_services" do
@@ -307,6 +319,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :vulns,
+                        help: true,
                         tab_completion: false
 
   describe "#cmd_vulns" do
@@ -332,6 +345,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :workspace,
+                        help: true,
                         tab_completion: true
 
   describe "#cmd_workspace" do
