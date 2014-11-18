@@ -317,66 +317,6 @@ class Db
     true
   end
 
-  #
-  # Database management: Postgres
-  #
-
-  #
-  # Connect to an existing Postgres database
-  #
-  def db_connect_postgresql(*args)
-    if(args[0] == nil or args[0] == "-h" or args[0] == "--help")
-      print_status("   Usage: db_connect <user:pass>@<host:port>/<database>")
-      print_status("      OR: db_connect -y [path/to/database.yml]")
-      print_status("Examples:")
-      print_status("       db_connect user@metasploit3")
-      print_status("       db_connect user:pass@192.168.0.2/metasploit3")
-      print_status("       db_connect user:pass@192.168.0.2:1500/metasploit3")
-      return
-    end
-
-    info = db_parse_db_uri_postgresql(args[0])
-    opts = { 'adapter' => 'postgresql' }
-
-    opts['username'] = info[:user] if (info[:user])
-    opts['password'] = info[:pass] if (info[:pass])
-    opts['database'] = info[:name]
-    opts['host'] = info[:host] if (info[:host])
-    opts['port'] = info[:port] if (info[:port])
-
-    opts['pass'] ||= ''
-
-    # Do a little legwork to find the real database socket
-    if(! opts['host'])
-      while(true)
-        done = false
-        dirs = %W{ /var/run/postgresql /tmp }
-        dirs.each do |dir|
-          if(::File.directory?(dir))
-            d = ::Dir.new(dir)
-            d.entries.grep(/^\.s\.PGSQL.(\d+)$/).each do |ent|
-              opts['port'] = ent.split('.')[-1].to_i
-              opts['host'] = dir
-              done = true
-              break
-            end
-          end
-          break if done
-        end
-        break
-      end
-    end
-
-    # Default to loopback
-    if(! opts['host'])
-      opts['host'] = '127.0.0.1'
-    end
-
-    if (not framework.db.connect(opts))
-      raise RuntimeError.new("Failed to connect to the database: #{framework.db.error}")
-    end
-  end
-
   def db_parse_db_uri_postgresql(path)
     res = {}
     if (path)
