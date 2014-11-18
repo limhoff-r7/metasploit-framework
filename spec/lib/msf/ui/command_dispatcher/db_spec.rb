@@ -36,7 +36,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_status }
   it { is_expected.to respond_to :cmd_db_vulns }
   it { is_expected.to respond_to :cmd_db_vulns_help }
-  it { is_expected.to respond_to :cmd_loot_help }
   it { is_expected.to respond_to :cmd_notes_help }
   it { is_expected.to respond_to :cmd_services_help }
   it { is_expected.to respond_to :cmd_vulns_help }
@@ -175,6 +174,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
       end
     end
   end
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :loot,
+                        tab_completion: false
 
   describe "#cmd_loot" do
     describe "-h" do
