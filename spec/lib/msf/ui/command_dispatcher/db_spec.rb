@@ -36,7 +36,12 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
                         tab_completion: false
 
   it { is_expected.to respond_to :cmd_db_export_help }
-  it { is_expected.to respond_to :cmd_db_hosts_help }
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_hosts,
+                        help: true,
+                        tab_completion: false
+
   it { is_expected.to respond_to :cmd_db_nmap }
   it { is_expected.to respond_to :cmd_db_notes }
   it { is_expected.to respond_to :cmd_db_notes_help }
