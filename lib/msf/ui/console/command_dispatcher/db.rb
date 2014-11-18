@@ -14,6 +14,7 @@ class Db
 
   autoload :Creds
   autoload :DbConnect
+  autoload :DbDisconnect
   autoload :DbExport
   autoload :Hosts
   autoload :Loot
@@ -24,6 +25,7 @@ class Db
 
   include Msf::Ui::Console::CommandDispatcher::Db::Creds
   include Msf::Ui::Console::CommandDispatcher::Db::DbConnect
+  include Msf::Ui::Console::CommandDispatcher::Db::DbDisconnect
   include Msf::Ui::Console::CommandDispatcher::Db::DbExport
   include Msf::Ui::Console::CommandDispatcher::Db::Hosts
   include Msf::Ui::Console::CommandDispatcher::Db::Loot
@@ -380,26 +382,6 @@ class Db
       print_status("#{framework.db.driver} connected to #{cdb}")
     else
       print_status("#{framework.db.driver} selected, no connection")
-    end
-  end
-
-  def cmd_db_disconnect_help
-    print_line "Usage: db_disconnect"
-    print_line
-    print_line "Disconnect from the database."
-    print_line
-  end
-
-  def cmd_db_disconnect(*args)
-    return if not db_check_driver
-
-    if(args[0] and (args[0] == "-h" || args[0] == "--help"))
-      cmd_db_disconnect_help
-      return
-    end
-
-    if (framework.db)
-      framework.db.disconnect()
     end
   end
 
