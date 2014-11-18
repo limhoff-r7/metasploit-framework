@@ -21,8 +21,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
                         :db_connect,
                         tab_completion: false
 
-  it { is_expected.to respond_to :cmd_db_disconnect }
-  it { is_expected.to respond_to :cmd_db_disconnect_help }
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_disconnect,
+                        tab_completion: false
+
   it { is_expected.to respond_to :cmd_db_driver }
   it { is_expected.to respond_to :cmd_db_driver_help }
   it { is_expected.to respond_to :cmd_db_export_help }
