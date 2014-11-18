@@ -97,4 +97,163 @@ module Msf::Ui::Console::CommandDispatcher::Db::Creds
     end
     return tabs
   end
+
+  private
+
+  def creds_search(*args)
+    host_ranges = []
+    port_ranges = []
+    svcs = []
+
+    #cred_table_columns = [ 'host', 'port', 'user', 'pass', 'type', 'proof', 'active?' ]
+    cred_table_columns = ['host', 'service', 'public', 'private', 'realm', 'private_type']
+    user = nil
+    delete_count = 0
+
+    while (arg = args.shift)
+      case arg
+      when '-o'
+        output_file = args.shift
+        if (!output_file)
+          print_error("Invalid output filename")
+          return
+        end
+        output_file = ::File.expand_path(output_file)
+      when "-p", "--port"
+        unless (arg_port_range(args.shift, port_ranges, true))
+          return
+        end
+      when "-t", "--type"
+        ptype = args.shift
+        if (!ptype)
+          print_error("Argument required for -t")
+          return
+        end
+      when "-s", "--service"
+        service = args.shift
+        if (!service)
+          print_error("Argument required for -s")
+          return
+        end
+        svcs = service.split(/[\s]*,[\s]*/)
+      when "-P", "--password"
+        pass = args.shift
+        if (!pass)
+          print_error("Argument required for -P")
+          return
+        end
+      when "-u", "--user"
+        user = args.shift
+        if (!user)
+          print_error("Argument required for -u")
+          return
+        end
+      when "-d"
+        mode = :delete
+      else
+        # Anything that wasn't an option is a host to search for
+        unless (arg_host_range(arg, host_ranges))
+          return
+        end
+      end
+    end
+
+    # If we get here, we're searching.  Delete implies search
+    if user
+      user_regex = Regexp.compile(user)
+    end
+    if pass
+      pass_regex = Regexp.compile(pass)
+    end
+
+    # normalize
+    ports = port_ranges.flatten.uniq
+    svcs.flatten!
+    tbl_opts = {
+        'Header' => "Credentials",
+        'Columns' => cred_table_columns
+    }
+
+    tbl = Rex::Ui::Text::Table.new(tbl_opts)
+
+    ::ActiveRecord::Base.connection_pool.with_connection {
+      query = Metasploit::Credential::Core.where(
+          workspace_id: framework.db.workspace,
+      )
+
+      query.each do |core|
+
+        # Exclude creds that don't match the given user
+        if user_regex.present? && !core.public.username.match(user_regex)
+          next
+        end
+
+        # Exclude creds that don't match the given pass
+        if pass_regex.present? && !core.private.data.match(pass_regex)
+          next
+        end
+
+        if core.logins.empty?
+          # Skip cores that don't have any logins if the user specified a
+          # filter based on host, port, or service name
+          next if host_ranges.any? || ports.any? || svcs.any?
+
+          tbl << [
+              "", # host
+              "", # port
+              core.public,
+              core.private,
+              core.realm,
+              core.private ? core.private.class.model_name.human : "",
+          ]
+        else
+          core.logins.each do |login|
+            if svcs.present? && !svcs.include?(login.service.name)
+              next
+            end
+
+            if ports.present? && !ports.include?(login.service.port)
+              next
+            end
+
+            # If none of this Core's associated Logins is for a host within
+            # the user-supplied RangeWalker, then we don't have any reason to
+            # print it out. However, we treat the absence of ranges as meaning
+            # all hosts.
+            if host_ranges.present? && !host_ranges.any? { |range| range.include?(login.service.host.address) }
+              next
+            end
+            row = [login.service.host.address]
+            if login.service.name.present?
+              row << "#{login.service.port}/#{login.service.proto} (#{login.service.name})"
+            else
+              row << "#{login.service.port}/#{login.service.proto}"
+            end
+
+            row += [
+                core.public,
+                core.private,
+                core.realm,
+                core.private ? core.private.class.model_name.human : "",
+            ]
+            tbl << row
+          end
+        end
+        if mode == :delete
+          core.destroy
+          delete_count += 1
+        end
+      end
+
+      if output_file.nil?
+        print_line(tbl.to_s)
+      else
+        # create the output file
+        ::File.open(output_file, "wb") { |f| f.write(tbl.to_csv) }
+        print_status("Wrote creds to #{output_file}")
+      end
+
+      print_status("Deleted #{delete_count} creds") if delete_count > 0
+    }
+  end
 end

@@ -42,7 +42,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :creds_add_ntlm_hash }
   it { is_expected.to respond_to :creds_add_password }
   it { is_expected.to respond_to :creds_add_ssh_key }
-  it { is_expected.to respond_to :creds_search }
   it { is_expected.to respond_to :db_check_driver }
   it { is_expected.to respond_to :db_connect_postgresql }
   it { is_expected.to respond_to :db_find_tools }
