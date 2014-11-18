@@ -13,6 +13,7 @@ class Db
   extend ActiveSupport::Autoload
 
   autoload :Creds
+  autoload :DbAutopwn
   autoload :DbConnect
   autoload :DbDisconnect
   autoload :DbDriver
@@ -27,6 +28,7 @@ class Db
   autoload :Workspace
 
   include Msf::Ui::Console::CommandDispatcher::Db::Creds
+  include Msf::Ui::Console::CommandDispatcher::Db::DbAutopwn
   include Msf::Ui::Console::CommandDispatcher::Db::DbConnect
   include Msf::Ui::Console::CommandDispatcher::Db::DbDisconnect
   include Msf::Ui::Console::CommandDispatcher::Db::DbDriver
@@ -120,8 +122,6 @@ class Db
   def cmd_db_vulns_help; deprecated_help(:vulns); end
   # :category: Deprecated Commands
   def cmd_db_services_help; deprecated_help(:services); end
-  # :category: Deprecated Commands
-  def cmd_db_autopwn_help; deprecated_help; end
 
   # :category: Deprecated Commands
   def cmd_db_hosts(*args); deprecated_cmd(:hosts, *args); end
@@ -131,12 +131,9 @@ class Db
   def cmd_db_vulns(*args); deprecated_cmd(:vulns, *args); end
   # :category: Deprecated Commands
   def cmd_db_services(*args); deprecated_cmd(:services, *args); end
-  # :category: Deprecated Commands
-  def cmd_db_autopwn(*args); deprecated_cmd; end
 
   #
   # Import Nmap data from a file
-  #
   def cmd_db_nmap(*args)
     return unless active?
   ::ActiveRecord::Base.connection_pool.with_connection {
