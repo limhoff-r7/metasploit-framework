@@ -32,8 +32,11 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_nmap }
   it { is_expected.to respond_to :cmd_db_notes }
   it { is_expected.to respond_to :cmd_db_notes_help }
-  it { is_expected.to respond_to :cmd_db_rebuild_cache }
-  it { is_expected.to respond_to :cmd_db_rebuild_cache_help }
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_rebuild_cache,
+                        tab_completion: false
+
   it { is_expected.to respond_to :cmd_db_services }
   it { is_expected.to respond_to :cmd_db_services_help }
   it { is_expected.to respond_to :cmd_db_status }
