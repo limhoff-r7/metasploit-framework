@@ -60,8 +60,12 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_services }
   it { is_expected.to respond_to :cmd_db_services_help }
   it { is_expected.to respond_to :cmd_db_status }
-  it { is_expected.to respond_to :cmd_db_vulns }
-  it { is_expected.to respond_to :cmd_db_vulns_help }
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_vulns,
+                        help: true,
+                        tab_completion: false
+
   it { is_expected.to respond_to :commands }
   it { is_expected.to respond_to :db_check_driver }
   it { is_expected.to respond_to :deprecated_commands }
