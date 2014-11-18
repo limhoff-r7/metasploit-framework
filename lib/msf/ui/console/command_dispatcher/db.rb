@@ -15,6 +15,7 @@ class Db
   autoload :Creds
   autoload :DbConnect
   autoload :DbDisconnect
+  autoload :DbDriver
   autoload :DbExport
   autoload :DbImport
   autoload :DbRebuildCache
@@ -28,6 +29,7 @@ class Db
   include Msf::Ui::Console::CommandDispatcher::Db::Creds
   include Msf::Ui::Console::CommandDispatcher::Db::DbConnect
   include Msf::Ui::Console::CommandDispatcher::Db::DbDisconnect
+  include Msf::Ui::Console::CommandDispatcher::Db::DbDriver
   include Msf::Ui::Console::CommandDispatcher::Db::DbExport
   include Msf::Ui::Console::CommandDispatcher::Db::DbImport
   include Msf::Ui::Console::CommandDispatcher::Db::DbRebuildCache
@@ -120,8 +122,6 @@ class Db
   def cmd_db_services_help; deprecated_help(:services); end
   # :category: Deprecated Commands
   def cmd_db_autopwn_help; deprecated_help; end
-  # :category: Deprecated Commands
-  def cmd_db_driver_help; deprecated_help; end
 
   # :category: Deprecated Commands
   def cmd_db_hosts(*args); deprecated_cmd(:hosts, *args); end
@@ -133,23 +133,6 @@ class Db
   def cmd_db_services(*args); deprecated_cmd(:services, *args); end
   # :category: Deprecated Commands
   def cmd_db_autopwn(*args); deprecated_cmd; end
-
-  #
-  # :category: Deprecated Commands
-  #
-  # This one deserves a little more explanation than standard deprecation
-  # warning, so give the user a better understanding of what's going on.
-  #
-  def cmd_db_driver(*args)
-    deprecated_cmd
-    print_line
-    print_line "Because Metasploit no longer supports databases other than the default"
-    print_line "PostgreSQL, there is no longer a need to set the driver. Thus db_driver"
-    print_line "is not useful and its functionality has been removed. Usually Metasploit"
-    print_line "will already have connected to the database; check db_status to see."
-    print_line
-    cmd_db_status
-  end
 
   #
   # Import Nmap data from a file
