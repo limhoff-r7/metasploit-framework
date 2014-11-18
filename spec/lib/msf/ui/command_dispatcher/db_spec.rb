@@ -44,7 +44,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_vulns_help }
   it { is_expected.to respond_to :commands }
   it { is_expected.to respond_to :db_check_driver }
-  it { is_expected.to respond_to :db_find_tools }
   it { is_expected.to respond_to :deprecated_commands }
   it { is_expected.to respond_to :each_host_range_chunk }
   it { is_expected.to respond_to :name }

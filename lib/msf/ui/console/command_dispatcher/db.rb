@@ -303,20 +303,6 @@ class Db
     print_line
   end
 
-  def db_find_tools(tools)
-    missed  = []
-    tools.each do |name|
-      if(! Rex::FileUtils.find_full_path(name))
-        missed << name
-      end
-    end
-    if(not missed.empty?)
-      print_error("This database command requires the following tools to be installed: #{missed.join(", ")}")
-      return
-    end
-    true
-  end
-
   #
   # Miscellaneous option helpers
   #
