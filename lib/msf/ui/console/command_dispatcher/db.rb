@@ -133,13 +133,6 @@ class Db
   def cmd_db_services(*args); deprecated_cmd(:services, *args); end
 
   #
-  # Store some locally-generated data as a file, similiar to store_loot.
-  #
-  def report_store_local(ltype=nil, ctype=nil, data=nil, filename=nil)
-    store_local(ltype,ctype,data,filename)
-  end
-
-  #
   # Database management
   #
   def db_check_driver

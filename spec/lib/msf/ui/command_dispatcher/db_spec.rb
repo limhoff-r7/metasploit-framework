@@ -65,7 +65,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :deprecated_commands }
   it { is_expected.to respond_to :each_host_range_chunk }
   it { is_expected.to respond_to :name }
-  it { is_expected.to respond_to :report_store_local }
   it { is_expected.to respond_to :set_rhosts_from_addrs }
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',

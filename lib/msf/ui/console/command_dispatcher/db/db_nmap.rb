@@ -75,4 +75,13 @@ module Msf::Ui::Console::CommandDispatcher::Db::DbNmap
       fd.close(true)
     }
   end
+
+  private
+
+  #
+  # Store some locally-generated data as a file, similiar to store_loot.
+  #
+  def report_store_local(ltype=nil, ctype=nil, data=nil, filename=nil)
+    store_local(ltype, ctype, data, filename)
+  end
 end
