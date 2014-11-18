@@ -100,6 +100,43 @@ module Msf::Ui::Console::CommandDispatcher::Db::Creds
 
   private
 
+  # @param private_type [Symbol] See `Metasploit::Credential::Creation#create_credential`
+  # @param username [String]
+  # @param password [String]
+  # @param realm [String]
+  # @param realm_type [String] A key in `Metasploit::Model::Realm::Key::SHORT_NAMES`
+  def creds_add(private_type, username, password=nil, realm=nil, realm_type=nil)
+    cred_data = {
+        username: username,
+        private_data: password,
+        private_type: private_type,
+        workspace_id: framework.db.workspace,
+        origin_type: :import,
+        filename: "msfconsole"
+    }
+    if realm.present?
+      if realm_type.present?
+        realm_key = Metasploit::Model::Realm::Key::SHORT_NAMES[realm_type]
+        if realm_key.nil?
+          valid = Metasploit::Model::Realm::Key::SHORT_NAMES.keys.map { |n| "'#{n}'" }.join(", ")
+          print_error("Invalid realm type: #{realm_type}. Valid values: #{valid}")
+          return
+        end
+      end
+      realm_key ||= Metasploit::Model::Realm::Key::ACTIVE_DIRECTORY_DOMAIN
+      cred_data.merge!(
+          realm_value: realm,
+          realm_key: realm_key
+      )
+    end
+
+    begin
+      create_credential(cred_data)
+    rescue ActiveRecord::RecordInvalid => e
+      print_error("Failed to add #{private_type}: #{e}")
+    end
+  end
+
   def creds_search(*args)
     host_ranges = []
     port_ranges = []
