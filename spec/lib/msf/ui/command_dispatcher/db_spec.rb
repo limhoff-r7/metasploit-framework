@@ -16,8 +16,11 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :arg_port_range }
   it { is_expected.to respond_to :cmd_db_autopwn }
   it { is_expected.to respond_to :cmd_db_autopwn_help }
-  it { is_expected.to respond_to :cmd_db_connect }
-  it { is_expected.to respond_to :cmd_db_connect_help }
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_connect,
+                        tab_completion: false
+
   it { is_expected.to respond_to :cmd_db_disconnect }
   it { is_expected.to respond_to :cmd_db_disconnect_help }
   it { is_expected.to respond_to :cmd_db_driver }
