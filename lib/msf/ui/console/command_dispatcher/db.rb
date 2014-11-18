@@ -52,8 +52,6 @@ class Db
   include Msf::Ui::Console::CommandDispatcher::Db::Vulns
   include Msf::Ui::Console::CommandDispatcher::Db::Workspace
 
-  require 'tempfile'
-
   include Msf::Ui::Console::CommandDispatcher
 
   # TODO: Not thrilled about including this entire module for just store_local.

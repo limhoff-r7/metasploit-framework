@@ -1,3 +1,9 @@
+#
+# Standard Library
+#
+
+require 'tempfile'
+
 module Msf::Ui::Console::CommandDispatcher::Db::DbNmap
   #
   # Import Nmap data from a file
