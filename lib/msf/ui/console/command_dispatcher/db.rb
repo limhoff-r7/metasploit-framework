@@ -100,10 +100,6 @@ class Db
     true
   end
 
-  def creds_add_ntlm_hash(*args)
-    creds_add(:ntlm_hash, *args)
-  end
-
   def creds_add_password(*args)
     creds_add(:password, *args)
   end
