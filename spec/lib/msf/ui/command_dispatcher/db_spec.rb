@@ -42,7 +42,11 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
                         help: true,
                         tab_completion: false
 
-  it { is_expected.to respond_to :cmd_db_nmap }
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_nmap,
+                        help: false,
+                        tab_completion: false
+
   it { is_expected.to respond_to :cmd_db_notes }
   it { is_expected.to respond_to :cmd_db_notes_help }
 
