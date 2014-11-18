@@ -317,20 +317,6 @@ class Db
     true
   end
 
-  def db_parse_db_uri_postgresql(path)
-    res = {}
-    if (path)
-      auth, dest = path.split('@')
-      (dest = auth and auth = nil) if not dest
-      res[:user],res[:pass] = auth.split(':') if auth
-      targ,name = dest.split('/')
-      (name = targ and targ = nil) if not name
-      res[:host],res[:port] = targ.split(':') if targ
-    end
-    res[:name] = name || 'metasploit3'
-    res
-  end
-
   #
   # Miscellaneous option helpers
   #
