@@ -18,6 +18,7 @@ class Db
   autoload :DbDisconnect
   autoload :DbDriver
   autoload :DbExport
+  autoload :DbHosts
   autoload :DbImport
   autoload :DbRebuildCache
   autoload :Hosts
@@ -33,6 +34,7 @@ class Db
   include Msf::Ui::Console::CommandDispatcher::Db::DbDisconnect
   include Msf::Ui::Console::CommandDispatcher::Db::DbDriver
   include Msf::Ui::Console::CommandDispatcher::Db::DbExport
+  include Msf::Ui::Console::CommandDispatcher::Db::DbHosts
   include Msf::Ui::Console::CommandDispatcher::Db::DbImport
   include Msf::Ui::Console::CommandDispatcher::Db::DbRebuildCache
   include Msf::Ui::Console::CommandDispatcher::Db::Hosts
@@ -115,16 +117,12 @@ class Db
   end
 
   # :category: Deprecated Commands
-  def cmd_db_hosts_help; deprecated_help(:hosts); end
-  # :category: Deprecated Commands
   def cmd_db_notes_help; deprecated_help(:notes); end
   # :category: Deprecated Commands
   def cmd_db_vulns_help; deprecated_help(:vulns); end
   # :category: Deprecated Commands
   def cmd_db_services_help; deprecated_help(:services); end
 
-  # :category: Deprecated Commands
-  def cmd_db_hosts(*args); deprecated_cmd(:hosts, *args); end
   # :category: Deprecated Commands
   def cmd_db_notes(*args); deprecated_cmd(:notes, *args); end
   # :category: Deprecated Commands
