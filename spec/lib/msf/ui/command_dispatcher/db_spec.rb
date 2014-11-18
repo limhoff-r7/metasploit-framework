@@ -82,6 +82,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
     end
   end
 
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_export,
+                        tab_completion: false
+
   describe "#cmd_db_export" do
     describe "-h" do
       it "should show a help message" do
