@@ -36,7 +36,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_status }
   it { is_expected.to respond_to :cmd_db_vulns }
   it { is_expected.to respond_to :cmd_db_vulns_help }
-  it { is_expected.to respond_to :cmd_vulns_help }
   it { is_expected.to respond_to :commands }
   it { is_expected.to respond_to :creds_add }
   it { is_expected.to respond_to :creds_add_non_replayable_hash }
@@ -297,6 +296,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
       end
     end
   end
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :vulns,
+                        tab_completion: false
 
   describe "#cmd_vulns" do
     describe "-h" do
