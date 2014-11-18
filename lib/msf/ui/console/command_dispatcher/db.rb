@@ -21,6 +21,7 @@ class Db
   autoload :DbHosts
   autoload :DbImport
   autoload :DbNmap
+  autoload :DbNotes
   autoload :DbRebuildCache
   autoload :Hosts
   autoload :Loot
@@ -38,6 +39,7 @@ class Db
   include Msf::Ui::Console::CommandDispatcher::Db::DbHosts
   include Msf::Ui::Console::CommandDispatcher::Db::DbImport
   include Msf::Ui::Console::CommandDispatcher::Db::DbNmap
+  include Msf::Ui::Console::CommandDispatcher::Db::DbNotes
   include Msf::Ui::Console::CommandDispatcher::Db::DbRebuildCache
   include Msf::Ui::Console::CommandDispatcher::Db::Hosts
   include Msf::Ui::Console::CommandDispatcher::Db::Loot
@@ -119,14 +121,10 @@ class Db
   end
 
   # :category: Deprecated Commands
-  def cmd_db_notes_help; deprecated_help(:notes); end
-  # :category: Deprecated Commands
   def cmd_db_vulns_help; deprecated_help(:vulns); end
   # :category: Deprecated Commands
   def cmd_db_services_help; deprecated_help(:services); end
 
-  # :category: Deprecated Commands
-  def cmd_db_notes(*args); deprecated_cmd(:notes, *args); end
   # :category: Deprecated Commands
   def cmd_db_vulns(*args); deprecated_cmd(:vulns, *args); end
   # :category: Deprecated Commands
