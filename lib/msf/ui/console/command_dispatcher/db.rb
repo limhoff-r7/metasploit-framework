@@ -112,17 +112,6 @@ class Db
     creds_add(:password, *args)
   end
 
-  def creds_add_ssh_key(username, *args)
-    key_file, realm = args
-    begin
-      key_data = File.read(key_file)
-    rescue ::Errno::EACCES, ::Errno::ENOENT => e
-      print_error("Failed to add ssh key: #{e}")
-    else
-      creds_add(:ssh_key, username, key_data, realm)
-    end
-  end
-
   # :category: Deprecated Commands
   def cmd_db_hosts_help; deprecated_help(:hosts); end
   # :category: Deprecated Commands

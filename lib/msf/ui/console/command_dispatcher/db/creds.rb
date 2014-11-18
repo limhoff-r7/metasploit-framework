@@ -137,6 +137,17 @@ module Msf::Ui::Console::CommandDispatcher::Db::Creds
     end
   end
 
+  def creds_add_ssh_key(username, *args)
+    key_file, realm = args
+    begin
+      key_data = File.read(key_file)
+    rescue ::Errno::EACCES, ::Errno::ENOENT => e
+      print_error("Failed to add ssh key: #{e}")
+    else
+      creds_add(:ssh_key, username, key_data, realm)
+    end
+  end
+
   def creds_search(*args)
     host_ranges = []
     port_ranges = []
