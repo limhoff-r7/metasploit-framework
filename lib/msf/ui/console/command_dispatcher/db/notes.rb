@@ -172,4 +172,22 @@ module Msf::Ui::Console::CommandDispatcher::Db::Notes
     print_line "  notes -S 'nmap.nse.(http|rtsp)' --sort type,output"
     print_line
   end
+
+  private
+
+  def make_sortable(input)
+    case input.class
+    when String
+      input = input.downcase
+    when Fixnum
+      input = "%016" % input
+    when Time
+      input = input.strftime("%Y%m%d%H%M%S%L")
+    when NilClass
+      input = ""
+    else
+      input = input.inspect.downcase
+    end
+    input
+  end
 end

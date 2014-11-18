@@ -160,22 +160,6 @@ class Db
     end
   end
 
-  def make_sortable(input)
-    case input.class
-    when String
-      input = input.downcase
-    when Fixnum
-      input = "%016" % input
-    when Time
-      input = input.strftime("%Y%m%d%H%M%S%L")
-    when NilClass
-      input = ""
-    else
-      input = input.inspect.downcase
-    end
-    input
-  end
-
   # :category: Deprecated Commands
   def cmd_db_hosts_help; deprecated_help(:hosts); end
   # :category: Deprecated Commands
