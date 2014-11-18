@@ -145,6 +145,10 @@ module Msf::Ui::Console::CommandDispatcher::Db::Creds
     creds_add(:ntlm_hash, *args)
   end
 
+  def creds_add_password(*args)
+    creds_add(:password, *args)
+  end
+
   def creds_add_ssh_key(username, *args)
     key_file, realm = args
     begin

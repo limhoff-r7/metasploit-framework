@@ -100,10 +100,6 @@ class Db
     true
   end
 
-  def creds_add_password(*args)
-    creds_add(:password, *args)
-  end
-
   # :category: Deprecated Commands
   def cmd_db_hosts_help; deprecated_help(:hosts); end
   # :category: Deprecated Commands
