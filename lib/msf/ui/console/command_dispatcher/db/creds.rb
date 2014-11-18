@@ -137,6 +137,10 @@ module Msf::Ui::Console::CommandDispatcher::Db::Creds
     end
   end
 
+  def creds_add_non_replayable_hash(*args)
+    creds_add(:non_replayable_hash, *args)
+  end
+
   def creds_add_ssh_key(username, *args)
     key_file, realm = args
     begin
