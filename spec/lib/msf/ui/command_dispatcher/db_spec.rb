@@ -29,8 +29,6 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
   it { is_expected.to respond_to :cmd_db_driver_help }
   it { is_expected.to respond_to :cmd_db_export_help }
   it { is_expected.to respond_to :cmd_db_hosts_help }
-  it { is_expected.to respond_to :cmd_db_import_help }
-  it { is_expected.to respond_to :cmd_db_import_tabs }
   it { is_expected.to respond_to :cmd_db_nmap }
   it { is_expected.to respond_to :cmd_db_notes }
   it { is_expected.to respond_to :cmd_db_notes_help }
@@ -103,6 +101,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
       end
     end
   end
+
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_import,
+                        tab_completion: true
 
   describe "#cmd_db_import" do
     describe "-h" do
