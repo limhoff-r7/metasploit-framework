@@ -67,7 +67,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
                         help: true,
                         tab_completion: false
 
-  it { is_expected.to respond_to :cmd_db_status }
+  it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
+                        :db_status,
+                        help: false,
+                        tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_vulns,
