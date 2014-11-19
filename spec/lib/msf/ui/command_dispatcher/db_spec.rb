@@ -77,6 +77,27 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
                         help: true,
                         tab_completion: false
 
+  context 'commands' do
+    subject(:commands) {
+      db.commands
+    }
+
+    it { is_expected.to include 'creds' }
+    it { is_expected.to include 'db_connect' }
+    it { is_expected.to include 'db_disconnect' }
+    it { is_expected.to include 'db_export' }
+    it { is_expected.to include 'db_import' }
+    it { is_expected.to include 'db_nmap' }
+    it { is_expected.to include 'db_rebuild_cache' }
+    it { is_expected.to include 'db_status' }
+    it { is_expected.to include 'hosts' }
+    it { is_expected.to include 'loot' }
+    it { is_expected.to include 'notes' }
+    it { is_expected.to include 'services' }
+    it { is_expected.to include 'vulns' }
+    it { is_expected.to include 'workspace' }
+  end
+
   it { is_expected.to respond_to :commands }
   it { is_expected.to respond_to :db_check_driver }
   it { is_expected.to respond_to :deprecated_commands }
