@@ -23,6 +23,7 @@ class Db
   autoload :DbNmap
   autoload :DbNotes
   autoload :DbServices
+  autoload :DbStatus
   autoload :DbRebuildCache
   autoload :DbVulns
   autoload :Hosts
@@ -44,6 +45,7 @@ class Db
   include Msf::Ui::Console::CommandDispatcher::Db::DbNotes
   include Msf::Ui::Console::CommandDispatcher::Db::DbRebuildCache
   include Msf::Ui::Console::CommandDispatcher::Db::DbServices
+  include Msf::Ui::Console::CommandDispatcher::Db::DbStatus
   include Msf::Ui::Console::CommandDispatcher::Db::DbVulns
   include Msf::Ui::Console::CommandDispatcher::Db::Hosts
   include Msf::Ui::Console::CommandDispatcher::Db::Loot
@@ -131,25 +133,6 @@ class Db
       return false
     end
     true
-  end
-
-  #
-  # Is everything working?
-  #
-  def cmd_db_status(*args)
-    return if not db_check_driver
-
-    if framework.db.connection_established?
-      cdb = ""
-      ::ActiveRecord::Base.connection_pool.with_connection { |conn|
-        if conn.respond_to? :current_database
-          cdb = conn.current_database
-        end
-      }
-      print_status("#{framework.db.driver} connected to #{cdb}")
-    else
-      print_status("#{framework.db.driver} selected, no connection")
-    end
   end
 
   #
