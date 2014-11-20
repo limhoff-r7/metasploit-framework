@@ -11,6 +11,10 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
     described_class.new(driver)
   end
 
+  let(:dispatcher_shell) {
+    db
+  }
+
   it { is_expected.to respond_to :active? }
   it { is_expected.to respond_to :arg_host_range }
   it { is_expected.to respond_to :arg_port_range }
