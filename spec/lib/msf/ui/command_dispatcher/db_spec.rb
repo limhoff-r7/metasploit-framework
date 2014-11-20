@@ -21,63 +21,75 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_autopwn,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_connect,
+                        description: 'Connect to an existing database',
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_disconnect,
+                        description: 'Disconnect from the current database instance',
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_driver,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_export,
+                        description: 'Export a file containing the contents of the database',
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_hosts,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_nmap,
+                        description: 'Executes nmap and records the output automatically',
                         help: false,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_notes,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_rebuild_cache,
+                        description: 'Rebuilds the database-stored module cache',
                         help: true,
                         tab_completion: false
 
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_services,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_status,
+                        description: "Show the current database status",
                         help: false,
                         tab_completion: false
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_vulns,
+                        description: nil,
                         help: true,
                         tab_completion: false
 
@@ -111,6 +123,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :creds,
+                        description: 'List all credentials in the database',
                         help: true,
                         tab_completion: true
 
@@ -147,6 +160,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_export,
+                        description: 'Export a file containing the contents of the database',
                         help: true,
                         tab_completion: false
 
@@ -165,6 +179,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :db_import,
+                        description: 'Import a scan result file (filetype will be auto-detected)',
                         help: true,
                         tab_completion: true
 
@@ -215,6 +230,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :hosts,
+                        description: "List all hosts in the database",
                         help: true,
                         tab_completion: false
 
@@ -241,6 +257,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :loot,
+                        description: 'List all loot in the database',
                         help: true,
                         tab_completion: false
 
@@ -268,6 +285,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :notes,
+                        description: 'List all notes in the database',
                         help: true,
                         tab_completion: false
 
@@ -298,6 +316,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :services,
+                        description: 'List all services in the database',
                         help: true,
                         tab_completion: false
 
@@ -369,6 +388,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :vulns,
+                        description: 'List all vulnerabilities in the database',
                         help: true,
                         tab_completion: false
 
@@ -395,6 +415,7 @@ describe Msf::Ui::Console::CommandDispatcher::Db do
 
   it_should_behave_like 'Rex::Ui::Text::DispatcherShell command',
                         :workspace,
+                        description: 'Switch between database workspaces',
                         help: true,
                         tab_completion: true
 

@@ -2,8 +2,9 @@
 #
 # A command defined inside a {Rex::Ui::Text::DispatcherShell::CommandDispatcher}.
 shared_examples_for 'Rex::Ui::Text::DispatcherShell command' do |name, options={}|
-  options.assert_valid_keys(:help, :tab_completion)
+  options.assert_valid_keys(:description, :help, :tab_completion)
 
+  expected_description = options.fetch(:description)
   defines_help = options.fetch(:help)
   defines_tab_completion = options.fetch(:tab_completion)
 
@@ -37,5 +38,13 @@ shared_examples_for 'Rex::Ui::Text::DispatcherShell command' do |name, options={
     it_defines_optional_cmd_feature 'tab completion',
                                     defines_tab_completion,
                                     suffix: :tabs
+
+    context 'description' do
+      subject(:description) {
+        dispatcher_shell.commands[name.to_s]
+      }
+
+      it { is_expected.to eq(expected_description) }
+    end
   end
 end
