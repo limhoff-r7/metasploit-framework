@@ -17,6 +17,7 @@ before_install:
   # - ln -sf ../../tools/dev/pre-commit-hook.rb ./.git/hooks/post-merge
   # - ls -la ./.git/hooks
   # - ./.git/hooks/post-merge
+  - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
 before_script:
   - cp config/database.yml.travis config/database.yml
   - bundle exec rake --version
