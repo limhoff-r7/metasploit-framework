@@ -55,3 +55,9 @@ SimpleCov.configure do
 
   add_group 'Specs', 'spec'
 end
+
+require 'coveralls'
+
+if ENV['TRAVIS'] == 'true'
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+end

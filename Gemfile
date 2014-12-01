@@ -41,6 +41,8 @@ end
 group :test do
   # cucumber extension for testing command line applications, like msfconsole
   gem 'aruba'
+  # upload coverage reports from simplecov to coveralls.io and monitor coverage changes in PRs
+  gem 'coveralls', require: false
   # cucumber + automatic database cleaning with database_cleaner
   gem 'cucumber-rails', :require => false
   gem 'shoulda-matchers'
