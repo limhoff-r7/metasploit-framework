@@ -1,49 +1,40 @@
-bundler_args: --path=~/.bundle --without development
+bundler_args: "--path=~/.bundle --without development"
 env:
   global:
-    - AWS_DEFAULT_REGION="us-west-2"
-    - AWS_S3_BUCKET="limhoff-r7-bundle-cache"
-    - BUNDLE_ARCHIVE="metasploit-framework"
-    - RAILS_ENV=test
+  - AWS_DEFAULT_REGION="us-west-2"
+  - AWS_S3_BUCKET="limhoff-r7-bundle-cache"
+  - BUNDLE_ARCHIVE="metasploit-framework"
+  - RAILS_ENV=test
+  - secure: aAp0hAtsll9FaQvSO8E+bmtzQunY05LqPF/tjBLWhcHj4vZvabiyWL4QpRD/JQvTRlCadMVOKlmx1EsAp57fC5Cx/QZEOTkx+LJ3wFzmcEpUSSH944xpp49s1sMazFbC43mu7+sYKZ8J1fcNPX4lYmbZTNEYd9cZLOOQPsMzo3o=
   matrix:
-    - RAKE_TASK=cucumber
-    - RAKE_TASK=cucumber:boot
-    - RAKE_TASK=spec SPEC_OPTS="--tag content"
-    - RAKE_TASK=spec SPEC_OPTS="--tag ~content"
-
+  - RAKE_TASK=cucumber
+  - RAKE_TASK=cucumber:boot
+  - RAKE_TASK=spec SPEC_OPTS="--tag content"
+  - RAKE_TASK=spec SPEC_OPTS="--tag ~content"
 language: ruby
 matrix:
   fast_finish: true
 before_install:
-  - rake --version
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libpcap-dev
-  # Uncomment when we have fewer shipping msftidy warnings.
-  # Merge committers will still be checking, just not autofailing.
-  # See https://dev.metasploit.com/redmine/issues/8498
-  # - ln -sf ../../tools/dev/pre-commit-hook.rb ./.git/hooks/post-merge
-  # - ls -la ./.git/hooks
-  # - ./.git/hooks/post-merge
-  - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-  - gem install bundler bundle_cache
-  - bundle_cache_install
+- rake --version
+- sudo apt-get update -qq
+- sudo apt-get install -qq libpcap-dev
+- 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
+- gem install bundler bundle_cache
+- bundle_cache_install
 before_script:
-  - cp config/database.yml.travis config/database.yml
-  - bundle exec rake --version
-  - bundle exec rake db:create
-  - bundle exec rake db:migrate
+- cp config/database.yml.travis config/database.yml
+- bundle exec rake --version
+- bundle exec rake db:create
+- bundle exec rake db:migrate
 script:
-  # fail build if db/schema.rb update is not committed
-  - git diff --exit-code && bundle exec rake $RAKE_TASK
+# fail build if db/schema.rb update is not committed
+- git diff --exit-code && bundle exec rake $RAKE_TASK
 after_script:
-  - bundle_cache
-
+- bundle_cache
 rvm:
-  - '1.9.3'
-  - '2.1'
-
+- 1.9.3
+- '2.1'
 notifications:
-  irc: "irc.freenode.org#msfnotify"
-
+  irc: irc.freenode.org#msfnotify
 git:
   depth: 5
