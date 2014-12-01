@@ -1,9 +1,15 @@
-bundler_args: --without development
+bundler_args: --path=~/.bundle --without development
 env:
-  - RAKE_TASK=cucumber
-  - RAKE_TASK=cucumber:boot
-  - RAKE_TASK=spec SPEC_OPTS="--tag content"
-  - RAKE_TASK=spec SPEC_OPTS="--tag ~content"
+  global:
+    - AWS_DEFAULT_REGION="us-west-2"
+    - AWS_S3_BUCKET="limhoff-r7-bundle-cache"
+    - BUNDLE_ARCHIVE="metasploit-framework"
+    - RAILS_ENV=test
+  matrix:
+    - RAKE_TASK=cucumber
+    - RAKE_TASK=cucumber:boot
+    - RAKE_TASK=spec SPEC_OPTS="--tag content"
+    - RAKE_TASK=spec SPEC_OPTS="--tag ~content"
 
 language: ruby
 matrix:
@@ -19,6 +25,8 @@ before_install:
   # - ls -la ./.git/hooks
   # - ./.git/hooks/post-merge
   - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
+  - gem install bundler bundle_cache
+  - bundle_cache_install
 before_script:
   - cp config/database.yml.travis config/database.yml
   - bundle exec rake --version
@@ -27,6 +35,8 @@ before_script:
 script:
   # fail build if db/schema.rb update is not committed
   - git diff --exit-code && bundle exec rake $RAKE_TASK
+after_script:
+  - bundle_cache
 
 rvm:
   - '1.9.3'
