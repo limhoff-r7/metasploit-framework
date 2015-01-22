@@ -18,8 +18,10 @@ module Msf
 #
 ###
 class ModuleManager < ModuleSet
+	require 'msf/core/module_manager/cache'
 	require 'msf/core/module_manager/module_paths'
 
+	include Msf::ModuleManager::Cache
 	include Msf::ModuleManager::ModulePaths
 
 	require 'msf/core/payload_set'
@@ -300,42 +302,6 @@ class ModuleManager < ModuleSet
 		::File.read(file, ::File.size(file))
 	end
 
-	#
-	# Rebuild the cache for the module set
-	#
-	def rebuild_cache(mod = nil)
-		return if not (framework.db and framework.db.migrated)
-		if mod
-			framework.db.update_module_details(mod)
-		else
-			framework.db.update_all_module_details
-		end
-		refresh_cache
-	end
-
-	#
-	# Return a listing of all cached modules
-	#
-	def cache_entries
-		return {} if not (framework.db and framework.db.migrated)
-		res = {}
-		::Mdm::ModuleDetail.find(:all).each do |m|
-			res[m.file] = { :mtype => m.mtype, :refname => m.refname, :file => m.file, :mtime => m.mtime }
-			unless module_set(m.mtype).has_key?(m.refname)
-				module_set(m.mtype)[m.refname] = SymbolicModule
-			end
-		end
-	
-		res
-	end
-
-	#
-	# Reset the module cache
-	#
-	def refresh_cache
-		self.cache = cache_entries
-	end
-
 	def has_module_file_changed?(file)
 		begin 
 			cfile = self.cache[file] 
@@ -382,7 +348,6 @@ class ModuleManager < ModuleSet
 		end
 	end
 
-	attr_accessor :cache # :nodoc:
 
 protected
 
