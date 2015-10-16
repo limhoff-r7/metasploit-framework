@@ -26,6 +26,7 @@ script:
 sudo: false
 rvm:
   - '2.1.7'
+  - '2.2'
 
 notifications:
   irc: "irc.freenode.org#msfnotify"
